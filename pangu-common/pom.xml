@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>com.pangu</groupId>
+        <artifactId>pangu-iot-cloud</artifactId>
+        <version>1.0.0</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <modules>
+        <module>pangu-common-bom</module>
+        <module>pangu-common-alibaba-bom</module>
+        <module>pangu-common-log</module>
+        <module>pangu-common-dict</module>
+        <module>pangu-common-excel</module>
+        <module>pangu-common-core</module>
+        <module>pangu-common-redis</module>
+        <module>pangu-common-doc</module>
+        <module>pangu-common-security</module>
+        <module>pangu-common-satoken</module>
+        <module>pangu-common-web</module>
+        <module>pangu-common-mybatis</module>
+        <module>pangu-common-job</module>
+        <module>pangu-common-dubbo</module>
+        <module>pangu-common-seata</module>
+        <module>pangu-common-loadbalancer</module>
+        <module>pangu-common-oss</module>
+        <module>pangu-common-idempotent</module>
+        <module>pangu-common-mail</module>
+        <module>pangu-common-sms</module>
+        <module>pangu-common-logstash</module>
+        <module>pangu-common-elasticsearch</module>
+        <module>pangu-common-sentinel</module>
+        <module>pangu-common-skylog</module>
+        <module>pangu-common-prometheus</module>
+    </modules>
+
+    <artifactId>pangu-common</artifactId>
+    <packaging>pom</packaging>
+
+    <description>
+        pangu-common通用模块
+    </description>
+
+</project>
