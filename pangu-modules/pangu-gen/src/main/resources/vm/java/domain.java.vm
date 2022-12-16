@@ -30,8 +30,8 @@ import com.pangu.common.core.web.domain.TreeEntity;
     #set($Entity="TreeEntity<${ClassName}>")
 #end
 @Data
-@EqualsAndHashCode(callSuper = true)
 @TableName("${tableName}")
+@EqualsAndHashCode(callSuper = true)
 public class ${ClassName} extends ${Entity} {
 
 private static final long serialVersionUID=1L;
@@ -51,6 +51,7 @@ private static final long serialVersionUID=1L;
         @TableId(value = "$column.columnName")
         #end
     private $column.javaType $column.javaField;
+
     #end
 #end
 

@@ -14,8 +14,8 @@ import com.pangu.common.core.web.domain.BaseEntity;
  * @author chengliang4810
  * @date ${datetime}
  */
-public class ${subClassName} extends BaseEntity
-    {
+public class ${subClassName} extends BaseEntity{
+
 private static final long serialVersionUID=1L;
 
 #foreach ($column in $subTable.columns)
@@ -47,13 +47,11 @@ private static final long serialVersionUID=1L;
         #else
             #set($AttrName=$column.javaField.substring(0,1).toUpperCase() + ${column.javaField.substring(1)})
         #end
-    public void set${AttrName}($column.javaType $column.javaField)
-        {
+    public void set${AttrName}($column.javaType $column.javaField){
         this.$column.javaField = $column.javaField;
         }
 
-    public $column.javaType get${AttrName}()
-        {
+    public $column.javaType get${AttrName}(){
         return $column.javaField;
         }
     #end

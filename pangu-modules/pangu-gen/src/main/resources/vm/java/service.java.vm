@@ -50,4 +50,5 @@ public interface I${ClassName}Service {
      * 校验并批量删除${functionName}信息
      */
     Boolean deleteWithValidByIds(Collection<${pkColumn.javaType}> ids, Boolean isValid);
+
 }

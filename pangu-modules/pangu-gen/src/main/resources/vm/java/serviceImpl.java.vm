@@ -27,8 +27,8 @@ import java.util.Collection;
  * @author chengliang4810
  * @date ${datetime}
  */
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
 public class ${ClassName}ServiceImpl implements I${ClassName}Service {
 
     private final ${ClassName}Mapper baseMapper;

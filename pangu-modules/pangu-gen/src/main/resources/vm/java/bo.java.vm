@@ -4,6 +4,7 @@ import com.pangu.common.core.validate.AddGroup;
 import com.pangu.common.core.validate.EditGroup;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
 
 import javax.validation.constraints.*;
 
@@ -16,12 +17,13 @@ import ${import};
 import com.pangu.common.core.web.domain.BaseEntity;
 #elseif($table.tree)
 import com.pangu.common.core.web.domain.TreeEntity;
+
 #end
 
 /**
  * ${functionName}业务对象
  *
- * @author chengliang4810
+ * @author ${author}
  * @date ${datetime}
  */
 #if($table.crud || $table.sub)
@@ -29,8 +31,8 @@ import com.pangu.common.core.web.domain.TreeEntity;
 #elseif($table.tree)
     #set($Entity="TreeEntity<${ClassName}Bo>")
 #end
-
 @Data
+@Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
 public class ${ClassName}Bo extends ${Entity} {
 
