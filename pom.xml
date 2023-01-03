@@ -8,8 +8,8 @@
     <artifactId>pangu-iot-cloud</artifactId>
     <version>1.0.0</version>
 
-    <name>PanGu-Cloud-Plus</name>
-    <url>https://gitee.com/JavaLionLi/PanGu-Cloud-Plus</url>
+    <name>pangu-iot-cloud</name>
+    <url>https://gitee.com</url>
     <description>PanGu-Iot微服务系统</description>
 
     <properties>
