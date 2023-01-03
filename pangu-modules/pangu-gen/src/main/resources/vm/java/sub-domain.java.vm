@@ -11,7 +11,7 @@ import com.pangu.common.core.web.domain.BaseEntity;
 /**
  * ${subTable.functionName}对象 ${subTableName}
  *
- * @author chengliang4810
+ * @author ${author}
  * @date ${datetime}
  */
 public class ${subClassName} extends BaseEntity{
@@ -29,9 +29,9 @@ private static final long serialVersionUID=1L;
                 #set($comment=$column.columnComment)
             #end
             #if($parentheseIndex != -1)
-            @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
+            @Excel(name = "${comment}" , readConverterExp = "$column.readConverterExp()")
             #elseif($column.javaType == 'Date')
-            @Excel(name = "${comment}", width = 30, dateFormat = "yyyy-MM-dd")
+            @Excel(name = "${comment}" , width = 30, dateFormat = "yyyy-MM-dd")
             #else
             @Excel(name = "${comment}")
             #end

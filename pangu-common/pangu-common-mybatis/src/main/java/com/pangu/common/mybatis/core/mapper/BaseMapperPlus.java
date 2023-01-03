@@ -2,6 +2,7 @@ package com.pangu.common.mybatis.core.mapper;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.ReflectUtil;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.enums.SqlMethod;
@@ -13,6 +14,7 @@ import com.baomidou.mybatisplus.core.toolkit.*;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import com.pangu.common.core.utils.BeanCopyUtils;
+import com.pangu.common.core.utils.StreamUtils;
 import org.apache.ibatis.binding.MapperMethod;
 import org.apache.ibatis.logging.Log;
 import org.apache.ibatis.logging.LogFactory;
@@ -135,7 +137,11 @@ public interface BaseMapperPlus<M, T, V> extends BaseMapper<T> {
     }
 
     default V selectVoById(Serializable id) {
-        return selectVoById(id, this.currentVoClass());
+        T obj = this.selectById(id);
+        if (ObjectUtil.isNull(obj)) {
+            return null;
+        }
+        return entityToVo(obj);
     }
 
     /**
@@ -150,7 +156,11 @@ public interface BaseMapperPlus<M, T, V> extends BaseMapper<T> {
     }
 
     default List<V> selectVoBatchIds(Collection<? extends Serializable> idList) {
-        return selectVoBatchIds(idList, this.currentVoClass());
+        List<T> list = this.selectBatchIds(idList);
+        if (CollUtil.isEmpty(list)) {
+            return CollUtil.newArrayList();
+        }
+        return entityToVoList(list);
     }
 
     /**
@@ -165,7 +175,11 @@ public interface BaseMapperPlus<M, T, V> extends BaseMapper<T> {
     }
 
     default List<V> selectVoByMap(Map<String, Object> map) {
-        return selectVoByMap(map, this.currentVoClass());
+        List<T> list = this.selectByMap(map);
+        if (CollUtil.isEmpty(list)) {
+            return CollUtil.newArrayList();
+        }
+        return entityToVoList(list);
     }
 
     /**
@@ -180,7 +194,11 @@ public interface BaseMapperPlus<M, T, V> extends BaseMapper<T> {
     }
 
     default V selectVoOne(Wrapper<T> wrapper) {
-        return selectVoOne(wrapper, this.currentVoClass());
+        T obj = this.selectOne(wrapper);
+        if (ObjectUtil.isNull(obj)) {
+            return null;
+        }
+        return entityToVo(obj);
     }
 
     /**
@@ -195,7 +213,11 @@ public interface BaseMapperPlus<M, T, V> extends BaseMapper<T> {
     }
 
     default List<V> selectVoList(Wrapper<T> wrapper) {
-        return selectVoList(wrapper, this.currentVoClass());
+        List<T> list = this.selectList(wrapper);
+        if (CollUtil.isEmpty(list)) {
+            return CollUtil.newArrayList();
+        }
+        return entityToVoList(list);
     }
 
     /**
@@ -222,8 +244,35 @@ public interface BaseMapperPlus<M, T, V> extends BaseMapper<T> {
         if (CollUtil.isEmpty(pageData.getRecords())) {
             return (P) voPage;
         }
-        voPage.setRecords(BeanCopyUtils.copyList(pageData.getRecords(), voClass));
+        voPage.setRecords(entityToVoList(pageData.getRecords()));
         return (P) voPage;
+    }
+
+    /**
+     * 实体签证官
+     *
+     * @param entity 实体
+     * @return {@link V}
+     */
+    default <V> V entityToVo(T entity) {
+        V v = (V) ReflectUtil.newInstanceIfPossible(this.currentVoClass());
+        return BeanCopyUtils.copy(entity, v);
+    }
+
+    /**
+     * 实体vo列表
+     *
+     * @param entityList 实体列表
+     * @return {@link List}<{@link V}>
+     */
+    default <V> List<V> entityToVoList(List<T> entityList) {
+        if (ObjectUtil.isNull(entityList)) {
+            return null;
+        }
+        if (CollUtil.isEmpty(entityList)) {
+            return CollUtil.newArrayList();
+        }
+        return StreamUtils.toList(entityList, this::entityToVo);
     }
 
 }

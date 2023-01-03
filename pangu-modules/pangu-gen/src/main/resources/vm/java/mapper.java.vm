@@ -7,7 +7,7 @@ import ${packageName}.domain.vo.${ClassName}Vo;
 /**
  * ${functionName}Mapper接口
  *
- * @author chengliang4810
+ * @author ${author}
  * @date ${datetime}
  */
 public interface ${ClassName}Mapper extends BaseMapperPlus<${ClassName}Mapper, ${ClassName}, ${ClassName}Vo> {

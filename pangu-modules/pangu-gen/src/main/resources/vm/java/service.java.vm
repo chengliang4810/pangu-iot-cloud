@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * ${functionName}Service接口
  *
- * @author chengliang4810
+ * @author ${author}
  * @date ${datetime}
  */
 public interface I${ClassName}Service {

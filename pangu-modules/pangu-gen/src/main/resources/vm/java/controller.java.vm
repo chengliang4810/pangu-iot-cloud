@@ -32,12 +32,12 @@ import javax.servlet.http.HttpServletResponse;
  * ${functionName}控制器
  * 前端访问路由地址为:/${moduleName}/${businessName}
  *
- * @author chengliang4810
+ * @author ${author}
  * @date ${datetime}
  */
 @Validated
-@RequiredArgsConstructor
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/${businessName}")
 public class ${ClassName}Controller extends BaseController {
 
