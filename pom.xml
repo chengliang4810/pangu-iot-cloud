@@ -355,6 +355,7 @@
         <module>pangu-gateway</module>
         <module>pangu-visual</module>
         <module>pangu-modules</module>
+        <module>pangu-iot</module>
         <module>pangu-api</module>
         <module>pangu-common</module>
         <module>pangu-example</module>
