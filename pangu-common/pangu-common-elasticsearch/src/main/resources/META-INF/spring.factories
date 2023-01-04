@@ -1,2 +1,0 @@
-org.springframework.boot.env.EnvironmentPostProcessor=\
-  com.pangu.common.elasticsearch.config.ActuatorEnvironmentPostProcessor

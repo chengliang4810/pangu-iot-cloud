@@ -1,5 +1,0 @@
-com.pangu.common.core.utils.SpringUtils
-com.pangu.common.core.config.ApplicationConfig
-com.pangu.common.core.config.JacksonConfig
-com.pangu.common.core.config.ValidatorConfig
-com.pangu.common.core.config.AsyncConfig
