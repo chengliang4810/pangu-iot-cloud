@@ -20,7 +20,7 @@ import java.util.Date;
  */
 @Data
 @ExcelIgnoreUnannotated
-public class ${ClassName}Vo {
+public class ${ClassName}VO {
 
     private static final long serialVersionUID = 1L;
 
