@@ -45,20 +45,20 @@ public class ${ClassName}Controller extends BaseController {
 
     private final I${ClassName}Service i${ClassName}Service;
 
-/**
- * 查询${functionName}列表
- */
-@GetMapping("/list")
-@SaCheckPermission("${permissionPrefix}:list")
+    /**
+     * 查询${functionName}列表
+     */
+    @GetMapping("/list")
+    @SaCheckPermission("${permissionPrefix}:list")
     #if($table.crud || $table.sub)
     public TableDataInfo<${ClassName}Vo> list(${ClassName}Bo bo, PageQuery pageQuery) {
         return i${ClassName}Service.queryPageList(bo, pageQuery);
     }
     #elseif($table.tree)
-        public R<List<${ClassName}Vo>> list(${ClassName}Bo bo) {
-            List<${ClassName}Vo> list = i${ClassName}Service.queryList(bo);
-            return R.ok(list);
-        }
+    public R<List<${ClassName}Vo>> list(${ClassName}Bo bo) {
+        List<${ClassName}Vo> list = i${ClassName}Service.queryList(bo);
+        return R.ok(list);
+    }
     #end
 
     /**

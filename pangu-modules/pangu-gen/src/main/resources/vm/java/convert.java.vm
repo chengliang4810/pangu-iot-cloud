@@ -23,7 +23,7 @@ public interface ${ClassName}Convert extends CommonConvert {
      * @param bo ${ClassName}BO对象
      * @return ${className}
      */
-        ${ClassName} toEntity(${ClassName}BO bo);
+    ${ClassName} toEntity(${ClassName}BO bo);
 
 
     /**
@@ -32,7 +32,7 @@ public interface ${ClassName}Convert extends CommonConvert {
      * @param  vo ${ClassName}VO对象
      * @return ${className}
      */
-        ${ClassName} toEntity(${ClassName}VO vo);
+    ${ClassName} toEntity(${ClassName}VO vo);
 
     /**
      * ${ClassName}转换为${ClassName}BO
@@ -40,7 +40,7 @@ public interface ${ClassName}Convert extends CommonConvert {
      * @param  entity ${ClassName}对象
      * @return ${className}BO
      */
-        ${ClassName}BO toBo(${ClassName} entity);
+    ${ClassName}BO toBo(${ClassName} entity);
 
     /**
      * ${ClassName}转换为${ClassName}VO
@@ -48,7 +48,7 @@ public interface ${ClassName}Convert extends CommonConvert {
      * @param entity ${ClassName}
      * @return ${className}VO
      */
-        ${ClassName}VO toVo(${ClassName} entity);
+    ${ClassName}VO toVo(${ClassName} entity);
 
     /**
      * BO List 转换为 Entity List

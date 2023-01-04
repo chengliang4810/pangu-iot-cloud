@@ -36,14 +36,11 @@ import com.pangu.common.core.web.domain.TreeEntity;
 @EqualsAndHashCode(callSuper = true)
 public class ${ClassName}Bo extends ${Entity} {
 
-    /**
-    *
-    */
     #foreach ($column in $columns)
         #if(!$table.isSuperColumn($column.javaField) && ($column.query || $column.isInsert || $column.isEdit))
-            /**
-             * $column.columnComment
-             */
+    /**
+     * $column.columnComment
+     */
             #if($column.isInsert && $column.isEdit)
                 #set($Group="AddGroup.class, EditGroup.class")
             #elseif($column.isInsert)
@@ -53,12 +50,12 @@ public class ${ClassName}Bo extends ${Entity} {
             #end
             #if($column.isRequired == 1)
                 #if($column.javaType == 'String')
-                @NotBlank(message = "$column.columnComment不能为空" , groups = { $Group })
+    @NotBlank(message = "$column.columnComment不能为空", groups = { $Group })
                 #else
-                @NotNull(message = "$column.columnComment不能为空" , groups = { $Group })
+    @NotNull(message = "$column.columnComment不能为空", groups = { $Group })
                 #end
             #end
-        private $column.javaType $column.javaField;
+    private $column.javaType $column.javaField;
 
         #end
     #end

@@ -4,8 +4,8 @@ import ${packageName}.domain.${ClassName};
 import ${packageName}.domain.vo.${ClassName}Vo;
 import ${packageName}.domain.bo.${ClassName}Bo;
     #if($table.crud || $table.sub)
-    import com.pangu.common.mybatis.core.page.PageQuery;
-    import com.pangu.common.mybatis.core.page.TableDataInfo;
+import com.pangu.common.mybatis.core.page.PageQuery;
+import com.pangu.common.mybatis.core.page.TableDataInfo;
     #end
 
 import java.util.Collection;
@@ -22,13 +22,13 @@ public interface I${ClassName}Service {
     /**
      * 查询${functionName}
      */
-        ${ClassName}Vo queryById(${pkColumn.javaType} ${pkColumn.javaField});
+    ${ClassName}Vo queryById(${pkColumn.javaType} ${pkColumn.javaField});
 
     #if($table.crud || $table.sub)
-        /**
-         * 查询${functionName}列表
-         */
-        TableDataInfo<${ClassName}Vo> queryPageList(${ClassName}Bo bo, PageQuery pageQuery);
+    /**
+     * 查询${functionName}列表
+     */
+    TableDataInfo<${ClassName}Vo> queryPageList(${ClassName}Bo bo, PageQuery pageQuery);
     #end
 
     /**

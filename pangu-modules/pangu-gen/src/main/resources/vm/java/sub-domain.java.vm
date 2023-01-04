@@ -1,7 +1,7 @@
 package ${packageName}.domain;
 
     #foreach ($import in $subImportList)
-    import ${import};
+import ${import};
     #end
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -16,7 +16,7 @@ import com.pangu.common.core.web.domain.BaseEntity;
  */
 public class ${subClassName} extends BaseEntity{
 
-private static final long serialVersionUID=1L;
+    private static final long serialVersionUID=1L;
 
 #foreach ($column in $subTable.columns)
     #if(!$table.isSuperColumn($column.javaField))
@@ -29,11 +29,11 @@ private static final long serialVersionUID=1L;
                 #set($comment=$column.columnComment)
             #end
             #if($parentheseIndex != -1)
-            @Excel(name = "${comment}" , readConverterExp = "$column.readConverterExp()")
+    @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
             #elseif($column.javaType == 'Date')
-            @Excel(name = "${comment}" , width = 30, dateFormat = "yyyy-MM-dd")
+    @Excel(name = "${comment}", width = 30, dateFormat = "yyyy-MM-dd")
             #else
-            @Excel(name = "${comment}")
+    @Excel(name = "${comment}")
             #end
         #end
     private $column.javaType $column.javaField;

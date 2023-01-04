@@ -1,7 +1,7 @@
 package ${packageName}.domain.vo;
 
     #foreach ($import in $importList)
-    import ${import};
+import ${import};
     #end
 import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import com.alibaba.excel.annotation.ExcelProperty;
@@ -26,9 +26,9 @@ public class ${ClassName}Vo {
 
     #foreach ($column in $columns)
         #if($column.isList)
-            /**
-             * $column.columnComment
-             */
+    /**
+     * $column.columnComment
+     */
             #set($parentheseIndex=$column.columnComment.indexOf("（"))
             #if($parentheseIndex != -1)
                 #set($comment=$column.columnComment.substring(0, $parentheseIndex))
@@ -36,15 +36,15 @@ public class ${ClassName}Vo {
                 #set($comment=$column.columnComment)
             #end
             #if(${column.dictType} && ${column.dictType} != '')
-            @ExcelProperty(value = "${comment}" , converter = ExcelDictConvert.class)
-            @ExcelDictFormat(dictType = "${column.dictType}")
+     @ExcelProperty(value = "${comment}", converter = ExcelDictConvert.class)
+     @ExcelDictFormat(dictType = "${column.dictType}")
             #elseif($parentheseIndex != -1)
-            @ExcelProperty(value = "${comment}" , converter = ExcelDictConvert.class)
-            @ExcelDictFormat(readConverterExp = "$column.readConverterExp()")
+     @ExcelProperty(value = "${comment}", converter = ExcelDictConvert.class)
+     @ExcelDictFormat(readConverterExp = "$column.readConverterExp()")
             #else
-            @ExcelProperty(value = "${comment}")
+     @ExcelProperty(value = "${comment}")
             #end
-        private $column.javaType $column.javaField;
+     private $column.javaType $column.javaField;
 
         #end
     #end

@@ -3,9 +3,9 @@ package ${packageName}.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import com.pangu.common.core.utils.StringUtils;
     #if($table.crud || $table.sub)
-    import com.pangu.common.mybatis.core.page.PageQuery;
-    import com.pangu.common.mybatis.core.page.TableDataInfo;
-    import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.pangu.common.mybatis.core.page.PageQuery;
+import com.pangu.common.mybatis.core.page.TableDataInfo;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
     #end
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -42,15 +42,15 @@ public class ${ClassName}ServiceImpl implements I${ClassName}Service {
     }
 
     #if($table.crud || $table.sub)
-        /**
-         * 查询${functionName}列表
-         */
-        @Override
-        public TableDataInfo<${ClassName}Vo> queryPageList(${ClassName}Bo bo, PageQuery pageQuery) {
-            LambdaQueryWrapper<${ClassName}> lqw = buildQueryWrapper(bo);
-            Page<${ClassName}Vo> result = baseMapper.selectVoPage(pageQuery.build(), lqw);
-            return TableDataInfo.build(result);
-        }
+    /**
+     * 查询${functionName}列表
+     */
+    @Override
+    public TableDataInfo<${ClassName}Vo> queryPageList(${ClassName}Bo bo, PageQuery pageQuery) {
+        LambdaQueryWrapper<${ClassName}> lqw = buildQueryWrapper(bo);
+        Page<${ClassName}Vo> result = baseMapper.selectVoPage(pageQuery.build(), lqw);
+        return TableDataInfo.build(result);
+    }
     #end
 
     /**
