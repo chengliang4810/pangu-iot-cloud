@@ -1,12 +1,12 @@
 # Tomcat
 server:
-  port: 9201
+  port: 9900
 
 # Spring
 spring:
   application:
     # 应用名称
-    name: pangu-system
+    name: pangu-iot-manager
   profiles:
     # 环境配置
     active: @profiles.active@
