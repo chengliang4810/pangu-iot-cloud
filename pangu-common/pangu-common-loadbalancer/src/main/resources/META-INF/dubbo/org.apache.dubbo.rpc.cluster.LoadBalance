@@ -1,0 +1,1 @@
+customDubboLoadBalancer=com.pangu.common.loadbalance.core.CustomDubboLoadBalancer
