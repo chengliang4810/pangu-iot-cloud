@@ -3408,8 +3408,8 @@
       {
         "current": {
           "selected": true,
-          "text": "ruoyi-auth",
-          "value": "ruoyi-auth"
+          "text": "pangu-auth",
+          "value": "pangu-auth"
         },
         "datasource": {
           "type": "prometheus"

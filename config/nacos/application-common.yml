@@ -55,7 +55,7 @@ dubbo:
     check: false
   scan:
     # 接口实现类扫描
-    base-packages: com.ruoyi.**.dubbo
+    base-packages: com.pangu.**.dubbo
   # 自定义配置
   custom:
     # 全局请求log
@@ -96,7 +96,7 @@ spring:
       transport:
         # dashboard控制台服务名 用于服务发现
         # 如无此配置将默认使用下方 dashboard 配置直接注册
-        server-name: ruoyi-sentinel-dashboard
+        server-name: pangu-sentinel-dashboard
         # 客户端指定注册的ip 用于多网卡ip不稳点使用
         # client-ip:
         # 控制台地址 从1.3.0开始使用 server-name 注册
@@ -192,11 +192,11 @@ sa-token:
 mybatis-plus:
   # 不支持多包, 如有需要可在注解配置 或 提升扫包等级
   # 例如 com.**.**.mapper
-  mapperPackage: com.ruoyi.**.mapper
+  mapperPackage: com.pangu.**.mapper
   # 对应的 XML 文件位置
   mapperLocations: classpath*:mapper/**/*Mapper.xml
   # 实体扫描，多个package用逗号或者分号分隔
-  typeAliasesPackage: com.ruoyi.**.domain
+  typeAliasesPackage: com.pangu.**.domain
   # 启动时是否检查 MyBatis XML 文件的存在，默认不检查
   checkConfigLocation: false
   configuration:
@@ -233,7 +233,7 @@ swagger:
   enabled: true
   info:
     # 标题
-    title: '标题：RuoYi-Cloud-Plus微服务权限管理系统_接口文档'
+    title: '标题：PanGu-Cloud-Plus微服务权限管理系统_接口文档'
     # 描述
     description: '描述：微服务权限管理系统, 具体包括XXX,XXX模块...'
     # 版本
@@ -242,7 +242,7 @@ swagger:
     contact:
       name: Lion Li
       email: crazylionli@163.com
-      url: https://gitee.com/JavaLionLi/RuoYi-Cloud-Plus
+      url: https://gitee.com/JavaLionLi/PanGu-Cloud-Plus
   components:
     # 鉴权方式配置
     security-schemes:
@@ -253,7 +253,7 @@ swagger:
   # 服务文档路径映射 参考 gateway router 配置
   # 默认为服务名去除前缀转换为path 此处填特殊的配置
   service-mapping:
-    ruoyi-gen: /code
+    pangu-gen: /code
 
 # seata配置
 seata:
@@ -273,7 +273,7 @@ seata:
   registry:
     type: nacos
     nacos:
-      application: ruoyi-seata-server
+      application: pangu-seata-server
       server-addr: ${spring.cloud.nacos.server-addr}
       group: ${spring.cloud.nacos.discovery.group}
       namespace: ${spring.profiles.active}
