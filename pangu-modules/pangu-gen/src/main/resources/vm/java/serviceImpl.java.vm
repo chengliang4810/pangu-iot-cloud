@@ -11,8 +11,8 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ${packageName}.domain.bo.${ClassName}Bo;
-import ${packageName}.domain.vo.${ClassName}Vo;
+import ${packageName}.domain.bo.${ClassName}BO;
+import ${packageName}.domain.vo.${ClassName}VO;
 import ${packageName}.domain.${ClassName};
 import ${packageName}.mapper.${ClassName}Mapper;
 import ${packageName}.service.I${ClassName}Service;
@@ -37,7 +37,7 @@ public class ${ClassName}ServiceImpl implements I${ClassName}Service {
      * 查询${functionName}
      */
     @Override
-    public ${ClassName}Vo queryById(${pkColumn.javaType} ${pkColumn.javaField}){
+    public ${ClassName}VO queryById(${pkColumn.javaType} ${pkColumn.javaField}){
         return baseMapper.selectVoById(${pkColumn.javaField});
     }
 
@@ -46,9 +46,9 @@ public class ${ClassName}ServiceImpl implements I${ClassName}Service {
      * 查询${functionName}列表
      */
     @Override
-    public TableDataInfo<${ClassName}Vo> queryPageList(${ClassName}Bo bo, PageQuery pageQuery) {
+    public TableDataInfo<${ClassName}VO> queryPageList(${ClassName}BO bo, PageQuery pageQuery) {
         LambdaQueryWrapper<${ClassName}> lqw = buildQueryWrapper(bo);
-        Page<${ClassName}Vo> result = baseMapper.selectVoPage(pageQuery.build(), lqw);
+        Page<${ClassName}VO> result = baseMapper.selectVoPage(pageQuery.build(), lqw);
         return TableDataInfo.build(result);
     }
 #end
@@ -57,12 +57,12 @@ public class ${ClassName}ServiceImpl implements I${ClassName}Service {
      * 查询${functionName}列表
      */
     @Override
-    public List<${ClassName}Vo> queryList(${ClassName}Bo bo) {
+    public List<${ClassName}VO> queryList(${ClassName}BO bo) {
         LambdaQueryWrapper<${ClassName}> lqw = buildQueryWrapper(bo);
         return baseMapper.selectVoList(lqw);
     }
 
-    private LambdaQueryWrapper<${ClassName}> buildQueryWrapper(${ClassName}Bo bo) {
+    private LambdaQueryWrapper<${ClassName}> buildQueryWrapper(${ClassName}BO bo) {
         Map<String, Object> params = bo.getParams();
         LambdaQueryWrapper<${ClassName}> lqw = Wrappers.lambdaQuery();
 #foreach($column in $columns)
@@ -93,7 +93,7 @@ public class ${ClassName}ServiceImpl implements I${ClassName}Service {
      * 新增${functionName}
      */
     @Override
-    public Boolean insertByBo(${ClassName}Bo bo) {
+    public Boolean insertByBo(${ClassName}BO bo) {
         ${ClassName} add = BeanUtil.toBean(bo, ${ClassName}.class);
         validEntityBeforeSave(add);
         boolean flag = baseMapper.insert(add) > 0;
@@ -108,7 +108,7 @@ public class ${ClassName}ServiceImpl implements I${ClassName}Service {
      * 修改${functionName}
      */
     @Override
-    public Boolean updateByBo(${ClassName}Bo bo) {
+    public Boolean updateByBo(${ClassName}BO bo) {
         ${ClassName} update = BeanUtil.toBean(bo, ${ClassName}.class);
         validEntityBeforeSave(update);
         return baseMapper.updateById(update) > 0;

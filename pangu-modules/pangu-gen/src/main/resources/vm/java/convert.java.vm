@@ -1,0 +1,85 @@
+package ${packageName}.domain;
+
+import java.util.List;
+
+import ${packageName}.domain.${ClassName};
+import ${packageName}.domain.vo.${ClassName}VO;
+import ${packageName}.domain.bo.${ClassName}BO;
+import com.pangu.common.core.convert.CommonConvert;
+import org.mapstruct.Mapper;
+
+/**
+ * ${functionName}Convert接口
+ *
+ * @author ${author}
+ * @date ${datetime}
+ */
+@Mapper(componentModel = "spring")
+public interface ${ClassName}Convert extends CommonConvert {
+
+    /**
+     * ${ClassName}BO转换为${ClassName}Entity
+     *
+     * @param bo ${ClassName}BO对象
+     * @return ${className}
+     */
+    ${ClassName} toEntity(${ClassName}BO bo);
+
+
+    /**
+     * ${ClassName}VO转换为${ClassName}Entity
+     *
+     * @param  vo ${ClassName}VO对象
+     * @return ${className}
+     */
+    ${ClassName} toEntity(${ClassName}VO vo);
+
+    /**
+     * ${ClassName}转换为${ClassName}BO
+     *
+     * @param  entity ${ClassName}对象
+     * @return ${className}BO
+     */
+    ${ClassName}BO toBo(${ClassName} entity);
+
+    /**
+     * ${ClassName}转换为${ClassName}VO
+     *
+     * @param entity ${ClassName}
+     * @return ${className}VO
+     */
+    ${ClassName}VO toVo(${ClassName} entity);
+
+    /**
+     * BO List 转换为 Entity List
+     *
+     * @param bos List<${ClassName}BO>对象
+     * @return List<${ClassName}>
+     */
+    List<${ClassName}> boListToEntityList(List<${ClassName}BO> bos);
+
+    /**
+     * VO List 转换为 Entity List
+     *
+     * @param vos List<${ClassName}VO>
+     * @return List<${ClassName}>
+     */
+    List<${ClassName}> voListToEntityList(List<${ClassName}VO> vos);
+
+    /**
+     * Entity List 转换为 BO List
+     *
+     * @param entities List<${ClassName}>
+     * @return List<${ClassName}BO>
+     */
+    List<${ClassName}BO> toBoList(List<${ClassName}> entities);
+
+    /**
+     * Entity List 转换为 VO List
+     *
+     * @param entities List<${ClassName}>
+     * @return List<${ClassName}VO>
+     */
+    List<${ClassName}VO> toVoList(List<${ClassName}> entities);
+
+}

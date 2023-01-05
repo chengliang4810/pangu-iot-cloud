@@ -1,8 +1,8 @@
 package ${packageName}.service;
 
 import ${packageName}.domain.${ClassName};
-import ${packageName}.domain.vo.${ClassName}Vo;
-import ${packageName}.domain.bo.${ClassName}Bo;
+import ${packageName}.domain.vo.${ClassName}VO;
+import ${packageName}.domain.bo.${ClassName}BO;
 #if($table.crud || $table.sub)
 import com.pangu.common.mybatis.core.page.PageQuery;
 import com.pangu.common.mybatis.core.page.TableDataInfo;
@@ -22,29 +22,29 @@ public interface I${ClassName}Service {
     /**
      * 查询${functionName}
      */
-    ${ClassName}Vo queryById(${pkColumn.javaType} ${pkColumn.javaField});
+    ${ClassName}VO queryById(${pkColumn.javaType} ${pkColumn.javaField});
 
 #if($table.crud || $table.sub)
     /**
      * 查询${functionName}列表
      */
-    TableDataInfo<${ClassName}Vo> queryPageList(${ClassName}Bo bo, PageQuery pageQuery);
+    TableDataInfo<${ClassName}VO> queryPageList(${ClassName}BO bo, PageQuery pageQuery);
 #end
 
     /**
      * 查询${functionName}列表
      */
-    List<${ClassName}Vo> queryList(${ClassName}Bo bo);
+    List<${ClassName}VO> queryList(${ClassName}BO bo);
 
     /**
      * 修改${functionName}
      */
-    Boolean insertByBo(${ClassName}Bo bo);
+    Boolean insertByBo(${ClassName}BO bo);
 
     /**
      * 修改${functionName}
      */
-    Boolean updateByBo(${ClassName}Bo bo);
+    Boolean updateByBo(${ClassName}BO bo);
 
     /**
      * 校验并批量删除${functionName}信息
