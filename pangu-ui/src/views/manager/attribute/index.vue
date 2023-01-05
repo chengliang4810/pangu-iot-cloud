@@ -217,15 +217,12 @@
         <el-form-item label="单位描述" prop="unit">
           <el-input v-model="form.unit" placeholder="请输入单位描述" />
         </el-form-item>
-        <el-form-item label="主条目id
-" prop="masterItemId">
+        <el-form-item label="主条目id" prop="masterItemId">
           <el-input v-model="form.masterItemId" placeholder="请输入主条目id
 " />
         </el-form-item>
-        <el-form-item label=" 依赖属性 id， 当 source为18时不为空
-" prop="dependencyAttrId">
-          <el-input v-model="form.dependencyAttrId" placeholder="请输入 依赖属性 id， 当 source为18时不为空
-" />
+        <el-form-item label="依赖属性 id， 当 source为18时不为空" prop="dependencyAttrId">
+          <el-input v-model="form.dependencyAttrId" placeholder="请输入 依赖属性 id， 当 source为18时不为空" />
         </el-form-item>
         <el-form-item label="zabbix ItemId" prop="zbxId">
           <el-input v-model="form.zbxId" placeholder="请输入zabbix ItemId" />
@@ -249,7 +246,7 @@
 </template>
 
 <script>
-import { listAttribute, getAttribute, delAttribute, addAttribute, updateAttribute } from "@/api/manager/attribute";
+import {addAttribute, delAttribute, getAttribute, listAttribute, updateAttribute} from "@/api/manager/attribute";
 
 export default {
   name: "Attribute",
@@ -309,8 +306,7 @@ export default {
           { required: true, message: "属性名称不能为空", trigger: "blur" }
         ],
         key: [
-          { required: true, message: "属性唯一Key
-不能为空", trigger: "blur" }
+          { required: true, message: "属性唯一Key不能为空", trigger: "blur" }
         ],
         valueType: [
           { required: true, message: "值类型不能为空", trigger: "change" }
@@ -322,12 +318,10 @@ export default {
           { required: true, message: "单位描述不能为空", trigger: "blur" }
         ],
         masterItemId: [
-          { required: true, message: "主条目id
-不能为空", trigger: "blur" }
+          { required: true, message: "主条目id不能为空", trigger: "blur" }
         ],
         dependencyAttrId: [
-          { required: true, message: " 依赖属性 id， 当 source为18时不为空
-不能为空", trigger: "blur" }
+          { required: true, message: " 依赖属性 id， 当 source为18时不为空不能为空", trigger: "blur" }
         ],
         zbxId: [
           { required: true, message: "zabbix ItemId不能为空", trigger: "blur" }

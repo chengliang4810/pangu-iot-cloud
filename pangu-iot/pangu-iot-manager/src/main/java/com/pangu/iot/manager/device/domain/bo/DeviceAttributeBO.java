@@ -2,13 +2,12 @@ package com.pangu.iot.manager.device.domain.bo;
 
 import com.pangu.common.core.validate.AddGroup;
 import com.pangu.common.core.validate.EditGroup;
+import com.pangu.common.core.web.domain.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import javax.validation.constraints.*;
 
-import java.util.Date;
-
-import com.pangu.common.core.web.domain.BaseEntity;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 /**
  * 设备属性业务对象
@@ -36,7 +35,6 @@ public class DeviceAttributeBO extends BaseEntity {
     /**
      * 设备编号
      */
-    @NotNull(message = "设备编号不能为空", groups = { AddGroup.class, EditGroup.class })
     private Long deviceId;
 
     /**
@@ -67,45 +65,38 @@ public class DeviceAttributeBO extends BaseEntity {
     /**
      * 单位描述
      */
-    @NotBlank(message = "单位描述不能为空", groups = { AddGroup.class, EditGroup.class })
     private String unit;
 
     /**
      * 主条目id
 
      */
-    @NotBlank(message = "主条目id不能为空", groups = { AddGroup.class, EditGroup.class })
     private String masterItemId;
 
     /**
      *  依赖属性 id， 当 source为18时不为空
 
      */
-    @NotNull(message = " 依赖属性 id， 当 source为18时不为空不能为空", groups = { AddGroup.class, EditGroup.class })
     private Long dependencyAttrId;
 
     /**
      * zabbix ItemId
      */
-    @NotBlank(message = "zabbix ItemId不能为空", groups = { AddGroup.class, EditGroup.class })
     private String zbxId;
 
     /**
      * 继承的ID
      */
-    @NotBlank(message = "继承的ID不能为空", groups = { AddGroup.class, EditGroup.class })
     private String templateId;
 
     /**
      * zabbix 值映射ID
      */
-    @NotBlank(message = "zabbix 值映射ID不能为空", groups = { AddGroup.class, EditGroup.class })
     private String valueMapId;
 
     /**
      * 备注
      */
-    @NotBlank(message = "备注不能为空", groups = { AddGroup.class, EditGroup.class })
     private String remark;
 
 

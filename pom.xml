@@ -357,6 +357,7 @@
         <module>pangu-modules</module>
         <module>pangu-api</module>
         <module>pangu-common</module>
+        <module>pangu-iot</module>
         <module>pangu-example</module>
     </modules>
     <packaging>pom</packaging>

@@ -34,6 +34,8 @@
         <module>pangu-common-sentinel</module>
         <module>pangu-common-skylog</module>
         <module>pangu-common-prometheus</module>
+        <module>pangu-common-zabbix</module>
+        <module>pangu-common-emqx</module>
     </modules>
 
     <artifactId>pangu-common</artifactId>
