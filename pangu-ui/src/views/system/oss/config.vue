@@ -287,8 +287,8 @@ export default {
     getList() {
       this.loading = true;
       listOssConfig(this.queryParams).then((response) => {
-        this.ossConfigList = response.rows;
-        this.total = response.total;
+        this.ossConfigList = response.data.rows;
+        this.total = response.data.total;
         this.loading = false;
       });
     },

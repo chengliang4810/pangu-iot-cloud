@@ -278,8 +278,8 @@ export default {
         this.queryParams.params["endCreateTime"] = this.daterangeCreateTime[1];
       }
       listDemo(this.queryParams).then(response => {
-        this.demoList = response.rows;
-        this.total = response.total;
+        this.demoList = response.data.rows;
+        this.total = response.data.total;
         this.loading = false;
       });
     },
@@ -292,8 +292,8 @@ export default {
         this.queryParams.params["endCreateTime"] = this.daterangeCreateTime[1];
       }
       pageDemo(this.queryParams).then(response => {
-        this.demoList = response.rows;
-        this.total = response.total;
+        this.demoList = response.data.rows;
+        this.total = response.data.total;
         this.loading = false;
       });
     },
