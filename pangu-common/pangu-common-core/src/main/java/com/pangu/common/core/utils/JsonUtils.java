@@ -3,6 +3,7 @@ package com.pangu.common.core.utils;
 import cn.hutool.core.lang.Dict;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.json.JSONUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -106,6 +107,19 @@ public class JsonUtils {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    /**
+     * 判断Json字符串是否是json数组结构
+     *
+     * @param json 数据
+     * @return boolean
+     */
+    public static boolean isJsonArray(String json) {
+        if (StringUtils.isBlank(json)) {
+            return false;
+        }
+        return JSONUtil.isTypeJSONArray(json);
     }
 
 }

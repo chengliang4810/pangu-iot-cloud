@@ -1,5 +1,7 @@
 package com.pangu.common.zabbix.inteceptor;
 
+import cn.hutool.core.lang.Dict;
+import cn.hutool.json.JSONUtil;
 import com.dtflys.forest.config.ForestConfiguration;
 import com.dtflys.forest.http.ForestRequest;
 import com.dtflys.forest.http.ForestResponse;
@@ -7,6 +9,7 @@ import com.dtflys.forest.interceptor.Interceptor;
 import com.dtflys.forest.reflection.ForestMethod;
 import com.dtflys.forest.utils.StringUtils;
 import com.google.gson.Gson;
+import com.pangu.common.core.utils.JsonUtils;
 import com.pangu.common.zabbix.annotation.JsonPath;
 import com.pangu.common.zabbix.annotation.ParamName;
 import com.pangu.common.zabbix.entity.ZbxResponseData;
@@ -79,12 +82,21 @@ public class JsonBodyBuildInterceptor implements Interceptor<String> {
     @Override
     public void onSuccess(String data, ForestRequest request, ForestResponse response) {
 
-        ZbxResponseData responseData = gson.fromJson(data, ZbxResponseData.class);
+        Dict responseDataMap = JsonUtils.parseMap(data);
+        log.info("response data: " + data);
+
+        ZbxResponseData  responseData = JSONUtil.toBean(data, ZbxResponseData.class);
+
+//        if (null != responseData && "false".equals(responseData.getStr("success"))) {
+//            throw new RuntimeException(responseData.getStr("error"));
+//        }
 
         if (null != responseData.getError()) {
             log.error(response.getContent());
             throw new RuntimeException(responseData.getError().getData());
         }
+//        List result = responseData.getResult();
+//        response.setResult(result.size() > 0 ? result.get(0) : "");
         response.setResult(responseData.getResult());
         Interceptor.super.onSuccess(data, request, response);
     }

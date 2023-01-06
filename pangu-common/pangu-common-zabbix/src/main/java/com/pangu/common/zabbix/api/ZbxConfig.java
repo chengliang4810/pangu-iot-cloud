@@ -1,4 +1,4 @@
-package com.pangu.common.zabbix.service;
+package com.pangu.common.zabbix.api;
 
 import com.dtflys.forest.annotation.JSONBody;
 import com.dtflys.forest.annotation.Post;

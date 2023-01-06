@@ -1,3 +1,7 @@
 com.pangu.common.zabbix.inteceptor.JsonBodyBuildInterceptor
+com.pangu.common.zabbix.config.ForestConfig
+com.pangu.common.zabbix.service.TemplateService
+com.pangu.common.zabbix.service.HostGroupService
+com.pangu.common.zabbix.service.ItemService
 com.pangu.common.zabbix.config.TopicRabbitConfig
 com.pangu.common.zabbix.service.ZbxDataService

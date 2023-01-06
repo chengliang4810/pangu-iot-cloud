@@ -10,6 +10,6 @@ import org.springframework.context.annotation.Configuration;
  * @date 2022/11/01
  */
 @Configuration
-@ForestScan(basePackages = "com.zczl.common.zabbix.service")
+@ForestScan(basePackages = "com.pangu.common.zabbix.api")
 public class ForestConfig {
 }

@@ -161,6 +161,18 @@
                 <artifactId>pangu-common-prometheus</artifactId>
                 <version>${project.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>com.pangu</groupId>
+                <artifactId>pangu-common-emqx</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.pangu</groupId>
+                <artifactId>pangu-common-zabbix</artifactId>
+                <version>${project.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 </project>
