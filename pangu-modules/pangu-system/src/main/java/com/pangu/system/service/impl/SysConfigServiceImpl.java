@@ -10,10 +10,11 @@ import com.pangu.common.core.utils.StringUtils;
 import com.pangu.common.mybatis.core.page.PageQuery;
 import com.pangu.common.mybatis.core.page.TableDataInfo;
 import com.pangu.common.redis.utils.CacheUtils;
-import com.pangu.system.domain.SysConfig;
+import com.pangu.system.api.domain.SysConfig;
 import com.pangu.system.mapper.SysConfigMapper;
 import com.pangu.system.service.ISysConfigService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -27,8 +28,9 @@ import java.util.Map;
  *
  * @author chengliang4810
  */
-@RequiredArgsConstructor
+@Slf4j
 @Service
+@RequiredArgsConstructor
 public class SysConfigServiceImpl implements ISysConfigService {
 
     private final SysConfigMapper baseMapper;
@@ -63,13 +65,12 @@ public class SysConfigServiceImpl implements ISysConfigService {
      * @param configKey 参数key
      * @return 参数键值
      */
-    @Cacheable(cacheNames = CacheNames.SYS_CONFIG, key = "#configKey")
     @Override
+    @Cacheable(cacheNames = CacheNames.SYS_CONFIG, key = "#configKey")
     public String selectConfigByKey(String configKey) {
-        SysConfig retConfig = baseMapper.selectOne(new LambdaQueryWrapper<SysConfig>()
-            .eq(SysConfig::getConfigKey, configKey));
+        SysConfig retConfig = baseMapper.selectOne(new LambdaQueryWrapper<SysConfig>().eq(SysConfig::getConfigKey, configKey));
         if (ObjectUtil.isNotNull(retConfig)) {
-            return retConfig.getConfigValue();
+            return String.valueOf(retConfig.getConfigValue());
         }
         return StringUtils.EMPTY;
     }
@@ -114,8 +115,8 @@ public class SysConfigServiceImpl implements ISysConfigService {
      * @param config 参数配置信息
      * @return 结果
      */
-    @CachePut(cacheNames = CacheNames.SYS_CONFIG, key = "#config.configKey")
     @Override
+    @CachePut(cacheNames = CacheNames.SYS_CONFIG, key = "#config.configKey")
     public String updateConfig(SysConfig config) {
         int row = 0;
         if (config.getConfigId() != null) {
@@ -128,6 +129,17 @@ public class SysConfigServiceImpl implements ISysConfigService {
             return config.getConfigValue();
         }
         throw new ServiceException("操作失败");
+    }
+
+
+    @Override
+    @CachePut(cacheNames = CacheNames.SYS_CONFIG, key = "#key")
+    public Boolean updateConfigValueByKey(String key, String value) {
+        if (StringUtils.isBlank(key)) {
+            return false;
+        }
+        return baseMapper.update(new SysConfig().setConfigValue(value), new LambdaQueryWrapper<SysConfig>()
+                .eq(SysConfig::getConfigKey, key)) > 0;
     }
 
     /**

@@ -1,4 +1,4 @@
-package com.pangu.system.domain;
+package com.pangu.system.api.domain;
 
 import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import com.alibaba.excel.annotation.ExcelProperty;
@@ -10,6 +10,7 @@ import com.pangu.common.excel.convert.ExcelDictConvert;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -21,10 +22,11 @@ import javax.validation.constraints.Size;
  */
 
 @Data
-@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
+@Accessors(chain = true)
 @TableName("sys_config")
 @ExcelIgnoreUnannotated
+@EqualsAndHashCode(callSuper = true)
 public class SysConfig extends BaseEntity {
 
     /**

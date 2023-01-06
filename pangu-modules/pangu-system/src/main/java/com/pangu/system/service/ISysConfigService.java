@@ -2,7 +2,7 @@ package com.pangu.system.service;
 
 import com.pangu.common.mybatis.core.page.PageQuery;
 import com.pangu.common.mybatis.core.page.TableDataInfo;
-import com.pangu.system.domain.SysConfig;
+import com.pangu.system.api.domain.SysConfig;
 
 import java.util.List;
 
@@ -84,4 +84,6 @@ public interface ISysConfigService {
      * @return 结果
      */
     String checkConfigKeyUnique(SysConfig config);
+
+    Boolean updateConfigValueByKey(String key, String value);
 }
