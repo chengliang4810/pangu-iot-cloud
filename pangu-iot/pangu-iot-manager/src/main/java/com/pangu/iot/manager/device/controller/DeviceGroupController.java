@@ -39,12 +39,21 @@ public class DeviceGroupController extends BaseController {
     private final IDeviceGroupService deviceGroupService;
 
     /**
-     * 查询设备分组列表
+     * 分页查询设备分组列表
      */
     @SaCheckPermission("manager:device_group:list")
     @GetMapping("/list")
     public TableDataInfo<DeviceGroupVO> list(DeviceGroupBO bo, PageQuery pageQuery) {
         return deviceGroupService.queryPageList(bo, pageQuery);
+    }
+
+    /**
+     * 查询设备分组列表
+     */
+    @SaCheckPermission("manager:device_group:list")
+    @GetMapping("/tree")
+    public R<List<DeviceGroupVO>> tree(DeviceGroupBO bo) {
+        return R.ok(deviceGroupService.queryList(bo));
     }
 
     /**
