@@ -1,10 +1,13 @@
 package com.pangu.common.core.utils;
 
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.text.CharSequenceUtil;
 import cn.hutool.core.util.BooleanUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.pangu.common.core.exception.ServiceException;
 import org.springframework.lang.Nullable;
+
+import java.util.Collection;
 
 /**
  * 断言工具类
@@ -24,7 +27,7 @@ public class Assert {
      */
     public static void notNull(@Nullable Object object, String message, Object... args){
         if (ObjectUtil.isNull(object)){
-            throw new ServiceException(CharSequenceUtil.format(message, args));
+            throw new ServiceException(format(message, args));
         }
     }
 
@@ -45,8 +48,8 @@ public class Assert {
      * @param args    消息参数
      */
     public static void notBlank(@Nullable String string, String message, Object... args){
-        if (CharSequenceUtil.isEmpty(string)){
-            throw new ServiceException(CharSequenceUtil.format(message, args));
+        if (CharSequenceUtil.isBlank(string)){
+            throw new ServiceException(format(message, args));
         }
     }
 
@@ -61,6 +64,20 @@ public class Assert {
 
 
     /**
+     * 非空
+     *
+     * @param collection 集合
+     * @param message    消息
+     * @param args       arg游戏
+     */
+    public static void notEmpty(Collection<?> collection, String message, Object... args) {
+        if (CollectionUtil.isEmpty(collection)){
+            throw new ServiceException(format(message, args));
+        }
+    }
+
+
+    /**
      * 是TRUE
      *
      * @param expression 表达式
@@ -69,7 +86,7 @@ public class Assert {
      */
     public static void isTrue(Boolean expression, String message, Object... args){
         if (BooleanUtil.isFalse(expression)){
-            throw new ServiceException(CharSequenceUtil.format(message, args));
+            throw new ServiceException(format(message, args));
         }
     }
 
@@ -91,8 +108,70 @@ public class Assert {
      */
     public static void isFalse(Boolean expression, String message, Object... args){
         if (BooleanUtil.isTrue(expression)){
-            throw new ServiceException(CharSequenceUtil.format(message, args));
+            throw new ServiceException(format(message, args));
         }
     }
+
+    /**
+     *   小于等于0
+     *
+     * @param number 数量
+     */
+    public static void isLessOrEqualZero(Long number, String message, Object... args) {
+        if (ObjectUtil.isNotNull(number) && number > 0){
+            throw new ServiceException(format(message, args));
+        }
+    }
+
+    /**
+     * 小于等于0
+     *
+     * @param number 数量
+     */
+    public static void isLessOrEqualZero(Integer number, String message, Object... args) {
+        if (ObjectUtil.isNotNull(number) && number > 0){
+            throw new ServiceException(format(message, args));
+        }
+    }
+
+    /**
+     * 大于零
+     *
+     * @param number  数量
+     * @param message 消息
+     * @param args    参数
+     */
+    public static void isGreaterZero(Integer number, String message, Object... args){
+        if (ObjectUtil.isNotNull(number) && number <= 0){
+            throw new ServiceException(format(message, args));
+        }
+    }
+
+    /**
+     * 大于零
+     *
+     * @param number  数量
+     * @param message 消息
+     * @param args    参数
+     */
+    public static void isGreaterZero(Long number, String message, Object... args){
+        if (ObjectUtil.isNotNull(number) && number <= 0){
+            throw new ServiceException(format(message, args));
+        }
+    }
+
+
+    /**
+     * 格式化字符串
+     *
+     * @param message 消息
+     * @param args    arg游戏
+     * @return {@link String}
+     */
+    private static String format(String message, Object... args){
+        return CharSequenceUtil.format(message, args);
+    }
+
+
 
 }

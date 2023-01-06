@@ -45,8 +45,9 @@ public class TemplateService {
         JSONArray jsonArray = JSONUtil.parseArray(zbxTemplate.templateGet(templateId));
         if (jsonArray.size() > 0) {
             zbxTemplate.templateDelete(templateId);
+        } else {
+            log.warn("templateId {} not found", templateId);
         }
-        log.warn("templateId {} not found", templateId);
     }
 
     @Data

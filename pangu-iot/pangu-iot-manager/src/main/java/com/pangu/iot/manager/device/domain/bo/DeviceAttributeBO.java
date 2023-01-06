@@ -75,7 +75,6 @@ public class DeviceAttributeBO extends BaseEntity {
 
     /**
      *  依赖属性 id， 当 source为18时不为空
-
      */
     private Long dependencyAttrId;
 

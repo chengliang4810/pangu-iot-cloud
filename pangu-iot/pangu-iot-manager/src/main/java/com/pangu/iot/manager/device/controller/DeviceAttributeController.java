@@ -110,6 +110,7 @@ public class DeviceAttributeController extends BaseController {
     @Log(title = "设备属性", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
     public R<Void> remove(@NotEmpty(message = "主键不能为空") @PathVariable Long[] ids) {
-        return toAjax(deviceAttributeService.deleteWithValidByIds(Arrays.asList(ids), true));
+        return toAjax(productAndAttributeService.deleteAttributeByIds(Arrays.asList(ids)));
     }
+
 }

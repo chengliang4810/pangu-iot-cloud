@@ -1,8 +1,9 @@
 package com.pangu.iot.manager.device.service.impl;
 
-import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.pangu.common.core.utils.Assert;
 import com.pangu.common.zabbix.entity.dto.TrapperItemDTO;
 import com.pangu.common.zabbix.service.ItemService;
 import com.pangu.common.zabbix.service.TemplateService;
@@ -19,6 +20,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.pangu.common.zabbix.constant.ZabbixConstants.ATTR_SOURCE_DEPEND;
 
@@ -37,17 +40,16 @@ public class ProductAndAttributeServiceImpl implements IProductAndAttributeServi
     /**
      * 删除属性
      *
-     * @param ids id
+     * @param attributeIds id
      * @return {@link Boolean}
      */
     @Override
-    public Boolean deleteAttributeByIds(Collection<Long> ids) {
-
+    @Transactional(rollbackFor = Exception.class)
+    public Boolean deleteAttributeByIds(Collection<Long> attributeIds) {
+        Assert.notEmpty(attributeIds, "参数异常无法删除");
         //检查是否有属性依赖
-//        int count = new QProductAttribute().depAttrId.in(productAttr.getAttrIds()).findCount();
-//        if (count > 0) {
-//            throw new ServiceException(BizExceptionEnum.PRODUCT_ATTR_DEPTED);
-//        }
+        long count = deviceAttributeService.count(Wrappers.lambdaQuery(DeviceAttribute.class).in(DeviceAttribute::getDependencyAttrId, attributeIds));
+        Assert.isLessOrEqualZero(count, "属性被依赖无法删除");
 
         //检查属性是否被告警规则引入
 //        List<Long> attrIds = new QProductAttribute().select(QProductAttribute.alias().attrId).templateId.in(productAttr.getAttrIds()).findSingleAttributeList();
@@ -56,7 +58,12 @@ public class ProductAndAttributeServiceImpl implements IProductAndAttributeServi
 //        if (count > 0) {
 //            throw new ServiceException(BizExceptionEnum.PRODUCT_EVENT_HASDEPTED);
 //        }
-
+        // 查询属性信息, 聚合所有zbxId
+        List<DeviceAttribute> attributeList = deviceAttributeService.list(Wrappers.lambdaQuery(DeviceAttribute.class).in(DeviceAttribute::getId, attributeIds));
+        List<String> zbxIds = attributeList.stream().map(DeviceAttribute::getZbxId).collect(Collectors.toList());
+        Assert.isGreaterZero(zbxIds.size(), "属性信息不存在");
+        //删除zbx item
+        itemService.deleteTrapperItems(zbxIds);
         // List<String> zbxIds = new QProductAttribute().select(QProductAttribute.alias().zbxId).attrId.in(productAttr.getAttrIds()).findSingleAttributeList();
         //删除zbx item
 //        if (ToolUtil.isNotEmpty(zbxIds)) {
@@ -65,16 +72,14 @@ public class ProductAndAttributeServiceImpl implements IProductAndAttributeServi
 //                zbxItem.deleteTrapperItem(itemInfos.parallelStream().map(ZbxItemInfo::getItemid).collect(Collectors.toList()));
 //            }
 //        }
-
         //删除 属性
         //new QProductAttribute().attrId.in(productAttr.getAttrIds()).delete();
 
         //删除 设备 继承的属性
         //new QProductAttribute().templateId.in(productAttr.getAttrIds()).delete();
 
-
-        // 入库
-        return deviceAttributeService.deleteWithValidByIds(ids, false);
+        // 删除属性
+        return deviceAttributeService.deleteWithValidByIds(attributeIds, false);
     }
 
     /**
@@ -193,7 +198,7 @@ public class ProductAndAttributeServiceImpl implements IProductAndAttributeServi
         result.setSource(item.getSource());
         result.setValueType(item.getValueType());
         result.setUnits(item.getUnit());
-        result.setDependencyItemZbxId(item.getDependencyAttrId() + "");
+        result.setDependencyItemZbxId(item.getMasterItemId());
         result.setValueMapId(item.getValueMapId());
         return result;
     }
