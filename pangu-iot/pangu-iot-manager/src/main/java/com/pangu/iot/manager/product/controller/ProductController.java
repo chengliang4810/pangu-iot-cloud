@@ -9,19 +9,20 @@ import com.pangu.common.excel.utils.ExcelUtil;
 import com.pangu.common.log.annotation.Log;
 import com.pangu.common.log.enums.BusinessType;
 import com.pangu.common.mybatis.core.page.PageQuery;
+import com.pangu.common.mybatis.core.page.TableDataInfo;
+import com.pangu.iot.manager.device.service.IProductAndAttributeService;
+import com.pangu.iot.manager.product.domain.bo.ProductBO;
+import com.pangu.iot.manager.product.domain.vo.ProductVO;
+import com.pangu.iot.manager.product.service.IProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import com.pangu.iot.manager.product.domain.vo.ProductVO;
-import com.pangu.iot.manager.product.domain.bo.ProductBO;
-import com.pangu.iot.manager.product.service.IProductService;
-import com.pangu.common.mybatis.core.page.TableDataInfo;
 
-import java.util.List;
-import java.util.Arrays;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import javax.servlet.http.HttpServletResponse;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * 产品控制器
@@ -37,6 +38,8 @@ import javax.servlet.http.HttpServletResponse;
 public class ProductController extends BaseController {
 
     private final IProductService productService;
+
+    private final IProductAndAttributeService productAndAttributeService;
 
     /**
      * 查询产品列表
@@ -98,6 +101,7 @@ public class ProductController extends BaseController {
     @Log(title = "产品", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
     public R<Void> remove(@NotEmpty(message = "主键不能为空") @PathVariable Long[] ids) {
-        return toAjax(productService.deleteWithValidByIds(Arrays.asList(ids), true));
+        return toAjax(productAndAttributeService.deleteProductByIds(Arrays.asList(ids)));
     }
+
 }

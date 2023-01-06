@@ -2,11 +2,12 @@ package com.pangu.iot.manager.product.domain.bo;
 
 import com.pangu.common.core.validate.AddGroup;
 import com.pangu.common.core.validate.EditGroup;
+import com.pangu.common.core.web.domain.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import javax.validation.constraints.*;
 
-import com.pangu.common.core.web.domain.BaseEntity;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 /**
  * 产品业务对象
@@ -52,26 +53,22 @@ public class ProductBO extends BaseEntity {
     /**
      * 图标
      */
-    @NotBlank(message = "图标不能为空", groups = { AddGroup.class, EditGroup.class })
     private String icon;
 
     /**
      * 厂家
 
      */
-    @NotBlank(message = "厂家不能为空", groups = { AddGroup.class, EditGroup.class })
     private String manufacturer;
 
     /**
      * 型号
      */
-    @NotBlank(message = "型号不能为空", groups = { AddGroup.class, EditGroup.class })
     private String model;
 
     /**
      * 备注
      */
-    @NotBlank(message = "备注不能为空", groups = { AddGroup.class, EditGroup.class })
     private String remark;
 
 }

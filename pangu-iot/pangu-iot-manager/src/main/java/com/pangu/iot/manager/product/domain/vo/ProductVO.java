@@ -4,6 +4,8 @@ import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import com.alibaba.excel.annotation.ExcelProperty;
 import lombok.Data;
 
+import java.util.Date;
+
 
 /**
  * 产品视图对象
@@ -66,16 +68,33 @@ public class ProductVO {
     private String model;
 
     /**
+     * 创建者
+     */
+    @ExcelProperty(value = "创建者")
+    private String createBy;
+
+    /**
+     * 创建时间
+     */
+    @ExcelProperty(value = "创建时间")
+    private Date createTime;
+
+    /**
+     * 更新者
+     */
+    @ExcelProperty(value = "更新者")
+    private String updateBy;
+
+    /**
+     * 更新时间
+     */
+    @ExcelProperty(value = "更新时间")
+    private Date updateTime;
+
+    /**
      * 备注
      */
     @ExcelProperty(value = "备注")
     private String remark;
-
-    /**
-     * Zabbix对应模板ID
-     */
-    @ExcelProperty(value = "Zabbix对应模板ID")
-    private String zbxId;
-
 
 }

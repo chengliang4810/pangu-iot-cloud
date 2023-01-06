@@ -18,3 +18,26 @@ spring:
         #  url:
         #  username:
         #  password:
+  rabbitmq:
+    virtual-host: ${RABBITMQ_VIRTUAL_HOST:/}
+    host: ${RABBITMQ_HOST:10.0.0.24}
+    port: ${RABBITMQ_PORT:5672}
+    username: ${RABBITMQ_USERNAME:guest}
+    password: ${RABBITMQ_PASSWORD:guest}
+    publisher-confirm-type: correlated
+    publisher-returns: true
+    listener:
+      simple:
+        acknowledge-mode: manual
+        retry:
+          enabled: true
+
+forest:
+  variables:
+    zbxServerIp: 10.0.0.24
+    zbxServerPort: 8088
+    zbxApiUrl: /zabbix/api_jsonrpc.php
+    zbxApiToken: 40a51a3d510d93b1d98d4d647c915f3ba77cff13a61921a7e6cd2548a0e6484f
+
+
+

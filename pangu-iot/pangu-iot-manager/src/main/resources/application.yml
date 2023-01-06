@@ -31,8 +31,5 @@ spring:
     import:
       - optional:nacos:application-common.yml
       - optional:nacos:datasource.yml
+      - optional:nacos:mq.yml
       - optional:nacos:${spring.application.name}.yml
-
-dubbo:
-  provider:
-    host: 10.0.1.201

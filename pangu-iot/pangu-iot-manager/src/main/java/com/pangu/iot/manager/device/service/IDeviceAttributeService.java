@@ -48,4 +48,21 @@ public interface IDeviceAttributeService extends IService<DeviceAttribute> {
      */
     Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid);
 
+    /**
+     * 按产品id删除
+     *
+     * @param productId 产品id
+     * @return {@link Boolean}
+     */
+    Boolean deleteByProductId(Long productId);
+
+    /**
+     * 产品属性是否存在
+     *
+     * @param code       KEY
+     * @param productId 产品id
+     * @return {@link Boolean}
+     */
+    Boolean existsProductAttributeBy(String code, Long productId);
+
 }

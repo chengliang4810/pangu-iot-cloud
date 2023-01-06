@@ -1,8 +1,7 @@
 package com.pangu.iot.manager.product.service;
 
-import com.pangu.iot.manager.product.domain.ProductGroup;
-import com.pangu.iot.manager.product.domain.vo.ProductGroupVO;
 import com.pangu.iot.manager.product.domain.bo.ProductGroupBO;
+import com.pangu.iot.manager.product.domain.vo.ProductGroupVO;
 
 import java.util.Collection;
 import java.util.List;
@@ -40,4 +39,5 @@ public interface IProductGroupService {
      * 校验并批量删除产品分组信息
      */
     Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid);
+
 }

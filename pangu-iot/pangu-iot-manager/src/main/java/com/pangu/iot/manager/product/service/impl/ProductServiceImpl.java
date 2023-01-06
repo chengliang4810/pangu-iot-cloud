@@ -1,23 +1,32 @@
 package com.pangu.iot.manager.product.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.pangu.common.core.utils.StringUtils;
 import com.pangu.common.mybatis.core.page.PageQuery;
 import com.pangu.common.mybatis.core.page.TableDataInfo;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.pangu.iot.manager.product.service.IProductService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import com.pangu.common.zabbix.service.TemplateService;
+import com.pangu.iot.manager.product.domain.Product;
 import com.pangu.iot.manager.product.domain.bo.ProductBO;
 import com.pangu.iot.manager.product.domain.vo.ProductVO;
-import com.pangu.iot.manager.product.domain.Product;
 import com.pangu.iot.manager.product.mapper.ProductMapper;
+import com.pangu.iot.manager.product.service.IProductService;
+import com.pangu.system.api.RemoteConfigService;
+import lombok.RequiredArgsConstructor;
+import org.apache.dubbo.config.annotation.DubboReference;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Collection;
+
+import static com.pangu.common.core.constant.ConfigKeyConstants.GLOBAL_HOST_GROUP_KEY;
 
 /**
  * 产品Service业务层处理
@@ -25,11 +34,16 @@ import java.util.Collection;
  * @author chengliang4810
  * @date 2023-01-05
  */
-@RequiredArgsConstructor
 @Service
-public class ProductServiceImpl implements IProductService {
+@RequiredArgsConstructor
+public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> implements IProductService {
+
+    @DubboReference
+    private final RemoteConfigService configService;
 
     private final ProductMapper baseMapper;
+
+    private final TemplateService templateService;
 
     /**
      * 查询产品
@@ -47,6 +61,17 @@ public class ProductServiceImpl implements IProductService {
         LambdaQueryWrapper<Product> lqw = buildQueryWrapper(bo);
         Page<ProductVO> result = baseMapper.selectVoPage(pageQuery.build(), lqw);
         return TableDataInfo.build(result);
+    }
+
+    /**
+     * 产品编码是否存在
+     *
+     * @param code 代码
+     * @return boolean
+     */
+    @Override
+    public Boolean existProductCode(String code){
+        return baseMapper.exists(Wrappers.lambdaQuery(Product.class).eq(Product::getCode, code));
     }
 
     /**
@@ -76,8 +101,22 @@ public class ProductServiceImpl implements IProductService {
      */
     @Override
     public Boolean insertByBo(ProductBO bo) {
+        //未指定产品编码，则生成
+        if(StrUtil.isBlank(bo.getCode())){
+            bo.setCode(IdUtil.nanoId());
+        }
+
+        // 创建zabbix模板
+        Long productId = IdUtil.getSnowflake().nextId();
+        String hostGroupId = configService.getConfigByKey(GLOBAL_HOST_GROUP_KEY);
+        String zbxId = templateService.zbxTemplateCreate(hostGroupId, productId.toString());
+
+        // Bean转换，设置ID与zabbix模板ID
         Product add = BeanUtil.toBean(bo, Product.class);
-        validEntityBeforeSave(add);
+        add.setId(productId);
+        add.setZbxId(zbxId);
+
+        // 入库
         boolean flag = baseMapper.insert(add) > 0;
         if (flag) {
             bo.setId(add.getId());
@@ -106,6 +145,7 @@ public class ProductServiceImpl implements IProductService {
      * 批量删除产品
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid) {
         if(isValid){
             //TODO 做一些业务上的校验,判断是否需要校验

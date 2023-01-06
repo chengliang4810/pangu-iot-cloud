@@ -1,24 +1,26 @@
 package com.pangu.iot.manager.device.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.ObjectUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.pangu.common.core.utils.StringUtils;
 import com.pangu.common.mybatis.core.page.PageQuery;
 import com.pangu.common.mybatis.core.page.TableDataInfo;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import com.pangu.common.zabbix.service.ItemService;
+import com.pangu.iot.manager.device.domain.DeviceAttribute;
 import com.pangu.iot.manager.device.domain.bo.DeviceAttributeBO;
 import com.pangu.iot.manager.device.domain.vo.DeviceAttributeVO;
-import com.pangu.iot.manager.device.domain.DeviceAttribute;
 import com.pangu.iot.manager.device.mapper.DeviceAttributeMapper;
 import com.pangu.iot.manager.device.service.IDeviceAttributeService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Collection;
 
 /**
  * 设备属性Service业务层处理
@@ -31,6 +33,8 @@ import java.util.Collection;
 public class DeviceAttributeServiceImpl extends ServiceImpl<DeviceAttributeMapper, DeviceAttribute> implements IDeviceAttributeService {
 
     private final DeviceAttributeMapper baseMapper;
+
+    private final ItemService itemService;
 
     /**
      * 查询设备属性
@@ -77,16 +81,24 @@ public class DeviceAttributeServiceImpl extends ServiceImpl<DeviceAttributeMappe
         return lqw;
     }
 
+    @Override
+    public Boolean existsProductAttributeBy(String key, Long productId) {
+        LambdaQueryWrapper<DeviceAttribute> lqw = Wrappers.lambdaQuery();
+        lqw.eq(DeviceAttribute::getProductId, productId);
+        lqw.eq(DeviceAttribute::getKey, key);
+        return count(lqw) > 0;
+    }
+
     /**
      * 新增设备属性
      */
     @Override
     public Boolean insertByBo(DeviceAttributeBO bo) {
-        DeviceAttribute add = BeanUtil.toBean(bo, DeviceAttribute.class);
-        validEntityBeforeSave(add);
-        boolean flag = baseMapper.insert(add) > 0;
+        DeviceAttribute update = BeanUtil.toBean(bo, DeviceAttribute.class);
+        validEntityBeforeSave(update);
+        boolean flag = baseMapper.insert(update) > 0;
         if (flag) {
-            bo.setId(add.getId());
+            bo.setId(update.getId());
         }
         return flag;
     }
@@ -116,6 +128,24 @@ public class DeviceAttributeServiceImpl extends ServiceImpl<DeviceAttributeMappe
         if(isValid){
             //TODO 做一些业务上的校验,判断是否需要校验
         }
+
         return baseMapper.deleteBatchIds(ids) > 0;
     }
+
+
+    /**
+     * 按产品id删除
+     *
+     * @param productId 产品id
+     * @return {@link Boolean}
+     */
+    @Override
+    public Boolean deleteByProductId(Long productId) {
+        if (ObjectUtil.isNotNull(productId)){
+            return false;
+        }
+        return baseMapper.delete(Wrappers.lambdaQuery(DeviceAttribute.class).eq(DeviceAttribute::getProductId, productId)) > 0;
+    }
+
+
 }

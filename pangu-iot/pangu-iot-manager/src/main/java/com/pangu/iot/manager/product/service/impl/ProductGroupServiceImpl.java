@@ -22,8 +22,8 @@ import java.util.Collection;
  * @author chengliang4810
  * @date 2023-01-05
  */
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
 public class ProductGroupServiceImpl implements IProductGroupService {
 
     private final ProductGroupMapper baseMapper;

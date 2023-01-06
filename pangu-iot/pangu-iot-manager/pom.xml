@@ -87,6 +87,11 @@
             <artifactId>pangu-api-resource</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.pangu</groupId>
+            <artifactId>pangu-common-zabbix</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>

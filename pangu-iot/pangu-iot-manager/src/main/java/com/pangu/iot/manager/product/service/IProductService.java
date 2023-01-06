@@ -1,9 +1,11 @@
 package com.pangu.iot.manager.product.service;
 
-import com.pangu.iot.manager.product.domain.vo.ProductVO;
-import com.pangu.iot.manager.product.domain.bo.ProductBO;
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.pangu.common.mybatis.core.page.PageQuery;
 import com.pangu.common.mybatis.core.page.TableDataInfo;
+import com.pangu.iot.manager.product.domain.Product;
+import com.pangu.iot.manager.product.domain.bo.ProductBO;
+import com.pangu.iot.manager.product.domain.vo.ProductVO;
 
 import java.util.Collection;
 import java.util.List;
@@ -14,7 +16,7 @@ import java.util.List;
  * @author chengliang4810
  * @date 2023-01-05
  */
-public interface IProductService {
+public interface IProductService extends IService<Product> {
 
     /**
      * 查询产品
@@ -31,6 +33,13 @@ public interface IProductService {
      */
     List<ProductVO> queryList(ProductBO bo);
 
+    /**
+     * 产品是否存在
+     *
+     * @param code 编码
+     * @return {@link Boolean}
+     */
+    Boolean existProductCode(String code);
     /**
      * 修改产品
      */

@@ -4,26 +4,25 @@ import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.pangu.common.core.domain.R;
 import com.pangu.common.core.validate.AddGroup;
 import com.pangu.common.core.validate.EditGroup;
-import com.pangu.common.core.validate.QueryGroup;
 import com.pangu.common.core.web.controller.BaseController;
 import com.pangu.common.excel.utils.ExcelUtil;
 import com.pangu.common.log.annotation.Log;
 import com.pangu.common.log.enums.BusinessType;
 import com.pangu.common.mybatis.core.page.PageQuery;
+import com.pangu.common.mybatis.core.page.TableDataInfo;
+import com.pangu.iot.manager.device.domain.bo.DeviceAttributeBO;
+import com.pangu.iot.manager.device.domain.vo.DeviceAttributeVO;
+import com.pangu.iot.manager.device.service.IDeviceAttributeService;
+import com.pangu.iot.manager.device.service.IProductAndAttributeService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import com.pangu.iot.manager.device.domain.vo.DeviceAttributeVO;
-import com.pangu.iot.manager.device.domain.bo.DeviceAttributeBO;
-import com.pangu.iot.manager.device.service.IDeviceAttributeService;
-import com.pangu.common.mybatis.core.page.TableDataInfo;
 
-import java.util.List;
-import java.util.Arrays;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import javax.servlet.http.HttpServletResponse;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * 设备属性控制器
@@ -39,6 +38,8 @@ import javax.servlet.http.HttpServletResponse;
 public class DeviceAttributeController extends BaseController {
 
     private final IDeviceAttributeService deviceAttributeService;
+
+    private final IProductAndAttributeService productAndAttributeService;
 
     /**
      * 查询设备属性列表
@@ -87,7 +88,7 @@ public class DeviceAttributeController extends BaseController {
     @Log(title = "设备属性", businessType = BusinessType.INSERT)
     @PostMapping()
     public R<Void> add(@Validated(AddGroup.class) @RequestBody DeviceAttributeBO bo) {
-        return toAjax(deviceAttributeService.insertByBo(bo));
+        return toAjax(productAndAttributeService.insertAttribute(bo));
     }
 
     /**
@@ -97,7 +98,7 @@ public class DeviceAttributeController extends BaseController {
     @Log(title = "设备属性", businessType = BusinessType.UPDATE)
     @PutMapping()
     public R<Void> edit(@Validated(EditGroup.class) @RequestBody DeviceAttributeBO bo) {
-        return toAjax(deviceAttributeService.updateByBo(bo));
+        return toAjax(productAndAttributeService.updateAttribute(bo));
     }
 
     /**
