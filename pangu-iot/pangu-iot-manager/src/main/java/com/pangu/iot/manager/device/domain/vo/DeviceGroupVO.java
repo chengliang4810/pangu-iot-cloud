@@ -4,6 +4,7 @@ import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import com.alibaba.excel.annotation.ExcelProperty;
 import lombok.Data;
 
+import java.util.Date;
 
 
 /**
@@ -31,10 +32,28 @@ public class DeviceGroupVO {
     private String name;
 
     /**
-     * zabbix ItemId
+     * 创建者
      */
-    @ExcelProperty(value = "zabbix ItemId")
-    private String zbxId;
+    @ExcelProperty(value = "创建者")
+    private String createBy;
+
+    /**
+     * 创建时间
+     */
+    @ExcelProperty(value = "创建时间")
+    private Date createTime;
+
+    /**
+     * 更新者
+     */
+    @ExcelProperty(value = "更新者")
+    private String updateBy;
+
+    /**
+     * 更新时间
+     */
+    @ExcelProperty(value = "更新时间")
+    private Date updateTime;
 
     /**
      * 备注

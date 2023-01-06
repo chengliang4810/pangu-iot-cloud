@@ -74,6 +74,27 @@ public class HostGroupService {
     }
 
 
+    /**
+     * 创建主机组
+     *
+     * @param hostGroupName 主机组名称
+     * @return zbxId {@link String}
+     */
+    public String createHostGroup(String hostGroupName){
+        String response = zbxHostGroup.hostGroupCreate(hostGroupName);
+        return JsonUtils.parseObject(response, ZbxResponseIds.class).getGroupids()[0];
+    }
+
+    /**
+     * 主机组删除
+     *
+     * @param zbxIds zbx id
+     */
+    public void hostGroupDelete(List<String> zbxIds) {
+        String result = zbxHostGroup.hostGroupDelete(zbxIds);
+        log.debug("主机组删除结果：{}", result);
+    }
+
 
     @Data
     static class ZbxResponseIds {

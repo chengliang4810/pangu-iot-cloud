@@ -32,7 +32,7 @@ public interface IDeviceGroupService {
     List<DeviceGroupVO> queryList(DeviceGroupBO bo);
 
     /**
-     * 修改设备分组
+     * 新增设备分组
      */
     Boolean insertByBo(DeviceGroupBO bo);
 

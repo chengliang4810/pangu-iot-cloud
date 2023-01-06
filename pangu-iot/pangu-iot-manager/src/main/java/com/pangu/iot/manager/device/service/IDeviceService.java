@@ -1,7 +1,9 @@
 package com.pangu.iot.manager.device.service;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.pangu.common.mybatis.core.page.PageQuery;
 import com.pangu.common.mybatis.core.page.TableDataInfo;
+import com.pangu.iot.manager.device.domain.Device;
 import com.pangu.iot.manager.device.domain.bo.DeviceBO;
 import com.pangu.iot.manager.device.domain.vo.DeviceVO;
 
@@ -14,7 +16,7 @@ import java.util.List;
  * @author chengliang4810
  * @date 2023-01-06
  */
-public interface IDeviceService {
+public interface IDeviceService extends IService<Device> {
 
     /**
      * 查询设备
