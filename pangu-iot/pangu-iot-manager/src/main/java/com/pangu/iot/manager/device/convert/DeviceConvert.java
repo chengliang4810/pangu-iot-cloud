@@ -25,7 +25,6 @@ public interface DeviceConvert extends CommonConvert {
      */
     Device toEntity(DeviceBO bo);
 
-
     /**
      * DeviceVO转换为DeviceEntity
      *

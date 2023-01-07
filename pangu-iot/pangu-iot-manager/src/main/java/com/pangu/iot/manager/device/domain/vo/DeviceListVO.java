@@ -7,7 +7,6 @@ import lombok.Data;
 import java.util.Date;
 
 
-
 /**
  * 设备视图对象
  *
@@ -16,7 +15,7 @@ import java.util.Date;
  */
 @Data
 @ExcelIgnoreUnannotated
-public class DeviceVO {
+public class DeviceListVO {
 
     private static final long serialVersionUID = 1L;
 
@@ -33,10 +32,9 @@ public class DeviceVO {
     private String code;
 
     /**
-     * 设备分组ID
+     * 设备组名称
      */
-    @ExcelProperty(value = "设备分组ID")
-    private Long groupId;
+    private String groupName;
 
     /**
      * 产品ID
@@ -44,7 +42,7 @@ public class DeviceVO {
     private Long productId;
 
     /**
-     * 产品名称
+     * 产品ID
      */
     @ExcelProperty(value = "产品名称")
     private String productName;

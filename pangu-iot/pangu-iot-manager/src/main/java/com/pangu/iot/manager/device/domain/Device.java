@@ -31,10 +31,6 @@ public class Device extends BaseEntity {
      */
     private String code;
     /**
-     * 设备分组ID
-     */
-    private Long groupId;
-    /**
      * 产品ID
      */
     private Long productId;
@@ -54,6 +50,10 @@ public class Device extends BaseEntity {
      * 地址坐标
      */
     private String position;
+    /**
+     * 启用状态 true/ > 0启用 ｜｜ false/0 禁用
+     */
+    private Boolean status;
     /**
      * 最近在线时间
      */

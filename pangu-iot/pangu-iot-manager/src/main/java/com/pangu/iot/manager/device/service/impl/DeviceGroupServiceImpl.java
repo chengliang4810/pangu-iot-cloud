@@ -11,7 +11,6 @@ import com.pangu.common.mybatis.core.page.PageQuery;
 import com.pangu.common.mybatis.core.page.TableDataInfo;
 import com.pangu.common.zabbix.service.HostGroupService;
 import com.pangu.iot.manager.device.convert.DeviceGroupConvert;
-import com.pangu.iot.manager.device.domain.Device;
 import com.pangu.iot.manager.device.domain.DeviceGroup;
 import com.pangu.iot.manager.device.domain.bo.DeviceGroupBO;
 import com.pangu.iot.manager.device.domain.vo.DeviceGroupVO;
@@ -155,8 +154,8 @@ public class DeviceGroupServiceImpl implements IDeviceGroupService {
         Assert.notEmpty(deviceGroupList, "产品分组不存在");
 
         //检查是否关联设备
-        long count = deviceService.count(Wrappers.lambdaQuery(Device.class).in(Device::getGroupId, ids));
-        Assert.isLessOrEqualZero(count, "设备组绑定了设备,请先解除绑定!");
+        // long count = deviceService.count(Wrappers.lambdaQuery(Device.class).in(Device::getGroupId, ids));
+        // Assert.isLessOrEqualZero(count, "设备组绑定了设备,请先解除绑定!");
 
         // 关联删除zabbix 分组
         List<String> zbxIds = deviceGroupList.stream().map(DeviceGroup::getZbxId).collect(Collectors.toList());

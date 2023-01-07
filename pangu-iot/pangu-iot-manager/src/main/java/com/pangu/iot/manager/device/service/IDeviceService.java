@@ -5,6 +5,7 @@ import com.pangu.common.mybatis.core.page.PageQuery;
 import com.pangu.common.mybatis.core.page.TableDataInfo;
 import com.pangu.iot.manager.device.domain.Device;
 import com.pangu.iot.manager.device.domain.bo.DeviceBO;
+import com.pangu.iot.manager.device.domain.vo.DeviceListVO;
 import com.pangu.iot.manager.device.domain.vo.DeviceVO;
 
 import java.util.Collection;
@@ -26,7 +27,7 @@ public interface IDeviceService extends IService<Device> {
     /**
      * 查询设备列表
      */
-    TableDataInfo<DeviceVO> queryPageList(DeviceBO bo, PageQuery pageQuery);
+    TableDataInfo<DeviceListVO> queryPageList(DeviceBO bo, PageQuery pageQuery);
 
     /**
      * 查询设备列表

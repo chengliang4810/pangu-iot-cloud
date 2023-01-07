@@ -1,6 +1,7 @@
 package com.pangu.iot.manager.device.service;
 
 import com.pangu.iot.manager.device.domain.bo.DeviceAttributeBO;
+import com.pangu.iot.manager.device.domain.bo.DeviceBO;
 
 import java.util.Collection;
 
@@ -42,4 +43,11 @@ public interface IProductAndAttributeService {
      */
     Boolean deleteProductByIds(Collection<Long> ids);
 
+    /**
+     * 创建设备
+     *
+     * @param bo 设备信息
+     * @return {@link Boolean}
+     */
+    Boolean insertDevice(DeviceBO bo);
 }

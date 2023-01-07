@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pangu.iot.manager.device.mapper.DeviceGroupRelationMapper">
+
+    <resultMap type="com.pangu.iot.manager.device.domain.DeviceGroupRelation" id="DeviceGroupRelationResult">
+    <result property="id" column="id"/>
+    <result property="deviceId" column="device_id"/>
+    <result property="deviceGroupId" column="device_group_id"/>
+    </resultMap>
+
+
+</mapper>

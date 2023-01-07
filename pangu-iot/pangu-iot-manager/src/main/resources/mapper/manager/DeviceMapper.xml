@@ -1,26 +1,55 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.pangu.iot.manager.device.mapper.DeviceMapper">
-
     <resultMap type="com.pangu.iot.manager.device.domain.Device" id="DeviceResult">
-    <result property="id" column="id"/>
-    <result property="code" column="code"/>
-    <result property="groupId" column="group_id"/>
-    <result property="productId" column="product_id"/>
-    <result property="name" column="name"/>
-    <result property="type" column="type"/>
-    <result property="address" column="address"/>
-    <result property="position" column="position"/>
-    <result property="latestOnline" column="latest_online"/>
-    <result property="createBy" column="create_by"/>
-    <result property="createTime" column="create_time"/>
-    <result property="updateBy" column="update_by"/>
-    <result property="updateTime" column="update_time"/>
-    <result property="remark" column="remark"/>
-    <result property="zbxId" column="zbx_id"/>
+        <result property="id" column="id"/>
+        <result property="code" column="code"/>
+        <result property="productId" column="product_id"/>
+        <result property="name" column="name"/>
+        <result property="type" column="type"/>
+        <result property="address" column="address"/>
+        <result property="position" column="position"/>
+        <result property="latestOnline" column="latest_online"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="status" column="status"/>
+        <result property="remark" column="remark"/>
+        <result property="zbxId" column="zbx_id"/>
     </resultMap>
 
+    <resultMap type="com.pangu.iot.manager.device.domain.vo.DeviceListVO" id="DeviceListVOResult">
+        <result property="id" column="id"/>
+        <result property="code" column="code"/>
+        <result property="productId" column="product_id"/>
+        <result property="productName" column="product_name"/>
+        <result property="name" column="name"/>
+        <result property="type" column="type"/>
+        <result property="address" column="address"/>
+        <result property="position" column="position"/>
+        <result property="latestOnline" column="latest_online"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="status" column="status"/>
+        <result property="remark" column="remark"/>
+        <result property="groupName" column="group_name"/>
+    </resultMap>
+
+    <select id="selectVoPageList" resultMap="DeviceListVOResult">
+        select device.id, device.code, device.product_id, device.name, device.address, device.position, device.latest_online, device.status, device.create_by, device.create_time, device.update_by, device.update_time, device.remark, device.zbx_id,
+         product.name product_name, product.type, group_name
+            from iot_device device
+            left join iot_product product on device.product_id = product.id
+            left join (
+                select any_value(device_group_relation.device_id) device_id, group_concat(device_group.name) as group_name from iot_device_group device_group
+                inner join iot_device_group_relation device_group_relation on device_group.id = device_group_relation.device_group_id
+             ) device_group on device_group.device_id = device.id
+        ${ew.customSqlSegment}
+    </select>
 
 </mapper>

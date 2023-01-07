@@ -10,6 +10,7 @@ import com.pangu.common.mybatis.core.page.PageQuery;
 import com.pangu.common.mybatis.core.page.TableDataInfo;
 import com.pangu.iot.manager.device.domain.Device;
 import com.pangu.iot.manager.device.domain.bo.DeviceBO;
+import com.pangu.iot.manager.device.domain.vo.DeviceListVO;
 import com.pangu.iot.manager.device.domain.vo.DeviceVO;
 import com.pangu.iot.manager.device.mapper.DeviceMapper;
 import com.pangu.iot.manager.device.service.IDeviceService;
@@ -44,9 +45,9 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> impleme
      * 查询设备列表
      */
     @Override
-    public TableDataInfo<DeviceVO> queryPageList(DeviceBO bo, PageQuery pageQuery) {
+    public TableDataInfo<DeviceListVO> queryPageList(DeviceBO bo, PageQuery pageQuery) {
         LambdaQueryWrapper<Device> lqw = buildQueryWrapper(bo);
-        Page<DeviceVO> result = baseMapper.selectVoPage(pageQuery.build(), lqw);
+        Page<DeviceListVO> result = baseMapper.selectVoPageList(pageQuery.build(), lqw);
         return TableDataInfo.build(result);
     }
 
@@ -63,14 +64,12 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> impleme
         Map<String, Object> params = bo.getParams();
         LambdaQueryWrapper<Device> lqw = Wrappers.lambdaQuery();
         lqw.eq(StringUtils.isNotBlank(bo.getCode()), Device::getCode, bo.getCode());
-        lqw.eq(bo.getGroupId() != null, Device::getGroupId, bo.getGroupId());
+        // lqw.in(CollectionUtil.isNotEmpty(bo.getGroupIds()), Device::getGroupId, bo.getGroupIds());
         lqw.eq(bo.getProductId() != null, Device::getProductId, bo.getProductId());
         lqw.like(StringUtils.isNotBlank(bo.getName()), Device::getName, bo.getName());
         lqw.eq(StringUtils.isNotBlank(bo.getType()), Device::getType, bo.getType());
         lqw.eq(StringUtils.isNotBlank(bo.getAddress()), Device::getAddress, bo.getAddress());
         lqw.eq(StringUtils.isNotBlank(bo.getPosition()), Device::getPosition, bo.getPosition());
-        lqw.eq(bo.getLatestOnline() != null, Device::getLatestOnline, bo.getLatestOnline());
-        lqw.eq(StringUtils.isNotBlank(bo.getZbxId()), Device::getZbxId, bo.getZbxId());
         return lqw;
     }
 

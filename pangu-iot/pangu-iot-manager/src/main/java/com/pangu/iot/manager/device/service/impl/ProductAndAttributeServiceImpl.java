@@ -8,9 +8,15 @@ import com.pangu.common.zabbix.entity.dto.TrapperItemDTO;
 import com.pangu.common.zabbix.service.ItemService;
 import com.pangu.common.zabbix.service.TemplateService;
 import com.pangu.iot.manager.device.convert.DeviceAttributeConvert;
+import com.pangu.iot.manager.device.convert.DeviceConvert;
+import com.pangu.iot.manager.device.domain.Device;
 import com.pangu.iot.manager.device.domain.DeviceAttribute;
+import com.pangu.iot.manager.device.domain.DeviceGroupRelation;
 import com.pangu.iot.manager.device.domain.bo.DeviceAttributeBO;
+import com.pangu.iot.manager.device.domain.bo.DeviceBO;
 import com.pangu.iot.manager.device.service.IDeviceAttributeService;
+import com.pangu.iot.manager.device.service.IDeviceGroupRelationService;
+import com.pangu.iot.manager.device.service.IDeviceService;
 import com.pangu.iot.manager.device.service.IProductAndAttributeService;
 import com.pangu.iot.manager.product.domain.Product;
 import com.pangu.iot.manager.product.service.IProductService;
@@ -25,17 +31,59 @@ import java.util.stream.Collectors;
 
 import static com.pangu.common.zabbix.constant.ZabbixConstants.ATTR_SOURCE_DEPEND;
 
+/**
+ *
+ * @author chengliang
+ * @date 2023/01/08
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class ProductAndAttributeServiceImpl implements IProductAndAttributeService {
 
     private final ItemService itemService;
-    private final TemplateService templateService;
+    private final DeviceConvert deviceConvert;
+    private final IDeviceService deviceService;
     private final IProductService productService;
-    private final IDeviceAttributeService deviceAttributeService;
+    private final TemplateService templateService;
     private final DeviceAttributeConvert deviceAttributeConvert;
+    private final IDeviceAttributeService deviceAttributeService;
+    private final IDeviceGroupRelationService deviceGroupRelationService;
 
+
+    /**
+     * 创建设备
+     *
+     * @param bo 设备信息
+     * @return {@link Boolean}
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Boolean insertDevice(DeviceBO bo) {
+
+        // 设备编号不存在则随机生成
+        if (StrUtil.isBlank(bo.getCode())){
+            bo.setCode(IdUtil.nanoId());
+        }
+
+        // 检查设备ID唯一性
+        long count = deviceService.count(Wrappers.lambdaQuery(Device.class).eq(Device::getCode, bo.getCode()));
+        Assert.isLessOrEqualZero(count, "设备ID已存在");
+
+        // 生成设备主键
+        long id = IdUtil.getSnowflake().nextId();
+
+        // 添加设备组关系
+        List<DeviceGroupRelation> groupRelations = bo.getGroupIds().stream()
+            .map(groupId -> new DeviceGroupRelation().setDeviceId(id).setDeviceGroupId(groupId))
+            .collect(Collectors.toList());
+        deviceGroupRelationService.saveBatch(groupRelations);
+
+        Device device = deviceConvert.toEntity(bo);
+        device.setId(id);
+
+        return deviceService.save(device);
+    }
 
     /**
      * 删除属性

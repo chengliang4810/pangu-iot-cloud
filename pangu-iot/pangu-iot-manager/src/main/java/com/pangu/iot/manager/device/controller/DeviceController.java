@@ -11,8 +11,10 @@ import com.pangu.common.log.enums.BusinessType;
 import com.pangu.common.mybatis.core.page.PageQuery;
 import com.pangu.common.mybatis.core.page.TableDataInfo;
 import com.pangu.iot.manager.device.domain.bo.DeviceBO;
+import com.pangu.iot.manager.device.domain.vo.DeviceListVO;
 import com.pangu.iot.manager.device.domain.vo.DeviceVO;
 import com.pangu.iot.manager.device.service.IDeviceService;
+import com.pangu.iot.manager.device.service.IProductAndAttributeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -37,13 +39,15 @@ import java.util.List;
 public class DeviceController extends BaseController {
 
     private final IDeviceService deviceService;
+    private final IProductAndAttributeService productAndAttributeService;
+
 
     /**
      * 分页查询设备列表
      */
     @SaCheckPermission("manager:device:list")
     @GetMapping("/list")
-    public TableDataInfo<DeviceVO> list(DeviceBO bo, PageQuery pageQuery) {
+    public TableDataInfo<DeviceListVO> list(DeviceBO bo, PageQuery pageQuery) {
         return deviceService.queryPageList(bo, pageQuery);
     }
 
@@ -85,7 +89,7 @@ public class DeviceController extends BaseController {
     @Log(title = "设备", businessType = BusinessType.INSERT)
     @PostMapping()
     public R<Void> add(@Validated(AddGroup.class) @RequestBody DeviceBO bo) {
-        return toAjax(deviceService.insertByBo(bo));
+        return toAjax(productAndAttributeService.insertDevice(bo));
     }
 
     /**

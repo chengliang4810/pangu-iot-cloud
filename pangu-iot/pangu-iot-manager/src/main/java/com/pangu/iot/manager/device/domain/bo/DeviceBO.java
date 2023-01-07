@@ -5,10 +5,13 @@ import com.pangu.common.core.validate.EditGroup;
 import com.pangu.common.core.web.domain.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+import java.util.List;
 
 /**
  * 设备业务对象
@@ -30,14 +33,15 @@ public class DeviceBO extends BaseEntity {
     /**
      * 设备编号
      */
-    @NotBlank(message = "设备编号不能为空", groups = { AddGroup.class, EditGroup.class })
+    @Length(min = 2, max = 60, message = "设备ID长度不符合规范")
+    @Pattern(regexp = "^[A-Za-z0-9]$", message = "设备ID只能包含英文、数字")
     private String code;
 
     /**
      * 设备分组ID
      */
-    @NotNull(message = "设备分组ID不能为空", groups = { AddGroup.class, EditGroup.class })
-    private Long groupId;
+    @Size(min = 1, max = 10, message = "设备分组ID不能为空", groups = { AddGroup.class, EditGroup.class })
+    private List<Long> groupIds;
 
     /**
      * 产品ID
@@ -54,38 +58,26 @@ public class DeviceBO extends BaseEntity {
     /**
      * 设备类型
      */
-    @NotBlank(message = "设备类型不能为空", groups = { AddGroup.class, EditGroup.class })
     private String type;
 
     /**
      * 设备地址
      */
-    @NotBlank(message = "设备地址不能为空", groups = { AddGroup.class, EditGroup.class })
     private String address;
 
     /**
      * 地址坐标
      */
-    @NotBlank(message = "地址坐标不能为空", groups = { AddGroup.class, EditGroup.class })
     private String position;
 
     /**
-     * 最近在线时间
+     * 启用状态
      */
-    @NotNull(message = "最近在线时间不能为空", groups = { AddGroup.class, EditGroup.class })
-    private Date latestOnline;
+    private Boolean status;
 
     /**
      * 备注
      */
-    @NotBlank(message = "备注不能为空", groups = { AddGroup.class, EditGroup.class })
     private String remark;
-
-    /**
-     * Zabbix对应模板ID
-     */
-    @NotBlank(message = "Zabbix对应模板ID不能为空", groups = { AddGroup.class, EditGroup.class })
-    private String zbxId;
-
 
 }
