@@ -42,12 +42,21 @@ public class ProductController extends BaseController {
     private final IProductAndAttributeService productAndAttributeService;
 
     /**
-     * 查询产品列表
+     * 分页查询产品列表
      */
     @SaCheckPermission("manager:product:list")
     @GetMapping("/list")
     public TableDataInfo<ProductVO> list(ProductBO bo, PageQuery pageQuery) {
         return productService.queryPageList(bo, pageQuery);
+    }
+
+    /**
+     * 查询产品列表
+     */
+    @SaCheckPermission("manager:product:list")
+    @GetMapping("/tree")
+    public R<List<ProductVO>> tree(ProductBO bo) {
+        return R.ok(productService.queryList(bo));
     }
 
     /**
