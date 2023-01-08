@@ -32,4 +32,6 @@ public class DeviceGroupRelation {
      */
     private Long deviceGroupId;
 
+    /** the constant of field {@link DeviceGroupRelation#deviceGroupId} */
+    public static final String CONST_DEVICE_GROUP_ID = "device_group.device_group_id";
 }

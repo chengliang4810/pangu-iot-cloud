@@ -38,6 +38,11 @@ public class DeviceBO extends BaseEntity {
     private String code;
 
     /**
+     * 设备分组IDid
+     */
+    private Long groupId;
+
+    /**
      * 设备分组ID
      */
     @Size(min = 1, max = 10, message = "设备分组ID不能为空", groups = { AddGroup.class, EditGroup.class })
@@ -48,6 +53,12 @@ public class DeviceBO extends BaseEntity {
      */
     @NotNull(message = "产品ID不能为空", groups = { AddGroup.class, EditGroup.class })
     private Long productId;
+
+
+    /**
+     * 产品ID
+     */
+    private List<Long> productIds;
 
     /**
      * 设备名称

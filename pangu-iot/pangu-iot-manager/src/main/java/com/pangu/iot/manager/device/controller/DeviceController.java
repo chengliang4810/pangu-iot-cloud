@@ -11,6 +11,7 @@ import com.pangu.common.log.enums.BusinessType;
 import com.pangu.common.mybatis.core.page.PageQuery;
 import com.pangu.common.mybatis.core.page.TableDataInfo;
 import com.pangu.iot.manager.device.domain.bo.DeviceBO;
+import com.pangu.iot.manager.device.domain.bo.DeviceStatusBO;
 import com.pangu.iot.manager.device.domain.vo.DeviceListVO;
 import com.pangu.iot.manager.device.domain.vo.DeviceVO;
 import com.pangu.iot.manager.device.service.IDeviceService;
@@ -41,6 +42,13 @@ public class DeviceController extends BaseController {
     private final IDeviceService deviceService;
     private final IProductAndAttributeService productAndAttributeService;
 
+
+    @PutMapping("/status")
+    @SaCheckPermission("manager:device:edit")
+    @Log(title = "设备", businessType = BusinessType.UPDATE)
+    public R<Boolean> updateStatus(@RequestBody DeviceStatusBO deviceStatusBO){
+        return R.ok(deviceService.updateDeviceStatus(deviceStatusBO));
+    }
 
     /**
      * 分页查询设备列表

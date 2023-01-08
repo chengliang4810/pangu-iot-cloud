@@ -5,6 +5,7 @@ import com.pangu.common.mybatis.core.page.PageQuery;
 import com.pangu.common.mybatis.core.page.TableDataInfo;
 import com.pangu.iot.manager.device.domain.Device;
 import com.pangu.iot.manager.device.domain.bo.DeviceBO;
+import com.pangu.iot.manager.device.domain.bo.DeviceStatusBO;
 import com.pangu.iot.manager.device.domain.vo.DeviceListVO;
 import com.pangu.iot.manager.device.domain.vo.DeviceVO;
 
@@ -48,4 +49,12 @@ public interface IDeviceService extends IService<Device> {
      * 校验并批量删除设备信息
      */
     Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid);
+
+    /**
+     * 更新设备状态
+     *
+     * @param deviceStatusBO 设备状态
+     * @return {@link Boolean}
+     */
+    Boolean updateDeviceStatus(DeviceStatusBO deviceStatusBO);
 }

@@ -46,7 +46,7 @@
             from iot_device device
             left join iot_product product on device.product_id = product.id
             left join (
-                select any_value(device_group_relation.device_id) device_id, group_concat(device_group.name) as group_name from iot_device_group device_group
+                select any_value(device_group_relation.device_id) device_id, any_value(device_group_id) device_group_id, group_concat(device_group.name) as group_name from iot_device_group device_group
                 inner join iot_device_group_relation device_group_relation on device_group.id = device_group_relation.device_group_id
              ) device_group on device_group.device_id = device.id
         ${ew.customSqlSegment}

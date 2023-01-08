@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.pangu.common.core.web.domain.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
 
 import java.util.Date;
 
@@ -15,6 +16,7 @@ import java.util.Date;
  * @date 2023-01-06
  */
 @Data
+@Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
 @TableName("iot_device")
 public class Device extends BaseEntity {
@@ -67,4 +69,15 @@ public class Device extends BaseEntity {
      */
     private String zbxId;
 
+
+    /** the constant of field {@link Device#code} */
+    public static final String CONST_CODE = "code";
+    /** the constant of field {@link Device#productId} */
+    public static final String CONST_PRODUCT_ID = "device.product_id";
+    /** the constant of field {@link Device#name} */
+    public static final String CONST_NAME = "device.name";
+    /** the constant of field {@link Device#type} */
+    public static final String CONST_TYPE = "type";
+    /** the constant of field {@link Device#status} */
+    public static final String CONST_STATUS = "status";
 }
