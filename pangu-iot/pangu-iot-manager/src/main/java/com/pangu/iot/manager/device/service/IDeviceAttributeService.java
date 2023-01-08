@@ -1,11 +1,11 @@
 package com.pangu.iot.manager.device.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.pangu.iot.manager.device.domain.DeviceAttribute;
-import com.pangu.iot.manager.device.domain.vo.DeviceAttributeVO;
-import com.pangu.iot.manager.device.domain.bo.DeviceAttributeBO;
 import com.pangu.common.mybatis.core.page.PageQuery;
 import com.pangu.common.mybatis.core.page.TableDataInfo;
+import com.pangu.iot.manager.device.domain.DeviceAttribute;
+import com.pangu.iot.manager.device.domain.bo.DeviceAttributeBO;
+import com.pangu.iot.manager.device.domain.vo.DeviceAttributeVO;
 
 import java.util.Collection;
 import java.util.List;
@@ -65,4 +65,11 @@ public interface IDeviceAttributeService extends IService<DeviceAttribute> {
      */
     Boolean existsProductAttributeBy(String code, Long productId);
 
+    /**
+     * 获取某设备所有属性包含产品属性
+     *
+     * @param deviceId 设备id
+     * @return {@link List}<{@link DeviceAttributeVO}>
+     */
+    List<DeviceAttributeVO> queryVOListByDeviceId(Long deviceId);
 }

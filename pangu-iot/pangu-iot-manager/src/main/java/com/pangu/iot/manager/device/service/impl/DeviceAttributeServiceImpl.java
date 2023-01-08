@@ -6,15 +6,18 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.pangu.common.core.utils.Assert;
 import com.pangu.common.core.utils.StringUtils;
 import com.pangu.common.mybatis.core.page.PageQuery;
 import com.pangu.common.mybatis.core.page.TableDataInfo;
 import com.pangu.common.zabbix.service.ItemService;
+import com.pangu.iot.manager.device.domain.Device;
 import com.pangu.iot.manager.device.domain.DeviceAttribute;
 import com.pangu.iot.manager.device.domain.bo.DeviceAttributeBO;
 import com.pangu.iot.manager.device.domain.vo.DeviceAttributeVO;
 import com.pangu.iot.manager.device.mapper.DeviceAttributeMapper;
 import com.pangu.iot.manager.device.service.IDeviceAttributeService;
+import com.pangu.iot.manager.device.service.IDeviceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -33,8 +36,23 @@ import java.util.Map;
 public class DeviceAttributeServiceImpl extends ServiceImpl<DeviceAttributeMapper, DeviceAttribute> implements IDeviceAttributeService {
 
     private final DeviceAttributeMapper baseMapper;
-
+    private final IDeviceService deviceService;
     private final ItemService itemService;
+
+    /**
+     * 获取某设备所有属性包含产品属性
+     *
+     * @param deviceId 设备id
+     * @return {@link List}<{@link DeviceAttributeVO}>
+     */
+    @Override
+    public List<DeviceAttributeVO> queryVOListByDeviceId(Long deviceId) {
+        Device device = deviceService.getById(deviceId);
+        Assert.notNull(device, "设备不存在");
+        return baseMapper.queryVOListByDeviceId(device.getProductId(), deviceId);
+    }
+
+
 
     /**
      * 查询设备属性

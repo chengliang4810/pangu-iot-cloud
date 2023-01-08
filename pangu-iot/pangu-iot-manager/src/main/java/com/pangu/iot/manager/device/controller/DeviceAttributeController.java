@@ -60,6 +60,15 @@ public class DeviceAttributeController extends BaseController {
     }
 
     /**
+     * 查询设备属性列表
+     */
+    @SaCheckPermission("manager:attribute:list")
+    @GetMapping("/tree/{deviceId}")
+    public R<List<DeviceAttributeVO>> tree(@PathVariable Long deviceId) {
+        return R.ok(deviceAttributeService.queryVOListByDeviceId(deviceId));
+    }
+
+    /**
      * 导出设备属性列表
      */
     @SaCheckPermission("manager:attribute:export")
