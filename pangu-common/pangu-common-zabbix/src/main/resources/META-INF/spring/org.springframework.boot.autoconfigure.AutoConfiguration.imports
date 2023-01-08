@@ -5,3 +5,4 @@ com.pangu.common.zabbix.service.HostGroupService
 com.pangu.common.zabbix.service.ItemService
 com.pangu.common.zabbix.config.TopicRabbitConfig
 com.pangu.common.zabbix.service.ZbxDataService
+com.pangu.common.zabbix.service.HostService

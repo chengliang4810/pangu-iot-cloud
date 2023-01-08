@@ -1,11 +1,13 @@
 package com.pangu.common.zabbix.entity;
 
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 /**
  * @author yefei
  **/
 @Data
+@Accessors(chain = true)
 public class Interface {
 
     private String interfaceid;

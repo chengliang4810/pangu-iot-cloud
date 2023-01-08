@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.pangu.common.mybatis.core.page.PageQuery;
 import com.pangu.common.mybatis.core.page.TableDataInfo;
+import com.pangu.iot.manager.device.domain.DeviceGroup;
 import com.pangu.iot.manager.device.domain.DeviceGroupRelation;
 import com.pangu.iot.manager.device.domain.bo.DeviceGroupRelationBO;
 import com.pangu.iot.manager.device.domain.vo.DeviceGroupRelationVO;
@@ -30,6 +31,18 @@ import java.util.Map;
 public class DeviceGroupRelationServiceImpl extends ServiceImpl<DeviceGroupRelationMapper, DeviceGroupRelation> implements IDeviceGroupRelationService {
 
     private final DeviceGroupRelationMapper baseMapper;
+
+    /**
+     * 查询设备组列表
+     *
+     * @param deviceId 设备id
+     * @return {@link List}<{@link DeviceGroup}>
+     */
+    @Override
+    public List<DeviceGroup> queryDeviceGroupListByDeviceId(Long deviceId) {
+        return baseMapper.selectDeviceGroupListByDeviceId(deviceId);
+    }
+
 
     /**
      * 查询设备与分组关系

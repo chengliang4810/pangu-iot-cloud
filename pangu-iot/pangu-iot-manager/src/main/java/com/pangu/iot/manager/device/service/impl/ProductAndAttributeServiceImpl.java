@@ -5,19 +5,18 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.pangu.common.core.utils.Assert;
 import com.pangu.common.zabbix.entity.dto.TrapperItemDTO;
+import com.pangu.common.zabbix.service.HostService;
 import com.pangu.common.zabbix.service.ItemService;
 import com.pangu.common.zabbix.service.TemplateService;
 import com.pangu.iot.manager.device.convert.DeviceAttributeConvert;
 import com.pangu.iot.manager.device.convert.DeviceConvert;
 import com.pangu.iot.manager.device.domain.Device;
 import com.pangu.iot.manager.device.domain.DeviceAttribute;
+import com.pangu.iot.manager.device.domain.DeviceGroup;
 import com.pangu.iot.manager.device.domain.DeviceGroupRelation;
 import com.pangu.iot.manager.device.domain.bo.DeviceAttributeBO;
 import com.pangu.iot.manager.device.domain.bo.DeviceBO;
-import com.pangu.iot.manager.device.service.IDeviceAttributeService;
-import com.pangu.iot.manager.device.service.IDeviceGroupRelationService;
-import com.pangu.iot.manager.device.service.IDeviceService;
-import com.pangu.iot.manager.device.service.IProductAndAttributeService;
+import com.pangu.iot.manager.device.service.*;
 import com.pangu.iot.manager.product.domain.Product;
 import com.pangu.iot.manager.product.service.IProductService;
 import lombok.RequiredArgsConstructor;
@@ -42,10 +41,12 @@ import static com.pangu.common.zabbix.constant.ZabbixConstants.ATTR_SOURCE_DEPEN
 public class ProductAndAttributeServiceImpl implements IProductAndAttributeService {
 
     private final ItemService itemService;
+    private final HostService hostService;
     private final DeviceConvert deviceConvert;
     private final IDeviceService deviceService;
     private final IProductService productService;
     private final TemplateService templateService;
+    private final IDeviceGroupService deviceGroupService;
     private final DeviceAttributeConvert deviceAttributeConvert;
     private final IDeviceAttributeService deviceAttributeService;
     private final IDeviceGroupRelationService deviceGroupRelationService;
@@ -70,8 +71,11 @@ public class ProductAndAttributeServiceImpl implements IProductAndAttributeServi
         long count = deviceService.count(Wrappers.lambdaQuery(Device.class).eq(Device::getCode, bo.getCode()));
         Assert.isLessOrEqualZero(count, "设备ID已存在");
 
+        // 产品是否存在
+        Product product = productService.getById(bo.getProductId());
+        Assert.notNull(product, "");
         // 生成设备主键
-        long id = IdUtil.getSnowflake().nextId();
+        Long id = IdUtil.getSnowflake().nextId();
 
         // 添加设备组关系
         List<DeviceGroupRelation> groupRelations = bo.getGroupIds().stream()
@@ -79,7 +83,16 @@ public class ProductAndAttributeServiceImpl implements IProductAndAttributeServi
             .collect(Collectors.toList());
         deviceGroupRelationService.saveBatch(groupRelations);
 
+        //设备对应的 zbx主机组ID,模板ID
+        String templateId = product.getZbxId();
+        List<DeviceGroup> deviceGroupList = deviceGroupService.list(Wrappers.lambdaQuery(DeviceGroup.class).in(DeviceGroup::getId, bo.getGroupIds()));
+        List<String> groupIds = deviceGroupList.stream().map(DeviceGroup::getZbxId).collect(Collectors.toList());
+
+        // 创建 zbx host
+        String zbxId = hostService.hostCreate(id.toString(), groupIds, templateId, null);
+
         Device device = deviceConvert.toEntity(bo);
+        device.setZbxId(zbxId);
         device.setId(id);
 
         return deviceService.save(device);
