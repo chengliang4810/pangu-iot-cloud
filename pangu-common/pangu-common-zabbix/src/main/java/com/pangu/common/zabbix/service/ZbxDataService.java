@@ -1,6 +1,7 @@
 package com.pangu.common.zabbix.service;
 
 import com.pangu.common.core.constant.CommonConstant;
+import com.pangu.common.core.utils.Assert;
 import com.pangu.common.core.utils.JsonUtils;
 import com.pangu.common.zabbix.model.ItemValue;
 import com.pangu.common.zabbix.model.ItemValueResult;
@@ -53,7 +54,8 @@ public class ZbxDataService {
      * @param itemValue zabbix item值
      */
     public void sendMessage(ItemValue itemValue) {
-        rabbitTemplate.convertAndSend(CommonConstant.Rabbit.TOPIC_EXCHANGE_ZABBIX_OUTPUT, CommonConstant.Rabbit.ROUTING_ZABBIX_OUTPUT_VALUE, itemValue);
+        Assert.notNull(itemValue, "itemValue is null");
+        rabbitTemplate.convertAndSend(CommonConstant.Rabbit.TOPIC_EXCHANGE_ZABBIX_OUTPUT, CommonConstant.Rabbit.ROUTING_ZABBIX_OUTPUT_VALUE, JsonUtils.toJsonString(itemValue));
     }
 
 }

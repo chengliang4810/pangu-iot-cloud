@@ -73,14 +73,14 @@ public interface CommonConstant {
         // Arguments
         String MESSAGE_TTL = "x-message-ttl";
 
-        String TOPIC_EXCHANGE_ZABBIX_INPUT = "pangu.exchange.zabbix.input.data";
-        String ROUTING_ZABBIX_INPUT_VALUE = "zabbix_route_input";
-        String QUEUE_ZABBIX_INPUT_VALUE = "queue.zabbix.input.data";
+        String TOPIC_EXCHANGE_ZABBIX_INPUT = "pangu.exchange.zabbix.read.data";
+        String ROUTING_ZABBIX_INPUT_VALUE = "zabbix_route_read";
+        String QUEUE_ZABBIX_INPUT_VALUE = "queue.zabbix.read.data";
 
         // zabbix output 发送zabbix数据
-        String TOPIC_EXCHANGE_ZABBIX_OUTPUT = "pangu.exchange.zabbix.output.data";
-        String ROUTING_ZABBIX_OUTPUT_VALUE = "zabbix_route_output";
-        String QUEUE_ZABBIX_OUTPUT_VALUE = "queue.zabbix.output.data";
+        String TOPIC_EXCHANGE_ZABBIX_OUTPUT = "pangu.exchange.zabbix.write.data";
+        String ROUTING_ZABBIX_OUTPUT_VALUE = "zabbix_route_write";
+        String QUEUE_ZABBIX_OUTPUT_VALUE = "queue.zabbix.write.data";
     }
 
 }

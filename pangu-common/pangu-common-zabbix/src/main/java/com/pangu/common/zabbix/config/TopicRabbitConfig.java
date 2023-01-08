@@ -12,6 +12,8 @@ import org.springframework.context.annotation.Configuration;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.pangu.common.core.constant.CommonConstant.Rabbit.*;
+
 /**
  * @author chengliang
  */
@@ -21,7 +23,7 @@ public class TopicRabbitConfig {
 
     @Bean
     TopicExchange zabbixInputDataExchange() {
-        return new TopicExchange("pangu.exchange.zabbix.input.data", true, false);
+        return new TopicExchange(TOPIC_EXCHANGE_ZABBIX_INPUT, true, false);
     }
 
     @Bean
@@ -29,7 +31,7 @@ public class TopicRabbitConfig {
         Map<String, Object> arguments = new HashMap<>();
         // 1天：24 * 60 * 60 * 1000 = 86400000
         arguments.put(CommonConstant.Rabbit.MESSAGE_TTL, 86400000);
-        return new Queue("queue.zabbix.input.data", true, false, false, arguments);
+        return new Queue(QUEUE_ZABBIX_INPUT_VALUE, true, false, false, arguments);
     }
 
     @Bean
@@ -37,12 +39,12 @@ public class TopicRabbitConfig {
         return BindingBuilder
                 .bind(zabbixInputDataQueue)
                 .to(zabbixInputDataExchange)
-                .with("zabbix_route_input");
+                .with(ROUTING_ZABBIX_INPUT_VALUE);
     }
 
     @Bean
     TopicExchange zabbixOutputDataExchange() {
-        return new TopicExchange("pangu.exchange.zabbix.output.data", true, false);
+        return new TopicExchange(TOPIC_EXCHANGE_ZABBIX_OUTPUT, true, false);
     }
 
     @Bean
@@ -50,7 +52,7 @@ public class TopicRabbitConfig {
         Map<String, Object> arguments = new HashMap<>();
         // 1天： 24 * 60 * 60 * 1000 = 86400000
         arguments.put(CommonConstant.Rabbit.MESSAGE_TTL, 86400000);
-        return new Queue("queue.zabbix.output.data", true, false, false, arguments);
+        return new Queue(QUEUE_ZABBIX_OUTPUT_VALUE, true, false, false, arguments);
     }
 
     @Bean
@@ -58,7 +60,7 @@ public class TopicRabbitConfig {
         return BindingBuilder
                 .bind(zabbixOutputDataQueue)
                 .to(zabbixOutputDataExchange)
-                .with("zabbix_route_output");
+                .with(ROUTING_ZABBIX_OUTPUT_VALUE);
     }
 
 
