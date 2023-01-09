@@ -4,6 +4,7 @@ import cn.hutool.core.lang.Dict;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.json.JSONUtil;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -37,6 +38,23 @@ public class JsonUtils {
             return OBJECT_MAPPER.writeValueAsString(object);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+
+    public static String toJsonString(Object object, boolean ignoreNull) {
+        if (ObjectUtil.isNull(object)) {
+            return null;
+        }
+        try {
+            if (ignoreNull){
+                OBJECT_MAPPER.setSerializationInclusion(JsonInclude.Include.NON_DEFAULT);
+            }
+            return OBJECT_MAPPER.writeValueAsString(object);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        } finally {
+            OBJECT_MAPPER.setSerializationInclusion(JsonInclude.Include.ALWAYS);
         }
     }
 

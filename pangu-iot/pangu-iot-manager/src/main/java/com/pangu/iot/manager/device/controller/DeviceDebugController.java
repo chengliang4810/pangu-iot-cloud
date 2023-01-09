@@ -1,9 +1,9 @@
 package com.pangu.iot.manager.device.controller;
 
-import cn.hutool.core.thread.ThreadUtil;
 import com.pangu.common.core.domain.R;
 import com.pangu.common.core.utils.Assert;
-import com.pangu.common.zabbix.model.ItemValue;
+import com.pangu.common.zabbix.model.DeviceValue;
+import com.pangu.common.zabbix.model.ZbxResponse;
 import com.pangu.common.zabbix.service.ZbxDataService;
 import com.pangu.iot.manager.device.domain.Device;
 import com.pangu.iot.manager.device.domain.bo.DebugDataBO;
@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 设备调试控制器
@@ -37,19 +40,15 @@ public class DeviceDebugController {
      * 设备调试发送数据
      */
     @PostMapping("/sendData")
-    public R<Void> sendData(@RequestBody DebugDataBO data) {
+    public R<ZbxResponse> sendData(@RequestBody DebugDataBO data) {
         Device device = deviceService.getById(data.getDeviceId());
         Assert.notNull(device, "设备不存在");
-        boolean isok = true;
-        while (isok){
-            data.getParams().forEach(params ->
-                dataService.sendMessage(new ItemValue().setHostname(device.getId().toString()).setItemKey(params.getDeviceAttrKey()).setItemValue(params.getDeviceAttrValue()))
-            );
-            ThreadUtil.sleep(500);
-        }
-
-        log.info("设备调试发送数据:{}", data);
-        return R.ok();
+        Map<String, String> attribute = data.getParams().stream().collect(Collectors.toMap(DebugDataBO.Params::getDeviceAttrKey, DebugDataBO.Params::getDeviceAttrValue));
+        // 封装设备数据
+        DeviceValue deviceValue = new DeviceValue();
+        deviceValue.setDeviceId(device.getCode());
+        deviceValue.setAttributes(attribute);
+        return R.ok(dataService.sendData(deviceValue));
     }
 
 }

@@ -28,5 +28,4 @@ public class ItemValue implements Serializable {
      */
     private String itemValue;
 
-
 }

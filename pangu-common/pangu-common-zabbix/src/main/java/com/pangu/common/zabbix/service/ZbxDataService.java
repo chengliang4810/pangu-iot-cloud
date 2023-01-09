@@ -1,10 +1,12 @@
 package com.pangu.common.zabbix.service;
 
+import cn.hutool.core.util.ObjectUtil;
+import com.google.gson.Gson;
 import com.pangu.common.core.constant.CommonConstant;
 import com.pangu.common.core.utils.Assert;
 import com.pangu.common.core.utils.JsonUtils;
-import com.pangu.common.zabbix.model.ItemValue;
-import com.pangu.common.zabbix.model.ItemValueResult;
+import com.pangu.common.zabbix.api.ZbxSenderService;
+import com.pangu.common.zabbix.model.*;
 import com.rabbitmq.client.Channel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +17,9 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * zabbix数据服务 通过消息队列发送数据到zabbix
@@ -28,6 +33,9 @@ import java.io.IOException;
 public class ZbxDataService {
 
     private final RabbitTemplate rabbitTemplate;
+    private final ZbxSenderService senderService;
+
+    private Gson gson = new Gson();
 
     /**
      * 接收zabbix实时数据
@@ -49,7 +57,8 @@ public class ZbxDataService {
 
 
     /**
-     * 通过rabbitmq发送消息数据到Zabbix
+     * 通过rabbitmq发送单条数据到Zabbix
+     * 不支持指定数据时间
      *
      * @param itemValue zabbix item值
      */
@@ -58,4 +67,55 @@ public class ZbxDataService {
         rabbitTemplate.convertAndSend(CommonConstant.Rabbit.TOPIC_EXCHANGE_ZABBIX_OUTPUT, CommonConstant.Rabbit.ROUTING_ZABBIX_OUTPUT_VALUE, JsonUtils.toJsonString(itemValue));
     }
 
+    /**
+     * 直连zabbix发送数据，支持批量发送与指定数据时间
+     *
+     * @param itemValue 值
+     */
+    public ZbxResponse sendData(List<ZbxItemValue> itemValue) {
+        Assert.notEmpty(itemValue, "itemValue is null");
+        try {
+            ZabbixTrapper zabbixTrapper = new ZabbixTrapper(itemValue);
+            return senderService.sendData(gson.toJson(zabbixTrapper));
+        } catch (IOException e) {
+            log.error("send data to zabbix error: {}", e.getMessage());
+        }
+        return null;
+    }
+
+    /**
+     * 直连zabbix发送数据，支持指定数据时间
+     *
+     * @param itemValue 值
+     */
+    public ZbxResponse sendData(ZbxItemValue itemValue) {
+       return this.sendData(Collections.singletonList(itemValue));
+    }
+
+
+    /**
+     * 发送数据物联网系统
+     *
+     * @param deviceValue 设备数据
+     */
+    public ZbxResponse sendData(DeviceValue deviceValue) {
+        Assert.notNull(deviceValue, "deviceValue is null");
+        Assert.notNull(deviceValue.getDeviceId(), "deviceId is null");
+        Assert.notNull(deviceValue.getAttributes(), "device attribute is null");
+
+        List<ZbxItemValue> itemValues = new ArrayList<>(deviceValue.getAttributes().size());
+
+        deviceValue.getAttributes().forEach((key,value) -> {
+            ZbxItemValue itemValue = new ZbxItemValue();
+            itemValue.setHost(deviceValue.getDeviceId());
+            itemValue.setKey(key);
+            itemValue.setValue(value);
+            if (ObjectUtil.isNotNull(deviceValue.getClock())){
+                itemValue.setClock(deviceValue.getClock());
+            }
+            itemValues.add(itemValue);
+        });
+
+        return this.sendData(itemValues);
+    }
 }
