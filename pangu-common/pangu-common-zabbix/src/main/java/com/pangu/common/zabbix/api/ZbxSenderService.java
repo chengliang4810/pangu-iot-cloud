@@ -56,7 +56,7 @@ public class ZbxSenderService {
     public ZbxResponse sendData(String message) throws IOException {
 
         Socket trapperSocket = this.getSocket();
-        log.info("发送数据:{}", message);
+        log.debug("发送数据:{}", message);
 
         int payloadLength = length(message);
         byte[] header = new byte[]{
@@ -112,7 +112,6 @@ public class ZbxSenderService {
      * @return String
      */
     private String zabbixResponseToMap(String resp) {
-        log.info("zabbix返回数据:{}", resp);
         Map<String, String> result = JsonUtils.parseObject(resp, Map.class);
 
         String info = result.get("info");
