@@ -10,6 +10,7 @@
 
     <modules>
         <module>pangu-iot-manager</module>
+        <module>pangu-iot-data</module>
     </modules>
 
     <artifactId>pangu-iot</artifactId>

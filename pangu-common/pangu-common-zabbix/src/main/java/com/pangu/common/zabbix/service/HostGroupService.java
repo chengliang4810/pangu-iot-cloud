@@ -7,6 +7,7 @@ import com.pangu.common.zabbix.api.ZbxHostGroup;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -28,7 +29,8 @@ public class HostGroupService {
 
     private final ForestConfiguration configuration;
 
-    private final HostGroupCallback hostGroupCallback;
+    @Autowired(required = false)
+    private HostGroupCallback hostGroupCallback;
 
     private static String zbxApiToken;
 
@@ -46,7 +48,10 @@ public class HostGroupService {
             groupId = createGlobalHostGroup();
         }
 
-        hostGroupCallback.initAfter(groupId);
+        //
+        if (hostGroupCallback != null){
+            hostGroupCallback.initAfter(groupId);
+        }
     }
 
     /**

@@ -14,12 +14,14 @@ import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 /**
  * zabbix数据服务 通过消息队列发送数据到zabbix
@@ -37,6 +39,9 @@ public class ZbxDataService {
 
     private Gson gson = new Gson();
 
+    @Autowired(required = false)
+    private ReceiveDataService receiveDataService;
+
     /**
      * 接收zabbix实时数据
      *
@@ -46,10 +51,19 @@ public class ZbxDataService {
     @RabbitHandler
     @RabbitListener(queues = "#{zabbixInputDataQueue.name}")
     public void receiveMessage(Channel channel, Message message) {
+        if (receiveDataService == null){
+            return;
+        }
         try {
             channel.basicAck(message.getMessageProperties().getDeliveryTag(), true);
-            ItemValueResult itemValue = JsonUtils.parseObject(message.getBody(), ItemValueResult.class);
-            log.debug("zabbix data: {}", itemValue);
+            Map<String, Object> result = JsonUtils.parseObject(message.getBody(), Map.class);
+            if (ObjectUtil.isNotNull(result.get("itemid"))){
+                receiveDataService.receiveData(JsonUtils.parseObject(message.getBody(), ZbxValue.class));
+            } else if (ObjectUtil.isNotNull(result.get("eventid"))){
+                receiveDataService.receiveProblems(JsonUtils.parseObject(message.getBody(), ZbxProblem.class));
+            } else {
+                log.warn("未知的zabbix数据类型 {}", result);
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
