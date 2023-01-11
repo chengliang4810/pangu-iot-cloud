@@ -40,7 +40,7 @@ public class ZbxValue implements Serializable {
      */
     private Integer clock;
     /**
-     * 时间
+     * 纳秒
      */
     private Integer ns;
     /**

@@ -29,7 +29,8 @@ public class ZbxItemValue implements Serializable {
     private String value;
 
     /**
-     * 秒，如果为 Null，则 zabbix 以接收时间为准
+     * 如果为 Null，则 zabbix 以接收时间为准
+     * 秒，70年到现在时间 例如：System.currentTimeMillis()/1000
      */
     private Long clock;
 
