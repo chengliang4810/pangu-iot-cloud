@@ -11,7 +11,6 @@ import com.pangu.common.log.enums.BusinessType;
 import com.pangu.common.mybatis.core.page.PageQuery;
 import com.pangu.common.mybatis.core.page.TableDataInfo;
 import com.pangu.iot.manager.device.domain.bo.DeviceAttributeBO;
-import com.pangu.iot.manager.device.domain.bo.LastDataAttributeBO;
 import com.pangu.iot.manager.device.domain.vo.DeviceAttributeVO;
 import com.pangu.iot.manager.device.service.IDeviceAttributeService;
 import com.pangu.iot.manager.device.service.IProductAndAttributeService;
@@ -26,8 +25,8 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * 设备属性控制器
- * 前端访问路由地址为:/manager/attribute
+ * 设备属性值控制器
+ * 前端访问路由地址为:/manager/device_attribute
  *
  * @author chengliang4810
  * @date 2023-01-05
@@ -35,21 +34,12 @@ import java.util.List;
 @Validated
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/device_attribute")
-public class DeviceAttributeController extends BaseController {
+@RequestMapping("/device_attribute/data")
+public class DeviceAttributeValueController extends BaseController {
 
     private final IDeviceAttributeService deviceAttributeService;
 
     private final IProductAndAttributeService productAndAttributeService;
-
-    /**
-     * 查询设备属性以及最新数据列表
-     */
-    @SaCheckPermission("manager:attribute:list")
-    @GetMapping("/latest_data/list")
-    public TableDataInfo<DeviceAttributeVO> latestDataList(LastDataAttributeBO bo, PageQuery pageQuery) {
-        return deviceAttributeService.queryLatestDataList(bo, pageQuery);
-    }
 
     /**
      * 查询设备属性列表

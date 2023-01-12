@@ -36,6 +36,7 @@
         <module>pangu-common-prometheus</module>
         <module>pangu-common-zabbix</module>
         <module>pangu-common-emqx</module>
+        <module>pangu-common-tdengine</module>
     </modules>
 
     <artifactId>pangu-common</artifactId>

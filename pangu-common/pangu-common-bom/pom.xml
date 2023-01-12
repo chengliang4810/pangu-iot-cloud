@@ -15,6 +15,14 @@
 
     <dependencyManagement>
         <dependencies>
+
+            <!--TdEngine-->
+            <dependency>
+                <groupId>com.pangu</groupId>
+                <artifactId>pangu-common-tdengine</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
             <!-- 核心模块 -->
             <dependency>
                 <groupId>com.pangu</groupId>

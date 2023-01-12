@@ -82,6 +82,12 @@
             <artifactId>pangu-common-seata</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.pangu</groupId>
+            <artifactId>pangu-common-tdengine</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
         <!-- PanGu Api System -->
         <dependency>
             <groupId>com.pangu</groupId>

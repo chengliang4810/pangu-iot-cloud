@@ -14,6 +14,7 @@ import com.pangu.common.zabbix.service.ItemService;
 import com.pangu.iot.manager.device.domain.Device;
 import com.pangu.iot.manager.device.domain.DeviceAttribute;
 import com.pangu.iot.manager.device.domain.bo.DeviceAttributeBO;
+import com.pangu.iot.manager.device.domain.bo.LastDataAttributeBO;
 import com.pangu.iot.manager.device.domain.vo.DeviceAttributeVO;
 import com.pangu.iot.manager.device.mapper.DeviceAttributeMapper;
 import com.pangu.iot.manager.device.service.IDeviceAttributeService;
@@ -38,6 +39,23 @@ public class DeviceAttributeServiceImpl extends ServiceImpl<DeviceAttributeMappe
     private final DeviceAttributeMapper baseMapper;
     private final IDeviceService deviceService;
     private final ItemService itemService;
+
+    @Override
+    public TableDataInfo<DeviceAttributeVO> queryLatestDataList(LastDataAttributeBO bo, PageQuery pageQuery) {
+
+        // 查询设备信息
+        Long deviceId = bo.getDeviceId();
+        Device device = deviceService.getById(deviceId);
+        Assert.notNull(device, "设备不存在");
+
+        // 查询该设备所有属性
+        List<DeviceAttributeVO> attributeVOList = baseMapper.queryVOListByDeviceId(ObjectUtil.isNull(bo.getProductId()) ? device.getProductId() : bo.getProductId(), deviceId);
+
+        // 获取最新属性值
+        // List<Map<String, Object>> latestDataList = itemService.getLatestDataList(device.getZabbixHostId(), attributeVOList);
+        return null;
+    }
+
 
     /**
      * 获取某设备所有属性包含产品属性
@@ -93,8 +111,6 @@ public class DeviceAttributeServiceImpl extends ServiceImpl<DeviceAttributeMappe
         lqw.eq(StringUtils.isNotBlank(bo.getUnit()), DeviceAttribute::getUnit, bo.getUnit());
         lqw.eq(StringUtils.isNotBlank(bo.getMasterItemId()), DeviceAttribute::getMasterItemId, bo.getMasterItemId());
         lqw.eq(bo.getDependencyAttrId() != null, DeviceAttribute::getDependencyAttrId, bo.getDependencyAttrId());
-        lqw.eq(StringUtils.isNotBlank(bo.getZbxId()), DeviceAttribute::getZbxId, bo.getZbxId());
-        lqw.eq(StringUtils.isNotBlank(bo.getTemplateId()), DeviceAttribute::getTemplateId, bo.getTemplateId());
         lqw.eq(StringUtils.isNotBlank(bo.getValueMapId()), DeviceAttribute::getValueMapId, bo.getValueMapId());
         return lqw;
     }

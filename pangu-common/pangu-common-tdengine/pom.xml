@@ -9,19 +9,13 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>pangu-common-zabbix</artifactId>
+    <artifactId>pangu-common-tdengine</artifactId>
 
     <description>
-        pangu-common-zabbix服务
+        pangu-common-tdengine
     </description>
 
     <dependencies>
-
-        <!-- Spring RabbitMq -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-amqp</artifactId>
-        </dependency>
 
         <!-- forest-spring-boot-starter -->
         <dependency>
@@ -30,23 +24,30 @@
             <version>1.5.26</version>
         </dependency>
 
-        <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-            <version>2.9.1</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.freemarker</groupId>
-            <artifactId>freemarker</artifactId>
-            <version>2.3.31</version>
-        </dependency>
-
-        <!-- pangu Common Core-->
+        <!-- RuoYi Common Core-->
         <dependency>
             <groupId>com.pangu</groupId>
             <artifactId>pangu-common-core</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>com.pangu</groupId>
+            <artifactId>pangu-common-mybatis</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid</artifactId>
+            <version>1.2.12</version>
+        </dependency>
+
+        <!-- TDengine连接 START-->
+        <dependency>
+            <groupId>com.taosdata.jdbc</groupId>
+            <artifactId>taos-jdbcdriver</artifactId>
+            <version>2.0.38</version>
+        </dependency>
+        <!-- TDengine连接  END-->
 
     </dependencies>
 </project>

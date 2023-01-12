@@ -50,6 +50,12 @@ public class DeviceAttributeBO extends BaseEntity {
     @NotBlank(message = "属性唯一Key不能为空", groups = { AddGroup.class, EditGroup.class })
     private String key;
 
+
+    /**
+     * 是否返回最新数据
+     */
+    private Boolean latestData;
+
     /**
      * 值类型
      */
@@ -77,16 +83,6 @@ public class DeviceAttributeBO extends BaseEntity {
      *  依赖属性 id， 当 source为18时不为空
      */
     private Long dependencyAttrId;
-
-    /**
-     * zabbix ItemId
-     */
-    private String zbxId;
-
-    /**
-     * 继承的ID
-     */
-    private String templateId;
 
     /**
      * zabbix 值映射ID
