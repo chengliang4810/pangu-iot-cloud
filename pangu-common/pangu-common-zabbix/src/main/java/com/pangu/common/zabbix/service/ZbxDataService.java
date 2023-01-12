@@ -108,7 +108,7 @@ public class ZbxDataService {
 
 
     /**
-     * 发送数据物联网系统
+     * 发送数据到zabbix
      *
      * @param deviceValue 设备数据
      */

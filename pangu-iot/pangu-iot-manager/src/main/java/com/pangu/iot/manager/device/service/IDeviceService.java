@@ -6,6 +6,7 @@ import com.pangu.common.mybatis.core.page.TableDataInfo;
 import com.pangu.iot.manager.device.domain.Device;
 import com.pangu.iot.manager.device.domain.bo.DeviceBO;
 import com.pangu.iot.manager.device.domain.bo.DeviceStatusBO;
+import com.pangu.iot.manager.device.domain.vo.DeviceDetailVO;
 import com.pangu.iot.manager.device.domain.vo.DeviceListVO;
 import com.pangu.iot.manager.device.domain.vo.DeviceVO;
 
@@ -23,7 +24,7 @@ public interface IDeviceService extends IService<Device> {
     /**
      * 查询设备
      */
-    DeviceVO queryById(Long id);
+    DeviceDetailVO queryById(Long id);
 
     /**
      * 查询设备列表

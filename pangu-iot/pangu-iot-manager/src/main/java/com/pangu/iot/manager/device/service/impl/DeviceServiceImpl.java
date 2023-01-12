@@ -14,6 +14,7 @@ import com.pangu.iot.manager.device.domain.Device;
 import com.pangu.iot.manager.device.domain.DeviceGroupRelation;
 import com.pangu.iot.manager.device.domain.bo.DeviceBO;
 import com.pangu.iot.manager.device.domain.bo.DeviceStatusBO;
+import com.pangu.iot.manager.device.domain.vo.DeviceDetailVO;
 import com.pangu.iot.manager.device.domain.vo.DeviceListVO;
 import com.pangu.iot.manager.device.domain.vo.DeviceVO;
 import com.pangu.iot.manager.device.mapper.DeviceMapper;
@@ -41,8 +42,8 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> impleme
      * 查询设备
      */
     @Override
-    public DeviceVO queryById(Long id){
-        return baseMapper.selectVoById(id);
+    public DeviceDetailVO queryById(Long id){
+        return baseMapper.detailById(id);
     }
 
     /**

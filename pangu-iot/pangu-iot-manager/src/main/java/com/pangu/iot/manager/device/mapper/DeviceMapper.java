@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.toolkit.Constants;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.pangu.common.mybatis.core.mapper.BaseMapperPlus;
 import com.pangu.iot.manager.device.domain.Device;
+import com.pangu.iot.manager.device.domain.vo.DeviceDetailVO;
 import com.pangu.iot.manager.device.domain.vo.DeviceListVO;
 import com.pangu.iot.manager.device.domain.vo.DeviceVO;
 import org.apache.ibatis.annotations.Param;
@@ -27,4 +28,11 @@ public interface DeviceMapper extends BaseMapperPlus<DeviceMapper, Device, Devic
      */
     Page<DeviceListVO> selectVoPageList(IPage<Device> page,@Param(Constants.WRAPPER) Wrapper ew);
 
+    /**
+     * 通过id 获取设备详情信息
+     *
+     * @param id id
+     * @return {@link DeviceDetailVO}
+     */
+    DeviceDetailVO detailById(Long id);
 }

@@ -1,4 +1,4 @@
-package com.pangu.common.zabbix;
+package com.pangu.common.zabbix.util;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;

@@ -12,6 +12,7 @@ import com.pangu.common.mybatis.core.page.PageQuery;
 import com.pangu.common.mybatis.core.page.TableDataInfo;
 import com.pangu.iot.manager.device.domain.bo.DeviceBO;
 import com.pangu.iot.manager.device.domain.bo.DeviceStatusBO;
+import com.pangu.iot.manager.device.domain.vo.DeviceDetailVO;
 import com.pangu.iot.manager.device.domain.vo.DeviceListVO;
 import com.pangu.iot.manager.device.domain.vo.DeviceVO;
 import com.pangu.iot.manager.device.service.IDeviceService;
@@ -86,7 +87,7 @@ public class DeviceController extends BaseController {
      */
     @SaCheckPermission("manager:device:query")
     @GetMapping("/{id}")
-    public R<DeviceVO> getInfo(@NotNull(message = "主键不能为空") @PathVariable Long id) {
+    public R<DeviceDetailVO> getInfo(@NotNull(message = "主键不能为空") @PathVariable Long id) {
         return R.ok(deviceService.queryById(id));
     }
 

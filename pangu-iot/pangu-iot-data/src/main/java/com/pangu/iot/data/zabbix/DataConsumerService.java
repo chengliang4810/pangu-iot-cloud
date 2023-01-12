@@ -27,6 +27,7 @@ public class DataConsumerService implements ReceiveDataService {
             return;
         }
         // 存入tdengine
+        log.info("接收到ZBX数据：{}", zbxValue);
     }
 
 
@@ -38,6 +39,7 @@ public class DataConsumerService implements ReceiveDataService {
     @Override
     public void receiveProblems(ZbxProblem zbxProblem) {
         // 设备告警
+        log.info("接收到ZBX事件：{}", zbxProblem);
     }
 
 }

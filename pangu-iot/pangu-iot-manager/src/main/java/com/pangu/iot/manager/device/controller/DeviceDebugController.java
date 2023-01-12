@@ -16,9 +16,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
-import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -51,9 +48,7 @@ public class DeviceDebugController {
         DeviceValue deviceValue = new DeviceValue();
         deviceValue.setDeviceId(device.getCode());
         deviceValue.setAttributes(attribute);
-        LocalDateTime localDateTime = LocalDateTime.now();
-        System.out.println(localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-        deviceValue.setClock(localDateTime.toEpochSecond( ZoneOffset.of("+8")));
+        deviceValue.setClock(System.currentTimeMillis() / 1000);
 
         return R.ok(dataService.sendData(deviceValue));
     }
