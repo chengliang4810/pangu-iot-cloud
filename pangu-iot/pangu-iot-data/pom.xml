@@ -104,6 +104,11 @@
             <artifactId>pangu-common-zabbix</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.pangu</groupId>
+            <artifactId>pangu-common-tdengine</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>

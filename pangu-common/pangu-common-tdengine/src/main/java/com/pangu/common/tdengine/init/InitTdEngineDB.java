@@ -1,5 +1,6 @@
 package com.pangu.common.tdengine.init;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.druid.pool.DruidDataSource;
 import com.pangu.common.tdengine.config.TdEngineConfig;
 import com.pangu.common.tdengine.mapper.TdDatabaseMapper;
@@ -17,7 +18,7 @@ import java.sql.DriverManager;
 import java.util.Properties;
 
 /**
- * init td引擎数据库
+ * 初始化 td引擎数据库
  *
  * @author chengliang4810
  * @date 2023/01/12 15:41
@@ -33,52 +34,39 @@ public class InitTdEngineDB  implements ApplicationRunner {
 
     private TdEngineConfig dengineConfig;
 
-    private TdDatabaseMapper commonDao;
+    private TdDatabaseMapper tdDatabaseMapper;
 
     @Override
     public void run(ApplicationArguments args) {
-
         //先获取TDengine的配置，检测TDengine是否已经配置
         if (containBean(TdEngineConfig.class)) {
             this.dengineConfig = applicationContext.getBean(TdEngineConfig.class);
             this.dataSource = applicationContext.getBean("tDengineDataSource", DruidDataSource.class);
-            this.commonDao= applicationContext.getBean(TdDatabaseMapper.class);
-            initTDengine(this.dengineConfig.getDbName());
-            log.info("使用TDengine存储设备数据，初始化成功");
+            this.tdDatabaseMapper= applicationContext.getBean(TdDatabaseMapper.class);
+            initTdEngine(this.dengineConfig.getDbName());
+            log.info("TDengine configuration initialization success");
         }else{
-            log.info("使用MySql存储设备数据，初始化成功");
+            log.warn("TDengine configuration initialization failed");
         }
     }
 
     /**
-     * @return
-     * @Method
-     * @Description 开始初始化加载系统参数, 创建数据库和超级表
-     * @Param null
-     * @date 2022/5/22,0022 14:27
-     * @author wxy
+     * 开始初始化加载系统参数, 创建数据库和超级表
      */
-    public void initTDengine(String dbName) {
+    public void initTdEngine(String dbName) {
         try {
             createDatabase();
             //创建数据库表
-            commonDao.createSTable(dbName);
-            log.info("完成超级表的创建");
+            // tdDatabaseMapper.createSuperTable(dbName);
+            log.info("super table [{}] is created", dbName);
         } catch (Exception e) {
-            log.error("错误",e.getMessage());
+            log.error("failed to create the super table : {}",e.getMessage());
             e.printStackTrace();
         }
-
     }
 
     /**
-     * @Method
-     * @Description 根据数据库连接自动创建数据库
-     * @Param null
-     * @return
-     * @date 2022/5/24,0024 14:32
-     * @author wxy
-     *
+     * 根据数据库连接自动创建数据库
      */
     private void createDatabase(){
         try {
@@ -92,7 +80,6 @@ public class InitTdEngineDB  implements ApplicationRunner {
             int endIndex = jdbcUrl.indexOf('?');
             String newJdbcUrl = jdbcUrl.substring(0,startIndex);
             newJdbcUrl= newJdbcUrl+jdbcUrl.substring(endIndex);
-            System.out.println(newJdbcUrl);
 
             Properties connProps = new Properties();
             connProps.setProperty(TSDBDriver.PROPERTY_KEY_CHARSET, "UTF-8");
@@ -101,22 +88,19 @@ public class InitTdEngineDB  implements ApplicationRunner {
             Connection conn = DriverManager.getConnection(newJdbcUrl, connProps);
             conn.createStatement().execute(String.format("create database  if not exists  %s;",dbName));
             conn.close();
-            log.info("完成数据库创建");
+            log.info("database [{}] created successfully", dbName);
         } catch (Exception e) {
-            log.info("错误",e.getMessage());
+            log.info("database created fail: {}",e.getMessage());
             e.printStackTrace();
         }
     }
 
     /**
-     * @return
-     * @Method containBean
-     * @Description 根据类判断是否有对应bean
-     * @author wxy
+     * 根据类判断是否有对应bean
      */
     private boolean containBean(@Nullable Class<?> T) {
         String[] beans = applicationContext.getBeanNamesForType(T);
-        if (beans == null || beans.length == 0) {
+        if (ObjectUtil.isNull(beans) || beans.length == 0) {
             return false;
         } else {
             return true;

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pangu.common.tdengine.mapper.TdDatabaseMapper">
+
+    <update id="createDB">
+        create database if not exists  ${database} keep 365 DURATION 10;
+    </update>
+
+    <update id="createSuperTable">
+        create STABLE  if not exists ${database}.${tableName}
+        <foreach collection="columns" open="(ts timestamp" close=")" item="column" separator=",">
+            #{column.name} ${column.type}
+        </foreach>
+
+        <foreach collection="tags" open="TAGS(" close=")" item="tag" separator=",">
+            #{tag.name} ${tag.type});
+        </foreach>
+    </update>
+
+</mapper>
