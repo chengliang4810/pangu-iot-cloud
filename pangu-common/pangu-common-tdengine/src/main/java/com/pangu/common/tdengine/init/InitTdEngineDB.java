@@ -2,7 +2,7 @@ package com.pangu.common.tdengine.init;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import com.pangu.common.tdengine.config.TdEngineConfig;
-import com.pangu.common.tdengine.dao.TdCommonDao;
+import com.pangu.common.tdengine.mapper.TdDatabaseMapper;
 import com.taosdata.jdbc.TSDBDriver;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +33,7 @@ public class InitTdEngineDB  implements ApplicationRunner {
 
     private TdEngineConfig dengineConfig;
 
-    private TdCommonDao commonDao;
+    private TdDatabaseMapper commonDao;
 
     @Override
     public void run(ApplicationArguments args) {
@@ -42,7 +42,7 @@ public class InitTdEngineDB  implements ApplicationRunner {
         if (containBean(TdEngineConfig.class)) {
             this.dengineConfig = applicationContext.getBean(TdEngineConfig.class);
             this.dataSource = applicationContext.getBean("tDengineDataSource", DruidDataSource.class);
-            this.commonDao= applicationContext.getBean(TdCommonDao.class);
+            this.commonDao= applicationContext.getBean(TdDatabaseMapper.class);
             initTDengine(this.dengineConfig.getDbName());
             log.info("使用TDengine存储设备数据，初始化成功");
         }else{

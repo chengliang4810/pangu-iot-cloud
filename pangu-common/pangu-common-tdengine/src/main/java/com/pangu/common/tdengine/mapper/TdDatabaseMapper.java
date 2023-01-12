@@ -1,9 +1,9 @@
-package com.pangu.common.tdengine.dao;
+package com.pangu.common.tdengine.mapper;
 
-import org.springframework.stereotype.Repository;
+import org.apache.ibatis.annotations.Mapper;
 
-@Repository
-public interface TdCommonDao {
+@Mapper
+public interface TdDatabaseMapper {
 
     /***
      * 创建数据库

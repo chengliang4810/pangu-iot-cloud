@@ -29,7 +29,7 @@ import java.util.List;
  * @date 2023/01/12 15:38
  */
 @Configuration
-@MapperScan(basePackages = {"com.pangu.common.tdengine.dao"}, sqlSessionTemplateRef = "tdengineSqlSessionTemplate")
+@MapperScan(basePackages = {"com.pangu.common.tdengine.mapper"}, sqlSessionTemplateRef = "tdengineSqlSessionTemplate")
 @ConditionalOnProperty(name = "spring.datasource.druid.tdengine-server.enabled", havingValue = "true")
 public class TdEngineConfig {
 

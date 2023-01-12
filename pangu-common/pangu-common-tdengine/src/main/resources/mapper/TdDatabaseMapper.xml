@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pangu.common.tdengine.mapper.TdDatabaseMapper">
+
+    <update id="createDB">
+        create database if not exists  ${database};
+    </update>
+
+    <update id="createSTable">
+        create STABLE  if not exists ${database}.device_log
+        (ts timestamp,
+        `log_value` BINARY(100),
+        is_monitor TINYINT,
+        log_type TINYINT,
+        `identity` BINARY(100),
+        mode TINYINT,
+        remark BINARY(500))
+
+        TAGS(
+        device_id BIGINT,
+        serial_number BINARY(50),
+        user_id BIGINT,
+        tenant_Id BIGINT,
+        user_name BINARY(100),
+        tenant_name BINARY(100),
+        device_name BINARY(100));
+    </update>
+
+</mapper>
