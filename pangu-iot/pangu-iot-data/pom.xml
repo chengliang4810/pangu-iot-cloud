@@ -85,28 +85,11 @@
         <dependency>
             <groupId>com.pangu</groupId>
             <artifactId>pangu-common-tdengine</artifactId>
-            <version>1.0.0</version>
-        </dependency>
-
-        <!-- PanGu Api System -->
-        <dependency>
-            <groupId>com.pangu</groupId>
-            <artifactId>pangu-api-system</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.pangu</groupId>
-            <artifactId>pangu-api-resource</artifactId>
         </dependency>
 
         <dependency>
             <groupId>com.pangu</groupId>
             <artifactId>pangu-common-zabbix</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.pangu</groupId>
-            <artifactId>pangu-common-tdengine</artifactId>
         </dependency>
 
     </dependencies>
