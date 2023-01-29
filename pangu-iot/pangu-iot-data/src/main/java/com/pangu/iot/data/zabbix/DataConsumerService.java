@@ -23,6 +23,7 @@ public class DataConsumerService implements ReceiveDataService {
      */
     @Override
     public void receiveData(ZbxValue zbxValue) {
+        // 过滤Zabbix server，暂不处理
         if (zbxValue.getHostname().equals("Zabbix server")){
             return;
         }
