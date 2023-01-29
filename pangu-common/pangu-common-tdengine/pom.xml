@@ -35,19 +35,12 @@
             <artifactId>pangu-common-mybatis</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>druid</artifactId>
-            <version>1.2.12</version>
-        </dependency>
-
-        <!-- TDengine连接 START-->
+        <!-- TDengine连接-->
         <dependency>
             <groupId>com.taosdata.jdbc</groupId>
             <artifactId>taos-jdbcdriver</artifactId>
-            <version>2.0.38</version>
+            <version>3.0.0</version>
         </dependency>
-        <!-- TDengine连接  END-->
 
     </dependencies>
 </project>

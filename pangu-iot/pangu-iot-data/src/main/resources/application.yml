@@ -11,8 +11,6 @@ spring:
     # 环境配置
     active: @profiles.active@
 
-
-
 --- # nacos 配置
 spring:
   cloud:

@@ -3,7 +3,6 @@ package com.pangu.iot.data;
 import org.apache.dubbo.config.spring.context.annotation.EnableDubbo;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.context.metrics.buffering.BufferingApplicationStartup;
 
 /**
@@ -12,7 +11,7 @@ import org.springframework.boot.context.metrics.buffering.BufferingApplicationSt
  * @author chengliang4810
  */
 @EnableDubbo
-@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
+@SpringBootApplication
 public class PanGuIotDataApplication {
     public static void main(String[] args) {
         SpringApplication application = new SpringApplication(PanGuIotDataApplication.class);

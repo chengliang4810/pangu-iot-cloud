@@ -1,2 +1,2 @@
 com.pangu.common.tdengine.config.TdEngineConfig
-com.pangu.common.tdengine.init.InitTdEngineDB
+#com.pangu.common.tdengine.init.InitTdEngineDB
