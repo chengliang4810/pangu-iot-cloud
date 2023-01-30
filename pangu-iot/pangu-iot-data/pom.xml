@@ -77,10 +77,10 @@
             <artifactId>pangu-common-dubbo</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>com.pangu</groupId>
-            <artifactId>pangu-common-seata</artifactId>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.pangu</groupId>-->
+<!--            <artifactId>pangu-common-seata</artifactId>-->
+<!--        </dependency>-->
 
         <dependency>
             <groupId>com.pangu</groupId>
