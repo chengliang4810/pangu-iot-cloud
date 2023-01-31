@@ -11,6 +11,7 @@ import com.pangu.common.core.utils.StringUtils;
 import com.pangu.common.mybatis.core.page.PageQuery;
 import com.pangu.common.mybatis.core.page.TableDataInfo;
 import com.pangu.common.zabbix.service.TemplateService;
+import com.pangu.data.api.RemoteTdEngineService;
 import com.pangu.iot.manager.product.domain.Product;
 import com.pangu.iot.manager.product.domain.bo.ProductBO;
 import com.pangu.iot.manager.product.domain.vo.ProductVO;
@@ -27,6 +28,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.pangu.common.core.constant.ConfigKeyConstants.GLOBAL_HOST_GROUP_KEY;
+import static com.pangu.common.core.constant.IotConstants.SUPER_TABLE_PREFIX;
 
 /**
  * 产品Service业务层处理
@@ -40,6 +42,8 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
 
     @DubboReference
     private final RemoteConfigService configService;
+    @DubboReference
+    private final RemoteTdEngineService tdEngineService;
 
     private final ProductMapper baseMapper;
 
@@ -106,8 +110,11 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
             bo.setCode(IdUtil.nanoId());
         }
 
-        // 创建zabbix模板
+        // 生成主键
         Long productId = IdUtil.getSnowflake().nextId();
+        // 初始化超级表
+        tdEngineService.initSuperTable(SUPER_TABLE_PREFIX + productId);
+        // 创建zabbix模板
         String hostGroupId = configService.getConfigByKey(GLOBAL_HOST_GROUP_KEY);
         String zbxId = templateService.zbxTemplateCreate(hostGroupId, productId.toString());
 

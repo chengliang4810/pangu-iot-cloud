@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
+import java.util.Map;
+
 /**
  * 监控项dto
  *
@@ -65,5 +67,10 @@ public class TrapperItemDTO {
      * 值映射zabbix ID
      */
     private String valueMapId;
+
+    /**
+     * 标签
+     */
+    private Map<String, String> tags;
 
 }

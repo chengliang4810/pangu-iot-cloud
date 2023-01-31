@@ -52,6 +52,7 @@ public class HostGroupService {
         if (hostGroupCallback != null){
             hostGroupCallback.initAfter(groupId);
         }
+
     }
 
     /**

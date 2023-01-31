@@ -33,7 +33,7 @@ public class ItemService {
      */
     public String createTrapperItem(TrapperItemDTO trapperItemDTO) {
         log.debug("创建监控项:{}", JSONUtil.toJsonStr(trapperItemDTO));
-        String response = zbxItem.createTrapperItem(trapperItemDTO.getItemName(), trapperItemDTO.getKey(), trapperItemDTO.getHostId(), trapperItemDTO.getSource(), "2s", trapperItemDTO.getDependencyItemZbxId(), trapperItemDTO.getValueType(), trapperItemDTO.getUnits(), null, trapperItemDTO.getValueMapId(), null, null);
+        String response = zbxItem.createTrapperItem(trapperItemDTO.getItemName(), trapperItemDTO.getKey(), trapperItemDTO.getHostId(), trapperItemDTO.getSource(), "2s", trapperItemDTO.getDependencyItemZbxId(), trapperItemDTO.getValueType(), trapperItemDTO.getUnits(), null, trapperItemDTO.getValueMapId(), trapperItemDTO.getTags(), null);
         return JsonUtils.parseObject(response, TemplateIds.class).getItemids()[0];
     }
 

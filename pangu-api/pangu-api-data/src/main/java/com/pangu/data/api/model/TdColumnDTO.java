@@ -1,4 +1,4 @@
-package com.pangu.common.tdengine.model;
+package com.pangu.data.api.model;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,7 +13,7 @@ import lombok.experimental.Accessors;
 @Data
 @NoArgsConstructor
 @Accessors(chain = true)
-public class TdColumn {
+public class TdColumnDTO {
 
     /**
      * 名字
@@ -25,7 +25,7 @@ public class TdColumn {
      */
     private String type;
 
-    public TdColumn(String name, String type) {
+    public TdColumnDTO(String name, String type) {
         this.name = name;
         this.type = type;
     }

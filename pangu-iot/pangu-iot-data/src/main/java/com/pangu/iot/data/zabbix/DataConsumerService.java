@@ -28,6 +28,7 @@ public class DataConsumerService implements ReceiveDataService {
             return;
         }
         // 存入tdengine
+        System.out.println("接收到ZBX数据: " + zbxValue);
         log.info("接收到ZBX数据：{}", zbxValue);
     }
 

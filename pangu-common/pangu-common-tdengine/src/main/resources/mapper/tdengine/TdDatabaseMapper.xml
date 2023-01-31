@@ -4,19 +4,23 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.pangu.common.tdengine.mapper.TdDatabaseMapper">
 
-    <update id="createDB">
-        create database if not exists  ${database} keep 365 DURATION 10;
-    </update>
+    <insert id="createDB">
+        create database if not exists  ${database} keep 365 DURATION 10
+    </insert>
 
-    <update id="createSuperTable">
+    <insert id="createSuperTable" >
         create STABLE  if not exists ${database}.${tableName}
-        <foreach collection="columns" open="(ts timestamp" close=")" item="column" separator=",">
-            #{column.name} ${column.type}
+        <foreach collection="columns" open="(" close=")" item="column" separator=",">
+            ${column.name} ${column.type}
         </foreach>
 
         <foreach collection="tags" open="TAGS(" close=")" item="tag" separator=",">
-            #{tag.name} ${tag.type});
+            ${tag.name} ${tag.type}
         </foreach>
-    </update>
+    </insert>
+
+    <select id="showDbCreateSql" resultType="String">
+        SHOW CREATE DATABASE ${database}
+    </select>
 
 </mapper>

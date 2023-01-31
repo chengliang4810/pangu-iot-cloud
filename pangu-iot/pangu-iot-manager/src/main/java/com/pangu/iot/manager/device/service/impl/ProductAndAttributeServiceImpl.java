@@ -8,6 +8,7 @@ import com.pangu.common.zabbix.entity.dto.TrapperItemDTO;
 import com.pangu.common.zabbix.service.HostService;
 import com.pangu.common.zabbix.service.ItemService;
 import com.pangu.common.zabbix.service.TemplateService;
+import com.pangu.data.api.RemoteTdEngineService;
 import com.pangu.iot.manager.device.convert.DeviceAttributeConvert;
 import com.pangu.iot.manager.device.convert.DeviceConvert;
 import com.pangu.iot.manager.device.domain.Device;
@@ -25,9 +26,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
+import static com.pangu.common.core.constant.IotConstants.SUPER_TABLE_PREFIX;
 import static com.pangu.common.zabbix.constant.ZabbixConstants.ATTR_SOURCE_DEPEND;
 
 /**
@@ -46,6 +50,7 @@ public class ProductAndAttributeServiceImpl implements IProductAndAttributeServi
     private final IDeviceService deviceService;
     private final IProductService productService;
     private final TemplateService templateService;
+    private final RemoteTdEngineService tdEngineService;
     private final IDeviceGroupService deviceGroupService;
     private final DeviceAttributeConvert deviceAttributeConvert;
     private final IDeviceAttributeService deviceAttributeService;
@@ -123,6 +128,10 @@ public class ProductAndAttributeServiceImpl implements IProductAndAttributeServi
         List<DeviceAttribute> attributeList = deviceAttributeService.list(Wrappers.lambdaQuery(DeviceAttribute.class).in(DeviceAttribute::getId, attributeIds));
         List<String> zbxIds = attributeList.stream().map(DeviceAttribute::getZbxId).collect(Collectors.toList());
         Assert.isGreaterZero(zbxIds.size(), "属性信息不存在");
+        // 删除属性
+        attributeList.forEach(attribute -> {
+            tdEngineService.deleteSuperTableField(SUPER_TABLE_PREFIX +  attribute.getProductId(), attribute.getKey());
+        });
         //删除zbx item
         itemService.deleteTrapperItems(zbxIds);
         // List<String> zbxIds = new QProductAttribute().select(QProductAttribute.alias().zbxId).attrId.in(productAttr.getAttrIds()).findSingleAttributeList();
@@ -154,12 +163,21 @@ public class ProductAndAttributeServiceImpl implements IProductAndAttributeServi
         // 产品信息
         Product product = productService.getById(attributeBo.getProductId());
         Assert.notNull(product, "产品不存在");
+        DeviceAttribute attribute = deviceAttributeService.getById(attributeBo.getId());
+        Assert.notNull(attribute, "属性不存在");
 
+        // 标识符/数据类型发生改变
+        if (!attribute.getKey().equals(attributeBo.getKey()) || !attribute.getValueType().equals(attributeBo.getValueType())) {
+            // 删除原有的
+            tdEngineService.deleteSuperTableField(SUPER_TABLE_PREFIX +  product.getId(), attribute.getKey());
+            // 新增
+            tdEngineService.createSuperTableField(SUPER_TABLE_PREFIX +  product.getId(), attributeBo.getKey(), attributeBo.getValueType());
+        }
         DeviceAttribute deviceAttribute = deviceAttributeConvert.toEntity(attributeBo);
         // 修改zabbix 监控项
         TrapperItemDTO trapperItemDTO = convertToTrapperItemDTO(deviceAttribute);
         trapperItemDTO.setHostId(product.getZbxId());
-        trapperItemDTO.setItemId(deviceAttribute.getZbxId());
+        trapperItemDTO.setItemId(attribute.getZbxId());
         itemService.updateTrapperItem(trapperItemDTO);
 
         // 入库
@@ -201,10 +219,15 @@ public class ProductAndAttributeServiceImpl implements IProductAndAttributeServi
         // 产品zbxId
         Product product = productService.getById(deviceAttribute.getProductId());
         Assert.notNull(product, "产品不存在");
+        // TdEngine添加字段
+        tdEngineService.createSuperTableField(SUPER_TABLE_PREFIX + product.getId(), deviceAttribute.getKey(), deviceAttribute.getValueType());
 
         // Zabbix创建监控项
         TrapperItemDTO trapperItemDTO = convertToTrapperItemDTO(deviceAttribute);
         trapperItemDTO.setHostId(product.getZbxId());
+        Map<String, String> tags = new HashMap<>();
+        // tags.put("deviceId", deviceAttribute.getDeviceId().toString());
+        tags.put("productId", deviceAttribute.getProductId().toString());
         String zabbixId = itemService.createTrapperItem(trapperItemDTO);
         Assert.notBlank(zabbixId, "创建监控项【{}】失败", trapperItemDTO.getItemName());
 
@@ -232,6 +255,9 @@ public class ProductAndAttributeServiceImpl implements IProductAndAttributeServi
             Product product = productService.getById(productId);
 
             // 查询该产品下是否存在设备
+
+            // tdengine删除表
+            tdEngineService.deleteSuperTable(SUPER_TABLE_PREFIX + product.getId());
 
             // 删除zabbix模板
             templateService.zbxTemplateDelete(product.getZbxId());

@@ -30,6 +30,13 @@
                 <version>${project.version}</version>
             </dependency>
 
+            <!-- 物联网数据服务接口 -->
+            <dependency>
+                <groupId>com.pangu</groupId>
+                <artifactId>pangu-api-data</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 </project>

@@ -7,6 +7,8 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Configuration;
 
+import static com.pangu.common.core.constant.IotConstants.TD_DB_NAME;
+
 /**
  * init td引擎
  *
@@ -22,10 +24,8 @@ public class InitTdEngine implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        //创建数据库
-        int result = databaseMapper.createDB("pangu_iot");
-        log.info("创建数据库结果：{}", result);
+        // 创建tdengine数据库
+        databaseMapper.createDB(TD_DB_NAME);
     }
-
 
 }
