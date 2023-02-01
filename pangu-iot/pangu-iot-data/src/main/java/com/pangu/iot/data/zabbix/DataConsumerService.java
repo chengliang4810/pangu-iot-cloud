@@ -3,8 +3,18 @@ package com.pangu.iot.data.zabbix;
 import com.pangu.common.zabbix.model.ZbxProblem;
 import com.pangu.common.zabbix.model.ZbxValue;
 import com.pangu.common.zabbix.service.ReceiveDataService;
+import com.pangu.iot.data.tdengine.service.TdEngineService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+import static com.pangu.common.core.constant.IotConstants.SUPER_TABLE_PREFIX;
 
 /**
  * ZBX数据消费者服务
@@ -14,7 +24,10 @@ import org.springframework.stereotype.Service;
  */
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class DataConsumerService implements ReceiveDataService {
+
+    private final TdEngineService tdEngineService;
 
     /**
      * 接收ZBX数据，处理
@@ -27,9 +40,16 @@ public class DataConsumerService implements ReceiveDataService {
         if (zbxValue.getHostname().equals("Zabbix server")){
             return;
         }
-        // 存入tdengine
-        System.out.println("接收到ZBX数据: " + zbxValue);
         log.info("接收到ZBX数据：{}", zbxValue);
+
+        // 存入tdengine
+        zbxValue.getItemTags().parallelStream().filter(itemTag -> itemTag.getTag().equals("productId")).findFirst().ifPresent(itemTag -> {
+            Map<String, Object> value = new LinkedHashMap<>(3);
+            value.put("ts", Timestamp.valueOf(LocalDateTime.ofEpochSecond(zbxValue.getClock(), zbxValue.getNs(), ZoneOffset.of("+8"))   ));
+            value.put("online", 1);
+            value.put(zbxValue.getName(), zbxValue.getValue());
+            tdEngineService.insertData(zbxValue.getHostname(),SUPER_TABLE_PREFIX + itemTag.getValue(), value);
+        });
     }
 
 

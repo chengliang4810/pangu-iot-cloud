@@ -3,6 +3,7 @@ package com.pangu.iot.data.tdengine.service;
 import com.pangu.common.tdengine.model.TdColumn;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * td引擎服务
@@ -40,5 +41,22 @@ public interface TdEngineService {
      */
     void deleteSuperTableField(String table, String... key);
 
+    /**
+     * 删除超级表
+     *
+     * @param table 表格
+     */
     void deleteSuperTable(String table);
+
+
+    /**
+     * 插入数据
+     *
+     * @param table      表格
+     * @param superTable 超级表
+     * @param value      值 key-values结构
+     * @return int 插入条数
+     */
+    int insertData(String table, String superTable, Map<String, Object> value);
+
 }

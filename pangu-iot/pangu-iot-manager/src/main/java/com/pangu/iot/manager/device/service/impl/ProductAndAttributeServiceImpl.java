@@ -226,8 +226,8 @@ public class ProductAndAttributeServiceImpl implements IProductAndAttributeServi
         TrapperItemDTO trapperItemDTO = convertToTrapperItemDTO(deviceAttribute);
         trapperItemDTO.setHostId(product.getZbxId());
         Map<String, String> tags = new HashMap<>();
-        // tags.put("deviceId", deviceAttribute.getDeviceId().toString());
         tags.put("productId", deviceAttribute.getProductId().toString());
+        trapperItemDTO.setTags(tags);
         String zabbixId = itemService.createTrapperItem(trapperItemDTO);
         Assert.notBlank(zabbixId, "创建监控项【{}】失败", trapperItemDTO.getItemName());
 

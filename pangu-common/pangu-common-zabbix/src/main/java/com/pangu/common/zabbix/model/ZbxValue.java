@@ -1,5 +1,6 @@
 package com.pangu.common.zabbix.model;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -54,6 +55,7 @@ public class ZbxValue implements Serializable {
     /**
      * 标签
      */
-    private List<String> itemTags;
+    @JsonAlias("item_tags")
+    private List<ZbxTag> itemTags;
 
 }

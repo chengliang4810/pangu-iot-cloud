@@ -49,14 +49,18 @@ public class ZbxDataService {
      * @param message 消息
      */
     @RabbitHandler
-    @RabbitListener(queues = "#{zabbixInputDataQueue.name}")
+    @RabbitListener(queues = "#{zabbixInputDataQueue.name}", ackMode= "MANUAL")
     public void receiveMessage(Channel channel, Message message) {
-        if (receiveDataService == null){
-            return;
-        }
+        long deliveryTag = message.getMessageProperties().getDeliveryTag();
         try {
-            channel.basicAck(message.getMessageProperties().getDeliveryTag(), true);
+            if (receiveDataService == null){
+                //负载到不进行消费的服务，消息重新投递
+                channel.basicReject(deliveryTag, true);
+                return;
+            }
+            log.info("接收到zabbix数据 {}", new String(message.getBody()));
             Map<String, Object> result = JsonUtils.parseObject(message.getBody(), Map.class);
+
             if (ObjectUtil.isNotNull(result.get("itemid"))){
                 receiveDataService.receiveData(JsonUtils.parseObject(message.getBody(), ZbxValue.class));
             } else if (ObjectUtil.isNotNull(result.get("eventid"))){
@@ -64,6 +68,8 @@ public class ZbxDataService {
             } else {
                 log.warn("未知的zabbix数据类型 {}", result);
             }
+             // 消息确认
+             channel.basicAck(deliveryTag, false);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -88,6 +94,7 @@ public class ZbxDataService {
      */
     public ZbxResponse sendData(List<ZbxItemValue> itemValue) {
         Assert.notEmpty(itemValue, "itemValue is null");
+        log.info("send data to zabbix: {}", itemValue);
         try {
             ZabbixTrapper zabbixTrapper = new ZabbixTrapper(itemValue);
             return senderService.sendData(gson.toJson(zabbixTrapper));
@@ -124,9 +131,8 @@ public class ZbxDataService {
             itemValue.setHost(deviceValue.getDeviceId());
             itemValue.setKey(key);
             itemValue.setValue(value);
-            if (ObjectUtil.isNotNull(deviceValue.getClock())){
-                itemValue.setClock(deviceValue.getClock());
-            }
+            itemValue.setClock(deviceValue.getClock());
+            itemValue.setNs(0L);
             itemValues.add(itemValue);
         });
 

@@ -49,7 +49,6 @@ public class DeviceDebugController {
         deviceValue.setDeviceId(device.getCode());
         deviceValue.setAttributes(attribute);
         deviceValue.setClock(System.currentTimeMillis() / 1000);
-
         return R.ok(dataService.sendData(deviceValue));
     }
 

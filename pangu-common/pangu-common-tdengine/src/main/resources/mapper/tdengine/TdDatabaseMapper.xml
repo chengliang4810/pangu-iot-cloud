@@ -19,6 +19,20 @@
         </foreach>
     </insert>
 
+    <insert id="insertData">
+        INSERT INTO ${table}
+        <foreach collection="value.keys" open="(" close=")" item="item" separator=",">
+            ${item}
+        </foreach>
+        USING ${superTable}
+        <foreach collection="tags" open="TAGS(" close=")" item="tag" separator=",">
+            ${tag}
+        </foreach>
+        <foreach collection="value.values" open="VALUES (" close=")" item="item" separator=",">
+            #{item}
+        </foreach>
+    </insert>
+
     <select id="showDbCreateSql" resultType="String">
         SHOW CREATE DATABASE ${database}
     </select>

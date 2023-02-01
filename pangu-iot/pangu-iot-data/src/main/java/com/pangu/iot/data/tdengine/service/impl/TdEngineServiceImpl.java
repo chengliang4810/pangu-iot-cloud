@@ -4,21 +4,39 @@ import com.pangu.common.core.utils.Assert;
 import com.pangu.common.tdengine.mapper.TdDatabaseMapper;
 import com.pangu.common.tdengine.model.SuperTableDTO;
 import com.pangu.common.tdengine.model.TdColumn;
+import com.pangu.iot.data.tdengine.service.TdEngineService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 import static com.pangu.common.core.constant.IotConstants.TD_DB_NAME;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class TdEngineServiceImpl implements com.pangu.iot.data.tdengine.service.TdEngineService {
+public class TdEngineServiceImpl implements TdEngineService {
 
 
     private final TdDatabaseMapper databaseMapper;
+
+
+    /**
+     * 插入数据
+     *
+     * @param table      表格
+     * @param superTable 超级表
+     * @param value      值 key-values结构
+     * @return int 插入条数
+     */
+    @Override
+    public int insertData(String table, String superTable, Map<String, Object> value) {
+        return databaseMapper.insertData(table, superTable, value, new Object[]{1});
+    }
+
+
 
     /**
      * 创建超级表

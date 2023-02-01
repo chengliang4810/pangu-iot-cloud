@@ -7,6 +7,9 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * td数据库 库、表操作方法
  *
@@ -65,4 +68,14 @@ public interface TdDatabaseMapper {
     @Delete("DROP STABLE IF EXISTS ${database}.${table}")
     void deleteSuperTable(@Param("database") String database, @Param("table") String table);
 
+    /**
+     * 插入数据
+     *
+     * @param table      表格
+     * @param superTable 超级表
+     * @param value      值 key - value1,value2
+     * @param tags       标签
+     * @return int
+     */
+    int insertData(@Param("table") String table, @Param("superTable") String superTable, @Param("value") Map<String,Object> value, @Param("tags") Object[] tags);
 }
