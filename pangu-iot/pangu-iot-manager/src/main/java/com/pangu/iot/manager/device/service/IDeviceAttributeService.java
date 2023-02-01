@@ -74,5 +74,12 @@ public interface IDeviceAttributeService extends IService<DeviceAttribute> {
      */
     List<DeviceAttributeVO> queryVOListByDeviceId(Long deviceId);
 
+    /**
+     * 查询最新数据列表
+     *
+     * @param bo        薄
+     * @param pageQuery 页面查询
+     * @return {@link TableDataInfo}<{@link DeviceAttributeVO}>
+     */
     TableDataInfo<DeviceAttributeVO> queryLatestDataList(LastDataAttributeBO bo, PageQuery pageQuery);
 }

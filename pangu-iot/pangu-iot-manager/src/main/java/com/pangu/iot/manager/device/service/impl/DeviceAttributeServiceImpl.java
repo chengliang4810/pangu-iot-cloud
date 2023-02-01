@@ -1,6 +1,7 @@
 package com.pangu.iot.manager.device.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -20,6 +21,7 @@ import com.pangu.iot.manager.device.mapper.DeviceAttributeMapper;
 import com.pangu.iot.manager.device.service.IDeviceAttributeService;
 import com.pangu.iot.manager.device.service.IDeviceService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -32,10 +34,10 @@ import java.util.Map;
  * @author chengliang4810
  * @date 2023-01-05
  */
-@RequiredArgsConstructor
+@Slf4j
 @Service
+@RequiredArgsConstructor
 public class DeviceAttributeServiceImpl extends ServiceImpl<DeviceAttributeMapper, DeviceAttribute> implements IDeviceAttributeService {
-
 
     private final IDeviceService deviceService;
     private final DeviceAttributeMapper baseMapper;
@@ -54,8 +56,10 @@ public class DeviceAttributeServiceImpl extends ServiceImpl<DeviceAttributeMappe
 
         // 获取最新属性值
         Map<String, Object> lastRowData = tdEngineService.todayLastRowData(device.getCode());
+        log.info("lastRowData:{}", lastRowData);
         attributeVOList.getRecords().forEach(attributeVO -> {
             attributeVO.setValue(lastRowData.get(attributeVO.getKey()));
+            attributeVO.setClock(MapUtil.getStr(lastRowData, "ts"));
         });
 
         return TableDataInfo.build(attributeVOList);

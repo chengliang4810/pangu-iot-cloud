@@ -47,6 +47,12 @@ public class DeviceAttributeVO {
      */
     private Object value;
 
+
+    /**
+     * 属性值的时间
+     */
+    private String clock;
+
     /**
      * 属性唯一Key
 
