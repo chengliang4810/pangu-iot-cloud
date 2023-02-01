@@ -2,10 +2,7 @@ package com.pangu.common.tdengine.mapper;
 
 import com.baomidou.mybatisplus.annotation.InterceptorIgnore;
 import com.pangu.common.tdengine.model.SuperTableDTO;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 import java.util.Map;
@@ -78,4 +75,14 @@ public interface TdDatabaseMapper {
      * @return int
      */
     int insertData(@Param("table") String table, @Param("superTable") String superTable, @Param("value") Map<String,Object> value, @Param("tags") Object[] tags);
+
+    /**
+     * 查询当日最后一行数据
+     *
+     * @param table 表格
+     * @return {@link Map}<{@link String}, {@link Object}>
+     */
+    @Select("select LAST_ROW(*) from ${table} where ts > TODAY()")
+    Map<String, Object> selectTodayLastRowData(@Param("table") String table);
+
 }

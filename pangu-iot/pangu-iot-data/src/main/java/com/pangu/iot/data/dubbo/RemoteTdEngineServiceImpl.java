@@ -12,6 +12,7 @@ import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 import static com.pangu.common.core.constant.IotConstants.TAG_OCCUPY_KEY;
 
@@ -85,4 +86,17 @@ public class RemoteTdEngineServiceImpl implements RemoteTdEngineService {
     public void deleteSuperTableField(String table, String key) {
         tdEngineService.deleteSuperTableField(table, key);
     }
+
+
+    /**
+     * 今天最后一行数据
+     *
+     * @param table 表格
+     * @return {@link Map}<{@link String}, {@link Object}>
+     */
+    @Override
+    public Map<String, Object> todayLastRowData(String table) {
+        return tdEngineService.selectLastData(table);
+    }
+
 }

@@ -10,7 +10,7 @@ import com.pangu.common.core.utils.Assert;
 import com.pangu.common.core.utils.StringUtils;
 import com.pangu.common.mybatis.core.page.PageQuery;
 import com.pangu.common.mybatis.core.page.TableDataInfo;
-import com.pangu.common.zabbix.service.ItemService;
+import com.pangu.data.api.RemoteTdEngineService;
 import com.pangu.iot.manager.device.domain.Device;
 import com.pangu.iot.manager.device.domain.DeviceAttribute;
 import com.pangu.iot.manager.device.domain.bo.DeviceAttributeBO;
@@ -36,9 +36,10 @@ import java.util.Map;
 @Service
 public class DeviceAttributeServiceImpl extends ServiceImpl<DeviceAttributeMapper, DeviceAttribute> implements IDeviceAttributeService {
 
-    private final DeviceAttributeMapper baseMapper;
+
     private final IDeviceService deviceService;
-    private final ItemService itemService;
+    private final DeviceAttributeMapper baseMapper;
+    private final RemoteTdEngineService tdEngineService;
 
     @Override
     public TableDataInfo<DeviceAttributeVO> queryLatestDataList(LastDataAttributeBO bo, PageQuery pageQuery) {
@@ -48,12 +49,16 @@ public class DeviceAttributeServiceImpl extends ServiceImpl<DeviceAttributeMappe
         Device device = deviceService.getById(deviceId);
         Assert.notNull(device, "设备不存在");
 
-        // 查询该设备所有属性
-        List<DeviceAttributeVO> attributeVOList = baseMapper.queryVOListByDeviceId(ObjectUtil.isNull(bo.getProductId()) ? device.getProductId() : bo.getProductId(), deviceId);
+        // 分页查询该设备所有属性
+        Page<DeviceAttributeVO> attributeVOList = baseMapper.queryVOListByDeviceId(pageQuery.build(), ObjectUtil.isNull(bo.getProductId()) ? device.getProductId() : bo.getProductId(), deviceId);
 
         // 获取最新属性值
-        // List<Map<String, Object>> latestDataList = itemService.getLatestDataList(device.getZabbixHostId(), attributeVOList);
-        return null;
+        Map<String, Object> lastRowData = tdEngineService.todayLastRowData(device.getCode());
+        attributeVOList.getRecords().forEach(attributeVO -> {
+            attributeVO.setValue(lastRowData.get(attributeVO.getKey()));
+        });
+
+        return TableDataInfo.build(attributeVOList);
     }
 
 

@@ -1,5 +1,6 @@
 package com.pangu.iot.data.tdengine.service.impl;
 
+import cn.hutool.core.map.MapUtil;
 import com.pangu.common.core.utils.Assert;
 import com.pangu.common.tdengine.mapper.TdDatabaseMapper;
 import com.pangu.common.tdengine.model.SuperTableDTO;
@@ -9,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -22,6 +24,27 @@ public class TdEngineServiceImpl implements TdEngineService {
 
     private final TdDatabaseMapper databaseMapper;
 
+    /**
+     * 选择最后一个数据
+     * 查询当日最后一条数据
+     *
+     * @param table 表格
+     * @return {@link Map}<{@link String}, {@link Object}>
+     */
+    @Override
+    public Map<String, Object> selectLastData(String table) {
+        Map<String, Object> lastRowData = databaseMapper.selectTodayLastRowData(table);
+        if (MapUtil.isEmpty(lastRowData)){
+            return Collections.emptyMap();
+        }
+        // 处理Key 删除last_row()
+        Map<String, Object> result = MapUtil.newHashMap(lastRowData.size());
+        lastRowData.forEach((key, value) -> {
+            String newKey = key.substring(9, key.length() - 1);
+            result.put(newKey, value);
+        });
+        return result;
+    }
 
     /**
      * 插入数据

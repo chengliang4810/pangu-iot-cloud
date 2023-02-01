@@ -3,6 +3,7 @@ package com.pangu.data.api;
 import com.pangu.data.api.model.TdColumnDTO;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * TdEngine服务
@@ -44,4 +45,12 @@ public interface RemoteTdEngineService {
      * @param key   关键
      */
     void deleteSuperTableField(String table, String key);
+
+    /**
+     * 今天最后一行数据
+     *
+     * @param table 表格
+     * @return {@link Map}<{@link String}, {@link Object}>
+     */
+    Map<String, Object> todayLastRowData(String table);
 }

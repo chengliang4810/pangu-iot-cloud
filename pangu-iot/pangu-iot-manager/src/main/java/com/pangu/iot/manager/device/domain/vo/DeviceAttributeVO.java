@@ -2,10 +2,7 @@ package com.pangu.iot.manager.device.domain.vo;
 
 import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import com.alibaba.excel.annotation.ExcelProperty;
-import com.pangu.common.excel.annotation.ExcelDictFormat;
-import com.pangu.common.excel.convert.ExcelDictConvert;
 import lombok.Data;
-import java.util.Date;
 
 
 
@@ -44,6 +41,11 @@ public class DeviceAttributeVO {
      */
     @ExcelProperty(value = "属性名称")
     private String name;
+
+    /**
+     * 属性值
+     */
+    private Object value;
 
     /**
      * 属性唯一Key

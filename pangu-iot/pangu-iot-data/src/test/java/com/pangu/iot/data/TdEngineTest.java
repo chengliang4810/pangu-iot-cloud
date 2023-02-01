@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
+import java.util.Map;
 
 @SpringBootTest
 public class TdEngineTest {
@@ -29,6 +30,15 @@ public class TdEngineTest {
         List<TdColumn> columns = ListUtil.of(new TdColumn("ts", "timestamp"), new TdColumn("id", "INT"), new TdColumn("name", "BINARY(20)"));
         List<TdColumn> tags = ListUtil.of(new TdColumn("tag1", "INT"), new TdColumn("tag2", "BINARY(20)"));
         tdEngineService.createSuperTable("test22", columns, tags);
+    }
+
+    @Test
+    void todayLastRowData(){
+        Map<String, Object> lastRowDataMap = tdDatabaseMapper.selectTodayLastRowData("dddd");
+        lastRowDataMap.forEach((key, value)->{
+            // key last_row(***)
+        });
+
     }
 
 

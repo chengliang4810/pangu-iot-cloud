@@ -59,4 +59,14 @@ public interface TdEngineService {
      */
     int insertData(String table, String superTable, Map<String, Object> value);
 
+
+    /**
+     * 选择最后一个数据
+     * 查询当日最后一条数据
+     *
+     * @param table 表格
+     * @return {@link Map}<{@link String}, {@link Object}>
+     */
+    Map<String, Object> selectLastData(String table);
+
 }
