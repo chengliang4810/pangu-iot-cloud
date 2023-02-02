@@ -17,5 +17,13 @@ public interface IDeviceTriggerService {
      * @param bo 规则
      * @return int
      */
-    int createDeviceStatusJudgeTrigger(DeviceStatusJudgeRuleBO bo);
+    Boolean createDeviceStatusJudgeTrigger(DeviceStatusJudgeRuleBO bo);
+
+    /**
+     * 更新设备状态判断触发器
+     *
+     * @param bo 薄
+     * @return int
+     */
+    Boolean updateDeviceStatusJudgeTrigger(DeviceStatusJudgeRuleBO bo);
 }

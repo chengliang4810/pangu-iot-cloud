@@ -55,4 +55,6 @@ public interface IDeviceStatusFunctionService extends IService<DeviceStatusFunct
      * @return {@link DeviceStatusFunctionVO}
      */
     DeviceStatusFunctionVO queryRelationId(Long id);
+
+
 }

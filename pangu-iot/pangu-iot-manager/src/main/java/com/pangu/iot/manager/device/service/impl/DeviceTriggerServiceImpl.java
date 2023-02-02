@@ -43,7 +43,7 @@ public class DeviceTriggerServiceImpl implements IDeviceTriggerService {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public int createDeviceStatusJudgeTrigger(DeviceStatusJudgeRuleBO judgeRule) {
+    public Boolean createDeviceStatusJudgeTrigger(DeviceStatusJudgeRuleBO judgeRule) {
 
         // 参数检查
         long count = deviceAttributeService.count(Wrappers.lambdaQuery(DeviceAttribute.class).eq(DeviceAttribute::getId, judgeRule.getAttributeId()));
@@ -84,8 +84,35 @@ public class DeviceTriggerServiceImpl implements IDeviceTriggerService {
         //step 4:同步到设备
         // Long productId = judgeRule.getRelationId();
 
-        return deviceStatusFunctionRelationService.save(deviceStatusFunctionRelation) ? 1 : 0;
+        return deviceStatusFunctionRelationService.save(deviceStatusFunctionRelation);
     }
 
+    /**
+     * 更新设备状态判断触发器
+     *
+     * @param judgeRule  规则数据
+     * @return int
+     */
+    @Override
+    public Boolean updateDeviceStatusJudgeTrigger(DeviceStatusJudgeRuleBO judgeRule) {
 
+        DeviceStatusFunctionRelation relation = deviceStatusFunctionRelationService.getOne(Wrappers.lambdaQuery(DeviceStatusFunctionRelation.class)
+            .eq(DeviceStatusFunctionRelation::getRuleId, judgeRule.getRuleId()).eq(DeviceStatusFunctionRelation::getRelationId, judgeRule.getRelationId()).last("limit 1"));
+        Assert.notNull(relation, "上下线规则不存在");
+
+        String ruleCondition = judgeRule.getRuleCondition();
+        if(!NumberUtil.isNumber(ruleCondition)){
+            ruleCondition = "\""+ruleCondition+"\"";
+        }
+
+        // 更新zabbix
+        deviceStatusTriggerService.updateDeviceStatusTrigger(relation.getZbxId(), judgeRule.getRuleId() + "", judgeRule.getRelationId().toString(),
+            judgeRule.getAttributeKey(), ruleCondition + judgeRule.getUnit(), judgeRule.getRuleFunction(), judgeRule.getAttributeKeyRecovery(),
+            judgeRule.getRuleConditionRecovery() + judgeRule.getUnitRecovery(), judgeRule.getRuleFunctionRecovery(), relation.getZbxIdRecovery());
+
+        // 修改入库
+        DeviceStatusFunction deviceStatusFunction = deviceStatusFunctionConvert.toEntity(judgeRule);
+        deviceStatusFunction.setId(judgeRule.getRuleId());
+        return deviceStatusFunctionService.updateById(deviceStatusFunction);
+    }
 }

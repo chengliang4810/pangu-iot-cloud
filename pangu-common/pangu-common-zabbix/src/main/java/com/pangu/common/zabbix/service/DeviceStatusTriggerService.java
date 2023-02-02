@@ -33,6 +33,10 @@ public class DeviceStatusTriggerService {
         return getTriggerId(response);
     }
 
+    public void updateDeviceStatusTrigger(String zbxId, String ruleId, String relationId, String attributeKey, String ruleCondition, String ruleFunction, String attributeKeyRecovery, String ruleConditionRecovery, String ruleFunctionRecovery, String zbxIdRecovery) {
+        zbxDeviceStatusTrigger.updateDeviceStatusTrigger(zbxId, ruleId, relationId, attributeKey, ruleCondition, ruleFunction, attributeKeyRecovery, ruleConditionRecovery, ruleFunctionRecovery, zbxIdRecovery);
+    }
+
     private String[] getTriggerId(String responseStr) {
         TriggerIds ids = JsonUtils.parseObject(responseStr, TriggerIds.class);
         if (null == ids || ids.getTriggerids().length != 2) {
@@ -40,6 +44,8 @@ public class DeviceStatusTriggerService {
         }
         return ids.getTriggerids();
     }
+
+
 
     @Data
     static class TriggerIds {

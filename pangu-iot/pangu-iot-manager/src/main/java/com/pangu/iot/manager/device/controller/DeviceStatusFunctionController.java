@@ -52,6 +52,16 @@ public class DeviceStatusFunctionController extends BaseController {
     }
 
     /**
+     * 修改设备上下线规则触发器
+     */
+    @SaCheckPermission("manager:device_status_function:edit")
+    @Log(title = "设备上下线规则", businessType = BusinessType.UPDATE)
+    @PutMapping("/trigger")
+    public R<Void> editTrigger(@Validated(EditGroup.class) @RequestBody DeviceStatusJudgeRuleBO bo) {
+        return toAjax(deviceTriggerService.updateDeviceStatusJudgeTrigger(bo));
+    }
+
+    /**
      * 获取设备上下线规则详细信息
      *
      * @param id 关系Id
