@@ -1,6 +1,8 @@
 package com.pangu.iot.data.dubbo;
 
 import cn.hutool.core.collection.ListUtil;
+import cn.hutool.core.util.StrUtil;
+import com.pangu.common.core.constant.IotConstants;
 import com.pangu.common.tdengine.model.TdColumn;
 import com.pangu.data.api.RemoteTdEngineService;
 import com.pangu.data.api.model.TdColumnDTO;
@@ -11,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -87,16 +90,21 @@ public class RemoteTdEngineServiceImpl implements RemoteTdEngineService {
         tdEngineService.deleteSuperTableField(table, key);
     }
 
-
     /**
      * 今天最后一行数据
      *
-     * @param table 表格
+     * @param productId  产品id
+     * @param deviceCode 设备代码
      * @return {@link Map}<{@link String}, {@link Object}>
      */
     @Override
-    public Map<String, Object> todayLastRowData(String table) {
-        return tdEngineService.selectLastData(table);
+    public Map<String, Object> todayLastRowData(Long productId, String deviceCode) {
+        try {
+            return tdEngineService.selectLastData(StrUtil.format(IotConstants.DEVICE_TABLE_NAME_TEMPLATE, productId, deviceCode));
+        } catch (Exception e) {
+            log.warn("查询今天最后一行数据失败", e);
+        }
+        return Collections.emptyMap();
     }
 
 }
