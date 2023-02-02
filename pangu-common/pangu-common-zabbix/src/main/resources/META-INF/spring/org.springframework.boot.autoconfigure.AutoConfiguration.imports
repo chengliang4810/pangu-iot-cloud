@@ -7,3 +7,4 @@ com.pangu.common.zabbix.service.ItemService
 com.pangu.common.zabbix.service.ZbxDataService
 com.pangu.common.zabbix.service.HostService
 com.pangu.common.zabbix.api.ZbxSenderService
+com.pangu.common.zabbix.service.DeviceStatusTriggerService

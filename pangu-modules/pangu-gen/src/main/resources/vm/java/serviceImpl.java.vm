@@ -7,6 +7,7 @@ import com.pangu.common.mybatis.core.page.PageQuery;
 import com.pangu.common.mybatis.core.page.TableDataInfo;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 #end
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +30,7 @@ import java.util.Collection;
  */
 @RequiredArgsConstructor
 @Service
-public class ${ClassName}ServiceImpl implements I${ClassName}Service {
+public class ${ClassName}ServiceImpl extends ServiceImpl<${ClassName}Mapper, ${ClassName}> implements I${ClassName}Service {
 
     private final ${ClassName}Mapper baseMapper;
 

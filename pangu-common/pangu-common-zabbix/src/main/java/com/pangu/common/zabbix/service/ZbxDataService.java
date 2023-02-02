@@ -66,7 +66,7 @@ public class ZbxDataService {
             } else if (ObjectUtil.isNotNull(result.get("eventid"))){
                 receiveDataService.receiveProblems(JsonUtils.parseObject(message.getBody(), ZbxProblem.class));
             } else {
-                log.warn("未知的zabbix数据类型 {}", result);
+                log.info("未知的zabbix数据类型 {}", result);
             }
              // 消息确认
              channel.basicAck(deliveryTag, false);

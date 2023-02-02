@@ -106,7 +106,7 @@ public class GenController extends BaseController {
      */
     @SaCheckPermission("tool:gen:edit")
     @Log(title = "代码生成", businessType = BusinessType.UPDATE)
-    @PutMapping
+    @PutMapping("/edit")
     public R<Void> editSave(@Validated @RequestBody GenTable genTable) {
         genTableService.validateEdit(genTable);
         genTableService.updateGenTable(genTable);
