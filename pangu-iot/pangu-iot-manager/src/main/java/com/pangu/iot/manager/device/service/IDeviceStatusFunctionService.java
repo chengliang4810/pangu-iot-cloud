@@ -47,4 +47,12 @@ public interface IDeviceStatusFunctionService extends IService<DeviceStatusFunct
      * 校验并批量删除设备上下线规则信息
      */
     Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid);
+
+    /**
+     * 查询关系id
+     *
+     * @param id id
+     * @return {@link DeviceStatusFunctionVO}
+     */
+    DeviceStatusFunctionVO queryRelationId(Long id);
 }

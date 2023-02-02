@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.pangu.common.core.utils.StringUtils;
 import com.pangu.common.mybatis.core.page.PageQuery;
 import com.pangu.common.mybatis.core.page.TableDataInfo;
+import com.pangu.iot.manager.device.convert.DeviceStatusFunctionConvert;
 import com.pangu.iot.manager.device.domain.DeviceStatusFunction;
 import com.pangu.iot.manager.device.domain.bo.DeviceStatusFunctionBO;
 import com.pangu.iot.manager.device.domain.vo.DeviceStatusFunctionVO;
@@ -31,6 +32,7 @@ import java.util.Map;
 public class DeviceStatusFunctionServiceImpl extends ServiceImpl<DeviceStatusFunctionMapper, DeviceStatusFunction> implements IDeviceStatusFunctionService {
 
     private final DeviceStatusFunctionMapper baseMapper;
+    private final DeviceStatusFunctionConvert deviceStatusFunctionConvert;
 
     /**
      * 查询设备上下线规则
@@ -115,4 +117,19 @@ public class DeviceStatusFunctionServiceImpl extends ServiceImpl<DeviceStatusFun
         }
         return baseMapper.deleteBatchIds(ids) > 0;
     }
+
+
+    /**
+     * 查询关系id
+     *
+     * @param id id
+     * @return {@link DeviceStatusFunctionVO}
+     */
+    @Override
+    public DeviceStatusFunctionVO queryRelationId(Long id) {
+        DeviceStatusFunction deviceStatusFunction = baseMapper.selectByRelationId(id);
+        return deviceStatusFunctionConvert.toVo(deviceStatusFunction);
+    }
+
+
 }

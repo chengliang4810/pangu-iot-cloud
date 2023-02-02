@@ -52,6 +52,17 @@ public class DeviceStatusFunctionController extends BaseController {
     }
 
     /**
+     * 获取设备上下线规则详细信息
+     *
+     * @param id 关系Id
+     */
+    @SaCheckPermission("manager:device_status_function:query")
+    @GetMapping("/relationId/{id}")
+    public R<DeviceStatusFunctionVO> getInfoByRelationId(@NotNull(message = "关系ID不能为空") @PathVariable Long id) {
+        return R.ok(deviceStatusFunctionService.queryRelationId(id));
+    }
+
+    /**
      * 查询设备上下线规则列表
      */
     @SaCheckPermission("manager:device_status_function:list")
@@ -78,7 +89,7 @@ public class DeviceStatusFunctionController extends BaseController {
      */
     @SaCheckPermission("manager:device_status_function:query")
     @GetMapping("/{id}")
-    public R<DeviceStatusFunctionVO> getInfo(@NotNull(message = "主键不能为空") @PathVariable Long id) {
+    public R<DeviceStatusFunctionVO> relationIdgetInfo(@NotNull(message = "主键不能为空") @PathVariable Long id) {
         return R.ok(deviceStatusFunctionService.queryById(id));
     }
 
