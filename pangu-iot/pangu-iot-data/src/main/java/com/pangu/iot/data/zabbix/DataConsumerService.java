@@ -1,8 +1,12 @@
 package com.pangu.iot.data.zabbix;
 
+import cn.hutool.core.util.StrUtil;
+import com.pangu.common.core.constant.IotConstants;
 import com.pangu.common.zabbix.model.ZbxProblem;
+import com.pangu.common.zabbix.model.ZbxTag;
 import com.pangu.common.zabbix.model.ZbxValue;
 import com.pangu.common.zabbix.service.ReceiveDataService;
+import com.pangu.iot.data.service.DeviceStatusService;
 import com.pangu.iot.data.tdengine.service.TdEngineService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +16,9 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static com.pangu.common.core.constant.IotConstants.SUPER_TABLE_PREFIX;
 
@@ -28,6 +34,7 @@ import static com.pangu.common.core.constant.IotConstants.SUPER_TABLE_PREFIX;
 public class DataConsumerService implements ReceiveDataService {
 
     private final TdEngineService tdEngineService;
+    private final DeviceStatusService deviceStatusService;
 
     /**
      * 接收ZBX数据，处理
@@ -41,14 +48,15 @@ public class DataConsumerService implements ReceiveDataService {
             return;
         }
         log.info("接收到ZBX数据：{}", zbxValue);
-
         // 存入tdengine
-        zbxValue.getItemTags().parallelStream().filter(itemTag -> itemTag.getTag().equals("productId")).findFirst().ifPresent(itemTag -> {
+        zbxValue.getItemTags().parallelStream().filter(itemTag -> itemTag.getTag().equals(IotConstants.PRODUCT_ID_TAG_NAME)).findFirst().ifPresent(itemTag -> {
+            // 获取当前设备状态
+            int status = deviceStatusService.getStatus(itemTag.getValue(), zbxValue.getHostname());
             Map<String, Object> value = new LinkedHashMap<>(3);
             value.put("ts", Timestamp.valueOf(LocalDateTime.ofEpochSecond(zbxValue.getClock(), zbxValue.getNs(), ZoneOffset.of("+8"))   ));
-            value.put("online", 1);
+            value.put("online", status);
             value.put(zbxValue.getName(), zbxValue.getValue());
-            tdEngineService.insertData(zbxValue.getHostname(),SUPER_TABLE_PREFIX + itemTag.getValue(), value);
+            tdEngineService.insertData( StrUtil.format(IotConstants.DEVICE_TABLE_NAME_TEMPLATE, itemTag.getValue(), zbxValue.getHostname() ),SUPER_TABLE_PREFIX + itemTag.getValue(), value);
         });
     }
 
@@ -60,8 +68,21 @@ public class DataConsumerService implements ReceiveDataService {
      */
     @Override
     public void receiveProblems(ZbxProblem zbxProblem) {
-        // 设备告警
-        log.info("接收到ZBX事件：{}", zbxProblem);
+        // 设备告警等
+        // log.info("接收到ZBX事件：{}", zbxProblem);
+
+        List<ZbxTag> itemTags = zbxProblem.getItemTags();
+        Map<String, String> tagMap = itemTags.stream().collect(Collectors.toMap(ZbxTag::getTag, ZbxTag::getValue));
+
+        if (tagMap.containsKey(IotConstants.DEVICE_STATUS_OFFLINE_TAG)){
+            // 设备离线
+            deviceStatusService.changeStatus(tagMap.get(IotConstants.PRODUCT_ID_TAG_NAME), tagMap.get(IotConstants.DEVICE_STATUS_OFFLINE_TAG), 0);
+            log.info("设备离线：{}", zbxProblem);
+        } else if (tagMap.containsKey(IotConstants.DEVICE_STATUS_ONLINE_TAG)) {
+            // 设备上线
+            log.info("设备上线：{}", zbxProblem);
+            deviceStatusService.changeStatus(tagMap.get(IotConstants.PRODUCT_ID_TAG_NAME), tagMap.get(IotConstants.DEVICE_STATUS_ONLINE_TAG), 1);
+        }
     }
 
 }

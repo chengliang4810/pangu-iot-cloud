@@ -3,6 +3,7 @@ package com.pangu.iot.manager.device.service.impl;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.pangu.common.core.constant.IotConstants;
 import com.pangu.common.core.utils.Assert;
 import com.pangu.common.zabbix.entity.dto.TrapperItemDTO;
 import com.pangu.common.zabbix.service.HostService;
@@ -226,7 +227,7 @@ public class ProductAndAttributeServiceImpl implements IProductAndAttributeServi
         TrapperItemDTO trapperItemDTO = convertToTrapperItemDTO(deviceAttribute);
         trapperItemDTO.setHostId(product.getZbxId());
         Map<String, String> tags = new HashMap<>();
-        tags.put("productId", deviceAttribute.getProductId().toString());
+        tags.put(IotConstants.PRODUCT_ID_TAG_NAME, deviceAttribute.getProductId().toString());
         trapperItemDTO.setTags(tags);
         String zabbixId = itemService.createTrapperItem(trapperItemDTO);
         Assert.notBlank(zabbixId, "创建监控项【{}】失败", trapperItemDTO.getItemName());

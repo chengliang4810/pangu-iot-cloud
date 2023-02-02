@@ -58,7 +58,6 @@ public class ZbxDataService {
                 channel.basicReject(deliveryTag, true);
                 return;
             }
-            log.info("接收到zabbix数据 {}", new String(message.getBody()));
             Map<String, Object> result = JsonUtils.parseObject(message.getBody(), Map.class);
 
             if (ObjectUtil.isNotNull(result.get("itemid"))){

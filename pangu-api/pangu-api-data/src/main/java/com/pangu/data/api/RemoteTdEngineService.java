@@ -49,8 +49,9 @@ public interface RemoteTdEngineService {
     /**
      * 今天最后一行数据
      *
-     * @param table 表格
+     * @param productId  产品id
+     * @param deviceCode 设备代码
      * @return {@link Map}<{@link String}, {@link Object}>
      */
-    Map<String, Object> todayLastRowData(String table);
+    Map<String, Object> todayLastRowData(Long productId, String deviceCode);
 }
