@@ -2,6 +2,7 @@ package com.pangu.iot.manager.device.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -82,6 +83,7 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> impleme
         Map<String, Object> params = bo.getParams();
         QueryWrapper<Device> lqw = Wrappers.query();
         lqw.eq(StringUtils.isNotBlank(bo.getCode()), Device.CONST_CODE, bo.getCode());
+        lqw.eq(ObjectUtil.isNotNull(bo.getProductId()), Device.CONST_PRODUCT_ID, bo.getProductId());
         lqw.in(CollectionUtil.isNotEmpty(bo.getGroupIds()), DeviceGroupRelation.CONST_DEVICE_GROUP_ID, bo.getGroupIds());
         lqw.in(CollectionUtil.isNotEmpty(bo.getProductIds()), Device.CONST_PRODUCT_ID, bo.getProductIds());
         lqw.like(StringUtils.isNotBlank(bo.getName()), Device.CONST_NAME, bo.getName());
