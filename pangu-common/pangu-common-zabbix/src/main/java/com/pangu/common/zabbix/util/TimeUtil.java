@@ -1,5 +1,6 @@
 package com.pangu.common.zabbix.util;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
@@ -21,5 +22,17 @@ public class TimeUtil {
     public static long millisecond(long clock, int ns) {
         return LocalDateTime.ofEpochSecond(clock, ns, ZoneOffset.of("+8")).toEpochSecond(ZoneOffset.of("+8"));
     }
+
+    /**
+     * 到时间戳
+     *
+     * @param clock 时钟
+     * @param ns    ns
+     * @return {@link Timestamp}
+     */
+    public static Timestamp toTimestamp(long clock, Integer ns) {
+        return Timestamp.valueOf(LocalDateTime.ofEpochSecond(clock, ns, ZoneOffset.of("+8")));
+    }
+
 
 }

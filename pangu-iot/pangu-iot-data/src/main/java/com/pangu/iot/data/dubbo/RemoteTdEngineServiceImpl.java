@@ -52,7 +52,7 @@ public class RemoteTdEngineServiceImpl implements RemoteTdEngineService {
     @Override
     public void initSuperTable(String table) {
         // 创建超级表默认字段
-        List<TdColumn> tdColumns = ListUtil.of(new TdColumn("ts", "TIMESTAMP"), new TdColumn("online", "int"));
+        List<TdColumn> tdColumns = ListUtil.of(new TdColumn(IotConstants.TABLE_PRIMARY_FIELD, "TIMESTAMP"), new TdColumn(IotConstants.TABLE_STATUS_FIELD, "int"));
         List<TdColumn> tags = ListUtil.of(new TdColumn(TAG_OCCUPY_KEY, "int"));
         tdEngineService.createSuperTable(table, tdColumns, tags);
     }

@@ -2,6 +2,7 @@ package com.pangu.common.core.utils;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.Validator;
+import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -19,6 +20,17 @@ import java.util.Set;
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class StringUtils extends org.apache.commons.lang3.StringUtils {
+
+	/**
+	 * 如果对象不是数字类型 就加上双引号返回
+	 */
+	public static String addQuotes(String value) {
+		if (NumberUtil.isNumber(value)) {
+			return value;
+		}
+		return "\\\\\"" + value + "\\\\\"";
+	}
+
 
 	/**
 	 * 获取参数不为空值

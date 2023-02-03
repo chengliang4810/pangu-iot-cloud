@@ -228,6 +228,7 @@ public class ProductAndAttributeServiceImpl implements IProductAndAttributeServi
         trapperItemDTO.setHostId(product.getZbxId());
         Map<String, String> tags = new HashMap<>();
         tags.put(IotConstants.PRODUCT_ID_TAG_NAME, deviceAttribute.getProductId().toString());
+        tags.put(IotConstants.ATTRIBUTE_KEY_TAG_NAME, deviceAttribute.getKey());
         trapperItemDTO.setTags(tags);
         String zabbixId = itemService.createTrapperItem(trapperItemDTO);
         Assert.notBlank(zabbixId, "创建监控项【{}】失败", trapperItemDTO.getItemName());
@@ -281,7 +282,7 @@ public class ProductAndAttributeServiceImpl implements IProductAndAttributeServi
         }
         TrapperItemDTO result = new TrapperItemDTO();
         result.setHostId(item.getZbxId());
-        result.setItemName(item.getName());
+        result.setItemName(item.getId().toString());
         result.setKey(item.getKey());
         result.setSource(item.getSource());
         result.setValueType(item.getValueType());

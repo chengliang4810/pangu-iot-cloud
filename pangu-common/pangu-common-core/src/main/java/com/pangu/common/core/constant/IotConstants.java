@@ -14,6 +14,16 @@ public interface IotConstants {
     String TD_DB_NAME = "pangu_iot";
 
     /**
+     * 表主要字段
+     */
+    String TABLE_PRIMARY_FIELD = "ts";
+
+    /**
+     * 表状态字段
+     */
+    String TABLE_STATUS_FIELD = "online";
+
+    /**
      * 超级表前缀
      */
     String SUPER_TABLE_PREFIX = "product_";
@@ -34,6 +44,15 @@ public interface IotConstants {
     String DEVICE_TABLE_NAME_TEMPLATE = "d_{}_{}";
 
     /**
+     * 报警标记名称
+     */
+    String ALARM_TAG_NAME   = "__alarm__";
+    /**
+     * 执行标记名称
+     */
+    String EXECUTE_TAG_NAME = "__execute__";
+
+    /**
      * 设备状态离线标签
      */
     String DEVICE_STATUS_OFFLINE_TAG = "__offline__";
@@ -48,4 +67,10 @@ public interface IotConstants {
      * 设备状态缓存前缀
      */
     String DEVICE_STATUS_CACHE_PREFIX = "com.pangu.iot.data.device_status_";
+
+    /**
+     * 属性关键标记名称
+     */
+    String ATTRIBUTE_KEY_TAG_NAME = "__attribute_key__";
+
 }

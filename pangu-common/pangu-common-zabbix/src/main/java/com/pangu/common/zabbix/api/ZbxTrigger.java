@@ -27,8 +27,9 @@ public interface ZbxTrigger {
     @JsonPath("/trigger/trigger.create")
     String triggerCreate(@ParamName("triggerName") String triggerName,
                          @ParamName("expression") String expression,
-                         @ParamName("ruleLevel") Byte ruleLevel,
-                         @ParamName("type") Integer type);
+                         @ParamName("ruleLevel") Integer ruleLevel,
+                         @ParamName("type") Integer type,
+                         @ParamName("tagMap") Map<String, String> tags);
 
     /**
      * 创建场景联动触发器
