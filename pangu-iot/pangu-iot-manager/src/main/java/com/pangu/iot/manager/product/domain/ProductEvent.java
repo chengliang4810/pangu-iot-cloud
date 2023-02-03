@@ -53,6 +53,11 @@ public class ProductEvent extends BaseEntity {
      * 触发类型 0-条件触发 1-定时触发
      */
     private Integer triggerType;
+
+    /**
+     * 状态
+     */
+    private Boolean status;
     /**
      * 备注
      */

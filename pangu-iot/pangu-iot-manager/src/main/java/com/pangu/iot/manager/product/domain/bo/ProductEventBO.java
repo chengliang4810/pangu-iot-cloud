@@ -36,7 +36,7 @@ public class ProductEventBO extends BaseEntity {
      * 告警等级
      */
     @NotNull(message = "告警等级不能为空", groups = { AddGroup.class, EditGroup.class })
-    private Long level;
+    private Integer level;
 
     /**
      * and 或者 or
@@ -48,13 +48,13 @@ public class ProductEventBO extends BaseEntity {
      * 0 否 1 是
      */
     @NotNull(message = "0 否 1 是不能为空", groups = { AddGroup.class, EditGroup.class })
-    private Long notify;
+    private Integer notify;
 
     /**
      * 0 告警 1场景联动
      */
     @NotNull(message = "0 告警 1场景联动不能为空", groups = { AddGroup.class, EditGroup.class })
-    private Long classify;
+    private Integer classify;
 
     /**
      * 任务ID
@@ -66,7 +66,7 @@ public class ProductEventBO extends BaseEntity {
      * 触发类型 0-条件触发 1-定时触发
      */
     @NotNull(message = "触发类型 0-条件触发 1-定时触发不能为空", groups = { AddGroup.class, EditGroup.class })
-    private Long triggerType;
+    private Integer triggerType;
 
     /**
      * 备注

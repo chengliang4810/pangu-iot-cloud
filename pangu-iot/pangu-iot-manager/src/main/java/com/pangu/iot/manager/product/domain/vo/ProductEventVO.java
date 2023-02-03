@@ -34,7 +34,13 @@ public class ProductEventVO {
      * 告警等级
      */
     @ExcelProperty(value = "告警等级")
-    private Long level;
+    private Integer level;
+
+    /**
+     * 告警等级描述
+     */
+    @ExcelProperty(value = "告警等级描述")
+    private String levelDescribe;
 
     /**
      * and 或者 or
@@ -46,13 +52,13 @@ public class ProductEventVO {
      * 0 否 1 是
      */
     @ExcelProperty(value = "0 否 1 是")
-    private Long notify;
+    private Integer notify;
 
     /**
      * 0 告警 1场景联动
      */
     @ExcelProperty(value = "0 告警 1场景联动")
-    private Long classify;
+    private Integer classify;
 
     /**
      * 任务ID
@@ -64,7 +70,13 @@ public class ProductEventVO {
      * 触发类型 0-条件触发 1-定时触发
      */
     @ExcelProperty(value = "触发类型 0-条件触发 1-定时触发")
-    private Long triggerType;
+    private Integer triggerType;
+
+    /**
+     * 状态
+     */
+    private Boolean status;
+
 
     /**
      * 备注

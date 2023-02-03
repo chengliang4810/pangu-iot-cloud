@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.pangu.common.core.enums.SeverityEnum;
 import com.pangu.common.core.utils.StringUtils;
 import com.pangu.common.mybatis.core.page.PageQuery;
 import com.pangu.common.mybatis.core.page.TableDataInfo;
@@ -119,6 +120,10 @@ public class ProductEventServiceImpl extends ServiceImpl<ProductEventMapper, Pro
     public TableDataInfo<ProductEventVO> queryPageList(ProductEventBO bo, PageQuery pageQuery) {
         LambdaQueryWrapper<ProductEvent> lqw = buildQueryWrapper(bo);
         Page<ProductEventVO> result = baseMapper.selectVoPage(pageQuery.build(), lqw);
+        // TODO 循环查询，后续单独写SQL
+        result.getRecords().forEach(item -> {
+            item.setLevelDescribe(SeverityEnum.getDescribe(item.getLevel().toString()));
+        });
         return TableDataInfo.build(result);
     }
 
