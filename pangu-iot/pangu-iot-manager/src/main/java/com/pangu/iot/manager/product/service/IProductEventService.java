@@ -56,4 +56,12 @@ public interface IProductEventService extends IService<ProductEvent> {
      * @return {@link Boolean}
      */
     Boolean createProductEventRule(ProductEventRuleBO bo);
+
+    /**
+     * 删除产品活动规则
+     *
+     * @param ruleId 规则id
+     * @return {@link Boolean}
+     */
+    Boolean deleteProductEventRule(Long ruleId);
 }

@@ -50,6 +50,19 @@ public class ProductEventController extends BaseController {
     }
 
     /**
+     * 删除告警规则触发器
+     *
+     * @param ruleId ruleId
+     */
+    @SaCheckPermission("manager:product_event:remove")
+    @Log(title = "告警规则", businessType = BusinessType.DELETE)
+    @DeleteMapping("/trigger/{ruleId}")
+    public R<Void> remove(@NotNull(message = "ruleId不能为空") @PathVariable Long ruleId) {
+        return toAjax(productEventService.deleteProductEventRule(ruleId));
+    }
+
+
+    /**
      * 查询告警规则列表
      */
     @SaCheckPermission("manager:product_event:list")
@@ -111,4 +124,5 @@ public class ProductEventController extends BaseController {
     public R<Void> remove(@NotEmpty(message = "主键不能为空") @PathVariable Long[] ids) {
         return toAjax(productEventService.deleteWithValidByIds(Arrays.asList(ids), true));
     }
+
 }

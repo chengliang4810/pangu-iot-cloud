@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.pangu.common.core.enums.SeverityEnum;
+import com.pangu.common.core.utils.Assert;
 import com.pangu.common.core.utils.StringUtils;
 import com.pangu.common.mybatis.core.page.PageQuery;
 import com.pangu.common.mybatis.core.page.TableDataInfo;
@@ -57,6 +58,42 @@ public class ProductEventServiceImpl extends ServiceImpl<ProductEventMapper, Pro
 
 
     /**
+     * 删除产品活动规则
+     *
+     * @param ruleId 规则id
+     * @return {@link Boolean}
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Boolean deleteProductEventRule(Long ruleId) {
+
+        ProductEventRelation productEventRelation = productEventRelationService.getOne(Wrappers.lambdaQuery(ProductEventRelation.class).eq(ProductEventRelation::getEventRuleId, ruleId).eq(ProductEventRelation::getInherit, "0"));
+        Assert.notNull(productEventRelation, "产品活动规则不存在");
+
+        //step 01:删除 zbx触发器
+        List<TriggerService.Triggers> triggersList = triggerService.triggerListGet(productEventRelation.getZbxId());
+        if (CollectionUtil.isNotEmpty(triggersList)){
+            triggerService.triggerDelete(productEventRelation.getZbxId());
+        }
+
+        //step 1:删除 与产品 设备的关联
+        // new QProductEventRelation().eventRuleId.eq(eventRule.getEventRuleId()).delete();
+        productEventRelationService.remove(Wrappers.lambdaQuery(ProductEventRelation.class).eq(ProductEventRelation::getEventRuleId, ruleId));
+
+        //step 2:删除 关联的执行服务
+        // new QProductEventService().eventRuleId.eq(eventRule.getEventRuleId()).delete();
+
+        //step 3:删除 关联的表达式
+        productEventExpressionService.remove(Wrappers.lambdaQuery(ProductEventExpression.class).eq(ProductEventExpression::getRuleId, ruleId));
+        // new QProductEventExpression().eventRuleId.eq(eventRule.getEventRuleId()).delete();
+
+        //step 4:删除 触发器
+        // baseMapper.deleteById(ruleId);
+        // new QProductEvent().eventRuleId.eq(eventRule.getEventRuleId()).delete();
+        return this.removeById(ruleId);
+    }
+
+    /**
      * 创建产品活动规则
      *
      * @param eventRule 薄
@@ -87,6 +124,7 @@ public class ProductEventServiceImpl extends ServiceImpl<ProductEventMapper, Pro
 
         // 保存产品告警规则
         ProductEvent productEvent = productEventConvert.toEntity(eventRule);
+        productEvent.setId(eventRuleId);
         baseMapper.insert(productEvent);
 
         // 保存 表达式，方便回显

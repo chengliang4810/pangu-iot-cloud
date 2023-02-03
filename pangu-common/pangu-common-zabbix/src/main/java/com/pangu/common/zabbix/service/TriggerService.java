@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -45,10 +46,34 @@ public class TriggerService {
         zbxTrigger.triggerTagCreate(triggerId, tags);
     }
 
+    public String triggerGet(String zbxId) {
+        return zbxTrigger.triggerGet(zbxId);
+    }
+
+    public List<Triggers> triggerListGet(String zbxId) {
+        return JsonUtils.parseArray(triggerGet(zbxId), Triggers.class);
+    }
+
+    public String triggerDelete(String zbxId) {
+        return zbxTrigger.triggerDelete(zbxId);
+    }
 
     @Data
     static class TriggerIds {
         private String[] triggerids;
+    }
+
+    @Data
+    public static class Triggers {
+        private String      triggerid;
+        private String      description;
+        private List<Hosts> hosts;
+    }
+
+    @Data
+    public static class Hosts {
+        private String hostid;
+        private String host;
     }
 
 }
