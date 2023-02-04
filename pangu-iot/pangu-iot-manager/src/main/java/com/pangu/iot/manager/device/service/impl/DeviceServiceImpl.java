@@ -11,6 +11,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.pangu.common.core.utils.StringUtils;
 import com.pangu.common.mybatis.core.page.PageQuery;
 import com.pangu.common.mybatis.core.page.TableDataInfo;
+import com.pangu.data.api.RemoteTdEngineService;
 import com.pangu.iot.manager.device.domain.Device;
 import com.pangu.iot.manager.device.domain.DeviceGroupRelation;
 import com.pangu.iot.manager.device.domain.bo.DeviceBO;
@@ -38,6 +39,8 @@ import java.util.Map;
 public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> implements IDeviceService {
 
     private final DeviceMapper baseMapper;
+    private final RemoteTdEngineService tdEngineService;
+
 
     /**
      * 查询设备

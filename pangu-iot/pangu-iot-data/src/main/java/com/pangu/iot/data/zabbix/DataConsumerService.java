@@ -79,12 +79,12 @@ public class DataConsumerService implements ReceiveDataService {
 
         if (tagMap.containsKey(IotConstants.DEVICE_STATUS_OFFLINE_TAG)){
             // 设备离线
-            deviceStatusService.changeStatus(tagMap.get(IotConstants.PRODUCT_ID_TAG_NAME), tagMap.get(IotConstants.DEVICE_STATUS_OFFLINE_TAG), 0);
+            deviceStatusService.offline(tagMap.get(IotConstants.PRODUCT_ID_TAG_NAME), tagMap.get(IotConstants.DEVICE_STATUS_OFFLINE_TAG));
             log.info("设备离线：{}", zbxProblem);
         } else if (tagMap.containsKey(IotConstants.DEVICE_STATUS_ONLINE_TAG)) {
             // 设备上线
             log.info("设备上线：{}", zbxProblem);
-            deviceStatusService.changeStatus(tagMap.get(IotConstants.PRODUCT_ID_TAG_NAME), tagMap.get(IotConstants.DEVICE_STATUS_ONLINE_TAG), 1);
+            deviceStatusService.online(tagMap.get(IotConstants.PRODUCT_ID_TAG_NAME), tagMap.get(IotConstants.DEVICE_STATUS_ONLINE_TAG), zbxProblem.getClock());
         } else if (tagMap.containsKey(IotConstants.ALARM_TAG_NAME)){
             // 设备告警
             log.info("设备告警：{}", zbxProblem);

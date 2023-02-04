@@ -13,6 +13,16 @@ import java.time.ZoneOffset;
 public class TimeUtil {
 
     /**
+     * 转换为DateTime 日期时间
+     *
+     * @param clock 时钟
+     * @return {@link LocalDateTime}
+     */
+    public static LocalDateTime toLocalDateTime(int clock) {
+        return LocalDateTime.ofEpochSecond(clock, 0, ZoneOffset.of("+8"));
+    }
+
+    /**
      * 毫秒
      *
      * @param clock 十位毫秒值（秒）

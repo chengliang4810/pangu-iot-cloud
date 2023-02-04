@@ -72,6 +72,11 @@ public class DeviceListVO {
     private String position;
 
     /**
+     * 在线
+     */
+    private Boolean online;
+
+    /**
      * 最近在线时间
      */
     @ExcelProperty(value = "最近在线时间")

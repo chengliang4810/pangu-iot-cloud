@@ -1,10 +1,14 @@
 package com.pangu.iot.data.service.impl;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.pangu.common.redis.utils.RedisUtils;
+import com.pangu.common.zabbix.util.TimeUtil;
 import com.pangu.iot.data.service.DeviceStatusService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 
 import static com.pangu.common.core.constant.IotConstants.DEVICE_STATUS_CACHE_PREFIX;
 
@@ -14,21 +18,34 @@ import static com.pangu.common.core.constant.IotConstants.DEVICE_STATUS_CACHE_PR
 public class DeviceStatusServiceImpl implements DeviceStatusService  {
 
     /**
-     * 设备状态变更
+     * 设备上线
      *
-     * @param deviceId 设备ID
-     * @param status   状态
-     * @param productId  产品Id
+     * @param productId 产品id
+     * @param deviceId  设备id
+     * @param clock      时间
      */
     @Override
-    public void changeStatus(String productId, String deviceId, Integer status) {
-        if (1 == status){
-            RedisUtils.setCacheObject(DEVICE_STATUS_CACHE_PREFIX + productId + "_" + deviceId, status);
-        }else {
+    public void online(String productId, String deviceId, Integer clock) {
+        RedisUtils.setCacheObject(DEVICE_STATUS_CACHE_PREFIX + productId + "_" + deviceId, clock);
+    }
+
+    /**
+     * 设备离线
+     *
+     * @param productId 产品id
+     * @param deviceId  设备id
+     */
+    @Override
+    public void offline(String productId, String deviceId) {
+        Integer clock = RedisUtils.getCacheObject(DEVICE_STATUS_CACHE_PREFIX + productId + "_" + deviceId);
+        if (ObjectUtil.isNotNull(clock)){
+            // 将clock 转换为时间
+            LocalDateTime lastOnlineTime = TimeUtil.toLocalDateTime(clock);
+            log.info("设备离线，设备id：{}，产品id：{}，最后上线时间：{}", deviceId, productId, lastOnlineTime);
+            // 更新设备最后上线时间
             RedisUtils.deleteObject(DEVICE_STATUS_CACHE_PREFIX + productId + "_" + deviceId);
         }
     }
-
 
     /**
      * 获得设备状态
