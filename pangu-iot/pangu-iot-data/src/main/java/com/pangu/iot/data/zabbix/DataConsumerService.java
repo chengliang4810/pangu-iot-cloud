@@ -54,7 +54,7 @@ public class DataConsumerService implements ReceiveDataService {
         // 产品Id
         String productId = tagMap.get(IotConstants.PRODUCT_ID_TAG_NAME);
         // 获取当前设备状态
-        int status = deviceStatusService.getStatus(tagMap.get(IotConstants.PRODUCT_ID_TAG_NAME), zbxValue.getHostname());
+        boolean status = deviceStatusService.getOnlineStatus(zbxValue.getHostname());
 
         Map<String, Object> value = new LinkedHashMap<>(3);
         value.put(IotConstants.TABLE_STATUS_FIELD, status);
@@ -79,12 +79,12 @@ public class DataConsumerService implements ReceiveDataService {
 
         if (tagMap.containsKey(IotConstants.DEVICE_STATUS_OFFLINE_TAG)){
             // 设备离线
-            deviceStatusService.offline(tagMap.get(IotConstants.PRODUCT_ID_TAG_NAME), tagMap.get(IotConstants.DEVICE_STATUS_OFFLINE_TAG));
+            deviceStatusService.offline(tagMap.get(IotConstants.DEVICE_STATUS_OFFLINE_TAG));
             log.info("设备离线：{}", zbxProblem);
         } else if (tagMap.containsKey(IotConstants.DEVICE_STATUS_ONLINE_TAG)) {
             // 设备上线
             log.info("设备上线：{}", zbxProblem);
-            deviceStatusService.online(tagMap.get(IotConstants.PRODUCT_ID_TAG_NAME), tagMap.get(IotConstants.DEVICE_STATUS_ONLINE_TAG), zbxProblem.getClock());
+            deviceStatusService.online(tagMap.get(IotConstants.DEVICE_STATUS_ONLINE_TAG), zbxProblem.getClock());
         } else if (tagMap.containsKey(IotConstants.ALARM_TAG_NAME)){
             // 设备告警
             log.info("设备告警：{}", zbxProblem);

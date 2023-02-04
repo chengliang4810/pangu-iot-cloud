@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.pangu.common.core.constant.IotConstants;
 import com.pangu.common.core.utils.Assert;
 import com.pangu.common.core.utils.StringUtils;
 import com.pangu.common.mybatis.core.page.PageQuery;
@@ -45,7 +46,6 @@ public class DeviceAttributeServiceImpl extends ServiceImpl<DeviceAttributeMappe
 
     @Override
     public TableDataInfo<DeviceAttributeVO> queryLatestDataList(LastDataAttributeBO bo, PageQuery pageQuery) {
-
         // 查询设备信息
         Long deviceId = bo.getDeviceId();
         Device device = deviceService.getById(deviceId);
@@ -54,14 +54,12 @@ public class DeviceAttributeServiceImpl extends ServiceImpl<DeviceAttributeMappe
         // 分页查询该设备所有属性
         Page<DeviceAttributeVO> attributeVOList = baseMapper.queryVOListByDeviceId(pageQuery.build(), ObjectUtil.isNull(bo.getProductId()) ? device.getProductId() : bo.getProductId(), deviceId);
 
-        // 获取最新属性值
+        // 获取最新属性值并绑定
         Map<String, Object> lastRowData = tdEngineService.todayLastRowData(device.getProductId() , device.getCode());
-        log.info("lastRowData:{}", lastRowData);
         attributeVOList.getRecords().forEach(attributeVO -> {
             attributeVO.setValue(lastRowData.get(attributeVO.getKey()));
-            attributeVO.setClock(MapUtil.getStr(lastRowData, "ts"));
+            attributeVO.setClock(MapUtil.getStr(lastRowData, IotConstants.TABLE_PRIMARY_FIELD));
         });
-
         return TableDataInfo.build(attributeVOList);
     }
 
@@ -78,8 +76,6 @@ public class DeviceAttributeServiceImpl extends ServiceImpl<DeviceAttributeMappe
         Assert.notNull(device, "设备不存在");
         return baseMapper.queryVOListByDeviceId(device.getProductId(), deviceId);
     }
-
-
 
     /**
      * 查询设备属性
