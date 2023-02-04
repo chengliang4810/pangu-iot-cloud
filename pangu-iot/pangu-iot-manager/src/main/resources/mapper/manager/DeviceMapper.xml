@@ -37,7 +37,10 @@
         <result property="updateTime" column="update_time"/>
         <result property="status" column="status"/>
         <result property="remark" column="remark"/>
-        <result property="groupName" column="group_name"/>
+        <collection property="groupList" ofType="com.pangu.iot.manager.device.domain.vo.DeviceGroupVO">
+            <result property="id" column="device_group_id"/>
+            <result property="name" column="device_group_name"/>
+        </collection>
     </resultMap>
 
     <resultMap type="com.pangu.iot.manager.device.domain.vo.DeviceDetailVO" id="DeviceDetailVOResult">
@@ -64,13 +67,11 @@
 
     <select id="selectVoPageList" resultMap="DeviceListVOResult">
         select device.id, device.code, device.product_id, device.name, device.address, device.position, device.latest_online, device.status, device.create_by, device.create_time, device.update_by, device.update_time, device.remark, device.zbx_id,
-         product.name product_name, product.type, group_name
+         product.name product_name, product.type, device_group.name device_group_name, device_group.id device_group_id
             from iot_device device
-            left join iot_product product on device.product_id = product.id
-            left join (
-                select any_value(device_group_relation.device_id) device_id, any_value(device_group_id) device_group_id, group_concat(device_group.name) as group_name from iot_device_group device_group
-                inner join iot_device_group_relation device_group_relation on device_group.id = device_group_relation.device_group_id
-             ) device_group on device_group.device_id = device.id
+              left join iot_product product on device.product_id = product.id
+              left join iot_device_group_relation device_group_relation on device.id = device_group_relation.device_id
+              left join iot_device_group device_group on device_group_relation.device_group_id = device_group.id
         ${ew.customSqlSegment}
     </select>
 

@@ -5,6 +5,7 @@ import com.alibaba.excel.annotation.ExcelProperty;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -32,9 +33,10 @@ public class DeviceListVO {
     private String code;
 
     /**
-     * 设备组名称
+     * 设备分组
      */
-    private String groupName;
+    @ExcelProperty(value = "设备分组")
+    private List<DeviceGroupVO> groupList;
 
     /**
      * 产品ID
