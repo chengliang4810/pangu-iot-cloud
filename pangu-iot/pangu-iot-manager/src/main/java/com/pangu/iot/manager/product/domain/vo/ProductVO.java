@@ -68,6 +68,12 @@ public class ProductVO {
     private String model;
 
     /**
+     * 设备数
+     */
+    @ExcelProperty(value = "设备数")
+    private Integer deviceCount;
+
+    /**
      * 创建者
      */
     @ExcelProperty(value = "创建者")

@@ -1,14 +1,10 @@
 package com.pangu.iot.manager.product.domain;
 
-import com.baomidou.mybatisplus.annotation.*;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.pangu.common.core.web.domain.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import java.io.Serializable;
-import java.util.Date;
-import java.math.BigDecimal;
-
-import com.pangu.common.core.web.domain.BaseEntity;
 
 /**
  * 产品对象 iot_product
@@ -57,6 +53,11 @@ public class Product extends BaseEntity {
      * 型号
      */
     private String model;
+
+    /**
+     * 设备数
+     */
+    private Integer deviceCount;
     /**
      * 备注
      */
