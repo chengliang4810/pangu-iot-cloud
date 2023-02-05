@@ -54,4 +54,11 @@ public interface RemoteTdEngineService {
      * @return {@link Map}<{@link String}, {@link Object}>
      */
     Map<String, Object> todayLastRowData(Long productId, String deviceCode);
+
+    /**
+     * 删除表
+     *
+     * @param deviceIds 设备id
+     */
+    void dropTable(List<Long> deviceIds);
 }

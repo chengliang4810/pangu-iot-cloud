@@ -1,6 +1,8 @@
 package com.pangu.iot.data.tdengine.service.impl;
 
 import cn.hutool.core.map.MapUtil;
+import cn.hutool.core.util.StrUtil;
+import com.pangu.common.core.constant.IotConstants;
 import com.pangu.common.core.utils.Assert;
 import com.pangu.common.tdengine.mapper.TdDatabaseMapper;
 import com.pangu.common.tdengine.model.SuperTableDTO;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static com.pangu.common.core.constant.IotConstants.TD_DB_NAME;
 
@@ -23,6 +26,23 @@ public class TdEngineServiceImpl implements TdEngineService {
 
 
     private final TdDatabaseMapper databaseMapper;
+
+
+    /**
+     * 删除表
+     *
+     * @param tableNameList 表名称列表
+     */
+    @Override
+    public void dropTable(List<String> tableNameList) {
+        Assert.notEmpty(tableNameList, "表名称列表不能为空");
+        List<String> resultList = tableNameList.stream().map(tableName -> {
+            return StrUtil.format(IotConstants.DEVICE_TABLE_NAME_TEMPLATE, tableName);
+        }).collect(Collectors.toList());
+        databaseMapper.dropTable(resultList);
+    }
+
+
 
     /**
      * 选择最后一个数据

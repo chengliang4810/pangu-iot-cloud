@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static com.pangu.common.core.constant.IotConstants.TAG_OCCUPY_KEY;
 
@@ -105,6 +106,17 @@ public class RemoteTdEngineServiceImpl implements RemoteTdEngineService {
             log.warn("查询今天最后一行数据失败", e);
         }
         return Collections.emptyMap();
+    }
+
+    /**
+     * 删除表
+     *
+     * @param deviceIds 设备id
+     */
+    @Override
+    public void dropTable(List<Long> deviceIds) {
+        List<String> ids = deviceIds.stream().map(Object::toString).collect(Collectors.toList());
+        tdEngineService.dropTable(ids);
     }
 
 }

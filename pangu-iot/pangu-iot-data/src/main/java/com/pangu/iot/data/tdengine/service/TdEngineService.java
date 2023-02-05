@@ -69,4 +69,10 @@ public interface TdEngineService {
      */
     Map<String, Object> selectLastData(String table);
 
+    /**
+     * 删除表
+     *
+     * @param tableNameList 表名称列表
+     */
+    void dropTable(List<String> tableNameList);
 }

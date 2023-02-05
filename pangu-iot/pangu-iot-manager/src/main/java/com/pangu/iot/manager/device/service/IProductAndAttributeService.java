@@ -50,4 +50,13 @@ public interface IProductAndAttributeService {
      * @return {@link Boolean}
      */
     Boolean insertDevice(DeviceBO bo);
+
+
+    /**
+     * 删除设备 根据 ids
+     *
+     * @param deviceId 设备id
+     * @return {@link Boolean}
+     */
+    Boolean deleteDeviceByIds(Collection<Long> deviceId);
 }

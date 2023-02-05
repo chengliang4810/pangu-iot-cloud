@@ -85,4 +85,10 @@ public interface TdDatabaseMapper {
     @Select("select LAST_ROW(*) from ${table} where ts > TODAY()")
     Map<String, Object> selectTodayLastRowData(@Param("table") String table);
 
+    /**
+     * 删除表
+     *
+     * @param resultList 结果列表
+     */
+    void dropTable(List<String> resultList);
 }

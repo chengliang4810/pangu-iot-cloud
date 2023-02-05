@@ -1,5 +1,6 @@
 package com.pangu.iot.manager.device.service.impl;
 
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -59,6 +60,41 @@ public class ProductAndAttributeServiceImpl implements IProductAndAttributeServi
 
 
     /**
+     * 删除设备 根据 ids
+     *
+     * @param deviceId 设备id
+     * @return {@link Boolean}
+     */
+    @Override
+    public Boolean deleteDeviceByIds(Collection<Long> deviceId) {
+
+        // zbx 删除主机
+        List<Device> deviceList = deviceService.list(Wrappers.<Device>lambdaQuery().in(Device::getId, deviceId));
+        List<String> zbxIds = deviceList.stream().map(Device::getZbxId).collect(Collectors.toList());
+        if (CollectionUtil.isNotEmpty(zbxIds)) {
+            hostService.hostDelete(zbxIds);
+        }
+
+        // 设备按照产品ID分组
+        Map<Long, List<Device>> deviceMap = deviceList.stream().collect(Collectors.groupingBy(Device::getProductId));
+        deviceMap.forEach((productId, devices) -> {
+            // 删除设备属性
+            List<Long> deviceIds = devices.stream().map(Device::getId).collect(Collectors.toList());
+            deviceAttributeService.remove(Wrappers.lambdaQuery(DeviceAttribute.class).in(DeviceAttribute::getDeviceId, deviceIds));
+            // 删除设备组关系
+            deviceGroupRelationService.remove(Wrappers.lambdaQuery(DeviceGroupRelation.class).in(DeviceGroupRelation::getDeviceId, deviceIds));
+            // 删除设备
+            // TODO 待补充
+            Integer number = deviceService.deleteWithValidByIds(deviceId, false);
+            // 更新产品的设备数量
+            // 删除设备表
+            tdEngineService.dropTable(deviceIds);
+        });
+        return null;
+    }
+
+
+    /**
      * 创建设备
      *
      * @param bo 设备信息
@@ -100,6 +136,9 @@ public class ProductAndAttributeServiceImpl implements IProductAndAttributeServi
         Device device = deviceConvert.toEntity(bo);
         device.setZbxId(zbxId);
         device.setId(id);
+
+        // 产品的设备总数+1
+        productService.update(Wrappers.lambdaUpdate(Product.class).setSql("device_count = device_count + 1").eq(Product::getId, bo.getProductId()));
 
         return deviceService.save(device);
     }
@@ -257,6 +296,8 @@ public class ProductAndAttributeServiceImpl implements IProductAndAttributeServi
             Product product = productService.getById(productId);
 
             // 查询该产品下是否存在设备
+            long count = deviceService.count(Wrappers.<Device>lambdaQuery().eq(Device::getProductId, productId));
+            Assert.isTrue(count == 0, "产品[{}]下存在设备，无法删除", product.getName());
 
             // tdengine删除表
             tdEngineService.deleteSuperTable(SUPER_TABLE_PREFIX + product.getId());

@@ -49,7 +49,7 @@ public interface IDeviceService extends IService<Device> {
     /**
      * 校验并批量删除设备信息
      */
-    Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid);
+    Integer deleteWithValidByIds(Collection<Long> ids, Boolean isValid);
 
     /**
      * 更新设备状态

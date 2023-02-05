@@ -11,6 +11,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.pangu.common.core.utils.StringUtils;
 import com.pangu.common.mybatis.core.page.PageQuery;
 import com.pangu.common.mybatis.core.page.TableDataInfo;
+import com.pangu.common.zabbix.service.HostService;
 import com.pangu.data.api.RemoteTdEngineService;
 import com.pangu.iot.manager.device.domain.Device;
 import com.pangu.iot.manager.device.domain.DeviceGroupRelation;
@@ -21,6 +22,7 @@ import com.pangu.iot.manager.device.domain.vo.DeviceListVO;
 import com.pangu.iot.manager.device.domain.vo.DeviceVO;
 import com.pangu.iot.manager.device.mapper.DeviceMapper;
 import com.pangu.iot.manager.device.service.IDeviceService;
+import com.pangu.iot.manager.product.service.IProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -39,7 +41,9 @@ import java.util.Map;
 public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> implements IDeviceService {
 
     private final DeviceMapper baseMapper;
+    private final HostService hostService;
     private final RemoteTdEngineService tdEngineService;
+    private final IProductService productService;
 
 
     /**
@@ -129,11 +133,11 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> impleme
      * 批量删除设备
      */
     @Override
-    public Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid) {
+    public Integer deleteWithValidByIds(Collection<Long> ids, Boolean isValid) {
         if(isValid){
             //TODO 做一些业务上的校验,判断是否需要校验
         }
-        return baseMapper.deleteBatchIds(ids) > 0;
+        return baseMapper.deleteBatchIds(ids);
     }
 
     /**

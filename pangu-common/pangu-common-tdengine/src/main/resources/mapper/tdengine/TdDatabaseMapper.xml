@@ -37,4 +37,10 @@
         SHOW CREATE DATABASE ${database}
     </select>
 
+    <delete id="dropTable">
+        DROP TABLE
+        <foreach collection="tables" item="table" separator="," open="" close="">
+            IF EXISTS ${table}
+    </foreach>
+    </delete>
 </mapper>

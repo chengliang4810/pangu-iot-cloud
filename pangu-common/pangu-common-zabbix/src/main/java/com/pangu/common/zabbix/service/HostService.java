@@ -32,6 +32,10 @@ public class HostService {
         return JsonUtils.parseObject(result, HostIds.class).getHostids()[0];
     }
 
+    public void hostDelete(List<String> zbxIds) {
+        zbxHost.hostDelete(zbxIds);
+    }
+
     @Data
     static class HostIds {
         private String[] hostids;
