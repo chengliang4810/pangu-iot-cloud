@@ -59,6 +59,6 @@ public class ProductServiceBO extends BaseEntity {
      * 关系id
      */
     @NotNull(groups = AddGroup.class)
-    private String relationId;
+    private Long relationId;
 
 }

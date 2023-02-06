@@ -1,24 +1,29 @@
 package com.pangu.iot.manager.product.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.pangu.common.core.utils.StringUtils;
 import com.pangu.common.mybatis.core.page.PageQuery;
 import com.pangu.common.mybatis.core.page.TableDataInfo;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import com.pangu.iot.manager.product.domain.ProductService;
+import com.pangu.iot.manager.product.domain.ProductServiceParam;
+import com.pangu.iot.manager.product.domain.ProductServiceRelation;
 import com.pangu.iot.manager.product.domain.bo.ProductServiceBO;
 import com.pangu.iot.manager.product.domain.vo.ProductServiceVO;
-import com.pangu.iot.manager.product.domain.ProductService;
 import com.pangu.iot.manager.product.mapper.ProductServiceMapper;
+import com.pangu.iot.manager.product.service.IProductServiceParamService;
+import com.pangu.iot.manager.product.service.IProductServiceRelationService;
 import com.pangu.iot.manager.product.service.IProductServiceService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Collection;
 
 /**
  * 产品功能Service业务层处理
@@ -31,6 +36,8 @@ import java.util.Collection;
 public class ProductServiceServiceImpl extends ServiceImpl<ProductServiceMapper, ProductService> implements IProductServiceService {
 
     private final ProductServiceMapper baseMapper;
+    private final IProductServiceParamService serviceParamService;
+    private final IProductServiceRelationService serviceRelationService;
 
     /**
      * 查询产品功能
@@ -72,10 +79,20 @@ public class ProductServiceServiceImpl extends ServiceImpl<ProductServiceMapper,
      * 新增产品功能
      */
     @Override
+    @Transactional
     public Boolean insertByBo(ProductServiceBO bo) {
+
+        // 数据入库
         ProductService add = BeanUtil.toBean(bo, ProductService.class);
-        validEntityBeforeSave(add);
         boolean flag = baseMapper.insert(add) > 0;
+        // 保存产品功能参数
+        List<ProductServiceParam> serviceParamList = bo.getProductServiceParamList();
+        serviceParamService.saveBatch(serviceParamList);
+
+        // 保存产品与功能关系
+        Long relationId = bo.getRelationId();
+        serviceRelationService.save(new ProductServiceRelation(add.getId(), relationId, false));
+
         if (flag) {
             bo.setId(add.getId());
         }

@@ -1,14 +1,11 @@
 package com.pangu.iot.manager.product.domain;
 
-import com.baomidou.mybatisplus.annotation.*;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.pangu.common.core.web.domain.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import java.io.Serializable;
-import java.util.Date;
-import java.math.BigDecimal;
-
-import com.pangu.common.core.web.domain.BaseEntity;
 
 /**
  * 产品功能参数对象 iot_product_service_param
@@ -24,7 +21,7 @@ public class ProductServiceParam extends BaseEntity {
     private static final long serialVersionUID=1L;
 
     /**
-     * 
+     *
      */
     @TableId(value = "id")
     private Long id;
@@ -35,6 +32,7 @@ public class ProductServiceParam extends BaseEntity {
     /**
      * 参数标识
      */
+    @TableField(value = "`key`")
     private String key;
     /**
      * 参数名
