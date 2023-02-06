@@ -120,10 +120,16 @@ public class ProductServiceServiceImpl extends ServiceImpl<ProductServiceMapper,
      * 批量删除产品功能
      */
     @Override
+    @Transactional
     public Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid) {
         if(isValid){
             //TODO 做一些业务上的校验,判断是否需要校验
         }
-        return baseMapper.deleteBatchIds(ids) > 0;
+        boolean flag = baseMapper.deleteBatchIds(ids) > 0;
+        // 删除产品功能参数
+        serviceParamService.remove(Wrappers.<ProductServiceParam>lambdaQuery().in(ProductServiceParam::getServiceId, ids));
+        // 删除产品与功能关系
+        serviceRelationService.remove(Wrappers.<ProductServiceRelation>lambdaQuery().in(ProductServiceRelation::getServiceId, ids));
+        return flag;
     }
 }
