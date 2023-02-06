@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -36,7 +37,7 @@ public class ProductEventRuleVO {
 
     private String remark;
 
-    private List<DeviceService> deviceServices;
+    private List<DeviceService> deviceServices = new ArrayList<>(0);
 
     private Long productId; // 产品ID
 
@@ -67,17 +68,17 @@ public class ProductEventRuleVO {
 
         private String value;
 
-        private String productAttrKey; // 产品属性 Key
+        private String productAttributeKey; // 产品属性 Key
 
         private String productId; // 产品 ID
 
         private String unit;
 
-        private Long productAttrId;
+        private Long productAttributeId;
 
-        private String productAttrType;
+        private String productAttributeType;
 
-        private String attrValueType;
+        private String attributeValueType;
 
         private Integer period;
 
@@ -88,7 +89,7 @@ public class ProductEventRuleVO {
             expression.append("(/");
             expression.append(productId);
             expression.append("/");
-            expression.append(productAttrKey);
+            expression.append(productAttributeKey);
 
             if (StringUtils.isNotBlank(scope)) {
                 expression.append(", ");

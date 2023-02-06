@@ -57,7 +57,7 @@ public interface ZbxTrigger {
     @JsonPath("/trigger/trigger.update")
     String triggerUpdate(@ParamName("triggerId") String triggerId,
                          @ParamName("expression") String expression,
-                         @ParamName("ruleLevel") Byte ruleLevel);
+                         @ParamName("ruleLevel") Integer ruleLevel);
 
 
     /**

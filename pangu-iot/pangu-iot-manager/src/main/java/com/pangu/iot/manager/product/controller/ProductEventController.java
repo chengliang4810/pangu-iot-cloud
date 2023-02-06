@@ -40,6 +40,7 @@ public class ProductEventController extends BaseController {
 
     private final IProductEventService productEventService;
 
+
     /**
      * 根据ID查询告警规则
      */
@@ -69,6 +70,16 @@ public class ProductEventController extends BaseController {
     @DeleteMapping("/trigger/{ruleId}")
     public R<Void> remove(@NotNull(message = "ruleId不能为空") @PathVariable Long ruleId) {
         return toAjax(productEventService.deleteProductEventRule(ruleId));
+    }
+
+    /**
+     * 修改告警规则触发器
+     */
+    @SaCheckPermission("manager:product_event:edit")
+    @Log(title = "告警规则", businessType = BusinessType.UPDATE)
+    @PutMapping("/trigger")
+    public R<Void> editTrigger(@Validated(EditGroup.class) @RequestBody ProductEventRuleBO bo) {
+        return toAjax(productEventService.updateProductEventRuleById(bo));
     }
 
 

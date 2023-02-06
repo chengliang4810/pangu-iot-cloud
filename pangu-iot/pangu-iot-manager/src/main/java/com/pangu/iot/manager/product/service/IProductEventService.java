@@ -73,4 +73,12 @@ public interface IProductEventService extends IService<ProductEvent> {
      * @return {@link ProductEventRuleVO}
      */
     ProductEventRuleVO queryProductEventRule(Long id);
+
+    /**
+     * 更新产品事件规则id
+     *
+     * @param bo 薄
+     * @return int
+     */
+    Boolean updateProductEventRuleById(ProductEventRuleBO bo);
 }

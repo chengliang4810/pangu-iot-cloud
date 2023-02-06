@@ -45,6 +45,7 @@ public interface ProductEventConvert extends CommonConvert {
             @Mapping(target = "level", source = "eventLevel"),
             @Mapping(target = "notify", source = "eventNotify"),
             @Mapping(target = "name", source = "eventRuleName"),
+            @Mapping(target = "id", source = "eventRuleId"),
     })
     ProductEvent toEntity(ProductEventRuleBO bo);
 

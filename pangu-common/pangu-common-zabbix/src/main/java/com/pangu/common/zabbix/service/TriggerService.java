@@ -58,6 +58,10 @@ public class TriggerService {
         return zbxTrigger.triggerDelete(zbxId);
     }
 
+    public void triggerUpdate(String zbxId, String expression, Integer eventLevel) {
+        zbxTrigger.triggerUpdate(zbxId, expression, eventLevel);
+    }
+
     @Data
     static class TriggerIds {
         private String[] triggerids;

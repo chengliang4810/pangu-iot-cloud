@@ -54,7 +54,7 @@ public class ProductEventRuleBO {
 
     private List<Tag> tags;
 
-    @NotNull(groups = EditGroup.class)
+    // @NotNull(groups = EditGroup.class)
     private String zbxId;
 
     @NotNull(groups = AddGroup.class)
@@ -91,17 +91,17 @@ public class ProductEventRuleBO {
         private String value;
 
         @NotNull(groups = {AddGroup.class, EditGroup.class})
-        private String productAttrKey; // 产品属性 Key
+        private String productAttributeKey; // 产品属性 Key
 
         private String productId; // 产品 ID
 
         private String unit;
 
-        private Long productAttrId;
+        private Long productAttributeId;
 
-        private String productAttrType;
+        private String productAttributeType;
 
-        private String attrValueType;
+        private String attributeValueType;
 
         private Integer period;
 
@@ -112,7 +112,7 @@ public class ProductEventRuleBO {
             expression.append("(/");
             expression.append(productId);
             expression.append("/");
-            expression.append(productAttrKey);
+            expression.append(productAttributeKey);
 
             if (StringUtils.isNotBlank(scope)) {
                 expression.append(", ");

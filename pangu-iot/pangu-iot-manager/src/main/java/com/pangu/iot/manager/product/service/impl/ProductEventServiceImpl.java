@@ -59,6 +59,46 @@ public class ProductEventServiceImpl extends ServiceImpl<ProductEventMapper, Pro
 
 
     /**
+     * 更新产品事件规则id
+     *
+     * @param bo 薄
+     * @return int
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Boolean updateProductEventRuleById(ProductEventRuleBO bo) {
+        // 查询规则是否存在
+        ProductEvent event = baseMapper.selectById(bo.getEventRuleId());
+        Assert.notNull(event, "告警规则不存在");
+
+        //step 1: 删除关联的函数表达式
+        productEventExpressionService.remove(Wrappers.lambdaQuery(ProductEventExpression.class).eq(ProductEventExpression::getRuleId, bo.getEventRuleId()));
+
+        //step 2: 删除关联的服务方法调用
+
+        // step 3: 更新产品告警规则
+        ProductEvent productEvent = productEventConvert.toEntity(bo);
+        int result = baseMapper.updateById(productEvent);
+
+        // step 4: 保存 表达式，方便回显
+        List<ProductEventExpression> expList = new ArrayList<>();
+        bo.getExpList().forEach(exp -> {
+            ProductEventExpression productEventExpression = productEventExpressionConvert.toEntity(exp);
+            productEventExpression.setRuleId(bo.getEventRuleId());
+            expList.add(productEventExpression);
+        });
+        productEventExpressionService.saveBatch(expList);
+
+        // 更新zbx表达式
+        String expression = bo.getExpList().stream().map(Object::toString).collect(Collectors.joining(" " + bo.getExpLogic() + " "));
+        ProductEventRelation eventRelation = productEventRelationService.getOne(Wrappers.lambdaQuery(ProductEventRelation.class).eq(ProductEventRelation::getEventRuleId, bo.getEventRuleId()).last(" limit 1"));
+
+        triggerService.triggerUpdate(eventRelation.getZbxId(), expression,  bo.getEventLevel());
+
+        return result > 0;
+    }
+
+    /**
      * 查询产品活动规则
      *
      * @param id id
@@ -76,10 +116,6 @@ public class ProductEventServiceImpl extends ServiceImpl<ProductEventMapper, Pro
         // 规则表达式
         List<ProductEventExpression> productEventExpressionList = productEventExpressionService.list(Wrappers.lambdaQuery(ProductEventExpression.class).eq(ProductEventExpression::getRuleId, id));
         productEventRuleVO.setExpList(productEventExpressionList);
-
-        ProductEventRelation productEventRelation = productEventRelationService.getOne(Wrappers.lambdaQuery(ProductEventRelation.class).eq(ProductEventRelation::getEventRuleId, id).last(" limit 1"));
-        productEventRuleVO.setStatus(productEventRelation.getStatus());
-        productEventRuleVO.setRemark(productEventRelation.getRemark());
 
         return productEventRuleVO;
     }

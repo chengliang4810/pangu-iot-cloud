@@ -20,12 +20,6 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface ProductEventExpressionConvert extends CommonConvert {
 
-    @Mappings({
-            @Mapping(target = "productAttributeId", source = "productAttrId"),
-            @Mapping(target = "productAttributeKey", source = "productAttrKey"),
-            @Mapping(source = "productAttrType", target = "productAttributeType"),
-            @Mapping(source = "attrValueType", target = "attributeValueType"),
-    })
     ProductEventExpression toEntity(ProductEventRuleBO.Expression expression);
 
 
