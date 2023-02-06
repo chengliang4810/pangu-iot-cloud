@@ -20,6 +20,7 @@ import com.pangu.iot.manager.product.domain.ProductEventExpression;
 import com.pangu.iot.manager.product.domain.ProductEventRelation;
 import com.pangu.iot.manager.product.domain.bo.ProductEventBO;
 import com.pangu.iot.manager.product.domain.bo.ProductEventRuleBO;
+import com.pangu.iot.manager.product.domain.vo.ProductEventRuleVO;
 import com.pangu.iot.manager.product.domain.vo.ProductEventVO;
 import com.pangu.iot.manager.product.mapper.ProductEventMapper;
 import com.pangu.iot.manager.product.service.IProductEventExpressionService;
@@ -55,6 +56,33 @@ public class ProductEventServiceImpl extends ServiceImpl<ProductEventMapper, Pro
     private final IProductEventRelationService productEventRelationService;
     private final ProductEventExpressionConvert productEventExpressionConvert;
     private final IProductEventExpressionService productEventExpressionService;
+
+
+    /**
+     * 查询产品活动规则
+     *
+     * @param id id
+     * @return {@link ProductEventRuleVO}
+     */
+    @Override
+    public ProductEventRuleVO queryProductEventRule(Long id) {
+
+        // 查询规则是否存在
+        ProductEvent productEvent = this.getById(id);
+        Assert.notNull(productEvent, "告警规则不存在");
+
+        ProductEventRuleVO productEventRuleVO = productEventConvert.toVO(productEvent);
+
+        // 规则表达式
+        List<ProductEventExpression> productEventExpressionList = productEventExpressionService.list(Wrappers.lambdaQuery(ProductEventExpression.class).eq(ProductEventExpression::getRuleId, id));
+        productEventRuleVO.setExpList(productEventExpressionList);
+
+        ProductEventRelation productEventRelation = productEventRelationService.getOne(Wrappers.lambdaQuery(ProductEventRelation.class).eq(ProductEventRelation::getEventRuleId, id).last(" limit 1"));
+        productEventRuleVO.setStatus(productEventRelation.getStatus());
+        productEventRuleVO.setRemark(productEventRelation.getRemark());
+
+        return productEventRuleVO;
+    }
 
 
     /**
@@ -94,7 +122,7 @@ public class ProductEventServiceImpl extends ServiceImpl<ProductEventMapper, Pro
     }
 
     /**
-     * 创建产品活动规则
+     * 创建产品报警规则
      *
      * @param eventRule 薄
      * @return {@link Boolean}

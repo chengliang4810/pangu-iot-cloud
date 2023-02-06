@@ -12,6 +12,7 @@ import com.pangu.common.mybatis.core.page.PageQuery;
 import com.pangu.common.mybatis.core.page.TableDataInfo;
 import com.pangu.iot.manager.product.domain.bo.ProductEventBO;
 import com.pangu.iot.manager.product.domain.bo.ProductEventRuleBO;
+import com.pangu.iot.manager.product.domain.vo.ProductEventRuleVO;
 import com.pangu.iot.manager.product.domain.vo.ProductEventVO;
 import com.pangu.iot.manager.product.service.IProductEventService;
 import lombok.RequiredArgsConstructor;
@@ -38,6 +39,15 @@ import java.util.List;
 public class ProductEventController extends BaseController {
 
     private final IProductEventService productEventService;
+
+    /**
+     * 根据ID查询告警规则
+     */
+    @SaCheckPermission("manager:product_event:query")
+    @GetMapping("/trigger/{id}")
+    public R<ProductEventRuleVO> query(@PathVariable("id") @NotNull(message = "id不能为空") Long id) {
+        return R.ok(productEventService.queryProductEventRule(id));
+    }
 
     /**
      * 新增告警规则触发器

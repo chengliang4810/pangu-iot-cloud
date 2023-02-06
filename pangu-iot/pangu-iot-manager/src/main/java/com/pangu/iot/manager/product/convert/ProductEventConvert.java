@@ -4,6 +4,7 @@ import com.pangu.common.core.convert.CommonConvert;
 import com.pangu.iot.manager.product.domain.ProductEvent;
 import com.pangu.iot.manager.product.domain.bo.ProductEventBO;
 import com.pangu.iot.manager.product.domain.bo.ProductEventRuleBO;
+import com.pangu.iot.manager.product.domain.vo.ProductEventRuleVO;
 import com.pangu.iot.manager.product.domain.vo.ProductEventVO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -20,6 +21,19 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface ProductEventConvert extends CommonConvert {
 
+    /**
+     * 给签证官
+     *
+     * @param productEvent 产品活动
+     * @return {@link ProductEventRuleVO}
+     */
+    @Mappings({
+            @Mapping(target = "eventLevel", source = "level"),
+            @Mapping(target = "eventNotify", source = "notify"),
+            @Mapping(target = "eventRuleName", source = "name"),
+            @Mapping(target = "eventRuleId", source = "id"),
+    })
+    ProductEventRuleVO toVO(ProductEvent productEvent);
 
     /**
      * 实体

@@ -66,11 +66,11 @@ public class ProductEventExpression extends BaseEntity {
     /**
      * 属性类型 属性 事件
      */
-    private String productAttributeType;
+    private Integer productAttributeType;
     /**
      * 取值周期 时间 周期
      */
-    private String period;
+    private Integer period;
     /**
      * 属性值类型
      */

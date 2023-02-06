@@ -2,6 +2,7 @@ package com.pangu.iot.manager.product.service;
 
 import com.pangu.iot.manager.product.domain.ProductEvent;
 import com.pangu.iot.manager.product.domain.bo.ProductEventRuleBO;
+import com.pangu.iot.manager.product.domain.vo.ProductEventRuleVO;
 import com.pangu.iot.manager.product.domain.vo.ProductEventVO;
 import com.pangu.iot.manager.product.domain.bo.ProductEventBO;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -64,4 +65,12 @@ public interface IProductEventService extends IService<ProductEvent> {
      * @return {@link Boolean}
      */
     Boolean deleteProductEventRule(Long ruleId);
+
+    /**
+     * 查询产品活动规则
+     *
+     * @param id id
+     * @return {@link ProductEventRuleVO}
+     */
+    ProductEventRuleVO queryProductEventRule(Long id);
 }

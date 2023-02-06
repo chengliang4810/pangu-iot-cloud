@@ -6,6 +6,8 @@ import com.pangu.iot.manager.product.domain.bo.ProductEventExpressionBO;
 import com.pangu.iot.manager.product.domain.bo.ProductEventRuleBO;
 import com.pangu.iot.manager.product.domain.vo.ProductEventExpressionVO;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Mappings;
 
 import java.util.List;
 
@@ -18,8 +20,14 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface ProductEventExpressionConvert extends CommonConvert {
 
-
+    @Mappings({
+            @Mapping(target = "productAttributeId", source = "productAttrId"),
+            @Mapping(target = "productAttributeKey", source = "productAttrKey"),
+            @Mapping(source = "productAttrType", target = "productAttributeType"),
+            @Mapping(source = "attrValueType", target = "attributeValueType"),
+    })
     ProductEventExpression toEntity(ProductEventRuleBO.Expression expression);
+
 
     List<ProductEventExpression> toEntityList(List<ProductEventRuleBO.Expression> expressions);
 
