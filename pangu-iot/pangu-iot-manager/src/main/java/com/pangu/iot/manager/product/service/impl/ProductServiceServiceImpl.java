@@ -61,15 +61,21 @@ public class ProductServiceServiceImpl extends ServiceImpl<ProductServiceMapper,
         Page<ProductServiceVO> result = baseMapper.selectProduceVoPageList(pageQuery.build(), lqw);
         buildServiceParam(result.getRecords());
         // 计算产品功能是否是继承的
-        buildServiceInherit(bo.getProdId(), result.getRecords());
+        buildServiceInherit(bo.getRelationId(), result.getRecords());
         return TableDataInfo.build(result);
     }
 
-    private void buildServiceInherit(Long prodId, List<ProductServiceVO> records) {
-        if (ObjectUtil.isNull(prodId) || CollectionUtil.isEmpty(records)) {
+    /**
+     * 计算产品功能是否是继承的
+     *
+     * @param deviceId 设备id
+     * @param records  记录
+     */
+    private void buildServiceInherit(Long deviceId, List<ProductServiceVO> records) {
+        if (ObjectUtil.isNull(deviceId) || CollectionUtil.isEmpty(records)) {
             return;
         }
-        records.parallelStream().filter(productServiceVO -> prodId.equals(productServiceVO.getRelationId())).forEach(productServiceVO -> productServiceVO.setInherit(true));
+        records.parallelStream().filter(productServiceVO -> !deviceId.equals(productServiceVO.getRelationId())).forEach(productServiceVO -> productServiceVO.setInherit(true));
     }
 
     /**
@@ -143,7 +149,7 @@ public class ProductServiceServiceImpl extends ServiceImpl<ProductServiceMapper,
         serviceParamService.saveBatch(serviceParamList);
 
         // 保存产品与功能关系
-        Long relationId = bo.getRelationId();
+        Long relationId = ObjectUtil.isNotNull(bo.getRelationId()) ? bo.getRelationId() : bo.getProdId();
         serviceRelationService.save(new ProductServiceRelation(add.getId(), relationId, false));
 
         if (flag) {

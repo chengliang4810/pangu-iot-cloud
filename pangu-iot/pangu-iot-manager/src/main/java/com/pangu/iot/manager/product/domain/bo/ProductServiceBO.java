@@ -56,14 +56,14 @@ public class ProductServiceBO extends BaseEntity {
     private List<ProductServiceParam> productServiceParamList;
 
     /**
-     * 关系id
-     */
-    @NotNull(groups = AddGroup.class)
-    private Long relationId;
-
-    /**
      * 产品id
      */
+    @NotNull(groups = AddGroup.class)
     private Long prodId;
+
+    /**
+     * 关系id
+     */
+    private Long relationId;
 
 }

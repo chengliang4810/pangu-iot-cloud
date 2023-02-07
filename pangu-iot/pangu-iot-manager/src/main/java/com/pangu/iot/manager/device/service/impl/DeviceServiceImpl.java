@@ -12,6 +12,7 @@ import com.pangu.common.core.utils.StringUtils;
 import com.pangu.common.mybatis.core.page.PageQuery;
 import com.pangu.common.mybatis.core.page.TableDataInfo;
 import com.pangu.data.api.RemoteDeviceStatusService;
+import com.pangu.iot.manager.device.convert.DeviceConvert;
 import com.pangu.iot.manager.device.domain.Device;
 import com.pangu.iot.manager.device.domain.DeviceGroupRelation;
 import com.pangu.iot.manager.device.domain.bo.DeviceBO;
@@ -20,10 +21,12 @@ import com.pangu.iot.manager.device.domain.vo.DeviceDetailVO;
 import com.pangu.iot.manager.device.domain.vo.DeviceListVO;
 import com.pangu.iot.manager.device.domain.vo.DeviceVO;
 import com.pangu.iot.manager.device.mapper.DeviceMapper;
+import com.pangu.iot.manager.device.service.IDeviceGroupRelationService;
 import com.pangu.iot.manager.device.service.IDeviceService;
 import lombok.RequiredArgsConstructor;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.List;
@@ -44,7 +47,8 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> impleme
     private final DeviceMapper baseMapper;
     @DubboReference
     private final RemoteDeviceStatusService deviceStatusService;
-
+    private final DeviceConvert deviceConvert;
+    private final IDeviceGroupRelationService deviceGroupRelationService;
 
     /**
      * 查询设备
@@ -134,10 +138,25 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> impleme
      * 修改设备
      */
     @Override
+    @Transactional
     public Boolean updateByBo(DeviceBO bo) {
-        Device update = BeanUtil.toBean(bo, Device.class);
-        validEntityBeforeSave(update);
-        return baseMapper.updateById(update) > 0;
+        Device device = deviceConvert.toEntity(bo);
+
+        // 更新设备组关联关系
+        if (CollectionUtil.isNotEmpty(bo.getGroupIds())) {
+            // 删除原有关联关系
+            deviceGroupRelationService.remove(Wrappers.<DeviceGroupRelation>lambdaQuery().eq(DeviceGroupRelation::getDeviceId, device.getId()));
+            // 新增关联关系
+            List<DeviceGroupRelation> relations = bo.getGroupIds().stream().map(groupId -> {
+                DeviceGroupRelation relation = new DeviceGroupRelation();
+                relation.setDeviceId(device.getId());
+                relation.setDeviceGroupId(groupId);
+                return relation;
+            }).collect(Collectors.toList());
+            deviceGroupRelationService.saveBatch(relations);
+        }
+
+        return baseMapper.updateById(device) > 0;
     }
 
     /**
