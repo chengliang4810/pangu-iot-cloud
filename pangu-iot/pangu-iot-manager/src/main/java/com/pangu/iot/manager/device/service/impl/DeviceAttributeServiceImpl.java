@@ -59,6 +59,7 @@ public class DeviceAttributeServiceImpl extends ServiceImpl<DeviceAttributeMappe
         attributeVOList.getRecords().forEach(attributeVO -> {
             attributeVO.setValue(lastRowData.get(attributeVO.getKey()));
             attributeVO.setClock(MapUtil.getStr(lastRowData, IotConstants.TABLE_PRIMARY_FIELD));
+            attributeVO.setInherit(0 == attributeVO.getDeviceId());
         });
         return TableDataInfo.build(attributeVOList);
     }
@@ -74,8 +75,11 @@ public class DeviceAttributeServiceImpl extends ServiceImpl<DeviceAttributeMappe
     public List<DeviceAttributeVO> queryVOListByDeviceId(Long deviceId) {
         Device device = deviceService.getById(deviceId);
         Assert.notNull(device, "设备不存在");
-        return baseMapper.queryVOListByDeviceId(device.getProductId(), deviceId);
+        List<DeviceAttributeVO> deviceAttributeVOList = baseMapper.queryVOListByDeviceId(device.getProductId(), deviceId);
+        deviceAttributeVOList.forEach(deviceAttributeVO -> deviceAttributeVO.setInherit(0 == deviceAttributeVO.getDeviceId()));
+        return deviceAttributeVOList;
     }
+
 
     /**
      * 查询设备属性

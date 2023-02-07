@@ -43,6 +43,11 @@ public class DeviceAttributeVO {
     private String name;
 
     /**
+     * 继承
+     */
+    private Boolean inherit;
+
+    /**
      * 属性值
      */
     private Object value;
