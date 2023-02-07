@@ -18,6 +18,7 @@ import com.pangu.iot.manager.product.convert.ProductEventExpressionConvert;
 import com.pangu.iot.manager.product.domain.ProductEvent;
 import com.pangu.iot.manager.product.domain.ProductEventExpression;
 import com.pangu.iot.manager.product.domain.ProductEventRelation;
+import com.pangu.iot.manager.product.domain.ProductEventService;
 import com.pangu.iot.manager.product.domain.bo.ProductEventBO;
 import com.pangu.iot.manager.product.domain.bo.ProductEventRuleBO;
 import com.pangu.iot.manager.product.domain.vo.ProductEventRuleVO;
@@ -26,6 +27,7 @@ import com.pangu.iot.manager.product.mapper.ProductEventMapper;
 import com.pangu.iot.manager.product.service.IProductEventExpressionService;
 import com.pangu.iot.manager.product.service.IProductEventRelationService;
 import com.pangu.iot.manager.product.service.IProductEventService;
+import com.pangu.iot.manager.product.service.IProductEventServiceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -53,6 +55,7 @@ public class ProductEventServiceImpl extends ServiceImpl<ProductEventMapper, Pro
     private final ProductEventMapper baseMapper;
     private final TriggerService triggerService;
     private final ProductEventConvert productEventConvert;
+    private final IProductEventServiceService eventServiceService;
     private final IProductEventRelationService productEventRelationService;
     private final ProductEventExpressionConvert productEventExpressionConvert;
     private final IProductEventExpressionService productEventExpressionService;
@@ -75,6 +78,7 @@ public class ProductEventServiceImpl extends ServiceImpl<ProductEventMapper, Pro
         productEventExpressionService.remove(Wrappers.lambdaQuery(ProductEventExpression.class).eq(ProductEventExpression::getRuleId, bo.getEventRuleId()));
 
         //step 2: 删除关联的服务方法调用
+        eventServiceService.remove(Wrappers.lambdaQuery(ProductEventService.class).eq(ProductEventService::getEventRuleId, bo.getEventRuleId()));
 
         // step 3: 更新产品告警规则
         ProductEvent productEvent = productEventConvert.toEntity(bo);
@@ -88,6 +92,20 @@ public class ProductEventServiceImpl extends ServiceImpl<ProductEventMapper, Pro
             expList.add(productEventExpression);
         });
         productEventExpressionService.saveBatch(expList);
+
+        // step 5: 保存服务方法调用
+        if (CollectionUtil.isNotEmpty(bo.getDeviceServices())) {
+            List<ProductEventService> productEventServiceList = new ArrayList<>();
+            bo.getDeviceServices().forEach(deviceService -> {
+                ProductEventService productEventService = new ProductEventService();
+                productEventService.setEventRuleId(bo.getEventRuleId());
+                productEventService.setServiceId(deviceService.getServiceId());
+                productEventService.setRelationId(bo.getProductId());
+                productEventService.setExecuteDeviceId(0L);
+                productEventServiceList.add(productEventService);
+            });
+            eventServiceService.saveBatch(productEventServiceList);
+        }
 
         // 更新zbx表达式
         String expression = bo.getExpList().stream().map(Object::toString).collect(Collectors.joining(" " + bo.getExpLogic() + " "));
@@ -117,6 +135,16 @@ public class ProductEventServiceImpl extends ServiceImpl<ProductEventMapper, Pro
         List<ProductEventExpression> productEventExpressionList = productEventExpressionService.list(Wrappers.lambdaQuery(ProductEventExpression.class).eq(ProductEventExpression::getRuleId, id));
         productEventRuleVO.setExpList(productEventExpressionList);
 
+        // 规则服务
+        List<ProductEventService> productEventServiceList = eventServiceService.list(Wrappers.lambdaQuery(ProductEventService.class).eq(ProductEventService::getEventRuleId, id));
+        List<ProductEventRuleVO.DeviceService> deviceServiceList = productEventServiceList.stream().map(productEventService -> {
+            ProductEventRuleVO.DeviceService deviceService = new ProductEventRuleVO.DeviceService();
+            deviceService.setServiceId(productEventService.getServiceId());
+            deviceService.setDeviceId(productEventService.getRelationId().toString());
+            return deviceService;
+        }).collect(Collectors.toList());
+        productEventRuleVO.setDeviceServices(deviceServiceList);
+
         return productEventRuleVO;
     }
 
@@ -134,26 +162,22 @@ public class ProductEventServiceImpl extends ServiceImpl<ProductEventMapper, Pro
         ProductEventRelation productEventRelation = productEventRelationService.getOne(Wrappers.lambdaQuery(ProductEventRelation.class).eq(ProductEventRelation::getEventRuleId, ruleId).eq(ProductEventRelation::getInherit, "0"));
         Assert.notNull(productEventRelation, "产品活动规则不存在");
 
-        //step 01:删除 zbx触发器
+        //step 0:删除 zbx触发器
         List<TriggerService.Triggers> triggersList = triggerService.triggerListGet(productEventRelation.getZbxId());
         if (CollectionUtil.isNotEmpty(triggersList)){
             triggerService.triggerDelete(productEventRelation.getZbxId());
         }
 
         //step 1:删除 与产品 设备的关联
-        // new QProductEventRelation().eventRuleId.eq(eventRule.getEventRuleId()).delete();
         productEventRelationService.remove(Wrappers.lambdaQuery(ProductEventRelation.class).eq(ProductEventRelation::getEventRuleId, ruleId));
 
         //step 2:删除 关联的执行服务
-        // new QProductEventService().eventRuleId.eq(eventRule.getEventRuleId()).delete();
+        eventServiceService.remove(Wrappers.lambdaQuery(ProductEventService.class).eq(ProductEventService::getEventRuleId, ruleId));
 
         //step 3:删除 关联的表达式
         productEventExpressionService.remove(Wrappers.lambdaQuery(ProductEventExpression.class).eq(ProductEventExpression::getRuleId, ruleId));
-        // new QProductEventExpression().eventRuleId.eq(eventRule.getEventRuleId()).delete();
 
         //step 4:删除 触发器
-        // baseMapper.deleteById(ruleId);
-        // new QProductEvent().eventRuleId.eq(eventRule.getEventRuleId()).delete();
         return this.removeById(ruleId);
     }
 
@@ -180,7 +204,7 @@ public class ProductEventServiceImpl extends ServiceImpl<ProductEventMapper, Pro
             tags.put(ALARM_TAG_NAME, "{HOST.HOST}");
         }
         if (CollectionUtil.isNotEmpty(eventRule.getDeviceServices()) && !tags.containsKey(EXECUTE_TAG_NAME)) {
-            tags.put(EXECUTE_TAG_NAME, eventRuleId + "");
+            tags.put(EXECUTE_TAG_NAME, eventRuleId.toString());
         }
         // 创建 zbx 触发器
         String expression = eventRule.getExpList().stream().map(Object::toString).collect(Collectors.joining(" " + eventRule.getExpLogic() + " "));
@@ -201,6 +225,19 @@ public class ProductEventServiceImpl extends ServiceImpl<ProductEventMapper, Pro
         productEventExpressionService.saveBatch(expList);
 
         //step 3: 保存执行动作 与 规则关联
+        if (CollectionUtil.isNotEmpty(eventRule.getDeviceServices())) {
+            List<ProductEventService> productEventServiceList = new ArrayList<>();
+            eventRule.getDeviceServices().forEach(deviceService -> {
+                ProductEventService productEventService = new ProductEventService();
+                productEventService.setEventRuleId(eventRuleId);
+                productEventService.setServiceId(deviceService.getServiceId());
+                productEventService.setRelationId(eventRule.getProductId());
+                productEventService.setExecuteDeviceId(0L);
+                productEventServiceList.add(productEventService);
+            });
+            eventServiceService.saveBatch(productEventServiceList);
+        }
+
         //step 4: 保存关联关系
         ProductEventRelation productEventRelation = new ProductEventRelation(eventRule.getEventRuleId(), eventRule.getProductId(), triggerId, eventRule.getRemark());
         return productEventRelationService.save(productEventRelation);
