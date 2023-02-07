@@ -135,9 +135,29 @@ public class ProductServiceServiceImpl extends ServiceImpl<ProductServiceMapper,
      * 修改产品功能
      */
     @Override
+    @Transactional
     public Boolean updateByBo(ProductServiceBO bo) {
+
+        // 根据ID获取产品功能信息
+        ProductService old = baseMapper.selectById(bo.getId());
+        Assert.notNull(old, "产品功能不存在");
+
+        // 校验名称是否重复
+        boolean exist = baseMapper.selectCount(Wrappers.<ProductService>lambdaQuery().eq(ProductService::getName, bo.getName()).ne(ProductService::getId, bo.getId())) > 0;
+        Assert.isFalse(exist, "功能已存在");
+
+        // 更新产品功能参数
+        List<ProductServiceParam> serviceParamList = bo.getProductServiceParamList();
+        serviceParamList.forEach(param -> param.setServiceId(bo.getId()));
+        serviceParamService.saveOrUpdateBatch(serviceParamList);
+
+        // 删除旧产品与功能关系，新增新的产品与功能关系
+        Long relationId = bo.getRelationId();
+        serviceRelationService.remove(Wrappers.<ProductServiceRelation>lambdaQuery().eq(ProductServiceRelation::getServiceId, bo.getId()));
+        serviceRelationService.save(new ProductServiceRelation(bo.getId(), relationId, false));
+
+        // 数据入库
         ProductService update = BeanUtil.toBean(bo, ProductService.class);
-        validEntityBeforeSave(update);
         return baseMapper.updateById(update) > 0;
     }
 
