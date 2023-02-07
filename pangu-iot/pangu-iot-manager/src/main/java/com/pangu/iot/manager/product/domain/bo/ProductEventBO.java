@@ -74,5 +74,15 @@ public class ProductEventBO extends BaseEntity {
     @NotBlank(message = "备注不能为空", groups = { AddGroup.class, EditGroup.class })
     private String remark;
 
+    /**
+     * 产品id
+     */
+    private Long productId;
+
+    /**
+     *  设备id
+     */
+    private Long deviceId;
+
 
 }

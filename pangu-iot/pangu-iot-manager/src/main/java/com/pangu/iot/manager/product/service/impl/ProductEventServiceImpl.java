@@ -3,6 +3,7 @@ package com.pangu.iot.manager.product.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -258,8 +259,7 @@ public class ProductEventServiceImpl extends ServiceImpl<ProductEventMapper, Pro
     @Override
     public TableDataInfo<ProductEventVO> queryPageList(ProductEventBO bo, PageQuery pageQuery) {
         LambdaQueryWrapper<ProductEvent> lqw = buildQueryWrapper(bo);
-        Page<ProductEventVO> result = baseMapper.selectVoPage(pageQuery.build(), lqw);
-        // TODO 循环查询，后续单独写SQL
+        Page<ProductEventVO> result = baseMapper.selectVoListPage(pageQuery.build(), lqw);
         result.getRecords().forEach(item -> {
             item.setLevelDescribe(SeverityEnum.getDescribe(item.getLevel().toString()));
         });
@@ -277,6 +277,13 @@ public class ProductEventServiceImpl extends ServiceImpl<ProductEventMapper, Pro
 
     private LambdaQueryWrapper<ProductEvent> buildQueryWrapper(ProductEventBO bo) {
         Map<String, Object> params = bo.getParams();
+        List<Long> relationIds = new ArrayList<>();
+        if (ObjectUtil.isNotNull(bo.getProductId())){
+            relationIds.add(bo.getProductId());
+        }
+        if (ObjectUtil.isNotNull(bo.getDeviceId())){
+            relationIds.add(bo.getDeviceId());
+        }
         LambdaQueryWrapper<ProductEvent> lqw = Wrappers.lambdaQuery();
         lqw.like(StringUtils.isNotBlank(bo.getName()), ProductEvent::getName, bo.getName());
         lqw.eq(bo.getLevel() != null, ProductEvent::getLevel, bo.getLevel());
@@ -285,6 +292,7 @@ public class ProductEventServiceImpl extends ServiceImpl<ProductEventMapper, Pro
         lqw.eq(bo.getClassify() != null, ProductEvent::getClassify, bo.getClassify());
         lqw.eq(bo.getTaskId() != null, ProductEvent::getTaskId, bo.getTaskId());
         lqw.eq(bo.getTriggerType() != null, ProductEvent::getTriggerType, bo.getTriggerType());
+        lqw.apply(CollectionUtil.isNotEmpty(relationIds), " relation_id in ({0})", StringUtils.join(relationIds, ","));
         return lqw;
     }
 

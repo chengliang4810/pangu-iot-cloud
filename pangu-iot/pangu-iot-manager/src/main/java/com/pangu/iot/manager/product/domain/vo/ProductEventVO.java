@@ -67,6 +67,11 @@ public class ProductEventVO {
     private Long taskId;
 
     /**
+     * 继承
+     */
+    private Boolean inherit;
+
+    /**
      * 触发类型 0-条件触发 1-定时触发
      */
     @ExcelProperty(value = "触发类型 0-条件触发 1-定时触发")
