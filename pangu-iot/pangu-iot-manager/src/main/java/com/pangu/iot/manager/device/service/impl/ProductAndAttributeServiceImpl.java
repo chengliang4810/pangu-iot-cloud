@@ -84,13 +84,16 @@ public class ProductAndAttributeServiceImpl implements IProductAndAttributeServi
             // 删除设备组关系
             deviceGroupRelationService.remove(Wrappers.lambdaQuery(DeviceGroupRelation.class).in(DeviceGroupRelation::getDeviceId, deviceIds));
             // 删除设备
-            // TODO 待补充
             Integer number = deviceService.deleteWithValidByIds(deviceId, false);
             // 更新产品的设备数量
+            Product product = productService.getById(productId);
+            product.setDeviceCount(product.getDeviceCount() - number);
+            productService.updateById(product);
             // 删除设备表
             tdEngineService.dropTable(deviceIds);
         });
-        return null;
+
+        return true;
     }
 
 
