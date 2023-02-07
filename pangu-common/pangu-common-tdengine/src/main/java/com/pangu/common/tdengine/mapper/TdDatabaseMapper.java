@@ -88,7 +88,7 @@ public interface TdDatabaseMapper {
     /**
      * 删除表
      *
-     * @param resultList 结果列表
+     * @param tables 结果列表
      */
-    void dropTable(List<String> resultList);
+    void dropTable(@Param("tables")List<String> tables);
 }
