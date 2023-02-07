@@ -106,7 +106,7 @@ public class ProductAndAttributeServiceImpl implements IProductAndAttributeServi
 
         // 设备编号不存在则随机生成
         if (StrUtil.isBlank(bo.getCode())){
-            bo.setCode(IdUtil.nanoId());
+            bo.setCode(IdUtil.getSnowflakeNextIdStr());
         }
 
         // 检查设备ID唯一性

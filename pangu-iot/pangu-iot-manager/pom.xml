@@ -100,6 +100,11 @@
 
         <dependency>
             <groupId>com.pangu</groupId>
+            <artifactId>pangu-api-manager</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.pangu</groupId>
             <artifactId>pangu-common-zabbix</artifactId>
         </dependency>
 

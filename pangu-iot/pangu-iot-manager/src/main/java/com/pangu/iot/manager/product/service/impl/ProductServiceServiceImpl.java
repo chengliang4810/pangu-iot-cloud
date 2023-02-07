@@ -1,6 +1,8 @@
 package com.pangu.iot.manager.product.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -22,6 +24,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -55,9 +58,18 @@ public class ProductServiceServiceImpl extends ServiceImpl<ProductServiceMapper,
     @Override
     public TableDataInfo<ProductServiceVO> queryPageList(ProductServiceBO bo, PageQuery pageQuery) {
         LambdaQueryWrapper<ProductService> lqw = buildQueryWrapper(bo);
-        Page<ProductServiceVO> result = baseMapper.selectVoPage(pageQuery.build(), lqw);
+        Page<ProductServiceVO> result = baseMapper.selectProduceVoPageList(pageQuery.build(), lqw);
         buildServiceParam(result.getRecords());
+        // 计算产品功能是否是继承的
+        buildServiceInherit(bo.getProdId(), result.getRecords());
         return TableDataInfo.build(result);
+    }
+
+    private void buildServiceInherit(Long prodId, List<ProductServiceVO> records) {
+        if (ObjectUtil.isNull(prodId) || CollectionUtil.isEmpty(records)) {
+            return;
+        }
+        records.parallelStream().filter(productServiceVO -> prodId.equals(productServiceVO.getRelationId())).forEach(productServiceVO -> productServiceVO.setInherit(true));
     }
 
     /**
@@ -73,7 +85,6 @@ public class ProductServiceServiceImpl extends ServiceImpl<ProductServiceMapper,
         }
         List<ProductServiceParam> serviceParams = serviceParamService.list(Wrappers.<ProductServiceParam>lambdaQuery().in(ProductServiceParam::getServiceId, sids));
         Map<Long, List<ProductServiceParam>> map = serviceParams.parallelStream().collect(Collectors.groupingBy(ProductServiceParam::getServiceId));
-        System.out.println(map);
         serviceVoList.forEach(productService -> {
             if (null != map.get(productService.getId())) {
                 productService.setProductServiceParamList(map.get(productService.getId()));
@@ -87,17 +98,27 @@ public class ProductServiceServiceImpl extends ServiceImpl<ProductServiceMapper,
     @Override
     public List<ProductServiceVO> queryList(ProductServiceBO bo) {
         LambdaQueryWrapper<ProductService> lqw = buildQueryWrapper(bo);
-        List<ProductServiceVO> serviceVOList = baseMapper.selectVoList(lqw);
+        List<ProductServiceVO> serviceVOList = baseMapper.selectProduceVoList(lqw);
         buildServiceParam(serviceVOList);
+        // 计算产品功能是否是继承的
+        buildServiceInherit(bo.getProdId(), serviceVOList);
         return serviceVOList;
     }
 
     private LambdaQueryWrapper<ProductService> buildQueryWrapper(ProductServiceBO bo) {
         Map<String, Object> params = bo.getParams();
+        List<Long> ids = new ArrayList<>();
+        if (ObjectUtil.isNotNull(bo.getProdId())){
+            ids.add(bo.getProdId());
+        }
+        if (ObjectUtil.isNotNull(bo.getRelationId())){
+            ids.add(bo.getRelationId());
+        }
         LambdaQueryWrapper<ProductService> lqw = Wrappers.lambdaQuery();
         lqw.like(StringUtils.isNotBlank(bo.getName()), ProductService::getName, bo.getName());
         lqw.eq(StringUtils.isNotBlank(bo.getMark()), ProductService::getMark, bo.getMark());
         lqw.eq(bo.getAsync() != null, ProductService::getAsync, bo.getAsync());
+        lqw.apply(CollectionUtil.isNotEmpty(ids), " relation_id in({0})", StringUtils.join(ids, ","));
         return lqw;
     }
 

@@ -39,9 +39,9 @@ public interface IotConstants {
     String PRODUCT_ID_TAG_NAME = "__product_id__";
 
     /**
-     * 设备表名模板
+     * 设备表名前缀
      */
-    String DEVICE_TABLE_NAME_TEMPLATE = "d_{}_{}";
+    String DEVICE_TABLE_NAME_PREFIX = "device_";
 
     /**
      * 报警标记名称

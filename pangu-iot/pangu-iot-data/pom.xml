@@ -97,6 +97,11 @@
             <artifactId>pangu-api-data</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.pangu</groupId>
+            <artifactId>pangu-api-manager</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>

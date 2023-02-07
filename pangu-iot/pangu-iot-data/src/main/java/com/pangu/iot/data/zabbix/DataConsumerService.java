@@ -1,6 +1,5 @@
 package com.pangu.iot.data.zabbix;
 
-import cn.hutool.core.util.StrUtil;
 import com.pangu.common.core.constant.IotConstants;
 import com.pangu.common.zabbix.model.ZbxProblem;
 import com.pangu.common.zabbix.model.ZbxTag;
@@ -57,10 +56,10 @@ public class DataConsumerService implements ReceiveDataService {
         boolean status = deviceStatusService.getOnlineStatus(zbxValue.getHostname());
 
         Map<String, Object> value = new LinkedHashMap<>(3);
-        value.put(IotConstants.TABLE_STATUS_FIELD, status);
+        value.put(IotConstants.TABLE_STATUS_FIELD, status ? 1 : 0);
         value.put(tagMap.get(IotConstants.ATTRIBUTE_KEY_TAG_NAME), zbxValue.getValue());
         value.put(IotConstants.TABLE_PRIMARY_FIELD, TimeUtil.toTimestamp(zbxValue.getClock(), zbxValue.getNs()));
-        tdEngineService.insertData(StrUtil.format(IotConstants.DEVICE_TABLE_NAME_TEMPLATE, productId, zbxValue.getHostname() ),SUPER_TABLE_PREFIX + productId, value);
+        tdEngineService.insertData(IotConstants.DEVICE_TABLE_NAME_PREFIX + zbxValue.getHostname(),SUPER_TABLE_PREFIX + productId, value);
     }
 
 
@@ -79,12 +78,12 @@ public class DataConsumerService implements ReceiveDataService {
 
         if (tagMap.containsKey(IotConstants.DEVICE_STATUS_OFFLINE_TAG)){
             // 设备离线
-            deviceStatusService.offline(tagMap.get(IotConstants.DEVICE_STATUS_OFFLINE_TAG));
+            deviceStatusService.offline(zbxProblem.getHostname());
             log.info("设备离线：{}", zbxProblem);
         } else if (tagMap.containsKey(IotConstants.DEVICE_STATUS_ONLINE_TAG)) {
             // 设备上线
             log.info("设备上线：{}", zbxProblem);
-            deviceStatusService.online(tagMap.get(IotConstants.DEVICE_STATUS_ONLINE_TAG), zbxProblem.getClock());
+            deviceStatusService.online(zbxProblem.getHostname(), zbxProblem.getClock());
         } else if (tagMap.containsKey(IotConstants.ALARM_TAG_NAME)){
             // 设备告警
             log.info("设备告警：{}", zbxProblem);

@@ -1,7 +1,6 @@
 package com.pangu.iot.data.dubbo;
 
 import cn.hutool.core.collection.ListUtil;
-import cn.hutool.core.util.StrUtil;
 import com.pangu.common.core.constant.IotConstants;
 import com.pangu.common.tdengine.model.TdColumn;
 import com.pangu.data.api.RemoteTdEngineService;
@@ -94,14 +93,13 @@ public class RemoteTdEngineServiceImpl implements RemoteTdEngineService {
     /**
      * 今天最后一行数据
      *
-     * @param productId  产品id
-     * @param deviceCode 设备代码
+     * @param deviceCode 设备编号
      * @return {@link Map}<{@link String}, {@link Object}>
      */
     @Override
-    public Map<String, Object> todayLastRowData(Long productId, String deviceCode) {
+    public Map<String, Object> todayLastRowData(String deviceCode) {
         try {
-            return tdEngineService.selectLastData(StrUtil.format(IotConstants.DEVICE_TABLE_NAME_TEMPLATE, productId, deviceCode));
+            return tdEngineService.selectLastData(IotConstants.DEVICE_TABLE_NAME_PREFIX + deviceCode);
         } catch (Exception e) {
             log.warn("查询今天最后一行数据失败", e);
         }

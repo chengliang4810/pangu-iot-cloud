@@ -33,8 +33,8 @@ public class DeviceBO extends BaseEntity {
     /**
      * 设备编号
      */
-    @Length(min = 2, max = 60, message = "设备ID长度不符合规范")
-    @Pattern(regexp = "^[A-Za-z0-9]$", message = "设备ID只能包含英文、数字")
+    @Length(min = 2, max = 60, message = "设备ID长度不符合规范", groups = { AddGroup.class })
+    @Pattern(regexp = "^[a-zA-Z0-9_]+$", message = "设备ID只能包含英文、数字、下划线", groups = { AddGroup.class })
     private String code;
 
     /**

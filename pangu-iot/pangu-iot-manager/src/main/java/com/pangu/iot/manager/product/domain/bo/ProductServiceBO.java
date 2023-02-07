@@ -61,4 +61,9 @@ public class ProductServiceBO extends BaseEntity {
     @NotNull(groups = AddGroup.class)
     private Long relationId;
 
+    /**
+     * 产品id
+     */
+    private Long prodId;
+
 }

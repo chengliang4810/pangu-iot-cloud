@@ -51,6 +51,17 @@ public class ProductServiceVO {
     private Long async;
 
     /**
+     * 是否来自于产品
+     */
+    @ExcelProperty(value = "是否来自于产品")
+    private Boolean inherit;
+
+    /**
+     * 关系id
+     */
+    private Long relationId;
+
+    /**
      * 产品服务参数列表
      */
     private List<ProductServiceParam> productServiceParamList;

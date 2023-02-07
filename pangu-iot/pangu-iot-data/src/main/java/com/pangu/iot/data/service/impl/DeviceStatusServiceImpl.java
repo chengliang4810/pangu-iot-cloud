@@ -4,8 +4,10 @@ import cn.hutool.core.util.ObjectUtil;
 import com.pangu.common.redis.utils.RedisUtils;
 import com.pangu.common.zabbix.util.TimeUtil;
 import com.pangu.iot.data.service.DeviceStatusService;
+import com.pangu.manager.api.RemoteDeviceService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -20,6 +22,9 @@ import static com.pangu.common.core.constant.IotConstants.DEVICE_STATUS_CACHE_PR
 @Service
 @RequiredArgsConstructor
 public class DeviceStatusServiceImpl implements DeviceStatusService  {
+
+    @DubboReference
+    private final RemoteDeviceService deviceService;
 
     /**
      * 设备上线
@@ -44,6 +49,8 @@ public class DeviceStatusServiceImpl implements DeviceStatusService  {
             // 将clock 转换为时间
             LocalDateTime lastOnlineTime = TimeUtil.toLocalDateTime(clock);
             log.info("设备离线，设备id：{}，最后上线时间：{}", deviceId, lastOnlineTime);
+            // 调用接口，更新设备最后上线时间
+            deviceService.updateDeviceLastOnlineTime(deviceId, clock);
             // 更新设备最后上线时间
             RedisUtils.deleteObject(DEVICE_STATUS_CACHE_PREFIX + deviceId);
         }
@@ -61,18 +68,23 @@ public class DeviceStatusServiceImpl implements DeviceStatusService  {
     }
 
     /**
-     * 获得设备状态
+     * 批量获得设备在线状态
      *
      * @param deviceId  设备id
      * @return int
      */
     @Override
-    public Map<String, Boolean> getOnlineStatus(Set<?> deviceId) {
+    public Map<String, Integer> getOnlineStatus(Set<?> deviceId) {
         if (ObjectUtil.isEmpty(deviceId)){
             return Collections.EMPTY_MAP;
         }
-        Map<String, Boolean> resultMap = new HashMap<>(deviceId.size());
-        deviceId.forEach(id -> resultMap.put(id.toString(), RedisUtils.hasKey(DEVICE_STATUS_CACHE_PREFIX + id)));
+        Map<String, Integer> resultMap = new HashMap<>(deviceId.size());
+        deviceId.forEach(id -> {
+            Integer value = RedisUtils.getCacheObject(DEVICE_STATUS_CACHE_PREFIX + id);
+            if (ObjectUtil.isNotNull(value)) {
+                resultMap.put(id.toString(), value);
+            }
+        });
         return resultMap;
     }
 

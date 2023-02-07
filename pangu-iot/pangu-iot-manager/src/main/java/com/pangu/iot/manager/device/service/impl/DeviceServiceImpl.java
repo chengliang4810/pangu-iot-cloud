@@ -11,8 +11,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.pangu.common.core.utils.StringUtils;
 import com.pangu.common.mybatis.core.page.PageQuery;
 import com.pangu.common.mybatis.core.page.TableDataInfo;
-import com.pangu.common.zabbix.service.HostService;
-import com.pangu.data.api.RemoteTdEngineService;
+import com.pangu.data.api.RemoteDeviceStatusService;
 import com.pangu.iot.manager.device.domain.Device;
 import com.pangu.iot.manager.device.domain.DeviceGroupRelation;
 import com.pangu.iot.manager.device.domain.bo.DeviceBO;
@@ -22,13 +21,15 @@ import com.pangu.iot.manager.device.domain.vo.DeviceListVO;
 import com.pangu.iot.manager.device.domain.vo.DeviceVO;
 import com.pangu.iot.manager.device.mapper.DeviceMapper;
 import com.pangu.iot.manager.device.service.IDeviceService;
-import com.pangu.iot.manager.product.service.IProductService;
 import lombok.RequiredArgsConstructor;
+import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * 设备Service业务层处理
@@ -41,9 +42,8 @@ import java.util.Map;
 public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> implements IDeviceService {
 
     private final DeviceMapper baseMapper;
-    private final HostService hostService;
-    private final RemoteTdEngineService tdEngineService;
-    private final IProductService productService;
+    @DubboReference
+    private final RemoteDeviceStatusService deviceStatusService;
 
 
     /**
@@ -61,7 +61,25 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> impleme
     public TableDataInfo<DeviceListVO> queryPageList(DeviceBO bo, PageQuery pageQuery) {
         QueryWrapper<Device> lqw = buildWrapper(bo);
         Page<DeviceListVO> result = baseMapper.selectVoPageList(pageQuery.build(), lqw);
+        // 查询设备状态
+        buildDeviceStatus(result.getRecords());
+
         return TableDataInfo.build(result);
+    }
+
+    /**
+     * 设备状态
+     *
+     * @param records 记录
+     */
+    private void buildDeviceStatus(List<DeviceListVO> records) {
+        Set<String> ids = records.stream().map(DeviceListVO::getCode).collect(Collectors.toSet());
+        Map<String, Integer> deviceStatus = deviceStatusService.getDeviceOnlineStatus(ids);
+        System.out.println("设备状态：" + deviceStatus);
+        records.forEach(item -> {
+            Integer status = deviceStatus.get(item.getCode());
+            item.setOnline(ObjectUtil.isNotNull(status));
+        });
     }
 
     /**

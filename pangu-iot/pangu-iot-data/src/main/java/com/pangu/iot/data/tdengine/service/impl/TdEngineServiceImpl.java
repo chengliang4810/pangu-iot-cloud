@@ -1,7 +1,6 @@
 package com.pangu.iot.data.tdengine.service.impl;
 
 import cn.hutool.core.map.MapUtil;
-import cn.hutool.core.util.StrUtil;
 import com.pangu.common.core.constant.IotConstants;
 import com.pangu.common.core.utils.Assert;
 import com.pangu.common.tdengine.mapper.TdDatabaseMapper;
@@ -36,9 +35,7 @@ public class TdEngineServiceImpl implements TdEngineService {
     @Override
     public void dropTable(List<String> tableNameList) {
         Assert.notEmpty(tableNameList, "表名称列表不能为空");
-        List<String> resultList = tableNameList.stream().map(tableName -> {
-            return StrUtil.format(IotConstants.DEVICE_TABLE_NAME_TEMPLATE, tableName);
-        }).collect(Collectors.toList());
+        List<String> resultList = tableNameList.stream().map(tableName -> IotConstants.DEVICE_TABLE_NAME_PREFIX + tableName).collect(Collectors.toList());
         databaseMapper.dropTable(resultList);
     }
 
@@ -76,7 +73,13 @@ public class TdEngineServiceImpl implements TdEngineService {
      */
     @Override
     public int insertData(String table, String superTable, Map<String, Object> value) {
-        return databaseMapper.insertData(table, superTable, value, new Object[]{1});
+        int data = 0;
+        try {
+            data = databaseMapper.insertData(table, superTable, value, new Object[]{1});
+        } catch (Exception e) {
+            log.error("插入数据失败", e);
+        }
+        return data;
     }
 
 

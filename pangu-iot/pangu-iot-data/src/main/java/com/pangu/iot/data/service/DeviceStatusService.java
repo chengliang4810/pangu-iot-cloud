@@ -38,8 +38,8 @@ public interface DeviceStatusService {
      * 批量获取设备在线状态
      *
      * @param deviceId 设备id
-     * @return {@link Map}<{@link String}, {@link Boolean}>
+     * @return {@link Map}<{@link String} deviceId, {@link Integer} clock>
      */
-    Map<String, Boolean> getOnlineStatus(Set<?> deviceId);
+    Map<String, Integer> getOnlineStatus(Set<?> deviceId);
 
 }
