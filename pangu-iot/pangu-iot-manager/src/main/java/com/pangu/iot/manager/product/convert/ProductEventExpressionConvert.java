@@ -1,13 +1,12 @@
 package com.pangu.iot.manager.product.convert;
 
 import com.pangu.common.core.convert.CommonConvert;
+import com.pangu.iot.manager.device.domain.bo.DeviceEventRuleBO;
 import com.pangu.iot.manager.product.domain.ProductEventExpression;
 import com.pangu.iot.manager.product.domain.bo.ProductEventExpressionBO;
 import com.pangu.iot.manager.product.domain.bo.ProductEventRuleBO;
 import com.pangu.iot.manager.product.domain.vo.ProductEventExpressionVO;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Mappings;
 
 import java.util.List;
 
@@ -19,6 +18,8 @@ import java.util.List;
  */
 @Mapper(componentModel = "spring")
 public interface ProductEventExpressionConvert extends CommonConvert {
+
+    ProductEventExpression toEntity(DeviceEventRuleBO.Expression expression);
 
     ProductEventExpression toEntity(ProductEventRuleBO.Expression expression);
 

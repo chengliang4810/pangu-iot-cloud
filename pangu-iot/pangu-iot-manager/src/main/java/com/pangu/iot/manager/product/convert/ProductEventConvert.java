@@ -1,6 +1,7 @@
 package com.pangu.iot.manager.product.convert;
 
 import com.pangu.common.core.convert.CommonConvert;
+import com.pangu.iot.manager.device.domain.bo.DeviceEventRuleBO;
 import com.pangu.iot.manager.product.domain.ProductEvent;
 import com.pangu.iot.manager.product.domain.bo.ProductEventBO;
 import com.pangu.iot.manager.product.domain.bo.ProductEventRuleBO;
@@ -48,6 +49,20 @@ public interface ProductEventConvert extends CommonConvert {
             @Mapping(target = "id", source = "eventRuleId"),
     })
     ProductEvent toEntity(ProductEventRuleBO bo);
+
+    /**
+     * 实体
+     *
+     * @param bo 薄
+     * @return {@link ProductEvent}
+     */
+    @Mappings({
+        @Mapping(target = "level", source = "eventLevel"),
+        @Mapping(target = "notify", source = "eventNotify"),
+        @Mapping(target = "name", source = "eventRuleName"),
+        @Mapping(target = "id", source = "eventRuleId"),
+    })
+    ProductEvent toEntity(DeviceEventRuleBO bo);
 
     /**
      * ProductEventBO转换为ProductEventEntity
