@@ -4,6 +4,7 @@ import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import com.alibaba.excel.annotation.ExcelProperty;
 import lombok.Data;
 
+import java.util.Date;
 
 
 /**
@@ -114,6 +115,11 @@ public class DeviceAttributeVO {
      */
     @ExcelProperty(value = "zabbix 值映射ID")
     private String valueMapId;
+
+    /**
+     * 更新时间
+     */
+    private Date updateTime;
 
     /**
      * 备注
