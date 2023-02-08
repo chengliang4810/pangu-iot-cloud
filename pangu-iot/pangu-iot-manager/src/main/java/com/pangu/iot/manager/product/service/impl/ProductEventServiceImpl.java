@@ -141,7 +141,7 @@ public class ProductEventServiceImpl extends ServiceImpl<ProductEventMapper, Pro
         List<ProductEventRuleVO.DeviceService> deviceServiceList = productEventServiceList.stream().map(productEventService -> {
             ProductEventRuleVO.DeviceService deviceService = new ProductEventRuleVO.DeviceService();
             deviceService.setServiceId(productEventService.getServiceId());
-            deviceService.setDeviceId(productEventService.getRelationId().toString());
+            deviceService.setDeviceId(String.valueOf(productEventService.getRelationId()));
             return deviceService;
         }).collect(Collectors.toList());
         productEventRuleVO.setDeviceServices(deviceServiceList);
