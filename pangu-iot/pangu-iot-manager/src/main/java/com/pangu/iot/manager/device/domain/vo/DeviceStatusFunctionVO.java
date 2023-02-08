@@ -2,10 +2,7 @@ package com.pangu.iot.manager.device.domain.vo;
 
 import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import com.alibaba.excel.annotation.ExcelProperty;
-import com.pangu.common.excel.annotation.ExcelDictFormat;
-import com.pangu.common.excel.convert.ExcelDictConvert;
 import lombok.Data;
-import java.util.Date;
 
 
 
@@ -33,6 +30,13 @@ public class DeviceStatusFunctionVO {
     @ExcelProperty(value = "下线属性ID")
     private Long attributeId;
 
+
+    /**
+     * 下线属性名称
+     */
+    private String attributeName;
+
+
     /**
      * 下线规则函数
      */
@@ -56,6 +60,12 @@ public class DeviceStatusFunctionVO {
      */
     @ExcelProperty(value = "上线属性ID")
     private Long attributeIdRecovery;
+
+    /**
+     *  上线属性名字
+     */
+    @ExcelProperty(value = "上线属性名称")
+    private String attributeNameRecovery;
 
     /**
      * 上线规则函数

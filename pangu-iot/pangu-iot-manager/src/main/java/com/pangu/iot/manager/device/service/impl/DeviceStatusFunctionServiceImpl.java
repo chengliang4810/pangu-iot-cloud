@@ -1,6 +1,7 @@
 package com.pangu.iot.manager.device.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -9,10 +10,12 @@ import com.pangu.common.core.utils.StringUtils;
 import com.pangu.common.mybatis.core.page.PageQuery;
 import com.pangu.common.mybatis.core.page.TableDataInfo;
 import com.pangu.iot.manager.device.convert.DeviceStatusFunctionConvert;
+import com.pangu.iot.manager.device.domain.DeviceAttribute;
 import com.pangu.iot.manager.device.domain.DeviceStatusFunction;
 import com.pangu.iot.manager.device.domain.bo.DeviceStatusFunctionBO;
 import com.pangu.iot.manager.device.domain.vo.DeviceStatusFunctionVO;
 import com.pangu.iot.manager.device.mapper.DeviceStatusFunctionMapper;
+import com.pangu.iot.manager.device.service.IDeviceAttributeService;
 import com.pangu.iot.manager.device.service.IDeviceStatusFunctionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -33,6 +36,7 @@ public class DeviceStatusFunctionServiceImpl extends ServiceImpl<DeviceStatusFun
 
     private final DeviceStatusFunctionMapper baseMapper;
     private final DeviceStatusFunctionConvert deviceStatusFunctionConvert;
+    private final IDeviceAttributeService deviceAttributeService;
 
     /**
      * 查询设备上下线规则
@@ -128,7 +132,20 @@ public class DeviceStatusFunctionServiceImpl extends ServiceImpl<DeviceStatusFun
     @Override
     public DeviceStatusFunctionVO queryRelationId(Long id) {
         DeviceStatusFunction deviceStatusFunction = baseMapper.selectByRelationId(id);
-        return deviceStatusFunctionConvert.toVo(deviceStatusFunction);
+        if (ObjectUtil.isNull(deviceStatusFunction)) {
+            return null;
+        }
+        DeviceStatusFunctionVO statusFunctionVO = deviceStatusFunctionConvert.toVo(deviceStatusFunction);
+        // 查询上线属性名称与下线属性名称
+        DeviceAttribute deviceAttribute = deviceAttributeService.getById(deviceStatusFunction.getAttributeId());
+        DeviceAttribute deviceAttributeRecovery = deviceAttributeService.getById(deviceStatusFunction.getAttributeIdRecovery());
+        if (ObjectUtil.isNotNull(deviceAttribute)) {
+            statusFunctionVO.setAttributeName(deviceAttribute.getName());
+        }
+        if (ObjectUtil.isNotNull(deviceAttributeRecovery)) {
+            statusFunctionVO.setAttributeNameRecovery(deviceAttributeRecovery.getName());
+        }
+        return statusFunctionVO;
     }
 
 
