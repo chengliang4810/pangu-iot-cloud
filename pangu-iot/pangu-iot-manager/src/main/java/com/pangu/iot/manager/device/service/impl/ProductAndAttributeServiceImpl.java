@@ -13,10 +13,7 @@ import com.pangu.common.zabbix.service.TemplateService;
 import com.pangu.data.api.RemoteTdEngineService;
 import com.pangu.iot.manager.device.convert.DeviceAttributeConvert;
 import com.pangu.iot.manager.device.convert.DeviceConvert;
-import com.pangu.iot.manager.device.domain.Device;
-import com.pangu.iot.manager.device.domain.DeviceAttribute;
-import com.pangu.iot.manager.device.domain.DeviceGroup;
-import com.pangu.iot.manager.device.domain.DeviceGroupRelation;
+import com.pangu.iot.manager.device.domain.*;
 import com.pangu.iot.manager.device.domain.bo.DeviceAttributeBO;
 import com.pangu.iot.manager.device.domain.bo.DeviceBO;
 import com.pangu.iot.manager.device.service.*;
@@ -59,7 +56,9 @@ public class ProductAndAttributeServiceImpl implements IProductAndAttributeServi
     private final DeviceAttributeConvert deviceAttributeConvert;
     private final IDeviceAttributeService deviceAttributeService;
     private final IDeviceGroupRelationService deviceGroupRelationService;
+    private final IDeviceStatusFunctionService deviceStatusFunctionService;
     private final IProductEventExpressionService productEventExpressionService;
+
 
 
     /**
@@ -166,6 +165,10 @@ public class ProductAndAttributeServiceImpl implements IProductAndAttributeServi
         //检查属性是否被告警规则引入
         count = productEventExpressionService.count(Wrappers.lambdaQuery(ProductEventExpression.class).in(ProductEventExpression::getProductAttributeId, attributeIds));
         Assert.isLessOrEqualZero(count, "属性被告警规则引入无法删除");
+
+        // TODO 可以考虑直接将关联的上下线规则一并删除
+        count = deviceStatusFunctionService.count(Wrappers.lambdaQuery(DeviceStatusFunction.class).in(DeviceStatusFunction::getAttributeId, attributeIds).or().in(DeviceStatusFunction::getAttributeIdRecovery, attributeIds));
+        Assert.isLessOrEqualZero(count, "属性被上下线规则引入无法删除");
 
         // 查询属性信息, 聚合所有zbxId
         List<DeviceAttribute> attributeList = deviceAttributeService.list(Wrappers.lambdaQuery(DeviceAttribute.class).in(DeviceAttribute::getId, attributeIds));

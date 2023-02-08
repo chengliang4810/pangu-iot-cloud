@@ -47,6 +47,7 @@ public class DataConsumerService implements ReceiveDataService {
         log.info("接收到ZBX数据：{}", zbxValue);
         Map<String, String> tagMap = zbxValue.getItemTags().stream().collect(Collectors.toMap(ZbxTag::getTag, ZbxTag::getValue));
         if (!tagMap.containsKey(IotConstants.PRODUCT_ID_TAG_NAME)){
+            log.info("未知产品：{}", zbxValue);
             return;
         }
         // 存入tdengine
