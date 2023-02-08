@@ -112,7 +112,7 @@ public class DeviceAttributeServiceImpl extends ServiceImpl<DeviceAttributeMappe
         Map<String, Object> params = bo.getParams();
         LambdaQueryWrapper<DeviceAttribute> lqw = Wrappers.lambdaQuery();
         lqw.eq(bo.getProductId() != null, DeviceAttribute::getProductId, bo.getProductId());
-        lqw.eq(bo.getDeviceId() != null, DeviceAttribute::getDeviceId, bo.getDeviceId());
+        lqw.eq(DeviceAttribute::getDeviceId, ObjectUtil.isNull(bo.getDeviceId()) ? 0 : bo.getDeviceId());
         lqw.like(StringUtils.isNotBlank(bo.getName()), DeviceAttribute::getName, bo.getName());
         lqw.eq(StringUtils.isNotBlank(bo.getKey()), DeviceAttribute::getKey, bo.getKey());
         lqw.eq(StringUtils.isNotBlank(bo.getValueType()), DeviceAttribute::getValueType, bo.getValueType());
