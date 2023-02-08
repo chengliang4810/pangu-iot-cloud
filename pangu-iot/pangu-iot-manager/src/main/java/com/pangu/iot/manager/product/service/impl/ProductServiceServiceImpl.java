@@ -11,12 +11,14 @@ import com.pangu.common.core.utils.Assert;
 import com.pangu.common.core.utils.StringUtils;
 import com.pangu.common.mybatis.core.page.PageQuery;
 import com.pangu.common.mybatis.core.page.TableDataInfo;
+import com.pangu.iot.manager.product.domain.ProductEventService;
 import com.pangu.iot.manager.product.domain.ProductService;
 import com.pangu.iot.manager.product.domain.ProductServiceParam;
 import com.pangu.iot.manager.product.domain.ProductServiceRelation;
 import com.pangu.iot.manager.product.domain.bo.ProductServiceBO;
 import com.pangu.iot.manager.product.domain.vo.ProductServiceVO;
 import com.pangu.iot.manager.product.mapper.ProductServiceMapper;
+import com.pangu.iot.manager.product.service.IProductEventServiceService;
 import com.pangu.iot.manager.product.service.IProductServiceParamService;
 import com.pangu.iot.manager.product.service.IProductServiceRelationService;
 import com.pangu.iot.manager.product.service.IProductServiceService;
@@ -43,6 +45,7 @@ public class ProductServiceServiceImpl extends ServiceImpl<ProductServiceMapper,
     private final ProductServiceMapper baseMapper;
     private final IProductServiceParamService serviceParamService;
     private final IProductServiceRelationService serviceRelationService;
+    private final IProductEventServiceService productEventServiceService;
 
     /**
      * 查询产品功能
@@ -124,8 +127,22 @@ public class ProductServiceServiceImpl extends ServiceImpl<ProductServiceMapper,
         lqw.like(StringUtils.isNotBlank(bo.getName()), ProductService::getName, bo.getName());
         lqw.eq(StringUtils.isNotBlank(bo.getMark()), ProductService::getMark, bo.getMark());
         lqw.eq(bo.getAsync() != null, ProductService::getAsync, bo.getAsync());
-        lqw.apply(CollectionUtil.isNotEmpty(ids), " relation_id in({0})", StringUtils.join(ids, ","));
+        lqw.apply(CollectionUtil.isNotEmpty(ids), buildRelationWhereSql(ids), ids.toArray());
         return lqw;
+    }
+
+    private String buildRelationWhereSql(Collection<Long> ids) {
+        if (CollectionUtil.isEmpty(ids)) {
+            return "";
+        }
+        StringBuilder sb = new StringBuilder();
+        sb.append(" relation_id in(");
+        for (int i = 0; i < ids.size(); i++) {
+            sb.append("{");
+            sb.append(i);
+            sb.append("},");
+        }
+        return sb.substring(0, sb.length() - 1) + ")";
     }
 
     /**
@@ -204,6 +221,9 @@ public class ProductServiceServiceImpl extends ServiceImpl<ProductServiceMapper,
         if(isValid){
             //TODO 做一些业务上的校验,判断是否需要校验
         }
+        // 该功能是否被告警规则引用
+        long count = productEventServiceService.count(Wrappers.<ProductEventService>lambdaQuery().in(ProductEventService::getServiceId, ids));
+        Assert.isTrue(count == 0, "该功能已被告警规则引用，无法删除");
         boolean flag = baseMapper.deleteBatchIds(ids) > 0;
         // 删除产品功能参数
         serviceParamService.remove(Wrappers.<ProductServiceParam>lambdaQuery().in(ProductServiceParam::getServiceId, ids));
