@@ -21,6 +21,8 @@ import com.pangu.iot.manager.device.domain.bo.DeviceAttributeBO;
 import com.pangu.iot.manager.device.domain.bo.DeviceBO;
 import com.pangu.iot.manager.device.service.*;
 import com.pangu.iot.manager.product.domain.Product;
+import com.pangu.iot.manager.product.domain.ProductEventExpression;
+import com.pangu.iot.manager.product.service.IProductEventExpressionService;
 import com.pangu.iot.manager.product.service.IProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -57,6 +59,7 @@ public class ProductAndAttributeServiceImpl implements IProductAndAttributeServi
     private final DeviceAttributeConvert deviceAttributeConvert;
     private final IDeviceAttributeService deviceAttributeService;
     private final IDeviceGroupRelationService deviceGroupRelationService;
+    private final IProductEventExpressionService productEventExpressionService;
 
 
     /**
@@ -161,36 +164,19 @@ public class ProductAndAttributeServiceImpl implements IProductAndAttributeServi
         Assert.isLessOrEqualZero(count, "属性被依赖无法删除");
 
         //检查属性是否被告警规则引入
-//        List<Long> attrIds = new QProductAttribute().select(QProductAttribute.alias().attrId).templateId.in(productAttr.getAttrIds()).findSingleAttributeList();
-//        attrIds.addAll(productAttr.getAttrIds());
-//        count = new QProductEventExpression().productAttrId.in(productAttr.getAttrIds()).findCount();
-//        if (count > 0) {
-//            throw new ServiceException(BizExceptionEnum.PRODUCT_EVENT_HASDEPTED);
-//        }
+        count = productEventExpressionService.count(Wrappers.lambdaQuery(ProductEventExpression.class).in(ProductEventExpression::getProductAttributeId, attributeIds));
+        Assert.isLessOrEqualZero(count, "属性被告警规则引入无法删除");
+
         // 查询属性信息, 聚合所有zbxId
         List<DeviceAttribute> attributeList = deviceAttributeService.list(Wrappers.lambdaQuery(DeviceAttribute.class).in(DeviceAttribute::getId, attributeIds));
         List<String> zbxIds = attributeList.stream().map(DeviceAttribute::getZbxId).collect(Collectors.toList());
         Assert.isGreaterZero(zbxIds.size(), "属性信息不存在");
-        // 删除属性
+        // 更新超级表字段
         attributeList.forEach(attribute -> {
             tdEngineService.deleteSuperTableField(SUPER_TABLE_PREFIX +  attribute.getProductId(), attribute.getKey());
         });
         //删除zbx item
         itemService.deleteTrapperItems(zbxIds);
-        // List<String> zbxIds = new QProductAttribute().select(QProductAttribute.alias().zbxId).attrId.in(productAttr.getAttrIds()).findSingleAttributeList();
-        //删除zbx item
-//        if (ToolUtil.isNotEmpty(zbxIds)) {
-//            List<ZbxItemInfo> itemInfos = JSONObject.parseArray(zbxItem.getItemInfo(zbxIds.toString(), null), ZbxItemInfo.class);
-//            if (ToolUtil.isNotEmpty(itemInfos)) {
-//                zbxItem.deleteTrapperItem(itemInfos.parallelStream().map(ZbxItemInfo::getItemid).collect(Collectors.toList()));
-//            }
-//        }
-        //删除 属性
-        //new QProductAttribute().attrId.in(productAttr.getAttrIds()).delete();
-
-        //删除 设备 继承的属性
-        //new QProductAttribute().templateId.in(productAttr.getAttrIds()).delete();
-
         // 删除属性
         return deviceAttributeService.deleteWithValidByIds(attributeIds, false);
     }
