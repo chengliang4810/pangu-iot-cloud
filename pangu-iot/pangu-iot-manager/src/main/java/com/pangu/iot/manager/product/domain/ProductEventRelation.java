@@ -40,7 +40,7 @@ public class ProductEventRelation extends BaseEntity {
      */
     private String zbxId;
     /**
-     * 是否来自产品
+     * 是否来自于产品: 0 false 1 true
      */
     private Long inherit;
     /**

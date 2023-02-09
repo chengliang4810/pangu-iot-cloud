@@ -1,6 +1,7 @@
 package com.pangu.iot.manager.device.service;
 
 import com.pangu.iot.manager.device.domain.bo.DeviceEventRuleBO;
+import com.pangu.iot.manager.device.domain.vo.DeviceAlarmRuleVO;
 
 /**
  * 设备告警规则Service接口
@@ -17,4 +18,12 @@ public interface IDeviceEventRuleService {
      * @return {@link Boolean}
      */
     Boolean createDeviceEventRule(DeviceEventRuleBO bo);
+
+    /**
+     * 通过id获取设备告警规则详情
+     *
+     * @param id id
+     * @return {@link DeviceAlarmRuleVO}
+     */
+    DeviceAlarmRuleVO getById(Long id);
 }

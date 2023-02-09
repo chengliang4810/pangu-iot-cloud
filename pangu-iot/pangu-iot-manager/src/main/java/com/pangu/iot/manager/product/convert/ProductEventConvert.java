@@ -2,6 +2,7 @@ package com.pangu.iot.manager.product.convert;
 
 import com.pangu.common.core.convert.CommonConvert;
 import com.pangu.iot.manager.device.domain.bo.DeviceEventRuleBO;
+import com.pangu.iot.manager.device.domain.vo.DeviceAlarmRuleVO;
 import com.pangu.iot.manager.product.domain.ProductEvent;
 import com.pangu.iot.manager.product.domain.bo.ProductEventBO;
 import com.pangu.iot.manager.product.domain.bo.ProductEventRuleBO;
@@ -35,6 +36,20 @@ public interface ProductEventConvert extends CommonConvert {
             @Mapping(target = "eventRuleId", source = "id"),
     })
     ProductEventRuleVO toVO(ProductEvent productEvent);
+
+    /**
+     * 给签证官
+     *
+     * @param productEvent 产品活动
+     * @return {@link ProductEventRuleVO}
+     */
+    @Mappings({
+        @Mapping(target = "eventLevel", source = "level"),
+        @Mapping(target = "eventNotify", source = "notify"),
+        @Mapping(target = "eventRuleName", source = "name"),
+        @Mapping(target = "eventRuleId", source = "id"),
+    })
+    DeviceAlarmRuleVO toDeviceVO(ProductEvent productEvent);
 
     /**
      * 实体

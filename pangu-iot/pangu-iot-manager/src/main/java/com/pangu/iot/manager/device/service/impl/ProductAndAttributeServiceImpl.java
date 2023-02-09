@@ -59,8 +59,6 @@ public class ProductAndAttributeServiceImpl implements IProductAndAttributeServi
     private final IDeviceStatusFunctionService deviceStatusFunctionService;
     private final IProductEventExpressionService productEventExpressionService;
 
-
-
     /**
      * 删除设备 根据 ids
      *
@@ -70,7 +68,7 @@ public class ProductAndAttributeServiceImpl implements IProductAndAttributeServi
     @Override
     public Boolean deleteDeviceByIds(Collection<Long> deviceId) {
 
-        // zbx 删除主机
+        // zbx 删除主机以及主机下的所有监控项
         List<Device> deviceList = deviceService.list(Wrappers.<Device>lambdaQuery().in(Device::getId, deviceId));
         List<String> zbxIds = deviceList.stream().map(Device::getZbxId).collect(Collectors.toList());
         if (CollectionUtil.isNotEmpty(zbxIds)) {

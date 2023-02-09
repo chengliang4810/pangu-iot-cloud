@@ -2,9 +2,11 @@ package com.pangu.iot.manager.device.service.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.IdUtil;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.pangu.common.core.utils.Assert;
 import com.pangu.common.zabbix.service.TriggerService;
 import com.pangu.iot.manager.device.domain.bo.DeviceEventRuleBO;
+import com.pangu.iot.manager.device.domain.vo.DeviceAlarmRuleVO;
 import com.pangu.iot.manager.device.service.IDeviceEventRuleService;
 import com.pangu.iot.manager.product.convert.ProductEventConvert;
 import com.pangu.iot.manager.product.convert.ProductEventExpressionConvert;
@@ -48,6 +50,34 @@ public class DeviceEventRuleServiceImpl implements IDeviceEventRuleService {
     private final IProductEventExpressionService productEventExpressionService;
 
 
+    @Override
+    public DeviceAlarmRuleVO getById(Long id) {
+        // 查询规则是否存在
+        ProductEvent productEvent = productEventService.getById(id);
+        Assert.notNull(productEvent, "告警规则不存在");
+
+        DeviceAlarmRuleVO deviceAlarmRuleVO = productEventConvert.toDeviceVO(productEvent);
+        // 是否继承自产品
+        ProductEventRelation eventRelation = productEventRelationService.getOne(Wrappers.lambdaQuery(ProductEventRelation.class).eq(ProductEventRelation::getEventRuleId, id), false);
+        deviceAlarmRuleVO.setInherit(eventRelation != null && eventRelation.getInherit() > 0);
+
+        // 规则表达式
+        List<ProductEventExpression> expressionList = productEventExpressionService.list(Wrappers.lambdaQuery(ProductEventExpression.class).eq(ProductEventExpression::getRuleId, id));
+        deviceAlarmRuleVO.setExpList(expressionList);
+
+        // 规则服务
+        List<ProductEventService> productEventServiceList = productEventServiceService.list(Wrappers.lambdaQuery(ProductEventService.class).eq(ProductEventService::getEventRuleId, id));
+        List<DeviceAlarmRuleVO.DeviceService> deviceServiceList = productEventServiceList.stream().map(productEventService -> {
+            DeviceAlarmRuleVO.DeviceService deviceService = new DeviceAlarmRuleVO.DeviceService();
+            deviceService.setServiceId(productEventService.getServiceId());
+            deviceService.setDeviceId(productEventService.getRelationId());
+            return deviceService;
+        }).collect(Collectors.toList());
+        deviceAlarmRuleVO.setDeviceServices(deviceServiceList);
+
+        return deviceAlarmRuleVO;
+    }
+
     /**
      * 检查动作服务是否重复
      *
@@ -90,6 +120,7 @@ public class DeviceEventRuleServiceImpl implements IDeviceEventRuleService {
         if (CollectionUtil.isNotEmpty(deviceEventRule.getDeviceServices()) && !tags.containsKey(EXECUTE_TAG_NAME)) {
             tags.put(EXECUTE_TAG_NAME, eventRuleId.toString());
         }
+
         // 创建 zbx 触发器
         String expression = deviceEventRule.getExpList().stream().map(Object::toString).collect(Collectors.joining(" " + deviceEventRule.getExpLogic() + " "));
         String triggerId = triggerService.createZbxTrigger(eventRuleId + "", expression, deviceEventRule.getEventLevel(), tags);
@@ -129,6 +160,8 @@ public class DeviceEventRuleServiceImpl implements IDeviceEventRuleService {
         List<ProductEventRelation> productEventRelationList = new ArrayList<>();
         deviceIds.forEach(relationId -> {
             ProductEventRelation productEventRelation = new ProductEventRelation(eventRuleId, relationId, triggerId, deviceEventRule.getRemark());
+
+            productEventRelation.setInherit(0L);
             productEventRelationList.add(productEventRelation);
         });
 

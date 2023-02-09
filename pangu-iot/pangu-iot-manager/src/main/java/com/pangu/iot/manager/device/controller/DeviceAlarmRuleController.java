@@ -7,13 +7,9 @@ import com.pangu.common.core.validate.EditGroup;
 import com.pangu.common.core.web.controller.BaseController;
 import com.pangu.common.log.annotation.Log;
 import com.pangu.common.log.enums.BusinessType;
-import com.pangu.common.mybatis.core.page.PageQuery;
-import com.pangu.common.mybatis.core.page.TableDataInfo;
 import com.pangu.iot.manager.device.domain.bo.DeviceBO;
 import com.pangu.iot.manager.device.domain.bo.DeviceEventRuleBO;
-import com.pangu.iot.manager.device.domain.vo.DeviceDetailVO;
-import com.pangu.iot.manager.device.domain.vo.DeviceListVO;
-import com.pangu.iot.manager.device.domain.vo.DeviceVO;
+import com.pangu.iot.manager.device.domain.vo.DeviceAlarmRuleVO;
 import com.pangu.iot.manager.device.service.IDeviceEventRuleService;
 import com.pangu.iot.manager.device.service.IDeviceService;
 import com.pangu.iot.manager.device.service.IProductAndAttributeService;
@@ -24,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.Arrays;
-import java.util.List;
 
 /**
  * 设备告警规则控制器
@@ -37,29 +32,11 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/device/alarm/rule")
-public class DeviceEventRuleController extends BaseController {
+public class DeviceAlarmRuleController extends BaseController {
 
     private final IDeviceService deviceService;
     private final IProductAndAttributeService productAndAttributeService;
     private final IDeviceEventRuleService deviceEventRuleService;
-
-    /**
-     * 分页查询设备列表
-     */
-    @SaCheckPermission("manager:device:list")
-    @GetMapping("/list")
-    public TableDataInfo<DeviceListVO> list(DeviceBO bo, PageQuery pageQuery) {
-        return deviceService.queryPageList(bo, pageQuery);
-    }
-
-    /**
-     * 查询设备
-     */
-    @SaCheckPermission("manager:device:list")
-    @GetMapping("/tree")
-    public R<List<DeviceVO>> tree(DeviceBO bo) {
-        return R.ok(deviceService.queryList(bo));
-    }
 
     /**
      * 获取设备详细信息
@@ -68,8 +45,8 @@ public class DeviceEventRuleController extends BaseController {
      */
     @SaCheckPermission("manager:device:query")
     @GetMapping("/{id}")
-    public R<DeviceDetailVO> getInfo(@NotNull(message = "主键不能为空") @PathVariable Long id) {
-        return R.ok(deviceService.queryById(id));
+    public R<DeviceAlarmRuleVO> getInfo(@NotNull(message = "主键不能为空") @PathVariable Long id) {
+        return R.ok(deviceEventRuleService.getById(id));
     }
 
     /**
