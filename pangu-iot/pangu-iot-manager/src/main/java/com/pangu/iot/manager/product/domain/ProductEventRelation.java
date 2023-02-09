@@ -52,9 +52,17 @@ public class ProductEventRelation extends BaseEntity {
      */
     private String remark;
 
-    public ProductEventRelation(Long eventRuleId, Long productId,String zbxId, String remark) {
+    /**
+     * 产品活动关系
+     *
+     * @param eventRuleId 规则id
+     * @param relationId  关系id
+     * @param zbxId       zbx id
+     * @param remark      备注
+     */
+    public ProductEventRelation(Long eventRuleId, Long relationId,String zbxId, String remark) {
         this.eventRuleId = eventRuleId;
-        this.relationId = productId;
+        this.relationId = relationId;
         this.zbxId = zbxId;
         this.remark = remark;
     }

@@ -73,6 +73,9 @@ public class DeviceEventRuleServiceImpl implements IDeviceEventRuleService {
         //检查是否有重复动作服务
         checkService(deviceEventRule.getDeviceServices());
 
+        List<Long> deviceIds = deviceEventRule.getExpList().parallelStream().map(DeviceEventRuleBO.Expression::getDeviceId).distinct().collect(Collectors.toList());
+        Assert.notEmpty(deviceIds, "告警规则缺少关联产品或设备");
+
         // 生成唯一ID
         Long eventRuleId = IdUtil.getSnowflakeNextId();
 
@@ -107,7 +110,6 @@ public class DeviceEventRuleServiceImpl implements IDeviceEventRuleService {
 
         //step 3: 保存触发器 调用 动作服务
         if (CollectionUtil.isNotEmpty(deviceEventRule.getDeviceServices())) {
-            List<Long> deviceIds = deviceEventRule.getExpList().parallelStream().map(DeviceEventRuleBO.Expression::getDeviceId).distinct().collect(Collectors.toList());
             List<ProductEventService> productEventServiceList = new ArrayList<>();
             deviceIds.forEach(deviceId -> {
                     deviceEventRule.getDeviceServices().forEach(deviceService -> {
@@ -123,11 +125,10 @@ public class DeviceEventRuleServiceImpl implements IDeviceEventRuleService {
         }
 
         //step 4: 保存关联关系
-        List<Long> relationIds = deviceEventRule.getExpList().parallelStream().map(DeviceEventRuleBO.Expression::getDeviceId).distinct().collect(Collectors.toList());
-        Assert.notEmpty(relationIds, "告警规则缺少关联产品或设备");
+
         List<ProductEventRelation> productEventRelationList = new ArrayList<>();
-        relationIds.forEach(relationId -> {
-            ProductEventRelation productEventRelation = new ProductEventRelation(deviceEventRule.getEventRuleId(), deviceEventRule.getDeviceId(), triggerId, deviceEventRule.getRemark());
+        deviceIds.forEach(relationId -> {
+            ProductEventRelation productEventRelation = new ProductEventRelation(eventRuleId, relationId, triggerId, deviceEventRule.getRemark());
             productEventRelationList.add(productEventRelation);
         });
 

@@ -119,8 +119,8 @@ public class DeviceEventRuleBO {
          * 产品attr关键
          * 产品属性 Key
          */
-        @NotNull(groups = {AddGroup.class, EditGroup.class})
-        private String productAttrKey;
+        @NotBlank(groups = {AddGroup.class, EditGroup.class})
+        private String productAttributeKey;
 
         /**
          * 设备id
@@ -129,13 +129,13 @@ public class DeviceEventRuleBO {
 
         private String unit;
 
-        private Long productAttrId;
+        private Long productAttributeId;
 
-        private String productAttrType;
+        private Integer productAttributeType;
 
         private String attrValueType;
 
-        private String period;
+        private Integer period;
 
         @Override
         public String toString() {
@@ -144,7 +144,7 @@ public class DeviceEventRuleBO {
             expression.append("(/");
             expression.append(deviceId);
             expression.append("/");
-            expression.append(productAttrKey);
+            expression.append(productAttributeKey);
 
             if (StringUtils.isNotBlank(scope)) {
                 expression.append(", ");

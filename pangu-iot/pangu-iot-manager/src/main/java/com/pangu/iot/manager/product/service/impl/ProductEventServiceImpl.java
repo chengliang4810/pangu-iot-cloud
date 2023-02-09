@@ -292,8 +292,22 @@ public class ProductEventServiceImpl extends ServiceImpl<ProductEventMapper, Pro
         lqw.eq(bo.getClassify() != null, ProductEvent::getClassify, bo.getClassify());
         lqw.eq(bo.getTaskId() != null, ProductEvent::getTaskId, bo.getTaskId());
         lqw.eq(bo.getTriggerType() != null, ProductEvent::getTriggerType, bo.getTriggerType());
-        lqw.apply(CollectionUtil.isNotEmpty(relationIds), " relation_id in ({0})", StringUtils.join(relationIds, ","));
+        lqw.apply(CollectionUtil.isNotEmpty(relationIds), buildRelationWhereSql(relationIds), relationIds.toArray());
         return lqw;
+    }
+
+    private String buildRelationWhereSql(Collection<Long> ids) {
+        if (CollectionUtil.isEmpty(ids)) {
+            return "";
+        }
+        StringBuilder sb = new StringBuilder();
+        sb.append(" relation_id in(");
+        for (int i = 0; i < ids.size(); i++) {
+            sb.append("{");
+            sb.append(i);
+            sb.append("},");
+        }
+        return sb.substring(0, sb.length() - 1) + ")";
     }
 
     /**

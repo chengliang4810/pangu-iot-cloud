@@ -136,7 +136,7 @@ public class ProductAndAttributeServiceImpl implements IProductAndAttributeServi
         List<String> groupIds = deviceGroupList.stream().map(DeviceGroup::getZbxId).collect(Collectors.toList());
 
         // 创建 zbx host
-        String zbxId = hostService.hostCreate(bo.getCode(), groupIds, templateId, null);
+        String zbxId = hostService.hostCreate(String.valueOf(id), groupIds, templateId, null);
 
         Device device = deviceConvert.toEntity(bo);
         device.setZbxId(zbxId);

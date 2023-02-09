@@ -36,7 +36,7 @@ import java.util.List;
 @Validated
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/device/event/rule")
+@RequestMapping("/device/alarm/rule")
 public class DeviceEventRuleController extends BaseController {
 
     private final IDeviceService deviceService;
