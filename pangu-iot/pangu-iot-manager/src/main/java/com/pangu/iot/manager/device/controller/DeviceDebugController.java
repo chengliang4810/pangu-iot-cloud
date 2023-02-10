@@ -46,10 +46,14 @@ public class DeviceDebugController {
         Map<String, String> attribute = data.getParams().stream().collect(Collectors.toMap(DebugDataBO.Params::getDeviceAttrKey, DebugDataBO.Params::getDeviceAttrValue));
         // 封装设备数据
         DeviceValue deviceValue = new DeviceValue();
-        deviceValue.setDeviceId(device.getCode());
+        deviceValue.setDeviceId(String.valueOf(device.getId()));
         deviceValue.setAttributes(attribute);
         deviceValue.setClock(System.currentTimeMillis() / 1000);
-        return R.ok(dataService.sendData(deviceValue));
+        ZbxResponse response = dataService.sendData(deviceValue);
+        if (response.getFailed() <= 0){
+            return R.ok("数据发送成功");
+        }else {
+            return R.fail("数据上报失败");
+        }
     }
-
 }

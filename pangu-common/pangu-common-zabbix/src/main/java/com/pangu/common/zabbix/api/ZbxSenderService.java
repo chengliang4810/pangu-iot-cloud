@@ -94,7 +94,7 @@ public class ZbxSenderService {
             headLength = 0;
         }
 
-        log.debug(" Zabbix Trapper 响应数据：{} ", resp.toString());
+        log.info(" Zabbix Trapper 响应数据：{} ", resp.toString());
 
         resStream.close();
         reqStream.close();

@@ -55,7 +55,7 @@ public class DeviceAttributeServiceImpl extends ServiceImpl<DeviceAttributeMappe
         Page<DeviceAttributeVO> attributeVOList = baseMapper.queryVOListByDeviceId(pageQuery.build(), ObjectUtil.isNull(bo.getProductId()) ? device.getProductId() : bo.getProductId(), deviceId);
 
         // 获取最新属性值并绑定
-        Map<String, Object> lastRowData = tdEngineService.todayLastRowData(device.getCode());
+        Map<String, Object> lastRowData = tdEngineService.todayLastRowData(String.valueOf(device.getId()));
         attributeVOList.getRecords().forEach(attributeVO -> {
             attributeVO.setValue(lastRowData.get(attributeVO.getKey()));
             attributeVO.setClock(MapUtil.getStr(lastRowData, IotConstants.TABLE_PRIMARY_FIELD));
