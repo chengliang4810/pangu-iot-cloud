@@ -49,6 +49,76 @@ public class DeviceEventRuleServiceImpl implements IDeviceEventRuleService {
     private final ProductEventExpressionConvert productEventExpressionConvert;
     private final IProductEventExpressionService productEventExpressionService;
 
+    /**
+     * 更新设备告警事件
+     *
+     * @param deviceEventRule 薄
+     * @return {@link Boolean}
+     */
+    @Override
+    @Transactional
+    public Boolean updateDeviceEventRuleByBo(DeviceEventRuleBO deviceEventRule) {
+
+        //检查是否有重复动作服务
+        checkService(deviceEventRule.getDeviceServices());
+
+        // 查询规则是否存在
+        ProductEvent event = productEventService.getById(deviceEventRule.getEventRuleId());
+        Assert.notNull(event, "告警规则不存在");
+
+        List<Long> deviceIds = deviceEventRule.getExpList().parallelStream().map(DeviceEventRuleBO.Expression::getDeviceId).distinct().collect(Collectors.toList());
+        Assert.notEmpty(deviceIds, "告警规则缺少关联产品或设备");
+
+        //构建表达式 更新zbx
+        String expression = deviceEventRule.getExpList().stream().map(Object::toString).collect(Collectors.joining(" " + deviceEventRule.getExpLogic() + " "));
+        String triggerId = triggerService.updateZbxTrigger(deviceEventRule.getZbxId(), expression, deviceEventRule.getEventLevel());
+
+        // 删除原有规则表达式
+        productEventExpressionService.remove(Wrappers.lambdaQuery(ProductEventExpression.class).eq(ProductEventExpression::getRuleId, deviceEventRule.getEventRuleId()));
+        // 删除服务方法调用
+        productEventServiceService.remove(Wrappers.lambdaQuery(ProductEventService.class).eq(ProductEventService::getEventRuleId, deviceEventRule.getEventRuleId()));
+        // 删除和所有设备的关联关系
+        productEventRelationService.remove(Wrappers.lambdaQuery(ProductEventRelation.class).eq(ProductEventRelation::getEventRuleId, deviceEventRule.getEventRuleId()));
+
+        // 更新告警规则入库
+        ProductEvent productEvent = productEventConvert.toEntity(deviceEventRule);
+        productEventService.updateById(productEvent);
+
+        // 保存 表达式，方便回显
+        List<ProductEventExpression> expList = new ArrayList<>();
+        deviceEventRule.getExpList().forEach(i -> {
+            ProductEventExpression exp = productEventExpressionConvert.toEntity(i);
+            exp.setRuleId(deviceEventRule.getEventRuleId());
+            expList.add(exp);
+        });
+        productEventExpressionService.saveBatch(expList);
+
+        // 保存触发器 调用 动作服务
+        if (CollectionUtil.isNotEmpty(deviceEventRule.getDeviceServices())) {
+            List<ProductEventService> productEventServiceList = new ArrayList<>();
+            deviceIds.forEach(deviceId -> {
+                deviceEventRule.getDeviceServices().forEach(deviceService -> {
+                    ProductEventService productEventService = new ProductEventService();
+                    productEventService.setEventRuleId(deviceEventRule.getEventRuleId());
+                    productEventService.setServiceId(deviceService.getServiceId());
+                    productEventService.setRelationId(deviceId);
+                    productEventService.setExecuteDeviceId(deviceService.getExecuteDeviceId());
+                    productEventServiceList.add(productEventService);
+                });
+            });
+            productEventServiceService.saveBatch(productEventServiceList);
+        }
+
+        //step 4: 保存关联关系
+        List<ProductEventRelation> productEventRelationList = new ArrayList<>();
+        deviceIds.forEach(relationId -> {
+            ProductEventRelation productEventRelation = new ProductEventRelation(deviceEventRule.getEventRuleId(), relationId, triggerId, deviceEventRule.getRemark());
+            productEventRelation.setInherit(0L);
+            productEventRelationList.add(productEventRelation);
+        });
+
+        return productEventRelationService.saveBatch(productEventRelationList);
+    }
 
     @Override
     public DeviceAlarmRuleVO getById(Long id) {
@@ -60,6 +130,7 @@ public class DeviceEventRuleServiceImpl implements IDeviceEventRuleService {
         // 是否继承自产品
         ProductEventRelation eventRelation = productEventRelationService.getOne(Wrappers.lambdaQuery(ProductEventRelation.class).eq(ProductEventRelation::getEventRuleId, id), false);
         deviceAlarmRuleVO.setInherit(eventRelation != null && eventRelation.getInherit() > 0);
+        deviceAlarmRuleVO.setZbxId(eventRelation.getZbxId());
 
         // 规则表达式
         List<ProductEventExpression> expressionList = productEventExpressionService.list(Wrappers.lambdaQuery(ProductEventExpression.class).eq(ProductEventExpression::getRuleId, id));
@@ -156,11 +227,9 @@ public class DeviceEventRuleServiceImpl implements IDeviceEventRuleService {
         }
 
         //step 4: 保存关联关系
-
         List<ProductEventRelation> productEventRelationList = new ArrayList<>();
         deviceIds.forEach(relationId -> {
             ProductEventRelation productEventRelation = new ProductEventRelation(eventRuleId, relationId, triggerId, deviceEventRule.getRemark());
-
             productEventRelation.setInherit(0L);
             productEventRelationList.add(productEventRelation);
         });

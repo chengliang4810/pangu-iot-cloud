@@ -26,4 +26,12 @@ public interface IDeviceEventRuleService {
      * @return {@link DeviceAlarmRuleVO}
      */
     DeviceAlarmRuleVO getById(Long id);
+
+    /**
+     * 更新设备告警事件
+     *
+     * @param bo 薄
+     * @return {@link Boolean}
+     */
+    Boolean updateDeviceEventRuleByBo(DeviceEventRuleBO bo);
 }

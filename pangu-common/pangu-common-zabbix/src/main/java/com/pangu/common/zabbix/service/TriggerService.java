@@ -37,6 +37,19 @@ public class TriggerService {
     }
 
     /**
+     * 创建zbx触发器
+     *
+     * @param triggerName 触发器名字
+     * @param expression  表达式
+     * @param level       告警级别
+     * @return {@link String[]}
+     */
+    public String updateZbxTrigger(String triggerName, String expression, Integer level) {
+        String res = zbxTrigger.triggerUpdate(triggerName, expression, level);
+        return JsonUtils.parseObject(res, TriggerIds.class).getTriggerids()[0];
+    }
+
+    /**
      * 触发标签创建
      *
      * @param triggerId 触发id

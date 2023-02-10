@@ -7,11 +7,9 @@ import com.pangu.common.core.validate.EditGroup;
 import com.pangu.common.core.web.controller.BaseController;
 import com.pangu.common.log.annotation.Log;
 import com.pangu.common.log.enums.BusinessType;
-import com.pangu.iot.manager.device.domain.bo.DeviceBO;
 import com.pangu.iot.manager.device.domain.bo.DeviceEventRuleBO;
 import com.pangu.iot.manager.device.domain.vo.DeviceAlarmRuleVO;
 import com.pangu.iot.manager.device.service.IDeviceEventRuleService;
-import com.pangu.iot.manager.device.service.IDeviceService;
 import com.pangu.iot.manager.device.service.IProductAndAttributeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
@@ -34,12 +32,11 @@ import java.util.Arrays;
 @RequestMapping("/device/alarm/rule")
 public class DeviceAlarmRuleController extends BaseController {
 
-    private final IDeviceService deviceService;
     private final IProductAndAttributeService productAndAttributeService;
     private final IDeviceEventRuleService deviceEventRuleService;
 
     /**
-     * 获取设备详细信息
+     * 获取设备告警规则
      *
      * @param id 主键
      */
@@ -50,23 +47,23 @@ public class DeviceAlarmRuleController extends BaseController {
     }
 
     /**
-     * 新增设备
+     * 新增设备告警规则
      */
     @SaCheckPermission("manager:device:add")
-    @Log(title = "设备", businessType = BusinessType.INSERT)
+    @Log(title = "设备告警规则", businessType = BusinessType.INSERT)
     @PostMapping()
     public R<Void> add(@Validated(AddGroup.class) @RequestBody DeviceEventRuleBO bo) {
         return toAjax(deviceEventRuleService.createDeviceEventRule(bo));
     }
 
     /**
-     * 修改设备
+     * 修改设备告警规则
      */
     @SaCheckPermission("manager:device:edit")
     @Log(title = "设备", businessType = BusinessType.UPDATE)
     @PutMapping()
-    public R<Void> edit(@Validated(EditGroup.class) @RequestBody DeviceBO bo) {
-        return toAjax(deviceService.updateByBo(bo));
+    public R<Void> edit(@Validated(EditGroup.class) @RequestBody DeviceEventRuleBO bo) {
+        return toAjax(deviceEventRuleService.updateDeviceEventRuleByBo(bo));
     }
 
     /**
@@ -80,6 +77,5 @@ public class DeviceAlarmRuleController extends BaseController {
     public R<Void> remove(@NotEmpty(message = "主键不能为空") @PathVariable Long[] ids) {
         return toAjax(productAndAttributeService.deleteDeviceByIds(Arrays.asList(ids)));
     }
-
 
 }
