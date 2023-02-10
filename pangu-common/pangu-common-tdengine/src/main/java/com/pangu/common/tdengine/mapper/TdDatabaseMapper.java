@@ -86,6 +86,15 @@ public interface TdDatabaseMapper {
     Map<String, Object> selectTodayLastRowData(@Param("table") String table);
 
     /**
+     * 查询最后一行数据
+     *
+     * @param table 表格
+     * @return {@link Map}<{@link String}, {@link Object}>
+     */
+    @Select("select LAST_ROW(*) from ${table}")
+    Map<String, Object> selectLastRowData(@Param("table") String table);
+
+    /**
      * 删除表
      *
      * @param tables 结果列表

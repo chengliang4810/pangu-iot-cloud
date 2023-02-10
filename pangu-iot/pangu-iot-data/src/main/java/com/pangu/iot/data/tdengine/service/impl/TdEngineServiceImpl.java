@@ -50,7 +50,7 @@ public class TdEngineServiceImpl implements TdEngineService {
      */
     @Override
     public Map<String, Object> selectLastData(String table) {
-        Map<String, Object> lastRowData = databaseMapper.selectTodayLastRowData(table);
+        Map<String, Object> lastRowData = databaseMapper.selectLastRowData(table);
         if (MapUtil.isEmpty(lastRowData)){
             return Collections.emptyMap();
         }
