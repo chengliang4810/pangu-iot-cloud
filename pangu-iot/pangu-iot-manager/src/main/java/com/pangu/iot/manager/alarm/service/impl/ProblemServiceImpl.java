@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.pangu.common.zabbix.service.ProblemService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.pangu.iot.manager.alarm.domain.bo.ProblemBO;
@@ -15,7 +16,9 @@ import com.pangu.iot.manager.alarm.domain.vo.ProblemVO;
 import com.pangu.iot.manager.alarm.domain.Problem;
 import com.pangu.iot.manager.alarm.mapper.ProblemMapper;
 import com.pangu.iot.manager.alarm.service.IProblemService;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Collection;
@@ -31,6 +34,34 @@ import java.util.Collection;
 public class ProblemServiceImpl extends ServiceImpl<ProblemMapper, Problem> implements IProblemService {
 
     private final ProblemMapper baseMapper;
+    private final ProblemService problemService;
+
+
+    /**
+     * 解决问题
+     *
+     * @param eventId 标识符
+     * @return {@link Boolean}
+     */
+    @Override
+    public Boolean resolve(Long eventId) {
+        problemService.resolve(eventId + "");
+        return baseMapper.updateById(new Problem().setEventId(eventId).setRClock(LocalDateTime.now())) > 0;
+    }
+
+    /**
+     * 确认问题告警
+     *
+     * @param eventId 标识符
+     * @return {@link Boolean}
+     */
+    @Override
+    @Transactional
+    public Boolean acknowledgement(Long eventId) {
+        problemService.acknowledgeProblem(eventId + "");
+        return baseMapper.updateById(new Problem().setEventId(eventId).setAcknowledged(1L)) > 0;
+    }
+
 
     /**
      * 查询告警记录
@@ -68,6 +99,7 @@ public class ProblemServiceImpl extends ServiceImpl<ProblemMapper, Problem> impl
         lqw.eq(bo.getClock() != null, Problem::getClock, bo.getClock());
         lqw.eq(bo.getRClock() != null, Problem::getRClock, bo.getRClock());
         lqw.eq(bo.getDeviceId() != null, Problem::getDeviceId, bo.getDeviceId());
+        lqw.orderByDesc(Problem::getClock);
         return lqw;
     }
 
@@ -112,4 +144,8 @@ public class ProblemServiceImpl extends ServiceImpl<ProblemMapper, Problem> impl
         }
         return baseMapper.deleteBatchIds(ids) > 0;
     }
+
+
+
+
 }

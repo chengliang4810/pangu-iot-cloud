@@ -39,6 +39,26 @@ public class ProblemController extends BaseController {
     private final IProblemService problemService;
 
     /**
+     * 解决告警
+     */
+    @SaCheckPermission("manager:problem:edit")
+    @Log(title = "解决告警", businessType = BusinessType.UPDATE)
+    @PutMapping("/resolve/{eventId}")
+    public R<Void> resolve(@NotNull(message = "主键不能为空") @PathVariable Long eventId) {
+        return toAjax(problemService.resolve(eventId));
+    }
+
+    /**
+     * 确认告警
+     */
+    @SaCheckPermission("manager:problem:edit")
+    @Log(title = "确认告警", businessType = BusinessType.UPDATE)
+    @PutMapping("/acknowledgement/{eventId}")
+    public R<Void> acknowledgement(@NotNull(message = "主键不能为空") @PathVariable Long eventId) {
+        return toAjax(problemService.acknowledgement(eventId));
+    }
+
+    /**
      * 查询告警记录列表
      */
     @SaCheckPermission("manager:problem:list")
@@ -85,7 +105,7 @@ public class ProblemController extends BaseController {
     @SaCheckPermission("manager:problem:edit")
     @Log(title = "告警记录", businessType = BusinessType.UPDATE)
     @PutMapping()
-    public R<Void> edit(@Validated(EditGroup.class) @RequestBody ProblemBO bo) {
+    public R<Void> acknowledgement(@Validated(EditGroup.class) @RequestBody ProblemBO bo) {
         return toAjax(problemService.updateByBo(bo));
     }
 

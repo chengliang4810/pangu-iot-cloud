@@ -47,4 +47,20 @@ public interface IProblemService extends IService<Problem> {
      * 校验并批量删除告警记录信息
      */
     Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid);
+
+    /**
+     * 确认问题告警
+     *
+     * @param eventId 标识符
+     * @return {@link Boolean}
+     */
+    Boolean acknowledgement(Long eventId);
+
+    /**
+     * 解决问题
+     *
+     * @param eventId 标识符
+     * @return {@link Boolean}
+     */
+    Boolean resolve(Long eventId);
 }
