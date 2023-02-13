@@ -8,8 +8,11 @@ import com.pangu.common.zabbix.service.ReceiveDataService;
 import com.pangu.common.zabbix.util.TimeUtil;
 import com.pangu.iot.data.service.DeviceStatusService;
 import com.pangu.iot.data.tdengine.service.TdEngineService;
+import com.pangu.manager.api.RemoteAlarmService;
+import com.pangu.manager.api.model.AlarmDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.stereotype.Service;
 
 import java.util.LinkedHashMap;
@@ -31,6 +34,8 @@ import static com.pangu.common.core.constant.IotConstants.SUPER_TABLE_PREFIX;
 public class DataConsumerService implements ReceiveDataService {
 
     private final TdEngineService tdEngineService;
+    @DubboReference
+    private final RemoteAlarmService remoteAlarmService;
     private final DeviceStatusService deviceStatusService;
 
     /**
@@ -80,13 +85,25 @@ public class DataConsumerService implements ReceiveDataService {
         if (tagMap.containsKey(IotConstants.DEVICE_STATUS_OFFLINE_TAG)){
             // 设备离线
             deviceStatusService.offline(zbxProblem.getHostname());
-            log.info("设备离线：{}", zbxProblem);
+            // log.info("设备离线：{}", zbxProblem);
         } else if (tagMap.containsKey(IotConstants.DEVICE_STATUS_ONLINE_TAG)) {
             // 设备上线
             log.info("设备上线：{}", zbxProblem);
             deviceStatusService.online(zbxProblem.getHostname(), zbxProblem.getClock());
         } else if (tagMap.containsKey(IotConstants.ALARM_TAG_NAME)){
             // 设备告警
+            // hostname = device_id = 1623590722269122560
+            // name= 事件id event_rule_id
+            AlarmDTO alarmDTO = new AlarmDTO();
+            alarmDTO.setObjectId(Long.valueOf(zbxProblem.getName()));
+            alarmDTO.setSeverity(zbxProblem.getSeverity());
+            alarmDTO.setDeviceId(Long.valueOf(zbxProblem.getHostname()));
+            alarmDTO.setEventId(zbxProblem.getEventid().longValue());
+            alarmDTO.setAcknowledged(0L);
+            alarmDTO.setClock(TimeUtil.toLocalDateTime(zbxProblem.getClock()));
+            remoteAlarmService.addAlarmRecord(alarmDTO);
+            // zbxProblem(eventid=32956, hostname=1623590722269122560, severity=3, name=1623589728705613824, clock=1676269468, groups=[1611599188680720384, 1611785596489895936], itemTags=[ZbxTag(tag=__alarm__, value=1623590722269122560), ZbxTag(tag=__product_id__, value=1623587503962886144), ZbxTag(tag=__attribute_key__, value=temp)])
+            // ZbxProblem(eventid=32957, hostname=1623590722269122560, severity=3, name=1623589984432328704, clock=1676269468, groups=[1611599188680720384, 1611785596489895936], itemTags=[ZbxTag(tag=__alarm__, value=1623590722269122560), ZbxTag(tag=__product_id__, value=1623587503962886144), ZbxTag(tag=__attribute_key__, value=temp)])
             log.info("设备告警：{}", zbxProblem);
         } else if (tagMap.containsKey(IotConstants.EXECUTE_TAG_NAME)){
             // 设备服务
