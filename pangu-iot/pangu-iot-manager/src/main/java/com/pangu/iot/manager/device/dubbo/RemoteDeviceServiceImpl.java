@@ -1,4 +1,4 @@
-package com.pangu.iot.manager.dubbo;
+package com.pangu.iot.manager.device.dubbo;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.pangu.common.zabbix.util.TimeUtil;
