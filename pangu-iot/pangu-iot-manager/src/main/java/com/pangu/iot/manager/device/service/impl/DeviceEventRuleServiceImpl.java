@@ -141,6 +141,7 @@ public class DeviceEventRuleServiceImpl implements IDeviceEventRuleService {
         List<DeviceAlarmRuleVO.DeviceService> deviceServiceList = productEventServiceList.stream().map(productEventService -> {
             DeviceAlarmRuleVO.DeviceService deviceService = new DeviceAlarmRuleVO.DeviceService();
             deviceService.setServiceId(productEventService.getServiceId());
+            deviceService.setExecuteDeviceId(productEventService.getExecuteDeviceId());
             deviceService.setDeviceId(productEventService.getRelationId());
             return deviceService;
         }).collect(Collectors.toList());
