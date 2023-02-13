@@ -22,6 +22,11 @@ import java.util.Date;
 public class ProblemBO extends BaseEntity {
 
     /**
+     * 是否需要设备信息
+     */
+    private Boolean deviceInfo;
+
+    /**
      * event_id
      */
     @NotNull(message = "event_id不能为空", groups = { EditGroup.class })

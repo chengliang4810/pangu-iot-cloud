@@ -20,6 +20,7 @@ public class ProblemVO {
 
     private static final long serialVersionUID = 1L;
 
+
     /**
      * event_id
      */
@@ -31,6 +32,11 @@ public class ProblemVO {
      */
     @ExcelProperty(value = "对象ID")
     private Long objectId;
+
+    /**
+     * 设备名称
+     */
+    private String deviceName;
 
     @ExcelProperty(value = "告警级别")
     private Integer severity;

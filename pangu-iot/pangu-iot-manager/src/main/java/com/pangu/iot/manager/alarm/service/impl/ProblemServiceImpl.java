@@ -1,27 +1,31 @@
 package com.pangu.iot.manager.alarm.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.BooleanUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.pangu.common.core.utils.StringUtils;
 import com.pangu.common.mybatis.core.page.PageQuery;
 import com.pangu.common.mybatis.core.page.TableDataInfo;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.pangu.common.zabbix.service.ProblemService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import com.pangu.iot.manager.alarm.domain.Problem;
 import com.pangu.iot.manager.alarm.domain.bo.ProblemBO;
 import com.pangu.iot.manager.alarm.domain.vo.ProblemVO;
-import com.pangu.iot.manager.alarm.domain.Problem;
 import com.pangu.iot.manager.alarm.mapper.ProblemMapper;
 import com.pangu.iot.manager.alarm.service.IProblemService;
+import com.pangu.iot.manager.device.domain.Device;
+import com.pangu.iot.manager.device.service.IDeviceService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Collection;
+import java.util.stream.Collectors;
 
 /**
  * 告警记录Service业务层处理
@@ -35,7 +39,7 @@ public class ProblemServiceImpl extends ServiceImpl<ProblemMapper, Problem> impl
 
     private final ProblemMapper baseMapper;
     private final ProblemService problemService;
-
+    private final IDeviceService deviceService;
 
     /**
      * 解决问题
@@ -78,6 +82,14 @@ public class ProblemServiceImpl extends ServiceImpl<ProblemMapper, Problem> impl
     public TableDataInfo<ProblemVO> queryPageList(ProblemBO bo, PageQuery pageQuery) {
         LambdaQueryWrapper<Problem> lqw = buildQueryWrapper(bo);
         Page<ProblemVO> result = baseMapper.selectVoPage(pageQuery.build(), lqw);
+        // 关联获取设备名称信息
+        if (BooleanUtil.isTrue(bo.getDeviceInfo())){
+            List<Long> ids = result.getRecords().stream().map(ProblemVO::getDeviceId).distinct().collect(Collectors.toList());
+            Map<Long, String> deviceNameMap = deviceService.listByIds(ids).stream().collect(Collectors.toMap(Device::getId, Device::getName));
+            result.getRecords().forEach(problemVO -> {
+                problemVO.setDeviceName(deviceNameMap.get(problemVO.getDeviceId()));
+            });
+        }
         return TableDataInfo.build(result);
     }
 
