@@ -99,7 +99,7 @@ public class RemoteTdEngineServiceImpl implements RemoteTdEngineService {
     @Override
     public Map<String, Object> todayLastRowData(String deviceCode) {
         try {
-            return tdEngineService.selectLastData(IotConstants.DEVICE_TABLE_NAME_PREFIX + deviceCode);
+            return tdEngineService.selectLastRowData(IotConstants.DEVICE_TABLE_NAME_PREFIX + deviceCode);
         } catch (Exception e) {
             log.warn("查询今天最后一行数据失败", e);
         }

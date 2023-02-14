@@ -70,6 +70,14 @@ public interface TdEngineService {
     Map<String, Object> selectLastData(String table);
 
     /**
+     * 选择最后一行数据
+     *
+     * @param table 表格
+     * @return {@link Map}<{@link String}, {@link Object}>
+     */
+    Map<String, Object> selectLastRowData(String table);
+
+    /**
      * 删除表
      *
      * @param tableNameList 表名称列表

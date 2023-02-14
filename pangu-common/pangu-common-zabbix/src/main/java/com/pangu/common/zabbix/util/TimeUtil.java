@@ -3,6 +3,7 @@ package com.pangu.common.zabbix.util;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.Date;
 
 /**
  * 时间工具
@@ -45,4 +46,8 @@ public class TimeUtil {
     }
 
 
+    public static String formatTime(Date createTime) {
+
+        return null;
+    }
 }

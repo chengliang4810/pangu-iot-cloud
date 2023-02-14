@@ -91,4 +91,13 @@ public class TableDataInfo<T> implements Serializable {
     public void setTotal(int size) {
         this.data.put("total", size);
     }
+
+    /**
+     * 设置总条数
+     *
+     * @param size 大小
+     */
+    public void setTotal(long size) {
+        this.data.put("total", size);
+    }
 }

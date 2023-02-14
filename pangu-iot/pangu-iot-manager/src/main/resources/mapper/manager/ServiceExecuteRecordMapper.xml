@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pangu.iot.manager.device.mapper.ServiceExecuteRecordMapper">
+
+    <resultMap type="com.pangu.iot.manager.device.domain.ServiceExecuteRecord" id="ServiceExecuteRecordResult">
+    <result property="id" column="id"/>
+    <result property="serviceName" column="service_name"/>
+    <result property="param" column="param"/>
+    <result property="deviceId" column="device_id"/>
+    <result property="executeType" column="execute_type"/>
+    <result property="executeUser" column="execute_user"/>
+    <result property="executeRuleId" column="execute_rule_id"/>
+    <result property="createBy" column="create_by"/>
+    <result property="createTime" column="create_time"/>
+    <result property="updateBy" column="update_by"/>
+    <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+
+</mapper>

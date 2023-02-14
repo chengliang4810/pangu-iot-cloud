@@ -49,7 +49,7 @@ public class TdEngineServiceImpl implements TdEngineService {
      * @return {@link Map}<{@link String}, {@link Object}>
      */
     @Override
-    public Map<String, Object> selectLastData(String table) {
+    public Map<String, Object> selectLastRowData(String table) {
         Map<String, Object> lastRowData = databaseMapper.selectLastRowData(table);
         if (MapUtil.isEmpty(lastRowData)){
             return Collections.emptyMap();
@@ -58,6 +58,27 @@ public class TdEngineServiceImpl implements TdEngineService {
         Map<String, Object> result = MapUtil.newHashMap(lastRowData.size());
         lastRowData.forEach((key, value) -> {
             String newKey = key.substring(9, key.length() - 1);
+            result.put(newKey, value);
+        });
+        return result;
+    }
+
+    /**
+     * 查询每列最后数据
+     *
+     * @param table 表格
+     * @return {@link Map}<{@link String}, {@link Object}>
+     */
+    @Override
+    public Map<String, Object> selectLastData(String table) {
+        Map<String, Object> lastRowData = databaseMapper.selectLastData(table);
+        if (MapUtil.isEmpty(lastRowData)){
+            return Collections.emptyMap();
+        }
+        // 处理Key 删除last()
+        Map<String, Object> result = MapUtil.newHashMap(lastRowData.size());
+        lastRowData.forEach((key, value) -> {
+            String newKey = key.substring(5, key.length() - 1);
             result.put(newKey, value);
         });
         return result;
