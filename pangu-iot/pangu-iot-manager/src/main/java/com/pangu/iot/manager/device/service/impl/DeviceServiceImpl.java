@@ -8,30 +8,36 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.pangu.common.core.utils.JsonUtils;
 import com.pangu.common.core.utils.StringUtils;
 import com.pangu.common.mybatis.core.page.PageQuery;
 import com.pangu.common.mybatis.core.page.TableDataInfo;
+import com.pangu.common.satoken.utils.LoginHelper;
 import com.pangu.data.api.RemoteDeviceStatusService;
 import com.pangu.iot.manager.device.convert.DeviceConvert;
 import com.pangu.iot.manager.device.domain.Device;
 import com.pangu.iot.manager.device.domain.DeviceGroupRelation;
+import com.pangu.iot.manager.device.domain.ServiceExecuteRecord;
 import com.pangu.iot.manager.device.domain.bo.DeviceBO;
 import com.pangu.iot.manager.device.domain.bo.DeviceStatusBO;
+import com.pangu.iot.manager.device.domain.bo.ServiceExecuteBO;
 import com.pangu.iot.manager.device.domain.vo.DeviceDetailVO;
 import com.pangu.iot.manager.device.domain.vo.DeviceListVO;
 import com.pangu.iot.manager.device.domain.vo.DeviceVO;
 import com.pangu.iot.manager.device.mapper.DeviceMapper;
 import com.pangu.iot.manager.device.service.IDeviceGroupRelationService;
 import com.pangu.iot.manager.device.service.IDeviceService;
+import com.pangu.iot.manager.device.service.IServiceExecuteRecordService;
+import com.pangu.iot.manager.product.domain.ProductService;
+import com.pangu.iot.manager.product.domain.ProductServiceParam;
+import com.pangu.iot.manager.product.service.IProductServiceParamService;
+import com.pangu.iot.manager.product.service.IProductServiceService;
 import lombok.RequiredArgsConstructor;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -48,6 +54,9 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> impleme
     @DubboReference
     private final RemoteDeviceStatusService deviceStatusService;
     private final DeviceConvert deviceConvert;
+    private final IServiceExecuteRecordService serviceExecuteRecordService;
+    private final IProductServiceService productServiceService;
+    private final IProductServiceParamService productServiceParamService;
     private final IDeviceGroupRelationService deviceGroupRelationService;
 
     /**
@@ -187,5 +196,74 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> impleme
     public Boolean updateDeviceStatus(DeviceStatusBO deviceStatusBO) {
         return baseMapper.updateById(new Device().setStatus(deviceStatusBO.getStatus()).setId(deviceStatusBO.getDeviceId())) > 0;
     }
+
+
+    @Override
+    public void executeService(Long deviceId, Long serviceId, List<ServiceExecuteBO.ServiceParam> serviceParams) {
+        boolean executeStatus = true;
+        // 查询设备信息
+        Device device = getById(deviceId);
+        if (ObjectUtil.isNull(device)){
+            executeStatus = false;
+        }
+
+
+        //封装执行参数
+//        List<Map<String, Object>> body = new ArrayList<>();
+//
+//        Map<String, Object> map = new ConcurrentHashMap<>(2);
+//
+//        map.put("device", deviceId);
+//
+//        List<Map<String, Object>> serviceList = new ArrayList<>();
+//        Map<String, Object> serviceMap = new ConcurrentHashMap<>(2);
+//        ProductService productService = new QProductService().id.eq(serviceId).findOne();
+//        if (null == productService) {
+//            throw new ServiceException(BizExceptionEnum.SERVICE_NOT_EXISTS);
+//        }
+//        serviceMap.put("name", productService.getName());
+//
+
+        List<ProductServiceParam> paramList = productServiceParamService.list(Wrappers.<ProductServiceParam>lambdaQuery().eq(ProductServiceParam::getServiceId, serviceId));
+        Map<String, String> paramStr = null;
+        if (CollectionUtil.isNotEmpty(paramList)) {
+            paramStr = paramList.parallelStream().collect(Collectors.toMap(ProductServiceParam::getKey, ProductServiceParam::getValue, (a, b) -> a));
+
+            if (CollectionUtil.isNotEmpty(serviceParams)) {
+                Map<String, String> userParam = serviceParams.parallelStream().collect(Collectors.toMap(ServiceExecuteBO.ServiceParam::getKey, ServiceExecuteBO.ServiceParam::getValue, (a, b) -> a));
+                for (Map.Entry<String, String> param : paramStr.entrySet()) {
+                    if (userParam.get(param.getKey()) != null) {
+                        param.setValue(userParam.get(param.getKey()));
+                    }
+                }
+            }
+
+            // serviceMap.put("param", paramStr);
+        }
+
+//        serviceList.add(serviceMap);
+//        map.put("service", serviceList);
+//        body.add(map);
+
+        //下发命令 执行
+        // Forest.post("/device/action/exec").host("127.0.0.1").port(12800).contentTypeJson().addBody(JSON.toJSON(body)).execute();
+
+        //记录服务日志
+        ServiceExecuteRecord serviceExecuteRecord = new ServiceExecuteRecord();
+        serviceExecuteRecord.setDeviceId(deviceId);
+        if (CollectionUtil.isNotEmpty(paramStr)) {
+            serviceExecuteRecord.setParam(JsonUtils.toJsonString(paramStr));
+        }
+
+        ProductService service = productServiceService.getById(serviceId);
+        serviceExecuteRecord.setServiceName(service.getName());
+        serviceExecuteRecord.setCreateTime(new Date());
+        serviceExecuteRecord.setExecuteType(0L);
+        serviceExecuteRecord.setExecuteUser(LoginHelper.getUserId() + "");
+        serviceExecuteRecord.setExecuteStatus(executeStatus);
+        serviceExecuteRecordService.save(serviceExecuteRecord);
+    }
+
+
 
 }

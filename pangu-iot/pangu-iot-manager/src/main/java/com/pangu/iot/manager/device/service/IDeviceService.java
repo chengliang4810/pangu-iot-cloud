@@ -6,6 +6,7 @@ import com.pangu.common.mybatis.core.page.TableDataInfo;
 import com.pangu.iot.manager.device.domain.Device;
 import com.pangu.iot.manager.device.domain.bo.DeviceBO;
 import com.pangu.iot.manager.device.domain.bo.DeviceStatusBO;
+import com.pangu.iot.manager.device.domain.bo.ServiceExecuteBO;
 import com.pangu.iot.manager.device.domain.vo.DeviceDetailVO;
 import com.pangu.iot.manager.device.domain.vo.DeviceListVO;
 import com.pangu.iot.manager.device.domain.vo.DeviceVO;
@@ -58,4 +59,6 @@ public interface IDeviceService extends IService<Device> {
      * @return {@link Boolean}
      */
     Boolean updateDeviceStatus(DeviceStatusBO deviceStatusBO);
+
+    void executeService(Long deviceId, Long serviceId, List<ServiceExecuteBO.ServiceParam> serviceParams);
 }
