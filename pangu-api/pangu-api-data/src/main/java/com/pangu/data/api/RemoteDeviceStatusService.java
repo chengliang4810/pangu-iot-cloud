@@ -15,4 +15,19 @@ public interface RemoteDeviceStatusService {
      */
     Map<String, Integer> getDeviceOnlineStatus(Set<String> deviceCode);
 
+    /**
+     * 设备上线
+     *
+     * @param deviceId  设备id
+     * @param clock      时间
+     */
+    void online(String deviceId, Integer clock);
+
+    /**
+     * 设备离线
+     *
+     * @param deviceId  设备id
+     */
+    void offline(String deviceId);
+
 }

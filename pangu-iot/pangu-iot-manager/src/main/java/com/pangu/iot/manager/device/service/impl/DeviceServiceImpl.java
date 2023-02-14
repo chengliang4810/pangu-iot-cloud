@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.pangu.common.core.utils.Assert;
 import com.pangu.common.core.utils.JsonUtils;
 import com.pangu.common.core.utils.StringUtils;
 import com.pangu.common.mybatis.core.page.PageQuery;
@@ -28,10 +29,13 @@ import com.pangu.iot.manager.device.mapper.DeviceMapper;
 import com.pangu.iot.manager.device.service.IDeviceGroupRelationService;
 import com.pangu.iot.manager.device.service.IDeviceService;
 import com.pangu.iot.manager.device.service.IServiceExecuteRecordService;
+import com.pangu.iot.manager.product.domain.ProductEventService;
 import com.pangu.iot.manager.product.domain.ProductService;
 import com.pangu.iot.manager.product.domain.ProductServiceParam;
+import com.pangu.iot.manager.product.service.IProductEventServiceService;
 import com.pangu.iot.manager.product.service.IProductServiceParamService;
 import com.pangu.iot.manager.product.service.IProductServiceService;
+import com.pangu.system.api.model.LoginUser;
 import lombok.RequiredArgsConstructor;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.stereotype.Service;
@@ -50,14 +54,16 @@ import java.util.stream.Collectors;
 @Service
 public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> implements IDeviceService {
 
-    private final DeviceMapper baseMapper;
     @DubboReference
     private final RemoteDeviceStatusService deviceStatusService;
+
+    private final DeviceMapper baseMapper;
     private final DeviceConvert deviceConvert;
-    private final IServiceExecuteRecordService serviceExecuteRecordService;
     private final IProductServiceService productServiceService;
     private final IProductServiceParamService productServiceParamService;
+    private final IProductEventServiceService productEventServiceService;
     private final IDeviceGroupRelationService deviceGroupRelationService;
+    private final IServiceExecuteRecordService serviceExecuteRecordService;
 
     /**
      * 查询设备
@@ -197,17 +203,42 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> impleme
         return baseMapper.updateById(new Device().setStatus(deviceStatusBO.getStatus()).setId(deviceStatusBO.getDeviceId())) > 0;
     }
 
+    /**
+     * 执行功能
+     *
+     * @param deviceId 设备id
+     * @param eventId  标识符
+     */
+    @Override
+    public void executeService(Long deviceId, Long eventId, Integer executeType) {
+
+        // 获取对应功能ID
+        ProductEventService service = productEventServiceService.getOne(Wrappers.<ProductEventService>lambdaQuery().eq(ProductEventService::getEventRuleId, eventId));
+        Long serviceId = service.getServiceId();
+
+        // 构建参数
+        List<ProductServiceParam> paramList = productServiceParamService.list(Wrappers.<ProductServiceParam>lambdaQuery().eq(ProductServiceParam::getServiceId, serviceId));
+        List<ServiceExecuteBO.ServiceParam> serviceParams = new ArrayList<>();
+        paramList.forEach(param -> {
+            ServiceExecuteBO.ServiceParam serviceParam = new ServiceExecuteBO.ServiceParam();
+            serviceParam.setKey(param.getKey());
+            serviceParam.setValue(param.getValue());
+            serviceParams.add(serviceParam);
+        });
+
+        // 执行
+        executeService(deviceId, serviceId, serviceParams, executeType);
+    }
 
     @Override
-    public void executeService(Long deviceId, Long serviceId, List<ServiceExecuteBO.ServiceParam> serviceParams) {
+    public void executeService(Long deviceId, Long serviceId, List<ServiceExecuteBO.ServiceParam> serviceParams, Integer executeType) {
         boolean executeStatus = true;
+        Assert.notNull(executeType, "执行类型不能为空");
         // 查询设备信息
         Device device = getById(deviceId);
         if (ObjectUtil.isNull(device)){
             executeStatus = false;
         }
-
-
         //封装执行参数
 //        List<Map<String, Object>> body = new ArrayList<>();
 //
@@ -258,11 +289,25 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> impleme
         ProductService service = productServiceService.getById(serviceId);
         serviceExecuteRecord.setServiceName(service.getName());
         serviceExecuteRecord.setCreateTime(new Date());
-        serviceExecuteRecord.setExecuteType(0L);
-        serviceExecuteRecord.setExecuteUser(LoginHelper.getUserId() + "");
+        serviceExecuteRecord.setExecuteType(executeType);
+        serviceExecuteRecord.setExecuteUser(getLoginUsername());
         serviceExecuteRecord.setExecuteStatus(executeStatus);
         serviceExecuteRecordService.save(serviceExecuteRecord);
     }
+
+    /**
+     * 获取登录用户名
+     */
+    private String getLoginUsername() {
+        LoginUser loginUser;
+        try {
+            loginUser = LoginHelper.getLoginUser();
+        } catch (Exception e) {
+            return "system";
+        }
+        return loginUser.getUsername();
+    }
+
 
 
 

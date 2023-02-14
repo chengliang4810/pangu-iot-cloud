@@ -29,4 +29,25 @@ public class RemoteDeviceStatusServiceImpl implements com.pangu.data.api.RemoteD
     }
 
 
+    /**
+     * 设备上线
+     *
+     * @param deviceId 设备id
+     * @param clock    时间
+     */
+    @Override
+    public void online(String deviceId, Integer clock) {
+        deviceStatusService.online(deviceId, clock);
+    }
+
+    /**
+     * 设备离线
+     *
+     * @param deviceId 设备id
+     */
+    @Override
+    public void offline(String deviceId) {
+        deviceStatusService.offline(deviceId);
+    }
+
 }

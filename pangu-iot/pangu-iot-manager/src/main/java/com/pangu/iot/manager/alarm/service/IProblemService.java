@@ -6,6 +6,7 @@ import com.pangu.iot.manager.alarm.domain.bo.ProblemBO;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.pangu.common.mybatis.core.page.PageQuery;
 import com.pangu.common.mybatis.core.page.TableDataInfo;
+import com.pangu.manager.api.model.AlarmDTO;
 
 import java.util.Collection;
 import java.util.List;
@@ -18,6 +19,12 @@ import java.util.List;
  */
 public interface IProblemService extends IService<Problem> {
 
+    /**
+     * 添加报警记录
+     *
+     * @param alarmDTO 报警dto
+     */
+    void addAlarmRecord(AlarmDTO alarmDTO);
     /**
      * 查询告警记录
      */

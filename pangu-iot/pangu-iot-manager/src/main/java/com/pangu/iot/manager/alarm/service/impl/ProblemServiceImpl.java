@@ -10,6 +10,7 @@ import com.pangu.common.core.utils.StringUtils;
 import com.pangu.common.mybatis.core.page.PageQuery;
 import com.pangu.common.mybatis.core.page.TableDataInfo;
 import com.pangu.common.zabbix.service.ProblemService;
+import com.pangu.iot.manager.alarm.convert.ProblemConvert;
 import com.pangu.iot.manager.alarm.domain.Problem;
 import com.pangu.iot.manager.alarm.domain.bo.ProblemBO;
 import com.pangu.iot.manager.alarm.domain.vo.ProblemVO;
@@ -17,6 +18,9 @@ import com.pangu.iot.manager.alarm.mapper.ProblemMapper;
 import com.pangu.iot.manager.alarm.service.IProblemService;
 import com.pangu.iot.manager.device.domain.Device;
 import com.pangu.iot.manager.device.service.IDeviceService;
+import com.pangu.iot.manager.product.domain.ProductEvent;
+import com.pangu.iot.manager.product.service.IProductEventService;
+import com.pangu.manager.api.model.AlarmDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,6 +44,22 @@ public class ProblemServiceImpl extends ServiceImpl<ProblemMapper, Problem> impl
     private final ProblemMapper baseMapper;
     private final ProblemService problemService;
     private final IDeviceService deviceService;
+    private final ProblemConvert problemConvert;
+    private final IProductEventService productEventService;
+
+    /**
+     * 添加报警记录
+     *
+     * @param alarmDTO 报警dto
+     */
+    @Override
+    public void addAlarmRecord(AlarmDTO alarmDTO) {
+        ProductEvent one = productEventService.getOne(Wrappers.lambdaQuery(ProductEvent.class).eq(ProductEvent::getId, alarmDTO.getObjectId()));
+        Problem problem = problemConvert.toEntity(alarmDTO);
+        problem.setName(one.getName());
+        baseMapper.insertOrUpdate(problem);
+    }
+
 
     /**
      * 解决问题
