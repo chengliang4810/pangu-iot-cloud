@@ -47,7 +47,7 @@ public class ServiceExecuteRecordVO {
      * 执行方式   手动触发  场景触发
      */
     @ExcelProperty(value = "执行方式   手动触发  场景触发")
-    private Long executeType;
+    private Integer executeType;
 
     /**
      * 执行人执行方式未手动触发时有值

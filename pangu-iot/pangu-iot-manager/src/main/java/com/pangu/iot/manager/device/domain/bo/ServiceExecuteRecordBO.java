@@ -48,7 +48,7 @@ public class ServiceExecuteRecordBO extends BaseEntity {
      * 执行方式   手动触发  场景触发
      */
     @NotNull(message = "执行方式   手动触发  场景触发不能为空", groups = { AddGroup.class, EditGroup.class })
-    private Long executeType;
+    private Integer executeType;
 
     /**
      * 执行人执行方式未手动触发时有值
