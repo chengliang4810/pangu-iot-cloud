@@ -42,6 +42,9 @@ public class ZbxDataService {
     @Autowired(required = false)
     private ReceiveDataService receiveDataService;
 
+    @Autowired(required = false)
+    private ReceiveProblemService receiveProblemService;
+
     /**
      * 接收zabbix实时数据
      *
@@ -53,22 +56,29 @@ public class ZbxDataService {
     public void receiveMessage(Channel channel, Message message) {
         long deliveryTag = message.getMessageProperties().getDeliveryTag();
         try {
-            if (receiveDataService == null){
+            if (receiveDataService == null && receiveProblemService == null){
                 //负载到不进行消费的服务，消息重新投递
                 channel.basicReject(deliveryTag, true);
                 return;
             }
             Map<String, Object> result = JsonUtils.parseObject(message.getBody(), Map.class);
 
-            if (ObjectUtil.isNotNull(result.get("itemid"))){
+            if (ObjectUtil.isNotNull(receiveDataService) && ObjectUtil.isNotNull(result.get("itemid"))){
                 receiveDataService.receiveData(JsonUtils.parseObject(message.getBody(), ZbxValue.class));
-            } else if (ObjectUtil.isNotNull(result.get("eventid"))){
-                receiveDataService.receiveProblems(JsonUtils.parseObject(message.getBody(), ZbxProblem.class));
+                // 消息确认
+                channel.basicAck(deliveryTag, false);
+            } else if (ObjectUtil.isNotNull(receiveProblemService) && ObjectUtil.isNotNull(result.get("eventid"))){
+                receiveProblemService.receiveProblems(JsonUtils.parseObject(message.getBody(), ZbxProblem.class));
+                // 消息确认
+                channel.basicAck(deliveryTag, false);
+                // receiveDataService.receiveProblems(JsonUtils.parseObject(message.getBody(), ZbxProblem.class));
             } else {
+                //负载到不进行消费的服务，消息重新投递
+                channel.basicReject(deliveryTag, true);
                 log.info("未知的zabbix数据类型 {}", result);
             }
              // 消息确认
-             channel.basicAck(deliveryTag, false);
+             // channel.basicAck(deliveryTag, false);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

@@ -1,6 +1,5 @@
 package com.pangu.common.zabbix.service;
 
-import com.pangu.common.zabbix.model.ZbxProblem;
 import com.pangu.common.zabbix.model.ZbxValue;
 
 /**
@@ -18,13 +17,5 @@ public interface ReceiveDataService {
      * @param itemValue ZBX数据
      */
     void receiveData(ZbxValue itemValue);
-
-    /**
-     * 接收ZBX事件，处理
-     *
-     * @param itemValue ZBX事件
-     */
-    void receiveProblems(ZbxProblem itemValue);
-
 
 }
