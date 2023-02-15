@@ -4,7 +4,7 @@ import com.pangu.common.core.domain.R;
 import com.pangu.common.core.utils.Assert;
 import com.pangu.common.zabbix.model.DeviceValue;
 import com.pangu.common.zabbix.model.ZbxResponse;
-import com.pangu.common.zabbix.service.ZbxDataService;
+import com.pangu.common.zabbix.service.SenderDataService;
 import com.pangu.iot.manager.device.domain.Device;
 import com.pangu.iot.manager.device.domain.bo.DebugDataBO;
 import com.pangu.iot.manager.device.service.IDeviceService;
@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/device/debug")
 public class DeviceDebugController {
 
-    private final ZbxDataService dataService;
+    private final SenderDataService senderDataService;
 
     private final IDeviceService deviceService;
 
@@ -49,7 +49,7 @@ public class DeviceDebugController {
         deviceValue.setDeviceId(String.valueOf(device.getId()));
         deviceValue.setAttributes(attribute);
         deviceValue.setClock(System.currentTimeMillis() / 1000);
-        ZbxResponse response = dataService.sendData(deviceValue);
+        ZbxResponse response = senderDataService.sendData(deviceValue);
         if (response.getFailed() <= 0){
             return R.ok("数据发送成功");
         }else {

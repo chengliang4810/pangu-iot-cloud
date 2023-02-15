@@ -21,6 +21,7 @@
         <spring-cloud.version>2021.0.5</spring-cloud.version>
         <spring-boot-admin.version>2.7.7</spring-boot-admin.version>
         <spring-boot.mybatis>2.2.2</spring-boot.mybatis>
+        <camel.version>3.14.7</camel.version>
         <mybatis.version>3.5.10</mybatis.version>
         <mybatis-plus.version>3.5.2</mybatis-plus.version>
         <p6spy.version>3.9.1</p6spy.version>
@@ -345,6 +346,15 @@
                 <groupId>com.alibaba</groupId>
                 <artifactId>fastjson</artifactId>
                 <version>${fastjson.version}</version>
+            </dependency>
+
+            <!-- Camel BOM -->
+            <dependency>
+                <groupId>org.apache.camel.springboot</groupId>
+                <artifactId>camel-spring-boot-bom</artifactId>
+                <version>${camel.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
 
         </dependencies>

@@ -11,6 +11,7 @@
     <modules>
         <module>pangu-iot-manager</module>
         <module>pangu-iot-data</module>
+        <module>pangu-iot-test-driver</module>
     </modules>
 
     <artifactId>pangu-iot</artifactId>

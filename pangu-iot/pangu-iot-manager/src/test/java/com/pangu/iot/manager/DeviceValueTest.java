@@ -1,7 +1,7 @@
 package com.pangu.iot.manager;
 
 import com.pangu.common.zabbix.model.ZbxItemValue;
-import com.pangu.common.zabbix.service.ZbxDataService;
+import com.pangu.common.zabbix.service.SenderDataService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -10,7 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class DeviceValueTest {
 
     @Autowired
-    private ZbxDataService dataService;
+    private SenderDataService dataService;
 
     @Test
     public void sendData(){

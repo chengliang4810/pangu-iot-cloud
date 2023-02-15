@@ -1,0 +1,3 @@
+com.pangu.common.sdk.camel.ZabbixRouter
+# com.pangu.common.sdk.camel.ZabbixSenderEndpoint
+com.pangu.common.sdk.camel.ZabbixDefaultComment
