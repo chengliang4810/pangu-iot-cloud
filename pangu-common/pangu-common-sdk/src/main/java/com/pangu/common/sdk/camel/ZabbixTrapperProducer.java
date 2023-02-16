@@ -27,7 +27,10 @@ public class ZabbixTrapperProducer extends DefaultProducer {
     @Override
     public void process(Exchange exchange) throws Exception {
         Message message = exchange.getIn();
-
+        System.out.println("body:::::" + message.getBody());
+        if (message.getBody() != null) {
+            return;
+        }
         if (message.getBody() == null && !(message.getBody() instanceof List)) {
             return;
         }

@@ -17,7 +17,7 @@
 
     <dependencies>
 
-        <!-- zabbix-api -->
+        <!-- myscheme-api -->
         <dependency>
             <groupId>com.pangu</groupId>
             <artifactId>pangu-common-zabbix-api</artifactId>
@@ -38,6 +38,11 @@
         <dependency>
             <groupId>org.apache.camel.springboot</groupId>
             <artifactId>camel-jackson-starter</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.camel.springboot</groupId>
+            <artifactId>camel-stream-starter</artifactId>
         </dependency>
 
     </dependencies>

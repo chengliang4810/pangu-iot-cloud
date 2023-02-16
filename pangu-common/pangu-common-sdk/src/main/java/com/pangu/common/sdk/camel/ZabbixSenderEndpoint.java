@@ -1,8 +1,7 @@
 package com.pangu.common.sdk.camel;
 
-import org.apache.camel.Consumer;
-import org.apache.camel.Processor;
-import org.apache.camel.Producer;
+import org.apache.camel.*;
+import org.apache.camel.support.DefaultConsumer;
 import org.apache.camel.support.DefaultEndpoint;
 
 /**
@@ -15,8 +14,8 @@ public class ZabbixSenderEndpoint extends DefaultEndpoint {
 
     private final ZabbixTrapperProducer producer;
 
-    public ZabbixSenderEndpoint(String endpointUri, ZabbixDefaultComment component) {
-        super(endpointUri, component);
+    public ZabbixSenderEndpoint() {
+        super();
         this.producer = new ZabbixTrapperProducer(this);
     }
 
@@ -27,13 +26,17 @@ public class ZabbixSenderEndpoint extends DefaultEndpoint {
 
     @Override
     public Consumer createConsumer(Processor processor) throws Exception {
-        return null; //TODO
+        return new DefaultConsumer(this, exchange -> {
+            //TODO
+            Message in = exchange.getIn();
+            String body = in.getBody(String.class);
+            System.out.println(body);
+        });
     }
 
     @Override
     public boolean isSingleton() {
-        return false;
+        return true;
     }
-
 
 }
