@@ -1,8 +1,10 @@
 package com.pangu.common.sdk.camel;
 
+import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.google.gson.Gson;
-import com.pangu.common.zabbix.model.ItemValue;
+import com.pangu.common.zabbix.model.DeviceValue;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.camel.Endpoint;
 import org.apache.camel.Exchange;
@@ -27,22 +29,22 @@ public class ZabbixTrapperProducer extends DefaultProducer {
     @Override
     public void process(Exchange exchange) throws Exception {
         Message message = exchange.getIn();
-        System.out.println("body:::::" + message.getBody());
         if (message.getBody() != null) {
             return;
         }
-        if (message.getBody() == null && !(message.getBody() instanceof List)) {
+        if (ObjectUtil.isNull(message.getBody()) && !(message.getBody() instanceof List)) {
             return;
         }
 
-        List<ItemValue> values = (List<ItemValue>) message.getBody();
+        List<DeviceValue> values = message.getBody(List.class);
 
-        for (ItemValue itemValue : values) {
-            if (StrUtil.isEmpty(itemValue.getHostname()) || StrUtil.isEmpty(itemValue.getItemKey()) || StrUtil.isEmpty(itemValue.getItemValue())) {
-                log.error(" process item data error，{}", new Gson().toJson(itemValue));
+        for (DeviceValue deviceValue : values) {
+            if (StrUtil.isEmpty(deviceValue.getDeviceId()) || CollectionUtil.isEmpty(deviceValue.getAttributes())) {
+                log.error("process deviceValue data error，{}", new Gson().toJson(deviceValue));
                 continue;
             }
             itemValueThread.submit(() -> {
+                // 通过线程池开始发送数据
                 // itemDataTransferWorker.in(itemValue);
             });
         }

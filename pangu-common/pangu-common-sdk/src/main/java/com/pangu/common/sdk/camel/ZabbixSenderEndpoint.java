@@ -1,11 +1,13 @@
 package com.pangu.common.sdk.camel;
 
-import org.apache.camel.*;
-import org.apache.camel.support.DefaultConsumer;
+import com.pangu.common.core.exception.ServiceException;
+import org.apache.camel.Consumer;
+import org.apache.camel.Processor;
+import org.apache.camel.Producer;
 import org.apache.camel.support.DefaultEndpoint;
 
 /**
- * zabbix发送端点
+ * 发送zabbix数据端点
  *
  * @author chengliang4810
  * @date 2023/02/15 16:47
@@ -21,22 +23,18 @@ public class ZabbixSenderEndpoint extends DefaultEndpoint {
 
     @Override
     public Producer createProducer() throws Exception {
-        return producer; // 每次 process 都会创建一个对象, 单例返回
+        // 每次 process 都会创建一个对象, 单例返回
+        return producer;
     }
 
     @Override
     public Consumer createConsumer(Processor processor) throws Exception {
-        return new DefaultConsumer(this, exchange -> {
-            //TODO
-            Message in = exchange.getIn();
-            String body = in.getBody(String.class);
-            System.out.println(body);
-        });
+        throw new ServiceException("zabbix sender endpoint not support consumer");
     }
 
     @Override
     public boolean isSingleton() {
-        return true;
+        return false;
     }
 
 }
