@@ -1,10 +1,12 @@
-package com.pangu.common.sdk.camel;
+package com.pangu.common.sdk.core;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.google.gson.Gson;
 import com.pangu.common.zabbix.model.DeviceValue;
+import com.pangu.common.zabbix.service.SenderDataService;
+import com.pangu.manager.api.RemoteDeviceService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.camel.Endpoint;
 import org.apache.camel.Exchange;
@@ -21,18 +23,22 @@ public class ZabbixTrapperProducer extends DefaultProducer {
 
     private final ExecutorService itemValueThread = Executors.newFixedThreadPool(20);
 
-    public ZabbixTrapperProducer(Endpoint endpoint) {
+    private final SenderDataService senderDataService;
+
+    private final RemoteDeviceService remoteDeviceService;
+
+    public ZabbixTrapperProducer(Endpoint endpoint, SenderDataService senderDataService, RemoteDeviceService remoteDeviceService) {
         super(endpoint);
+        this.senderDataService = senderDataService;
+        this.remoteDeviceService = remoteDeviceService;
     }
 
 
     @Override
     public void process(Exchange exchange) throws Exception {
         Message message = exchange.getIn();
-        if (message.getBody() != null) {
-            return;
-        }
-        if (ObjectUtil.isNull(message.getBody()) && !(message.getBody() instanceof List)) {
+
+        if (ObjectUtil.isNull(message.getBody()) ||  !(message.getBody() instanceof List)) {
             return;
         }
 
@@ -43,9 +49,15 @@ public class ZabbixTrapperProducer extends DefaultProducer {
                 log.error("process deviceValue data error，{}", new Gson().toJson(deviceValue));
                 continue;
             }
+            Long id = remoteDeviceService.getDeviceIdByCode(deviceValue.getDeviceId());
+            if (ObjectUtil.isNull(id)){
+                log.warn("device id : {} not exist", id);
+                continue;
+            }
+            deviceValue.setDeviceId(id.toString());
             itemValueThread.submit(() -> {
                 // 通过线程池开始发送数据
-                // itemDataTransferWorker.in(itemValue);
+                senderDataService.sendData(deviceValue);
             });
         }
 

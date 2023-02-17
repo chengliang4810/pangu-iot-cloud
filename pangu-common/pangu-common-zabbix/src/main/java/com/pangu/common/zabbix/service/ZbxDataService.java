@@ -1,5 +1,6 @@
 package com.pangu.common.zabbix.service;
 
+import cn.hutool.core.thread.ThreadUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.pangu.common.core.constant.CommonConstant;
 import com.pangu.common.core.utils.Assert;
@@ -49,33 +50,43 @@ public class ZbxDataService {
     @RabbitListener(queues = "#{zabbixInputDataQueue.name}", ackMode= "MANUAL")
     public void receiveMessage(Channel channel, Message message) {
         long deliveryTag = message.getMessageProperties().getDeliveryTag();
-        try {
-            if (receiveDataService == null && receiveProblemService == null){
-                //负载到不进行消费的服务，消息重新投递
-                channel.basicReject(deliveryTag, true);
-                return;
-            }
-            Map<String, Object> result = JsonUtils.parseObject(message.getBody(), Map.class);
+        ThreadUtil.execAsync(() -> {
+            try {
+                if (receiveDataService == null && receiveProblemService == null){
+                    //负载到不进行消费的服务，消息重新投递
+                    channel.basicReject(deliveryTag, true);
+                    return;
+                }
 
-            if (ObjectUtil.isNotNull(receiveDataService) && ObjectUtil.isNotNull(result.get("itemid"))){
-                receiveDataService.receiveData(JsonUtils.parseObject(message.getBody(), ZbxValue.class));
-                // 消息确认
-                channel.basicAck(deliveryTag, false);
-            } else if (ObjectUtil.isNotNull(receiveProblemService) && ObjectUtil.isNotNull(result.get("eventid"))){
-                receiveProblemService.receiveProblems(JsonUtils.parseObject(message.getBody(), ZbxProblem.class));
-                // 消息确认
-                channel.basicAck(deliveryTag, false);
-                // receiveDataService.receiveProblems(JsonUtils.parseObject(message.getBody(), ZbxProblem.class));
-            } else {
-                //负载到不进行消费的服务，消息重新投递
-                channel.basicReject(deliveryTag, true);
-                log.info("未知的zabbix数据类型 {}", result);
+                Map<String, Object> result = JsonUtils.parseObject(message.getBody(), Map.class);
+
+                if (ObjectUtil.isNotNull(receiveDataService) && ObjectUtil.isNotNull(result.get("itemid"))){
+                    receiveDataService.receiveData(JsonUtils.parseObject(message.getBody(), ZbxValue.class));
+                    // 消息确认
+                    channel.basicAck(deliveryTag, false);
+                } else if (ObjectUtil.isNotNull(receiveProblemService) && ObjectUtil.isNotNull(result.get("eventid"))){
+                    receiveProblemService.receiveProblems(JsonUtils.parseObject(message.getBody(), ZbxProblem.class));
+                    // 消息确认
+                    channel.basicAck(deliveryTag, false);
+                    // receiveDataService.receiveProblems(JsonUtils.parseObject(message.getBody(), ZbxProblem.class));
+                } else {
+                    //负载到不进行消费的服务，消息重新投递
+                    log.info("receiveProblemService is {}", receiveProblemService);
+                    log.info("receiveDataService is {}", receiveDataService);
+                    channel.basicReject(deliveryTag, true);
+                    //log.info("未知的zabbix数据类型 {}", result);
+                }
+                 // 消息确认
+                 // channel.basicAck(deliveryTag, false);
+            } catch (IOException e) {
+                try {
+                    channel.basicReject(deliveryTag, true);
+                } catch (IOException ex) {
+                    log.debug("消息确认失败");
+                }
+                throw new RuntimeException(e);
             }
-             // 消息确认
-             // channel.basicAck(deliveryTag, false);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        });
     }
 
 

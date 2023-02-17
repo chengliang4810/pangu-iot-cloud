@@ -41,4 +41,19 @@ public class RemoteDeviceServiceImpl implements RemoteDeviceService {
         deviceService.update(new Device().setLatestOnline(time), Wrappers.lambdaQuery(Device.class).eq(Device::getCode, deviceCode));
     }
 
+
+    /**
+     * 被代码设备id
+     *
+     * @param deviceCode 设备代码
+     */
+    @Override
+    public Long getDeviceIdByCode(String deviceCode) {
+        try {
+            return deviceService.queryDeviceIdByCode(deviceCode);
+        } catch (Exception e){
+            log.error("getDeviceIdByCode error {}", e);
+            return null;
+        }
+    }
 }

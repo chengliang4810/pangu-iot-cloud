@@ -22,6 +22,7 @@ import com.pangu.iot.manager.product.domain.ProductEvent;
 import com.pangu.iot.manager.product.service.IProductEventService;
 import com.pangu.manager.api.model.AlarmDTO;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,6 +38,7 @@ import java.util.stream.Collectors;
  * @author chengliang4810
  * @date 2023-02-13
  */
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class ProblemServiceImpl extends ServiceImpl<ProblemMapper, Problem> implements IProblemService {
@@ -55,6 +57,10 @@ public class ProblemServiceImpl extends ServiceImpl<ProblemMapper, Problem> impl
     @Override
     public void addAlarmRecord(AlarmDTO alarmDTO) {
         ProductEvent one = productEventService.getOne(Wrappers.lambdaQuery(ProductEvent.class).eq(ProductEvent::getId, alarmDTO.getObjectId()));
+        if (one == null) {
+            log.error("未找到对应的事件信息，事件id：{}", alarmDTO.getObjectId());
+            return;
+        }
         Problem problem = problemConvert.toEntity(alarmDTO);
         problem.setName(one.getName());
         baseMapper.insertOrUpdate(problem);

@@ -23,6 +23,11 @@ import java.util.List;
 public interface IDeviceService extends IService<Device> {
 
     /**
+     * 获取设备ID使用Code
+     */
+    Long queryDeviceIdByCode(String code);
+
+    /**
      * 查询设备
      */
     DeviceDetailVO queryById(Long id);

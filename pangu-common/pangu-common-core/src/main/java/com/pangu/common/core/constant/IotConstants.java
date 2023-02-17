@@ -73,4 +73,11 @@ public interface IotConstants {
      */
     String ATTRIBUTE_KEY_TAG_NAME = "__attribute_key__";
 
+
+    /**
+     * 设备ID缓存前缀
+     */
+    String DEVICE_CODE_CACHE_PREFIX = "com:pangu:iot:device:code:";
+
+
 }

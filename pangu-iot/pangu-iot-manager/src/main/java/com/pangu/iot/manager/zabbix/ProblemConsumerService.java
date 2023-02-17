@@ -43,7 +43,7 @@ public class ProblemConsumerService implements ReceiveProblemService {
         if (tagMap.containsKey(IotConstants.DEVICE_STATUS_OFFLINE_TAG)){
             // 设备离线
             deviceStatusService.offline(zbxProblem.getHostname());
-            // log.info("设备离线：{}", zbxProblem);
+            log.info("设备离线：{}", zbxProblem);
         } else if (tagMap.containsKey(IotConstants.DEVICE_STATUS_ONLINE_TAG)) {
             // 设备上线
             log.info("设备上线：{}", zbxProblem);

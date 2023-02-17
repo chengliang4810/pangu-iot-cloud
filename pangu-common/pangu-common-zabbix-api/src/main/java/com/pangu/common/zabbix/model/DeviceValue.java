@@ -17,7 +17,7 @@ import java.util.Map;
 public class DeviceValue {
 
     /**
-     * 设备唯一编码 对应数据库device_code字段，非主键
+     * 设备唯一ID 对应数据库device_code字段，非主键
      */
     private String deviceId;
 

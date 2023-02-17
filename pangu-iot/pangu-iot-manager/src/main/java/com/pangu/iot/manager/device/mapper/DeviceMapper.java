@@ -10,6 +10,7 @@ import com.pangu.iot.manager.device.domain.vo.DeviceDetailVO;
 import com.pangu.iot.manager.device.domain.vo.DeviceListVO;
 import com.pangu.iot.manager.device.domain.vo.DeviceVO;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 /**
  * 设备Mapper接口
@@ -35,4 +36,14 @@ public interface DeviceMapper extends BaseMapperPlus<DeviceMapper, Device, Devic
      * @return {@link DeviceDetailVO}
      */
     DeviceDetailVO detailById(Long id);
+
+    /**
+     * 查询设备id 根据code
+     *
+     * @param code 编码
+     * @return {@link Long}
+     */
+    @Select("select id from iot_device where status = 1 and code = #{code}")
+    Long selectDeviceIdByCode(String code);
+
 }

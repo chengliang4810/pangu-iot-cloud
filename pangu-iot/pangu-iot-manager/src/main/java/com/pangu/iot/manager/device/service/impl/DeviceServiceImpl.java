@@ -13,6 +13,7 @@ import com.pangu.common.core.utils.JsonUtils;
 import com.pangu.common.core.utils.StringUtils;
 import com.pangu.common.mybatis.core.page.PageQuery;
 import com.pangu.common.mybatis.core.page.TableDataInfo;
+import com.pangu.common.redis.utils.RedisUtils;
 import com.pangu.common.satoken.utils.LoginHelper;
 import com.pangu.data.api.RemoteDeviceStatusService;
 import com.pangu.iot.manager.device.convert.DeviceConvert;
@@ -44,6 +45,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.pangu.common.core.constant.IotConstants.DEVICE_CODE_CACHE_PREFIX;
+
 /**
  * 设备Service业务层处理
  *
@@ -64,6 +67,33 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> impleme
     private final IProductEventServiceService productEventServiceService;
     private final IDeviceGroupRelationService deviceGroupRelationService;
     private final IServiceExecuteRecordService serviceExecuteRecordService;
+
+    /**
+     * 获取设备ID使用code
+     *
+     * @param code
+     */
+    @Override
+    public Long queryDeviceIdByCode(String code) {
+        if (StringUtils.isEmpty(code)) {
+            return null;
+        }
+
+        // 取缓存
+        Long cacheId = RedisUtils.getCacheObject(DEVICE_CODE_CACHE_PREFIX + code);
+        if (ObjectUtil.isNotNull(cacheId)) {
+            return cacheId;
+        }
+
+        // 添加缓存
+        Long id = baseMapper.selectDeviceIdByCode(code);
+        if (ObjectUtil.isNotNull(id)) {
+            RedisUtils.setCacheObject(DEVICE_CODE_CACHE_PREFIX + code, id);
+        }
+
+        return id;
+    }
+
 
     /**
      * 查询设备

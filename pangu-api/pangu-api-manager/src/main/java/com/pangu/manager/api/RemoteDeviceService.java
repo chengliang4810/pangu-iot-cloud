@@ -17,4 +17,11 @@ public interface RemoteDeviceService {
     void updateDeviceLastOnlineTime(String deviceCode, int ns);
 
 
+    /**
+     * 被代码设备id
+     *
+     * @param deviceCode 设备代码
+     */
+    Long getDeviceIdByCode(String deviceCode);
+
 }

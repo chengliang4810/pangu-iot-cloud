@@ -1,6 +1,8 @@
-package com.pangu.common.sdk.camel;
+package com.pangu.common.sdk.core;
 
 import com.pangu.common.core.exception.ServiceException;
+import com.pangu.common.zabbix.service.SenderDataService;
+import com.pangu.manager.api.RemoteDeviceService;
 import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
@@ -16,9 +18,9 @@ public class ZabbixSenderEndpoint extends DefaultEndpoint {
 
     private final ZabbixTrapperProducer producer;
 
-    public ZabbixSenderEndpoint() {
+    public ZabbixSenderEndpoint(SenderDataService senderDataService, RemoteDeviceService remoteDeviceService) {
         super();
-        this.producer = new ZabbixTrapperProducer(this);
+        this.producer = new ZabbixTrapperProducer(this, senderDataService, remoteDeviceService);
     }
 
     @Override
