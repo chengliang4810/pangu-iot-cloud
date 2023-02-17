@@ -1,7 +1,9 @@
 package com.pangu.iot.driver;
 
 import cn.hutool.core.util.RandomUtil;
+import com.pangu.common.core.exception.ServiceException;
 import com.pangu.common.sdk.service.DriverDataService;
+import com.pangu.common.zabbix.model.DeviceFunction;
 import com.pangu.common.zabbix.model.DeviceValue;
 import org.springframework.stereotype.Component;
 
@@ -22,11 +24,14 @@ public class DefaultDriverDataService implements DriverDataService {
 
     /**
      * 控制设备
+     *
+     * @param deviceFunction
      */
     @Override
-    public void control() {
-
+    public Boolean control(DeviceFunction deviceFunction) {
+        // 通过异常信息记录日志
+        throw new ServiceException("暂不支持控制设备");
+        // return true;
     }
-
 
 }

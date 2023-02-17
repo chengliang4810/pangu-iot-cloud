@@ -1,5 +1,6 @@
 package com.pangu.common.sdk.service;
 
+import com.pangu.common.zabbix.model.DeviceFunction;
 import com.pangu.common.zabbix.model.DeviceValue;
 
 import java.util.List;
@@ -23,7 +24,10 @@ public interface DriverDataService {
 
     /**
      * 控制设备
+     *
+     * @param deviceFunction 控制设备功能参数
+     * @return {@link Boolean} 控制成功返回true，否则返回false
      */
-    void control();
+    Boolean control(DeviceFunction deviceFunction);
 
 }
