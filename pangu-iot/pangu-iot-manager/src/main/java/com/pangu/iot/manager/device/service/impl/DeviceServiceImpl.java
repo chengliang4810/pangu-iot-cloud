@@ -307,6 +307,7 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> impleme
 //        body.add(map);
 
         //下发命令 执行
+        // TODO 尝试通过emqx下发命令
         // Forest.post("/device/action/exec").host("127.0.0.1").port(12800).contentTypeJson().addBody(JSON.toJSON(body)).execute();
 
         //记录服务日志
