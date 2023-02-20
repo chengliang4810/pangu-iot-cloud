@@ -1,4 +1,4 @@
-package com.pangu.iot.driver;
+package com.pangu.iot.driver.service;
 
 import cn.hutool.core.util.RandomUtil;
 import com.pangu.common.core.exception.ServiceException;

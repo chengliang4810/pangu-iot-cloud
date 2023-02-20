@@ -15,6 +15,7 @@ import com.pangu.common.mybatis.core.page.PageQuery;
 import com.pangu.common.mybatis.core.page.TableDataInfo;
 import com.pangu.common.redis.utils.RedisUtils;
 import com.pangu.common.satoken.utils.LoginHelper;
+import com.pangu.common.zabbix.model.DeviceFunction;
 import com.pangu.data.api.RemoteDeviceStatusService;
 import com.pangu.iot.manager.device.convert.DeviceConvert;
 import com.pangu.iot.manager.device.domain.Device;
@@ -38,7 +39,10 @@ import com.pangu.iot.manager.product.service.IProductServiceParamService;
 import com.pangu.iot.manager.product.service.IProductServiceService;
 import com.pangu.system.api.model.LoginUser;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboReference;
+import org.eclipse.paho.client.mqttv3.MqttClient;
+import org.eclipse.paho.client.mqttv3.MqttException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -53,14 +57,16 @@ import static com.pangu.common.core.constant.IotConstants.DEVICE_CODE_CACHE_PREF
  * @author chengliang4810
  * @date 2023-01-06
  */
-@RequiredArgsConstructor
+@Slf4j
 @Service
+@RequiredArgsConstructor
 public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> implements IDeviceService {
 
     @DubboReference
     private final RemoteDeviceStatusService deviceStatusService;
 
     private final DeviceMapper baseMapper;
+    private final MqttClient mqttClient;
     private final DeviceConvert deviceConvert;
     private final IProductServiceService productServiceService;
     private final IProductServiceParamService productServiceParamService;
@@ -262,6 +268,7 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> impleme
 
     @Override
     public void executeService(Long deviceId, Long serviceId, List<ServiceExecuteBO.ServiceParam> serviceParams, Integer executeType) {
+        long startTime = System.currentTimeMillis();
         boolean executeStatus = true;
         Assert.notNull(executeType, "执行类型不能为空");
         // 查询设备信息
@@ -269,21 +276,10 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> impleme
         if (ObjectUtil.isNull(device)){
             executeStatus = false;
         }
-        //封装执行参数
-//        List<Map<String, Object>> body = new ArrayList<>();
-//
-//        Map<String, Object> map = new ConcurrentHashMap<>(2);
-//
-//        map.put("device", deviceId);
-//
-//        List<Map<String, Object>> serviceList = new ArrayList<>();
-//        Map<String, Object> serviceMap = new ConcurrentHashMap<>(2);
-//        ProductService productService = new QProductService().id.eq(serviceId).findOne();
-//        if (null == productService) {
-//            throw new ServiceException(BizExceptionEnum.SERVICE_NOT_EXISTS);
-//        }
-//        serviceMap.put("name", productService.getName());
-//
+        ProductService productService = productServiceService.getById(serviceId);
+        if (null == productService) {
+            executeStatus = false;
+        }
 
         List<ProductServiceParam> paramList = productServiceParamService.list(Wrappers.<ProductServiceParam>lambdaQuery().eq(ProductServiceParam::getServiceId, serviceId));
         Map<String, String> paramStr = null;
@@ -298,17 +294,20 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> impleme
                     }
                 }
             }
-
-            // serviceMap.put("param", paramStr);
         }
-
-//        serviceList.add(serviceMap);
-//        map.put("service", serviceList);
-//        body.add(map);
-
         //下发命令 执行
-        // TODO 尝试通过emqx下发命令
-        // Forest.post("/device/action/exec").host("127.0.0.1").port(12800).contentTypeJson().addBody(JSON.toJSON(body)).execute();
+        if (executeStatus){
+            try {
+                DeviceFunction deviceFunction = new DeviceFunction();
+                deviceFunction.setDeviceId(deviceId.toString());
+                deviceFunction.setIdentifier(productService.getMark());
+                deviceFunction.setParams(paramStr);
+                String topic = "iot/device/" + deviceId + "/driver/"+ 1 +"/function/" + serviceId + "/exec";
+                mqttClient.publish(topic, JsonUtils.toJsonString(deviceFunction).getBytes(), 2, false);
+            } catch (MqttException e) {
+                throw new RuntimeException(e);
+            }
+        }
 
         //记录服务日志
         ServiceExecuteRecord serviceExecuteRecord = new ServiceExecuteRecord();
@@ -324,6 +323,8 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> impleme
         serviceExecuteRecord.setExecuteUser(getLoginUsername());
         serviceExecuteRecord.setExecuteStatus(executeStatus);
         serviceExecuteRecordService.save(serviceExecuteRecord);
+
+        log.info("执行功能耗时：{}ms", System.currentTimeMillis() - startTime);
     }
 
     /**

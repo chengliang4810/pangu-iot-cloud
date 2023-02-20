@@ -108,6 +108,11 @@
             <artifactId>pangu-common-zabbix</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.pangu</groupId>
+            <artifactId>pangu-common-emqx</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>

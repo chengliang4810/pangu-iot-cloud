@@ -11,6 +11,16 @@ spring:
     # 环境配置
     active: @profiles.active@
 
+mqtt:
+  config:
+    broker: tcp://10.0.0.34:1883
+    userName: admin
+    password: admin
+    cleanSession: false
+    reconnect: true
+    timeout: 30
+    keepAlive: 60
+
 --- # nacos 配置
 spring:
   cloud:

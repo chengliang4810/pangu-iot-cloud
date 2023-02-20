@@ -21,7 +21,7 @@ public class ZabbixRouter extends RouteBuilder {
             .to("rabbitmq:pangu.exchange.driver.heartbeat?queue=queue.driver.heartbeat&routingKey=driver_route_heartbeat");
 
         // 读取设备数据
-        from("timer://TestTimer2?period=2000")
+        from("timer://TestTimer2?period=2000s")
             .process(exchange -> exchange.getIn().setBody(driverDataService.read()))
             .to("zabbix");
 

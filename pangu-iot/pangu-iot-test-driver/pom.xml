@@ -66,6 +66,11 @@
             <artifactId>pangu-common-sdk</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.pangu</groupId>
+            <artifactId>pangu-common-emqx</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>
