@@ -17,6 +17,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.net.Inet4Address;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +36,9 @@ public class EmqxConfig {
 
     @Value("${spring.application.name}")
     private String applicationName;
+
+    @Resource
+    private List<SubscriptTopic> subscriptTopics;
 
     /**
      * MQTT的连接设置
@@ -64,8 +68,7 @@ public class EmqxConfig {
 
         //得到所有使用@Topic注解的类
         Map<String, Object> beansWithAnnotation = applicationContext.getBeansWithAnnotation(Topic.class);
-        List<SubscriptTopic> topicMap = new ArrayList<SubscriptTopic>(beansWithAnnotation.size());
-
+        List<SubscriptTopic> topicMap = subscriptTopics != null ? subscriptTopics : new ArrayList<SubscriptTopic>(beansWithAnnotation.size());
         //遍历所有使用@Topic注解的类
         for (String className : beansWithAnnotation.keySet()) {
             Class<?> classByteCode = beansWithAnnotation.get(className).getClass();

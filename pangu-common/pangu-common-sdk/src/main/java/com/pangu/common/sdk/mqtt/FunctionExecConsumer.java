@@ -1,8 +1,6 @@
 package com.pangu.common.sdk.mqtt;
 
 import com.pangu.common.core.utils.JsonUtils;
-import com.pangu.common.emqx.annotation.Topic;
-import com.pangu.common.emqx.constant.Pattern;
 import com.pangu.common.emqx.core.MqttConsumer;
 import com.pangu.common.sdk.service.DriverDataService;
 import com.pangu.common.zabbix.model.DeviceFunction;
@@ -16,7 +14,6 @@ import javax.annotation.Resource;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-@Topic(topic = "iot/device/+/function/+/exec", qos = 2, patten = Pattern.SHARE, group = "groupName")
 public class FunctionExecConsumer extends MqttConsumer<DeviceFunction> {
 
     @Resource
