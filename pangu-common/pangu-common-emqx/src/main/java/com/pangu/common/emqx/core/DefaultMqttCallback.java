@@ -6,7 +6,12 @@ import com.pangu.common.emqx.constant.Pattern;
 import com.pangu.common.emqx.doamin.SubscriptTopic;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.eclipse.paho.client.mqttv3.*;
+import org.eclipse.paho.mqttv5.client.*;
+import org.eclipse.paho.mqttv5.common.MqttException;
+import org.eclipse.paho.mqttv5.common.MqttMessage;
+import org.eclipse.paho.mqttv5.common.MqttSubscription;
+import org.eclipse.paho.mqttv5.common.packet.MqttProperties;
+import org.eclipse.paho.mqttv5.common.util.MqttTopicValidator;
 
 import java.util.List;
 
@@ -17,29 +22,56 @@ import java.util.List;
  * @date 2022/08/01
  */
 @Slf4j
-public class MqttCallback implements MqttCallbackExtended {
+public class DefaultMqttCallback implements MqttCallback {
 
     private final List<SubscriptTopic> topicMap;
 
-    public MqttCallback(List<SubscriptTopic> topicMap) {
+    public DefaultMqttCallback(List<SubscriptTopic> topicMap) {
         this.topicMap = topicMap;
     }
 
+
     /**
-     * 客户端断开后触发
+     * 断开连接
      *
-     * @param throwable 异常
      */
-    @SneakyThrows
     @Override
-    public void connectionLost(Throwable throwable) {
+    @SneakyThrows
+    public void disconnected(MqttDisconnectResponse mqttDisconnectResponse) {
         MqttClient client = SpringUtils.getBean(MqttClient.class);
-        MqttConnectOptions option = SpringUtils.getBean(MqttConnectOptions.class);
+        MqttConnectionOptions option = SpringUtils.getBean(MqttConnectionOptions.class);
         while (!client.isConnected()) {
             log.info("client is not connected, try to reconnect");
             client.connect(option);
             ThreadUtil.sleep(1000);
         }
+    }
+
+    /**
+     * mqtt发生错误
+     *
+     */
+    @Override
+    public void mqttErrorOccurred(MqttException e) {
+        e.printStackTrace();
+    }
+
+    /**
+     * 发布消息成功
+     *
+     * @param token mqtt令牌
+     */
+    @Override
+    public void deliveryComplete(IMqttToken token) {
+        String[] topics = token.getTopics();
+        for (String topic : topics) {
+            log.debug("向主题 {} 发送数据", topic);
+        }
+    }
+
+    @Override
+    public void authPacketArrived(int i, MqttProperties mqttProperties) {
+
     }
 
     /**
@@ -67,38 +99,26 @@ public class MqttCallback implements MqttCallbackExtended {
      * @return 是否为通配符主题的子主题
      */
     private boolean isMatched(String topicFilter, String topic) {
-        return MqttTopic.isMatched(topicFilter, topic);
+        return MqttTopicValidator.isMatched(topicFilter, topic);
     }
 
-    /**
-     * 发布消息成功
-     *
-     * @param token token
-     */
-    @SneakyThrows
-    @Override
-    public void deliveryComplete(IMqttDeliveryToken token) {
-        String[] topics = token.getTopics();
-        for (String topic : topics) {
-            log.debug("向主题 {} 发送数据", topic);
-        }
-    }
 
     /**
      * 连接emq服务器后触发
-     *
-     * @param b
-     * @param s
      */
     @SneakyThrows
     @Override
     public void connectComplete(boolean b, String s) {
         MqttClient client = SpringUtils.getBean(MqttClient.class);
         if (client.isConnected()) {
-            for (SubscriptTopic sub : topicMap) {
-                client.subscribe(sub.getSubTopic(), sub.getQos(), sub.getMessageListener());
-                log.info("订阅主题 {}", sub.getSubTopic());
+            MqttSubscription[] mqttSubscriptions = new MqttSubscription[topicMap.size()];
+            IMqttMessageListener[] messageListeners = new IMqttMessageListener[topicMap.size()];
+            for (int i = 0; i < topicMap.size(); i++) {
+                mqttSubscriptions[i] = new MqttSubscription(topicMap.get(i).getSubTopic(), topicMap.get(i).getQos());
+                messageListeners[i] = topicMap.get(i).getMessageListener();
+                log.info("订阅主题 {}", topicMap.get(i).getSubTopic());
             }
+            client.subscribe(mqttSubscriptions, messageListeners);
             log.info("共订阅 {}   个主题!", topicMap.size());
         }
     }
