@@ -18,7 +18,7 @@ mqtt:
     password: admin
     cleanSession: false
     reconnect: true
-    timeout: 30
+    timeout: 1000
     keepAlive: 60
 
 --- # nacos 配置

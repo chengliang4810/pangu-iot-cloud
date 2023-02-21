@@ -302,7 +302,7 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> impleme
                 deviceFunction.setDeviceId(deviceId.toString());
                 deviceFunction.setIdentifier(productService.getMark());
                 deviceFunction.setParams(paramStr);
-                String topic = "iot/device/" + deviceId + "/driver/"+ 1 +"/function/" + serviceId + "/exec";
+                String topic = "iot/device/" + deviceId + "/function/" + serviceId + "/exec";
                 mqttClient.publish(topic, JsonUtils.toJsonString(deviceFunction).getBytes(), 2, false);
             } catch (MqttException e) {
                 throw new RuntimeException(e);
