@@ -82,6 +82,7 @@ public class EmqxConfig {
             // 判断共享订阅类型
             String subTopic = topic;
             if (patten == Pattern.SHARE) {
+                group = group.replace("${spring.application.name}", applicationName);
                 subTopic = "$share/" + group + "/" + topic;
             } else if (patten == Pattern.QUEUE) {
                 subTopic = "$queue/" + topic;
