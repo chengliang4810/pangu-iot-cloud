@@ -26,6 +26,11 @@ public class DefaultMqttCallback implements MqttCallback {
 
     private final List<SubscriptTopic> topicMap;
 
+    /**
+     * 默认mqtt回调
+     *
+     * @param topicMap 订阅列表
+     */
     public DefaultMqttCallback(List<SubscriptTopic> topicMap) {
         this.topicMap = topicMap;
     }
@@ -69,8 +74,16 @@ public class DefaultMqttCallback implements MqttCallback {
         }
     }
 
+    /**
+     * 身份验证数据包到达
+     *
+     * @param reasonCode The Reason code, can be Success (0),
+     *                   Continue authentication (24)
+     *                   Re-authenticate (25).
+     * @param mqttProperties mqtt属性
+     */
     @Override
-    public void authPacketArrived(int i, MqttProperties mqttProperties) {
+    public void authPacketArrived(int reasonCode, MqttProperties mqttProperties) {
 
     }
 
