@@ -11,6 +11,7 @@ import com.pangu.common.core.utils.Assert;
 import com.pangu.common.core.utils.StringUtils;
 import com.pangu.common.mybatis.core.page.PageQuery;
 import com.pangu.common.mybatis.core.page.TableDataInfo;
+import com.pangu.iot.manager.product.convert.ProductServiceConvert;
 import com.pangu.iot.manager.product.domain.ProductEventService;
 import com.pangu.iot.manager.product.domain.ProductService;
 import com.pangu.iot.manager.product.domain.ProductServiceParam;
@@ -30,7 +31,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * 产品功能Service业务层处理
@@ -44,6 +44,7 @@ public class ProductServiceServiceImpl extends ServiceImpl<ProductServiceMapper,
 
     private final ProductServiceMapper baseMapper;
     private final IProductServiceParamService serviceParamService;
+    private final ProductServiceConvert productServiceConvert;
     private final IProductServiceRelationService serviceRelationService;
     private final IProductEventServiceService productEventServiceService;
 
@@ -62,7 +63,7 @@ public class ProductServiceServiceImpl extends ServiceImpl<ProductServiceMapper,
     public TableDataInfo<ProductServiceVO> queryPageList(ProductServiceBO bo, PageQuery pageQuery) {
         LambdaQueryWrapper<ProductService> lqw = buildQueryWrapper(bo);
         Page<ProductServiceVO> result = baseMapper.selectProduceVoPageList(pageQuery.build(), lqw);
-        buildServiceParam(result.getRecords());
+        // buildServiceParam(result.getRecords());
         // 计算产品功能是否是继承的
         buildServiceInherit(bo.getRelationId(), result.getRecords());
         return TableDataInfo.build(result);
@@ -81,25 +82,25 @@ public class ProductServiceServiceImpl extends ServiceImpl<ProductServiceMapper,
         records.parallelStream().filter(productServiceVO -> !deviceId.equals(productServiceVO.getRelationId())).forEach(productServiceVO -> productServiceVO.setInherit(true));
     }
 
-    /**
-     * 构建服务参数
-     *
-     * @param serviceVoList
-     */
-    private void buildServiceParam(List<ProductServiceVO> serviceVoList) {
-        //查询关联的参数
-        List<Long> sids = serviceVoList.parallelStream().map(ProductServiceVO::getId).collect(Collectors.toList());
-        if (sids.isEmpty()) {
-            return;
-        }
-        List<ProductServiceParam> serviceParams = serviceParamService.list(Wrappers.<ProductServiceParam>lambdaQuery().in(ProductServiceParam::getServiceId, sids));
-        Map<Long, List<ProductServiceParam>> map = serviceParams.parallelStream().collect(Collectors.groupingBy(ProductServiceParam::getServiceId));
-        serviceVoList.forEach(productService -> {
-            if (null != map.get(productService.getId())) {
-                productService.setProductServiceParamList(map.get(productService.getId()));
-            }
-        });
-    }
+//    /**
+//     * 构建服务参数
+//     *
+//     * @param serviceVoList
+//     */
+//    private void buildServiceParam(List<ProductServiceVO> serviceVoList) {
+//        //查询关联的参数
+//        List<Long> sids = serviceVoList.parallelStream().map(ProductServiceVO::getId).collect(Collectors.toList());
+//        if (sids.isEmpty()) {
+//            return;
+//        }
+////        List<ProductServiceParam> serviceParams = serviceParamService.list(Wrappers.<ProductServiceParam>lambdaQuery().in(ProductServiceParam::getServiceId, sids));
+////        Map<Long, List<ProductServiceParam>> map = serviceParams.parallelStream().collect(Collectors.groupingBy(ProductServiceParam::getServiceId));
+////        serviceVoList.forEach(productService -> {
+////            if (null != map.get(productService.getId())) {
+////                productService.setProductServiceParamList(map.get(productService.getId()));
+////            }
+////        });
+//    }
 
     /**
      * 查询产品功能列表
@@ -108,7 +109,7 @@ public class ProductServiceServiceImpl extends ServiceImpl<ProductServiceMapper,
     public List<ProductServiceVO> queryList(ProductServiceBO bo) {
         LambdaQueryWrapper<ProductService> lqw = buildQueryWrapper(bo);
         List<ProductServiceVO> serviceVOList = baseMapper.selectProduceVoList(lqw);
-        buildServiceParam(serviceVOList);
+        // buildServiceParam(serviceVOList);
         // 计算产品功能是否是继承的
         buildServiceInherit(bo.getProdId(), serviceVOList);
         return serviceVOList;
@@ -157,13 +158,13 @@ public class ProductServiceServiceImpl extends ServiceImpl<ProductServiceMapper,
         Assert.isFalse(exist, "功能已存在");
 
         // 数据入库
-        ProductService add = BeanUtil.toBean(bo, ProductService.class);
+        ProductService add = productServiceConvert.toEntity(bo);
         boolean flag = baseMapper.insert(add) > 0;
 
-        // 保存产品功能参数
-        List<ProductServiceParam> serviceParamList = bo.getProductServiceParamList();
-        serviceParamList.forEach(param -> param.setServiceId(add.getId()));
-        serviceParamService.saveBatch(serviceParamList);
+//        // 保存产品功能参数
+//        List<ProductServiceParam> serviceParamList = bo.getProductServiceParamList();
+//        serviceParamList.forEach(param -> param.setServiceId(add.getId()));
+//        serviceParamService.saveBatch(serviceParamList);
 
         // 保存产品与功能关系
         Long relationId = ObjectUtil.isNotNull(bo.getRelationId()) ? bo.getRelationId() : bo.getProdId();
@@ -191,9 +192,9 @@ public class ProductServiceServiceImpl extends ServiceImpl<ProductServiceMapper,
         Assert.isFalse(exist, "功能已存在");
 
         // 更新产品功能参数
-        List<ProductServiceParam> serviceParamList = bo.getProductServiceParamList();
-        serviceParamList.forEach(param -> param.setServiceId(bo.getId()));
-        serviceParamService.saveOrUpdateBatch(serviceParamList);
+//        List<ProductServiceParam> serviceParamList = bo.getProductServiceParamList();
+//        serviceParamList.forEach(param -> param.setServiceId(bo.getId()));
+//        serviceParamService.saveOrUpdateBatch(serviceParamList);
 
         // 删除旧产品与功能关系，新增新的产品与功能关系
         Long relationId = bo.getRelationId();

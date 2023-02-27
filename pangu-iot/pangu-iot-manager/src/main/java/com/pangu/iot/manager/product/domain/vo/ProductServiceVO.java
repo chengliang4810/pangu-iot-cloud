@@ -2,10 +2,7 @@ package com.pangu.iot.manager.product.domain.vo;
 
 import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import com.alibaba.excel.annotation.ExcelProperty;
-import com.pangu.iot.manager.product.domain.ProductServiceParam;
 import lombok.Data;
-
-import java.util.List;
 
 
 /**
@@ -61,10 +58,16 @@ public class ProductServiceVO {
      */
     private Long relationId;
 
+
     /**
-     * 产品服务参数列表
+     * 数据类型
      */
-    private List<ProductServiceParam> productServiceParamList;
+    private String dataType;
+
+    /**
+     * 规格
+     */
+    private String specs;
 
 
 }

@@ -1,12 +1,13 @@
 package com.pangu.iot.manager.product.convert;
 
-import java.util.List;
-
-import com.pangu.iot.manager.product.domain.ProductService;
-import com.pangu.iot.manager.product.domain.vo.ProductServiceVO;
-import com.pangu.iot.manager.product.domain.bo.ProductServiceBO;
 import com.pangu.common.core.convert.CommonConvert;
+import com.pangu.iot.manager.device.enums.IotDataType;
+import com.pangu.iot.manager.product.domain.ProductService;
+import com.pangu.iot.manager.product.domain.bo.ProductServiceBO;
+import com.pangu.iot.manager.product.domain.vo.ProductServiceVO;
 import org.mapstruct.Mapper;
+
+import java.util.List;
 
 /**
  * 产品功能Convert接口
@@ -81,5 +82,16 @@ public interface ProductServiceConvert extends CommonConvert {
      * @return List<ProductServiceVO>
      */
     List<ProductServiceVO> toVoList(List<ProductService> entities);
+
+    //枚举类字段转换
+    default IotDataType customConverter(String name){
+        for (IotDataType dataType: IotDataType.values()){
+            if (dataType.name().equals(name)){
+                return dataType;
+            }
+        }
+        return null;
+    }
+
 
 }
