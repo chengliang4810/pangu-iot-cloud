@@ -1,7 +1,6 @@
 package com.pangu.common.emqx.decoder;
 
-import org.eclipse.paho.client.mqttv3.MqttMessage;
-
+import org.eclipse.paho.mqttv5.common.MqttMessage;
 /**
  * 消息解码器
  *

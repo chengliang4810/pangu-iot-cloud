@@ -4,7 +4,7 @@ import com.pangu.common.emqx.constant.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.eclipse.paho.client.mqttv3.IMqttMessageListener;
+import org.eclipse.paho.mqttv5.client.IMqttMessageListener;
 
 /**
  * 订阅主题

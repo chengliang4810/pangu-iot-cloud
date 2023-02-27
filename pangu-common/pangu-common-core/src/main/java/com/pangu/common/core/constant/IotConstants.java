@@ -80,4 +80,35 @@ public interface IotConstants {
     String DEVICE_CODE_CACHE_PREFIX = "com:pangu:iot:device:code:";
 
 
+    /**
+     * Topic主题相关
+     *
+     * @author chengliang
+     * @date 2023/02/21
+     */
+    public interface Topic {
+
+        /**
+         * 设备功能执行主题
+         */
+        String DEVICE_EXECUTE_TOPIC_TPL = "iot/device/{}/function/{}/exec";
+
+        /**
+         * 设备功能执行结果主题
+         */
+        String DEVICE_EXECUTE_RESULT_TOPIC_TPL = "iot/device/{}/function/{}/result";
+
+        /**
+         * 设备功能执行订阅主题
+         */
+        String DEVICE_EXECUTE_SUBSCRIBE_TOPIC = "iot/device/+/function/+/exec";
+
+        /**
+         * 设备功能执行订阅主题
+         */
+        String DEVICE_EXECUTE_SHARE_SUBSCRIBE_TOPIC = "$share/{}Group/iot/device/#/function/#/exec";
+
+    }
+
+
 }
