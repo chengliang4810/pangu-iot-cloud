@@ -6,7 +6,7 @@ import lombok.Setter;
 import java.util.Map;
 
 /**
- * 方便理解，转换命名
+ * 设备数据
  *
  * @author chengliang4810
  * @date 2023/01/09 11:24
