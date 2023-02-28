@@ -186,6 +186,16 @@ public class RedisUtils {
     }
 
     /**
+     * 得到缓存键数
+     *
+     * @param pattern 表达式
+     * @return {@link Long}
+     */
+    public static Long getCacheKeyNumber(final String pattern) {
+        return CLIENT.getKeys().getKeysStreamByPattern(pattern).count();
+    }
+
+    /**
      * 获得key剩余存活时间
      *
      * @param key 缓存键值

@@ -1,24 +1,27 @@
 package com.pangu.iot.manager.driver.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.pangu.common.core.constant.IotConstants;
 import com.pangu.common.core.utils.StringUtils;
 import com.pangu.common.mybatis.core.page.PageQuery;
 import com.pangu.common.mybatis.core.page.TableDataInfo;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import com.pangu.common.redis.utils.RedisUtils;
+import com.pangu.iot.manager.driver.convert.DriverConvert;
+import com.pangu.iot.manager.driver.domain.Driver;
 import com.pangu.iot.manager.driver.domain.bo.DriverBO;
 import com.pangu.iot.manager.driver.domain.vo.DriverVO;
-import com.pangu.iot.manager.driver.domain.Driver;
 import com.pangu.iot.manager.driver.mapper.DriverMapper;
 import com.pangu.iot.manager.driver.service.IDriverService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Collection;
 
 /**
  * 协议驱动Service业务层处理
@@ -31,6 +34,7 @@ import java.util.Collection;
 public class DriverServiceImpl extends ServiceImpl<DriverMapper, Driver> implements IDriverService {
 
     private final DriverMapper baseMapper;
+    private final DriverConvert driverConvert;
 
     @Override
     public Driver selectByServiceName(String serviceName) {
@@ -51,8 +55,20 @@ public class DriverServiceImpl extends ServiceImpl<DriverMapper, Driver> impleme
     @Override
     public TableDataInfo<DriverVO> queryPageList(DriverBO bo, PageQuery pageQuery) {
         LambdaQueryWrapper<Driver> lqw = buildQueryWrapper(bo);
-        Page<DriverVO> result = baseMapper.selectVoPage(pageQuery.build(), lqw);
-        return TableDataInfo.build(result);
+        Page<Driver> driverPage = baseMapper.selectPage(pageQuery.build(), lqw);
+        List<DriverVO> voList = driverConvert.toVoList(driverPage.getRecords());
+        voList.forEach(vo -> vo.setServerNumber(getDriverServerNumber(vo.getServiceName())));
+        return TableDataInfo.build(voList, driverPage.getTotal());
+    }
+
+    /**
+     * 获取驱动服务数量
+     *
+     * @param serviceName 服务名称
+     * @return {@link Long}
+     */
+    private Long getDriverServerNumber(String serviceName) {
+       return RedisUtils.getCacheKeyNumber(IotConstants.RedisKey.DRIVER_HEARTBEAT + serviceName + "*");
     }
 
     /**

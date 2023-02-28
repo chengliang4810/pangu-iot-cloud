@@ -2,10 +2,7 @@ package com.pangu.iot.manager.driver.domain.vo;
 
 import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import com.alibaba.excel.annotation.ExcelProperty;
-import com.pangu.common.excel.annotation.ExcelDictFormat;
-import com.pangu.common.excel.convert.ExcelDictConvert;
 import lombok.Data;
-import java.util.Date;
 
 
 
@@ -58,10 +55,15 @@ public class DriverVO {
     private Long port;
 
     /**
+     * 服务数量
+     */
+    private Long serverNumber;
+
+    /**
      * 启用|禁用
      */
     @ExcelProperty(value = "启用|禁用")
-    private Long enable;
+    private Boolean status;
 
     /**
      * 描述
