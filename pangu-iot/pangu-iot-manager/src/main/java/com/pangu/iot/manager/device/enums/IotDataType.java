@@ -32,6 +32,13 @@ public enum IotDataType {
             return null;
         }
     },
+
+    bool("布尔"){
+        @Override
+        public <T> T convert(String jsonString) {
+            return null;
+        }
+    },
     /**
      * 枚举
      */
