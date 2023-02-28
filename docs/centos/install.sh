@@ -7,9 +7,9 @@ zabbixsrc=$basename/zabbix-6.0.13
 INSTALLDIR=/usr/local/pangu
 ZABBIX_HOME=$INSTALLDIR/zabbix
 PHP_CONF=/etc/opt/rh/rh-php73
-sqldir=$basename/zabbix-6.0.13/database/postgresql
+sqldir=$basename/zabbix-6.0.13/database/mysql
 PGDATA=$INSTALLDIR/pgdata
-zeusurl=
+zabbixurl=
 
 function logprint() {
         if [ $? != 0 ]; then
@@ -154,15 +154,15 @@ function PGInstall() {
         fi
 
         startfile=/usr/lib/systemd/system/postgresql-13.service
-        #sed -i 's/\(^User\=\).*/\1zeus/g' $startfile
-        #sed -i 's/\(^Group\=\).*/\1zeus/g' $startfile
+        #sed -i 's/\(^User\=\).*/\1zabbix/g' $startfile
+        #sed -i 's/\(^Group\=\).*/\1zabbix/g' $startfile
         sed -i "s#\(^Environment\=PGDATA\=\).*#\1$INSTALLDIR\/pgdata#g" $startfile
         systemctl daemon-reload
         ### 初始化数据库
         /usr/pgsql-13/bin/postgresql-13-setup initdb 1>/dev/null
         logprint "初始化PG错误"
 
-        #echo "shared_preload_libraries = 'timescaledb'" >>/opt/zeus/pgdata/postgresql.conf
+        #echo "shared_preload_libraries = 'timescaledb'" >>/opt/zabbix/pgdata/postgresql.conf
         ### 启动数据库
         systemctl enable postgresql-13 &>/dev/null
         systemctl start postgresql-13
@@ -172,12 +172,13 @@ function PGInstall() {
         echo -e "\033[32m  [ OK ] \033[0m"
 }
 
-## 编译安装 zabbix 6.0 LTS
+## 编译安装 zabbix 6 LTS
 function ZbxInstall() {
         echo -e -n "\033[32mStep4: 编译安装 zabbix ....  \033[0m"
         ### 安装编译依赖
         cd "$basename" || exit
         yum -y install vim \
+                mysql-devel \
                 wget \
                 gcc \
                 gcc-c++ \
@@ -202,7 +203,7 @@ function ZbxInstall() {
         cd "$zabbixsrc" && ./configure --prefix=$ZABBIX_HOME \
                 --enable-server \
                 --enable-agent \
-                --with-postgresql=/usr/pgsql-13/bin/pg_config \
+                --with-mysql \
                 --with-net-snmp \
                 --with-libcurl \
                 --with-libxml2 \
@@ -214,10 +215,10 @@ function ZbxInstall() {
         make install 1>/dev/null
         logprint "zabbix编译异常"
         ### 前端内容部署
-        mv ui $ZABBIX_HOME/zabbix && chown zeus. $ZABBIX_HOME/zabbix -R
+        mv ui $ZABBIX_HOME/zabbix && chown zabbix. $ZABBIX_HOME/zabbix -R
         mv $ZABBIX_HOME/zabbix/conf/zabbix.conf.php.example $ZABBIX_HOME/zabbix/conf/zabbix.conf.php
         sed -i "s/\($DB\['PASSWORD'\]\s*=\).*/\1 'zabbix';/g" $ZABBIX_HOME/zabbix/conf/zabbix.conf.php
-        sed -i "s/\($DB\['TYPE'\]\s*=\).*/\1 \'POSTGRESQL\';/g" $ZABBIX_HOME/zabbix/conf/zabbix.conf.php
+
         echo -e "\033[32m  [ OK ] \033[0m"
         ### 数据初始化
         echo -e -n "\033[32mStep5: 初始化 zabbix 数据库 ....  \033[0m"
@@ -306,10 +307,10 @@ function PHPInstall() {
         sed -i 's/max_execution_time = 30/max_execution_time = 300/' $PHP_CONF/php.ini
         sed -i 's/max_input_time = 60/max_input_time = 300/' $PHP_CONF/php.ini
         sed -i 's/; date.timezone =/date.timezone = "Asia\/Shanghai"/' $PHP_CONF/php.ini
-        sed -i 's/user = apache/user = zeus/g' $PHP_CONF/php-fpm.d/www.conf
-        sed -i 's/group = apache/group = zeus/g' $PHP_CONF/php-fpm.d/www.conf
-        sed -i 's/;listen.owner = nobody/listen.owner = zeus/g' $PHP_CONF/php-fpm.d/www.conf
-        sed -i 's/;listen.group = nobody/listen.group = zeus/g' $PHP_CONF/php-fpm.d/www.conf
+        sed -i 's/user = apache/user = zabbix/g' $PHP_CONF/php-fpm.d/www.conf
+        sed -i 's/group = apache/group = zabbix/g' $PHP_CONF/php-fpm.d/www.conf
+        sed -i 's/;listen.owner = nobody/listen.owner = zabbix/g' $PHP_CONF/php-fpm.d/www.conf
+        sed -i 's/;listen.group = nobody/listen.group = zabbix/g' $PHP_CONF/php-fpm.d/www.conf
         sed -i 's/\(^listen =\).*/\1\/var\/run\/php-fpm.sock/g' $PHP_CONF/php-fpm.d/www.conf
         chmod 777 /var/opt/rh/rh-php73/lib/php/session -R
         echo -e "\033[32m  [ OK ] \033[0m"
@@ -362,7 +363,7 @@ server {
 EOL
 
         ## 修改 nginx 配置用户
-        sed -i 's/user nginx;/user zeus;/g' /etc/nginx/nginx.conf
+        sed -i 's/user nginx;/user zabbix;/g' /etc/nginx/nginx.conf
         systemctl enable rh-php73-php-fpm &> /dev/null
         systemctl enable nginx &> /dev/null
         systemctl start rh-php73-php-fpm
@@ -378,7 +379,7 @@ function gettoken(){
         local data='{"jsonrpc": "2.0","method": "user.login","params":{"user":"Admin","password":"zabbix"},"id":1,"auth":null}'
         local res=`eval exec "curl -d '$data' -H 'Content-Type: application/json' -X POST -s $zabbix_api_url"`
         local auth=`echo $res | python -c 'import sys, json; print(json.load(sys.stdin)["result"])'`
-        local data='{"jsonrpc": "2.0","method": "token.create","params":{"name":"zeus","userid":"1"},"id":1,"auth":"'${auth}'"}'
+        local data='{"jsonrpc": "2.0","method": "token.create","params":{"name":"zabbix","userid":"1"},"id":1,"auth":"'${auth}'"}'
         local res=`eval exec "curl -d '$data' -H 'Content-Type: application/json' -X POST -s $zabbix_api_url"`
         local tokenid=`echo $res | python -c 'import sys, json; print(json.load(sys.stdin)["result"]["tokenids"][0])'`
         local data='{"jsonrpc": "2.0","method": "token.generate","params":["'${tokenid}'"],"id":1,"auth":"'${auth}'"}'
@@ -406,22 +407,22 @@ EOF
 }
 
 
-function ZeusInstall() {
-        echo -e -n "\033[32mStep11: 安装 Zeus-IoT 服务 ....  \033[0m"
+function zabbixInstall() {
+        echo -e -n "\033[32mStep11: 安装 zabbix-IoT 服务 ....  \033[0m"
         cd $INSTALLDIR || exit
         ## 创建taos 数据库
-        taos -s "create database zeus_data" 1> /dev/null
-        wget -c $zeusurl -o /dev/null -O - | tar -xz
-        logprint "zeusiot下载失败，检查网络"
+        taos -s "create database zabbix_data" 1> /dev/null
+        wget -c $zabbixurl -o /dev/null -O - | tar -xz
+        logprint "zabbixiot下载失败，检查网络"
         gettoken
         logprint "zabbix-token获取失败"
         ## 数据库导入
-        sudo -u postgres createdb -E Unicode -T template0 zeus-iot
+        sudo -u postgres createdb -E Unicode -T template0 zabbix-iot
         logprint "数据库创建失败"
-        cat ./zeus-iot-bin/bin/sql/zeus-iot.sql | sudo -u postgres psql zeus-iot &>/dev/null
+        cat ./zabbix-iot-bin/bin/sql/zabbix-iot.sql | sudo -u postgres psql zabbix-iot &>/dev/null
         logprint "文件未找到"
-        sed -i "s%\(zbxApiToken: \).*%\1$token%" ./zeus-iot-bin/webapp/webapp.yml
-        ./zeus-iot-bin/bin/startup.sh 1> /dev/null
+        sed -i "s%\(zbxApiToken: \).*%\1$token%" ./zabbix-iot-bin/webapp/webapp.yml
+        ./zabbix-iot-bin/bin/startup.sh 1> /dev/null
         echo -e "\033[32m  [ OK ] \033[0m"
 }
 
@@ -429,8 +430,8 @@ function clearsys() {
 
 
         # 清理用户
-        if ! id zeus; then
-                userdell zeus
+        if ! id zabbix; then
+                userdell zabbix
         fi
 
         function kill9() {
@@ -446,10 +447,10 @@ function clearsys() {
         }
 
         # 清理应用
-        ## 清理 zeus
-        kill9 zeus-iot-bin
+        ## 清理 zabbix
+        kill9 zabbix-iot-bin
 
-        [ -d /opt/zeus/zeus-iot-bin ] && rm -rf /opt/zeus/zeus-iot-bin
+        [ -d /opt/zabbix/zabbix-iot-bin ] && rm -rf /opt/zabbix/zabbix-iot-bin
 
         ## 清理 taos
         systemctl stop taosd &> /dev/null
@@ -466,7 +467,7 @@ function clearsys() {
         kill9 zabbix_server
         kill9 zabbix_agent
 
-        [ -d /opt/zeus/zabbix ] && rm -rf /opt/zeus/zabbix
+        [ -d /opt/zabbix/zabbix ] && rm -rf /opt/zabbix/zabbix
         [ -f /usr/lib/systemd/system/zabbix-server.service ] && rm -rf /usr/lib/systemd/system/zabbix-server.service
         [ -f /usr/lib/systemd/system/zabbix-agent.service ] && rm -rf /usr/lib/systemd/system/zabbix-agent.service
 
@@ -477,7 +478,7 @@ function clearsys() {
 
         yum remove postgresql13 -y &> /dev/null
 
-        [ -d /opt/zeus/pgdata ] && rm -rf /opt/zeus/pgdata
+        [ -d /opt/zabbix/pgdata ] && rm -rf /opt/zabbix/pgdata
         [ -f /usr/lib/systemd/system/postgresql-13.service ] && rm -rf /usr/lib/systemd/system/postgresql-13.service
 
         ## 清理 nginx
@@ -490,7 +491,7 @@ function clearsys() {
 
 
 function sendmsg() {
-        echo "zabbix 部分已安装成功，zeus iot 可以参照 www.zmops.com 官方文档自定义安装。"
+        echo "zabbix 部分已安装成功，zabbix iot 可以参照 www.zmops.com 官方文档自定义安装。"
         echo ""
         echo "zabbix server 访问地址： http://<HostIP>/zabbix"
         echo ""
