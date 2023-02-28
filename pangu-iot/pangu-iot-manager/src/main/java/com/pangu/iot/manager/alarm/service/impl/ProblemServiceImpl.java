@@ -20,7 +20,7 @@ import com.pangu.iot.manager.device.domain.Device;
 import com.pangu.iot.manager.device.service.IDeviceService;
 import com.pangu.iot.manager.product.domain.ProductEvent;
 import com.pangu.iot.manager.product.service.IProductEventService;
-import com.pangu.manager.api.model.AlarmDTO;
+import com.pangu.manager.api.domain.dto.AlarmDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

@@ -6,7 +6,7 @@ import com.pangu.iot.manager.alarm.domain.bo.ProblemBO;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.pangu.common.mybatis.core.page.PageQuery;
 import com.pangu.common.mybatis.core.page.TableDataInfo;
-import com.pangu.manager.api.model.AlarmDTO;
+import com.pangu.manager.api.domain.dto.AlarmDTO;
 
 import java.util.Collection;
 import java.util.List;

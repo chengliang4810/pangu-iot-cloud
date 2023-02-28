@@ -1,0 +1,110 @@
+# Tomcat
+server:
+  port: 7701
+
+# Spring
+spring:
+  application:
+    # 应用名称
+    name: pangu-iot-test-driver
+  profiles:
+    # 环境配置
+    active: @profiles.active@
+
+mqtt:
+  config:
+    broker: tcp://10.0.0.34:1883
+    userName: admin
+    password: admin
+    cleanSession: false
+    reconnect: true
+    timeout: 1000
+    keepAlive: 60
+
+--- # nacos 配置
+spring:
+  cloud:
+    nacos:
+      # nacos 服务地址
+      server-addr: @nacos.server@
+      discovery:
+        # 注册组
+        group: @nacos.discovery.group@
+        namespace: ${spring.profiles.active}
+      config:
+        # 配置组
+        group: @nacos.config.group@
+        namespace: ${spring.profiles.active}
+  config:
+    import:
+      - optional:nacos:application-common.yml
+      - optional:nacos:mq.yml
+      - optional:nacos:${spring.application.name}.yml
+
+
+driver:
+  # 唯一驱动标识，根据该名称自动实现创建或更新配置
+  name: ${spring.application.name}
+  # 驱动显示名称
+  display-name: PLC采集驱动
+  project: @project.artifactId@
+  description: @project.description@
+  # 周期时间
+  schedule:
+    read: '10s'
+    heartbeat: '10s'
+  driver-attribute:
+    - displayName: 主机
+      name: host
+      type: string
+      value: localhost
+      description: Modbus IP
+      option:
+        type: input\select\checkox\switch\time...
+        required: true
+        data-type: static/url
+        data: jsonString
+    - displayName: 端口
+      name: port
+      type: int
+      value: 502
+      description: Modbus Port
+      option:
+        type: input\select\checkox\switch\time...
+        required: true
+        data-type: static/url
+        data: jsonString
+  point-attribute:
+    - displayName: 从站编号
+      name: slaveId
+      type: int
+      value: 1
+      description: 从站编号
+      option:
+        type: input\select\checkox\switch\time...
+        required: true
+        data-type: static/url
+        data: jsonString
+    - displayName: 功能码
+      name: functionCode
+      type: int
+      value: 1
+      description: 功能码 [1、2、3、4]
+      option:
+        type: input\select\checkox\switch\time...
+        required: true
+        data-type: static/url
+        data: jsonString
+    - displayName: 偏移量
+      name: offset
+      type: int
+      value: 0
+      description: 偏移量
+      option:
+        type: input\select\checkox\switch\time...
+        required: true
+        data-type: static/url
+        data: jsonString
+
+
+

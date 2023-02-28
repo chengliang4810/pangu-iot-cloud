@@ -4,7 +4,7 @@ import com.pangu.iot.manager.alarm.convert.ProblemConvert;
 import com.pangu.iot.manager.alarm.service.IProblemService;
 import com.pangu.iot.manager.product.service.IProductEventService;
 import com.pangu.manager.api.RemoteAlarmService;
-import com.pangu.manager.api.model.AlarmDTO;
+import com.pangu.manager.api.domain.dto.AlarmDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboService;

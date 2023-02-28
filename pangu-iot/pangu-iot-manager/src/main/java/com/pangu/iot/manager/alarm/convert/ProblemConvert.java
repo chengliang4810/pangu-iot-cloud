@@ -4,7 +4,7 @@ import com.pangu.common.core.convert.CommonConvert;
 import com.pangu.iot.manager.alarm.domain.Problem;
 import com.pangu.iot.manager.alarm.domain.bo.ProblemBO;
 import com.pangu.iot.manager.alarm.domain.vo.ProblemVO;
-import com.pangu.manager.api.model.AlarmDTO;
+import com.pangu.manager.api.domain.dto.AlarmDTO;
 import org.mapstruct.Mapper;
 
 import java.util.List;

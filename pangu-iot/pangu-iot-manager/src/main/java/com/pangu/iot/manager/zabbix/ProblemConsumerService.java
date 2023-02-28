@@ -9,7 +9,7 @@ import com.pangu.common.zabbix.util.TimeUtil;
 import com.pangu.data.api.RemoteDeviceStatusService;
 import com.pangu.iot.manager.alarm.service.IProblemService;
 import com.pangu.iot.manager.device.service.IDeviceService;
-import com.pangu.manager.api.model.AlarmDTO;
+import com.pangu.manager.api.domain.dto.AlarmDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
