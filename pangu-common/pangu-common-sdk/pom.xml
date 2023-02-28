@@ -17,6 +17,12 @@
 
     <dependencies>
 
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+
         <!-- SpringCloud Alibaba Nacos -->
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
@@ -34,7 +40,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
-
 
         <!-- zabbix-api -->
         <dependency>
@@ -66,6 +71,11 @@
 
         <dependency>
             <groupId>org.apache.camel.springboot</groupId>
+            <artifactId>camel-paho-mqtt5-starter</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.camel.springboot</groupId>
             <artifactId>camel-jackson-starter</artifactId>
         </dependency>
 
@@ -83,6 +93,8 @@
             <groupId>com.pangu</groupId>
             <artifactId>pangu-common-emqx</artifactId>
         </dependency>
+
+
 
     </dependencies>
 </project>

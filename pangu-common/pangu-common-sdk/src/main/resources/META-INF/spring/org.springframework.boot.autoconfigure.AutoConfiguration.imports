@@ -1,3 +1,4 @@
 com.pangu.common.sdk.config.CamelConfig
 com.pangu.common.sdk.config.DefaultTopicConfig
 com.pangu.common.sdk.mqtt.FunctionExecConsumer
+com.pangu.common.sdk.init.DriverInitRunner

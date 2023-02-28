@@ -1,6 +1,5 @@
 package com.pangu.common.emqx.core;
 
-import cn.hutool.core.thread.ThreadUtil;
 import com.pangu.common.core.utils.SpringUtils;
 import com.pangu.common.emqx.constant.Pattern;
 import com.pangu.common.emqx.doamin.SubscriptTopic;
@@ -45,11 +44,11 @@ public class DefaultMqttCallback implements MqttCallback {
     public void disconnected(MqttDisconnectResponse mqttDisconnectResponse) {
         MqttClient client = SpringUtils.getBean(MqttClient.class);
         MqttConnectionOptions option = SpringUtils.getBean(MqttConnectionOptions.class);
-        while (!client.isConnected()) {
-            log.info("client is not connected, try to reconnect");
-            client.connect(option);
-            ThreadUtil.sleep(1000);
-        }
+//        while (!client.isConnected()) {
+//            log.info("client is not connected, try to reconnect");
+//            client.connect(option);
+//            ThreadUtil.sleep(10000);
+//        }
     }
 
     /**

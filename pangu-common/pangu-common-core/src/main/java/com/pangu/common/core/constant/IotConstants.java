@@ -1,5 +1,7 @@
 package com.pangu.common.core.constant;
 
+import cn.hutool.core.util.StrUtil;
+
 /**
  * 物联网常量
  *
@@ -86,7 +88,19 @@ public interface IotConstants {
      * @author chengliang
      * @date 2023/02/21
      */
-    public interface Topic {
+    interface Topic {
+
+        interface Driver {
+
+            String DRIVER_TOPIC_HEARTBEAT_URI_TPL = "iot/driver/heartbeat/{}?brokerUrl={}&clientId={}&qos=0&password={}&username={}";
+
+            String DRIVER_TOPIC_HEARTBEAT_SUBSCRIBE_TOPIC = "iot/driver/heartbeat/+";
+
+            public default String getDriverTopicHeartbeatUri(String primaryKey, String brokerUrl, String clientId ,String username, String password) {
+                return StrUtil.format(DRIVER_TOPIC_HEARTBEAT_URI_TPL, primaryKey, brokerUrl, clientId, password, username);
+            }
+        }
+
 
         /**
          * 设备功能执行主题
@@ -111,4 +125,9 @@ public interface IotConstants {
     }
 
 
+    interface RedisKey {
+
+
+        String DRIVER_HEARTBEAT = "com.pangu.iot.driver.heartbeat.";
+    }
 }

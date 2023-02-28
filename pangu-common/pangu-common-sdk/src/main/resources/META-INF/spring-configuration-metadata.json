@@ -1,0 +1,49 @@
+{
+  "properties": [
+    {
+      "name": "driver.name",
+      "type": "java.lang.String",
+      "description": "driver name."
+    },
+    {
+      "name": "driver.type",
+      "type": "java.lang.String",
+      "description": "driver type, default:driver, driver|gateway...,."
+    },
+    {
+      "name": "driver.tenant",
+      "type": "java.lang.String",
+      "description": "driver tenant."
+    },
+    {
+      "name": "driver.project",
+      "type": "java.lang.String",
+      "description": "driver project."
+    },
+    {
+      "name": "driver.description",
+      "type": "java.lang.String",
+      "description": "driver description."
+    },
+    {
+      "name": "driver.driver-attribute",
+      "type": "java.util.List",
+      "description": "driver attribute list<p/><p>- displayName: attribute display name<p>- name: attribute name<p>- type: string/int/double/float/long/boolean<p>- value: default value<p>- description: description."
+    },
+    {
+      "name": "driver.point-attribute",
+      "type": "java.util.List",
+      "description": "device point attribute list<p/><p>- displayName: attribute display name<p>- name: attribute name<p>- type: string/int/double/float/long/boolean<p>- value: default value<p>- description: description."
+    },
+    {
+      "name": "driver.schedule.heartbeat",
+      "type": "java.lang.String",
+      "description": "driver heartbeat schedule."
+    },
+    {
+      "name": "driver.schedule.read",
+      "type": "java.lang.String",
+      "description": "driver read schedule."
+    }
+  ]
+}

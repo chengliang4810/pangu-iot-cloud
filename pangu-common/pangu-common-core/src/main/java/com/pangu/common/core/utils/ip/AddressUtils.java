@@ -11,6 +11,8 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.net.InetAddress;
+
 /**
  * 获取地址类
  *
@@ -56,4 +58,20 @@ public class AddressUtils {
 //        }
         return address;
     }
+
+    /**
+     * 获取当前主机的 Local Host
+     *
+     * @return String
+     */
+    public static String localHost() {
+        try {
+            InetAddress address = InetAddress.getLocalHost();
+            return address.getHostAddress();
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
+        return null;
+    }
+
 }
