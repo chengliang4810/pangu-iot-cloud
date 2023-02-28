@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.HashMap;
@@ -34,7 +35,7 @@ public class DeviceStatusServiceImpl implements DeviceStatusService  {
      */
     @Override
     public void online(String deviceId, Integer clock) {
-        RedisUtils.setCacheObject(DEVICE_STATUS_CACHE_PREFIX + deviceId, clock);
+        RedisUtils.setCacheObject(DEVICE_STATUS_CACHE_PREFIX + deviceId, clock, Duration.ofSeconds(60));
     }
 
     /**

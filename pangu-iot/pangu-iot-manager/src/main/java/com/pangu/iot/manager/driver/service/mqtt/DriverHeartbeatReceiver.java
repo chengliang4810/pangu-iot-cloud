@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.eclipse.paho.mqttv5.common.MqttMessage;
 import org.springframework.stereotype.Component;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 
 @Slf4j
@@ -22,7 +23,7 @@ public class DriverHeartbeatReceiver extends MqttConsumer<DriverStatus> {
     @Override
     protected void messageHandler(String topic, DriverStatus entity) {
         log.info("收到驱动心跳: {}", entity);
-        RedisUtils.setCacheObject(IotConstants.RedisKey.DRIVER_HEARTBEAT + entity.getPrimaryDriverName(), LocalDateTime.now());
+        RedisUtils.setCacheObject(IotConstants.RedisKey.DRIVER_HEARTBEAT + entity.getPrimaryDriverName(), LocalDateTime.now(), Duration.ofSeconds(30));
     }
 
     @Override
