@@ -11,6 +11,7 @@ import org.eclipse.paho.mqttv5.client.IMqttMessageListener;
 import org.eclipse.paho.mqttv5.client.IMqttToken;
 import org.eclipse.paho.mqttv5.client.MqttClient;
 import org.eclipse.paho.mqttv5.client.MqttConnectionOptions;
+import org.eclipse.paho.mqttv5.client.persist.MemoryPersistence;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -40,6 +41,11 @@ public class EmqxConfig {
     private String applicationName;
 
     /**
+     * 内存存储
+     */
+    private final MemoryPersistence memoryPersistence = new MemoryPersistence();
+
+    /**
      * MQTT的连接设置
      * @return
      */
@@ -64,7 +70,7 @@ public class EmqxConfig {
     @Bean
     public MqttClient getClient(MqttConnectionOptions options, ApplicationContext applicationContext, EmqProperties emqProperties) throws Exception {
         // 构建Client 设置客户端ID
-        MqttClient client = new MqttClient(emqProperties.getBroker(), applicationName + "_" + Inet4Address.getLocalHost().getHostAddress() + ":" + port);
+        MqttClient client = new MqttClient(emqProperties.getBroker(), applicationName + "_" + Inet4Address.getLocalHost().getHostAddress() + ":" + port, memoryPersistence);
 
         //得到所有使用@Topic注解的类
         Map<String, Object> beansWithAnnotation = applicationContext.getBeansWithAnnotation(Topic.class);
