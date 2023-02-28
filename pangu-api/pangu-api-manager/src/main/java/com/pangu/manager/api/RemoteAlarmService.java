@@ -1,6 +1,6 @@
 package com.pangu.manager.api;
 
-import com.pangu.manager.api.model.AlarmDTO;
+import com.pangu.manager.api.domain.dto.AlarmDTO;
 
 /**
  * 告警记录服务

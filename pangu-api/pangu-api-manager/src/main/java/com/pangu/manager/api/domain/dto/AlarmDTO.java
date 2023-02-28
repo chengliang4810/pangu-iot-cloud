@@ -1,4 +1,4 @@
-package com.pangu.manager.api.model;
+package com.pangu.manager.api.domain.dto;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
