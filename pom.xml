@@ -368,6 +368,7 @@
         <module>pangu-api</module>
         <module>pangu-common</module>
         <module>pangu-iot</module>
+        <module>pangu-iot-driver</module>
         <module>pangu-example</module>
     </modules>
     <packaging>pom</packaging>
@@ -455,8 +456,8 @@
     <repositories>
         <repository>
             <id>public</id>
-            <name>huawei nexus</name>
-            <url>https://mirrors.huaweicloud.com/repository/maven/</url>
+            <name>aliyun nexus</name>
+            <url>https://maven.aliyun.com/repository/public/</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
@@ -466,8 +467,8 @@
     <pluginRepositories>
         <pluginRepository>
             <id>public</id>
-            <name>huawei nexus</name>
-            <url>https://mirrors.huaweicloud.com/repository/maven/</url>
+            <name>aliyun nexus</name>
+            <url>https://maven.aliyun.com/repository/public/</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
