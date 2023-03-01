@@ -1,12 +1,13 @@
 package com.pangu.iot.manager.product.convert;
 
-import java.util.List;
-
-import com.pangu.iot.manager.product.domain.Product;
-import com.pangu.iot.manager.product.domain.vo.ProductVO;
-import com.pangu.iot.manager.product.domain.bo.ProductBO;
 import com.pangu.common.core.convert.CommonConvert;
+import com.pangu.iot.manager.product.domain.Product;
+import com.pangu.iot.manager.product.domain.bo.ProductBO;
+import com.pangu.iot.manager.product.domain.vo.ProductVO;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+
+import java.util.List;
 
 /**
  * 产品Convert接口
@@ -23,8 +24,8 @@ public interface ProductConvert extends CommonConvert {
      * @param bo ProductBO对象
      * @return product
      */
+    @Mapping(target = "driver", source = "driver", qualifiedByName = "listToString")
     Product toEntity(ProductBO bo);
-
 
     /**
      * ProductVO转换为ProductEntity
@@ -32,6 +33,7 @@ public interface ProductConvert extends CommonConvert {
      * @param  vo ProductVO对象
      * @return product
      */
+    @Mapping(target = "driver", source = "driver", qualifiedByName = "listToString")
     Product toEntity(ProductVO vo);
 
     /**
@@ -40,6 +42,7 @@ public interface ProductConvert extends CommonConvert {
      * @param  entity Product对象
      * @return productBO
      */
+    @Mapping(target = "driver", source = "driver", qualifiedByName = "stringToList")
     ProductBO toBo(Product entity);
 
     /**
@@ -48,6 +51,7 @@ public interface ProductConvert extends CommonConvert {
      * @param entity Product
      * @return productVO
      */
+    @Mapping(target = "driver", source = "driver", qualifiedByName = "stringToList")
     ProductVO toVo(Product entity);
 
     /**

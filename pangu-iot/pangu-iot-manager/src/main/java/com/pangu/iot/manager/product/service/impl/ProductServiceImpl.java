@@ -12,6 +12,7 @@ import com.pangu.common.mybatis.core.page.PageQuery;
 import com.pangu.common.mybatis.core.page.TableDataInfo;
 import com.pangu.common.zabbix.service.TemplateService;
 import com.pangu.data.api.RemoteTdEngineService;
+import com.pangu.iot.manager.product.convert.ProductConvert;
 import com.pangu.iot.manager.product.domain.Product;
 import com.pangu.iot.manager.product.domain.bo.ProductBO;
 import com.pangu.iot.manager.product.domain.vo.ProductVO;
@@ -44,10 +45,9 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
     private final RemoteConfigService configService;
     @DubboReference
     private final RemoteTdEngineService tdEngineService;
-
     private final ProductMapper baseMapper;
-
     private final TemplateService templateService;
+    private final ProductConvert productConvert;
 
     /**
      * 查询产品
@@ -110,6 +110,8 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
             bo.setCode(IdUtil.nanoId());
         }
 
+        System.out.println(bo.getDriver());
+
         // 生成主键
         Long productId = IdUtil.getSnowflake().nextId();
         // 初始化超级表
@@ -119,7 +121,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         String zbxId = templateService.zbxTemplateCreate(hostGroupId, productId.toString());
 
         // Bean转换，设置ID与zabbix模板ID
-        Product add = BeanUtil.toBean(bo, Product.class);
+        Product add = productConvert.toEntity(bo);
         add.setId(productId);
         add.setZbxId(zbxId);
 

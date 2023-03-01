@@ -5,6 +5,7 @@ import com.alibaba.excel.annotation.ExcelProperty;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -48,6 +49,11 @@ public class ProductVO {
      */
     @ExcelProperty(value = "产品类型")
     private String type;
+
+    /**
+     * 驱动ID , 分割
+     */
+    private List<String> driver;
 
     /**
      * 图标

@@ -41,6 +41,10 @@ public class Product extends BaseEntity {
      */
     private String type;
     /**
+     * 驱动ID , 分割
+     */
+    private String driver;
+    /**
      * 图标
      */
     private String icon;
