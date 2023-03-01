@@ -39,6 +39,14 @@ public class DriverController extends BaseController {
     private final IDriverService driverService;
 
     /**
+     * 查询协议驱动表所有数据
+     */
+    @GetMapping("/tree")
+    public R<List<DriverVO>> tree(DriverBO bo) {
+        return R.ok(driverService.queryList(bo));
+    }
+
+    /**
      * 查询协议驱动列表
      */
     @SaCheckPermission("manager:driver:list")
