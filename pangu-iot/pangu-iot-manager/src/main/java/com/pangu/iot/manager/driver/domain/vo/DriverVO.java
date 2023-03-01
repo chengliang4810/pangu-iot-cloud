@@ -4,6 +4,7 @@ import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import com.alibaba.excel.annotation.ExcelProperty;
 import lombok.Data;
 
+import java.util.List;
 
 
 /**
@@ -37,27 +38,14 @@ public class DriverVO {
     private String displayName;
 
     /**
-     * 协议服务名称
+     * 服务列表
      */
-    @ExcelProperty(value = "协议服务名称")
-    private String serviceName;
+    private List<DriverServiceVO> serviceList;
 
     /**
-     * 主机IP
+     * 在线服务数量
      */
-    @ExcelProperty(value = "主机IP")
-    private String host;
-
-    /**
-     * 端口
-     */
-    @ExcelProperty(value = "端口")
-    private Long port;
-
-    /**
-     * 服务数量
-     */
-    private Long serverNumber;
+    private Integer serverNumber;
 
     /**
      * 启用|禁用

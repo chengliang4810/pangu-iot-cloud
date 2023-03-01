@@ -1,6 +1,7 @@
 package com.pangu.iot.manager.driver.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.crypto.SecureUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -13,15 +14,19 @@ import com.pangu.common.redis.utils.RedisUtils;
 import com.pangu.iot.manager.driver.convert.DriverConvert;
 import com.pangu.iot.manager.driver.domain.Driver;
 import com.pangu.iot.manager.driver.domain.bo.DriverBO;
+import com.pangu.iot.manager.driver.domain.bo.DriverServiceBO;
+import com.pangu.iot.manager.driver.domain.vo.DriverServiceVO;
 import com.pangu.iot.manager.driver.domain.vo.DriverVO;
 import com.pangu.iot.manager.driver.mapper.DriverMapper;
 import com.pangu.iot.manager.driver.service.IDriverService;
+import com.pangu.iot.manager.driver.service.IDriverServiceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 协议驱动Service业务层处理
@@ -35,10 +40,11 @@ public class DriverServiceImpl extends ServiceImpl<DriverMapper, Driver> impleme
 
     private final DriverMapper baseMapper;
     private final DriverConvert driverConvert;
+    private final IDriverServiceService driverServiceService;
 
     @Override
-    public Driver selectByServiceName(String serviceName) {
-        return baseMapper.selectOne(Wrappers.lambdaQuery(Driver.class).eq(Driver::getServiceName, serviceName).last("limit 1"));
+    public Driver selectByName(String name) {
+        return baseMapper.selectOne(Wrappers.lambdaQuery(Driver.class).eq(Driver::getName, name).last("limit 1"));
     }
 
     /**
@@ -57,18 +63,27 @@ public class DriverServiceImpl extends ServiceImpl<DriverMapper, Driver> impleme
         LambdaQueryWrapper<Driver> lqw = buildQueryWrapper(bo);
         Page<Driver> driverPage = baseMapper.selectPage(pageQuery.build(), lqw);
         List<DriverVO> voList = driverConvert.toVoList(driverPage.getRecords());
-        voList.forEach(vo -> vo.setServerNumber(getDriverServerNumber(vo.getServiceName())));
+
+        // 查询驱动对应服务信息与服务在线数量
+        voList.forEach(vo ->{
+            List<String> serviceIds = getDriverServiceIds(vo.getName());
+            vo.setServerNumber(serviceIds.size());
+            List<DriverServiceVO> serviceVOList = driverServiceService.queryList(new DriverServiceBO().setDriverId(vo.getId()));
+            serviceVOList.stream().filter(serviceVO -> serviceIds.contains(serviceVO.getId())).forEach(serviceVO -> serviceVO.setOnlineStatus(true));
+            vo.setServiceList(serviceVOList);
+        });
         return TableDataInfo.build(voList, driverPage.getTotal());
     }
 
     /**
-     * 获取驱动服务数量
+     * 获取驱动服务缓存Id
      *
-     * @param serviceName 服务名称
-     * @return {@link Long}
+     * @param driverName 服务名称
+     * @return {@link List}<{@link String}>
      */
-    private Long getDriverServerNumber(String serviceName) {
-       return RedisUtils.getCacheKeyNumber(IotConstants.RedisKey.DRIVER_HEARTBEAT + serviceName + "*");
+    private List<String> getDriverServiceIds(String driverName) {
+        List<String> keys = RedisUtils.getCacheKeyNumber(IotConstants.RedisKey.DRIVER_HEARTBEAT + driverName + "*");
+        return keys.stream().map(key -> key.replace(IotConstants.RedisKey.DRIVER_HEARTBEAT, "")).map(SecureUtil::md5).collect(Collectors.toList());
     }
 
     /**
@@ -85,9 +100,6 @@ public class DriverServiceImpl extends ServiceImpl<DriverMapper, Driver> impleme
         LambdaQueryWrapper<Driver> lqw = Wrappers.lambdaQuery();
         lqw.like(StringUtils.isNotBlank(bo.getName()), Driver::getName, bo.getName());
         lqw.like(StringUtils.isNotBlank(bo.getDisplayName()), Driver::getDisplayName, bo.getDisplayName());
-        lqw.like(StringUtils.isNotBlank(bo.getServiceName()), Driver::getServiceName, bo.getServiceName());
-        lqw.eq(StringUtils.isNotBlank(bo.getHost()), Driver::getHost, bo.getHost());
-        lqw.eq(bo.getPort() != null, Driver::getPort, bo.getPort());
         lqw.eq(bo.getEnable() != null, Driver::getEnable, bo.getEnable());
         lqw.eq(StringUtils.isNotBlank(bo.getDescription()), Driver::getDescription, bo.getDescription());
         return lqw;

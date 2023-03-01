@@ -54,7 +54,14 @@ public class ZbxDataService {
             try {
                 if (receiveDataService == null && receiveProblemService == null){
                     //负载到不进行消费的服务，消息重新投递
-                    channel.basicReject(deliveryTag, true);
+                    ThreadUtil.execAsync(() -> {
+                        try {
+                            ThreadUtil.sleep(1000);
+                            channel.basicReject(deliveryTag, true);
+                        } catch (IOException e) {
+                            log.debug("消息确认失败");
+                        }
+                    });
                     return;
                 }
 
@@ -71,9 +78,15 @@ public class ZbxDataService {
                     // receiveDataService.receiveProblems(JsonUtils.parseObject(message.getBody(), ZbxProblem.class));
                 } else {
                     //负载到不进行消费的服务，消息重新投递
-                    log.info("receiveProblemService is {}", receiveProblemService);
-                    log.info("receiveDataService is {}", receiveDataService);
-                    channel.basicReject(deliveryTag, true);
+                    ThreadUtil.execAsync(() -> {
+                        try {
+                            ThreadUtil.sleep(1000);
+                            channel.basicReject(deliveryTag, true);
+                        } catch (IOException e) {
+                            log.debug("消息确认失败");
+                        }
+                    });
+                    //channel.basicReject(deliveryTag, true);
                     //log.info("未知的zabbix数据类型 {}", result);
                 }
                  // 消息确认

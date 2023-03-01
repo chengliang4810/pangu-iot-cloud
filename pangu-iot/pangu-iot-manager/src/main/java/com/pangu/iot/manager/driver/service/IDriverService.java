@@ -51,8 +51,8 @@ public interface IDriverService extends IService<Driver> {
     /**
      * 根据服务名称查询驱动
      *
-     * @param serviceName 服务名称
+     * @param name 服务名称
      * @return {@link Driver}
      */
-    Driver selectByServiceName(String serviceName);
+    Driver selectByName(String name);
 }

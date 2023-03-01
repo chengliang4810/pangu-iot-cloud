@@ -186,13 +186,13 @@ public class RedisUtils {
     }
 
     /**
-     * 得到缓存键数
+     * 得到缓存键
      *
      * @param pattern 表达式
      * @return {@link Long}
      */
-    public static Long getCacheKeyNumber(final String pattern) {
-        return CLIENT.getKeys().getKeysStreamByPattern(pattern).count();
+    public static List<String> getCacheKeyNumber(final String pattern) {
+        return CLIENT.getKeys().getKeysStreamByPattern(pattern).collect(Collectors.toList());
     }
 
     /**

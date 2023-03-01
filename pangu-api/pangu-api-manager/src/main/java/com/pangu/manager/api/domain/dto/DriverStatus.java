@@ -13,17 +13,17 @@ import java.io.Serializable;
 public class DriverStatus implements Serializable {
 
     /**
-     * 唯一驱动名称
+     * 每个驱动唯一标识
      */
-    private String primaryDriverName;
+    private String primaryKey;
 
     /**
      * 状态
      */
     private OnlineStatus status;
 
-    public DriverStatus(String primaryServiceName, OnlineStatus online) {
-        this.primaryDriverName = primaryServiceName;
+    public DriverStatus(String primaryKey, OnlineStatus online) {
+        this.primaryKey = primaryKey;
         this.status = online;
     }
 

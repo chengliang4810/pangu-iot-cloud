@@ -35,14 +35,14 @@ public class ZabbixRouter extends RouteBuilder {
     @Override
     public void configure() throws Exception {
         // 组织唯一驱动标识
-        String primaryServiceName = applicationName + ":" + AddressUtils.localHost() + ":" + port;
-
-        String mqttUri = "paho-mqtt5:" + StrUtil.format(IotConstants.Topic.Driver.DRIVER_TOPIC_HEARTBEAT_URI_TPL, applicationName, emqProperties.getBroker(), primaryServiceName, emqProperties.getPassword(), emqProperties.getUserName());
+        String emqClientId = applicationName + ":" + AddressUtils.localHost() + ":" + port;
+        String primaryKey = driverProperty.getName() + "_" + AddressUtils.localHost() + "_" + port;
+        String mqttUri = "paho-mqtt5:" + StrUtil.format(IotConstants.Topic.Driver.DRIVER_TOPIC_HEARTBEAT_URI_TPL, applicationName, emqProperties.getBroker(), emqClientId, emqProperties.getPassword(), emqProperties.getUserName());
 
         // 发送驱动心跳
-        from("timer://DriverHeartbeatTimer?period="+driverProperty.getSchedule().getHeartbeat()+"&delay=5s")
+        from("timer://DriverHeartbeatTimer?period=" + driverProperty.getSchedule().getHeartbeat() + "&delay=5s")
                 .process(exchange -> {
-                    exchange.getMessage().setBody(JsonUtils.toJsonString(new DriverStatus(primaryServiceName, OnlineStatus.ONLINE)));
+                    exchange.getMessage().setBody(JsonUtils.toJsonString(new DriverStatus(primaryKey, OnlineStatus.ONLINE)));
                 })
                 .to(mqttUri);
         //.to("rabbitmq:pangu.exchange.driver.heartbeat?queue=queue.driver.heartbeat&routingKey=driver_route_heartbeat");

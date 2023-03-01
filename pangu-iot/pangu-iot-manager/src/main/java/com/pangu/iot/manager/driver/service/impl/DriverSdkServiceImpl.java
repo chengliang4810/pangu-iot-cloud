@@ -2,9 +2,11 @@ package com.pangu.iot.manager.driver.service.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.crypto.SecureUtil;
 import com.pangu.iot.manager.driver.convert.DriverConvert;
 import com.pangu.iot.manager.driver.domain.Driver;
 import com.pangu.iot.manager.driver.domain.DriverInfo;
+import com.pangu.iot.manager.driver.domain.DriverService;
 import com.pangu.iot.manager.driver.domain.PointInfo;
 import com.pangu.iot.manager.driver.service.*;
 import com.pangu.manager.api.domain.DriverAttribute;
@@ -28,6 +30,7 @@ public class DriverSdkServiceImpl implements IDriverSdkService {
     private final IDriverService driverService;
     private final IPointInfoService pointInfoService;
     private final IDriverInfoService driverInfoService;
+    private final IDriverServiceService driverServiceService;
     private final IPointAttributeService pointAttributeService;
     private final IDriverAttributeService driverAttributeService;
 
@@ -38,17 +41,24 @@ public class DriverSdkServiceImpl implements IDriverSdkService {
         Driver driver = driverConvert.toEntity(driverDto);
         log.info("Register driver {}", driver);
 
-        Driver dbDriver = driverService.selectByServiceName(driver.getServiceName());
+        Driver dbDriver = driverService.selectByName(driver.getName());
         if (ObjectUtil.isNotNull(dbDriver)) {
             log.debug("Driver already registered, updating {} ", driver);
             driver.setId(dbDriver.getId());
             driverService.updateById(driver);
-            return;
+        } else {
+            log.debug("Driver does not registered, adding {} ", driver);
+            driverService.save(driver);
         }
 
-        log.debug("Driver does not registered, adding {} ", driver);
-        driverService.save(driver);
-
+        // register driver service
+        // 新增驱动服务
+        String driverServiceId = SecureUtil.md5(driver.getName() + "_" + driverDto.getHost() + "_" + driverDto.getPort());
+        DriverService dbDriverService = driverServiceService.getById(driverServiceId);
+        if (ObjectUtil.isNull(dbDriverService)) {
+            log.debug("Driver service does not registered, adding {} ", driverServiceId);
+            driverServiceService.save(new DriverService().setDriverId(driver.getId()).setId(driverServiceId).setHost(driverDto.getHost()).setPort(driverDto.getPort()).setServiceName(driverDto.getServiceName()));
+        }
 
         //register driver attribute
         // 新驱动属性

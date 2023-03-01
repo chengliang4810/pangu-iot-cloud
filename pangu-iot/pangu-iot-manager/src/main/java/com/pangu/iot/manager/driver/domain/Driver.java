@@ -34,18 +34,7 @@ public class Driver implements Serializable {
      * 显示名称
      */
     private String displayName;
-    /**
-     * 协议服务名称
-     */
-    private String serviceName;
-    /**
-     * 主机IP
-     */
-    private String host;
-    /**
-     * 端口
-     */
-    private Long port;
+
     /**
      * 启用|禁用
      */
@@ -60,7 +49,6 @@ public class Driver implements Serializable {
      */
     @TableField(fill = FieldFill.INSERT)
     private Date createTime;
-
 
     /**
      * 更新时间
