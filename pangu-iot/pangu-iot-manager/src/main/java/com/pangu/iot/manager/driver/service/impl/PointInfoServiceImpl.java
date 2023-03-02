@@ -1,24 +1,31 @@
 package com.pangu.iot.manager.driver.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.ObjectUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.pangu.common.core.utils.Assert;
 import com.pangu.common.core.utils.StringUtils;
 import com.pangu.common.mybatis.core.page.PageQuery;
 import com.pangu.common.mybatis.core.page.TableDataInfo;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import com.pangu.iot.manager.driver.domain.bo.PointInfoBO;
-import com.pangu.iot.manager.driver.domain.vo.PointInfoVO;
+import com.pangu.iot.manager.device.domain.Device;
+import com.pangu.iot.manager.device.domain.DeviceAttribute;
+import com.pangu.iot.manager.device.service.IDeviceAttributeService;
+import com.pangu.iot.manager.device.service.IDeviceService;
 import com.pangu.iot.manager.driver.domain.PointInfo;
+import com.pangu.iot.manager.driver.domain.bo.PointInfoBO;
+import com.pangu.iot.manager.driver.domain.bo.PointInfoBatchBO;
+import com.pangu.iot.manager.driver.domain.vo.PointInfoVO;
 import com.pangu.iot.manager.driver.mapper.PointInfoMapper;
 import com.pangu.iot.manager.driver.service.IPointInfoService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Collection;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 点位属性配置信息Service业务层处理
@@ -31,6 +38,73 @@ import java.util.Collection;
 public class PointInfoServiceImpl extends ServiceImpl<PointInfoMapper, PointInfo> implements IPointInfoService {
 
     private final PointInfoMapper baseMapper;
+    private final IDeviceService deviceService;
+    private final IDeviceAttributeService deviceAttributeService;
+
+    /**
+     * 批量更新
+     *
+     * @param bo 薄
+     * @return {@link Boolean}
+     */
+    @Override
+    public Boolean batchUpdate(PointInfoBatchBO bo) {
+        Long deviceId = bo.getDeviceId();
+        // 验证设备是否存在
+        Device device = deviceService.getById(deviceId);
+        Assert.notNull(device, "设备不存在");
+        Long deviceAttributeId = bo.getDeviceAttributeId();
+        // 验证属性是否存在
+        DeviceAttribute deviceAttribute = deviceAttributeService.getById(deviceAttributeId);
+        Assert.notNull(deviceAttribute, "属性不存在");
+
+        Map<Long, String> attributeValue = bo.getAttributeValue();
+        List<PointInfo> pointInfoList = new ArrayList<PointInfo>(attributeValue.size());
+
+        attributeValue.forEach((attributeId,value) -> {
+            // 查询驱动配置信息
+            PointInfo dbPointInfo = baseMapper.selectOne(Wrappers.lambdaQuery(PointInfo.class)
+                    .eq(PointInfo::getDeviceId, deviceId)
+                    .eq(PointInfo::getPointAttributeId, attributeId)
+                    .eq(PointInfo::getDeviceAttributeId, deviceAttributeId)
+                    .last("limit 1")
+            );
+
+            // 构建驱动配置信息
+            PointInfo pointInfo = new PointInfo();
+            pointInfo.setDeviceId(deviceId);
+            pointInfo.setDeviceAttributeId(deviceAttributeId);
+            pointInfo.setPointAttributeId(attributeId);
+            pointInfo.setValue(value);
+            // 数据库存在则更新，不存在则插入 通过主键判断
+            if (ObjectUtil.isNotNull(dbPointInfo)){
+                pointInfo.setId(dbPointInfo.getId());
+            }
+            pointInfoList.add(pointInfo);
+        });
+
+        return baseMapper.insertOrUpdateBatch(pointInfoList);
+    }
+
+    /**
+     * 得到点信息价值地图
+     *
+     * @param deviceId    设备id
+     * @param attributeId
+     * @param pointIds    点id
+     * @return {@link Map}<{@link Long}, {@link String}>
+     */
+    @Override
+    public Map<Long, String> getPointInfoValueMap(Long deviceId, Long attributeId, List<Long> pointIds) {
+        List<PointInfo> driverInfos = baseMapper.selectList(Wrappers.lambdaQuery(PointInfo.class)
+                .eq(PointInfo::getDeviceId, deviceId)
+                .eq(PointInfo::getPointAttributeId, attributeId)
+                .in(PointInfo::getPointAttributeId, pointIds));
+        if (CollectionUtil.isEmpty(driverInfos)) {
+            return Collections.emptyMap();
+        }
+        return driverInfos.stream().collect(Collectors.toMap(PointInfo::getPointAttributeId, PointInfo::getValue));
+    }
 
     @Override
     public List<PointInfo> selectByAttributeId(Long pointAttributeId) {
@@ -69,7 +143,7 @@ public class PointInfoServiceImpl extends ServiceImpl<PointInfoMapper, PointInfo
         LambdaQueryWrapper<PointInfo> lqw = Wrappers.lambdaQuery();
         lqw.eq(bo.getPointAttributeId() != null, PointInfo::getPointAttributeId, bo.getPointAttributeId());
         lqw.eq(bo.getDeviceId() != null, PointInfo::getDeviceId, bo.getDeviceId());
-        lqw.eq(bo.getPointId() != null, PointInfo::getPointId, bo.getPointId());
+        lqw.eq(bo.getDeviceAttributeId() != null, PointInfo::getDeviceAttributeId, bo.getDeviceAttributeId());
         lqw.eq(StringUtils.isNotBlank(bo.getValue()), PointInfo::getValue, bo.getValue());
         lqw.eq(StringUtils.isNotBlank(bo.getDescription()), PointInfo::getDescription, bo.getDescription());
         return lqw;

@@ -1,6 +1,7 @@
 package com.pangu.iot.manager.driver.service;
 
 import com.pangu.iot.manager.driver.domain.PointInfo;
+import com.pangu.iot.manager.driver.domain.bo.PointInfoBatchBO;
 import com.pangu.iot.manager.driver.domain.vo.PointInfoVO;
 import com.pangu.iot.manager.driver.domain.bo.PointInfoBO;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -9,6 +10,7 @@ import com.pangu.common.mybatis.core.page.TableDataInfo;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 点位属性配置信息Service接口
@@ -55,4 +57,22 @@ public interface IPointInfoService extends IService<PointInfo> {
      * @return PointInfo Array
      */
     List<PointInfo> selectByAttributeId(Long pointAttributeId);
+
+    /**
+     * 得到点信息价值地图
+     *
+     * @param deviceId    设备id
+     * @param attributeId
+     * @param pointIds    点id
+     * @return {@link Map}<{@link Long}, {@link String}>
+     */
+    Map<Long, String> getPointInfoValueMap(Long deviceId, Long attributeId, List<Long> pointIds);
+
+    /**
+     * 批量更新
+     *
+     * @param bo 薄
+     * @return {@link Boolean}
+     */
+    Boolean batchUpdate(PointInfoBatchBO bo);
 }

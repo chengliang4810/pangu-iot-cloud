@@ -4,26 +4,25 @@ import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.pangu.common.core.domain.R;
 import com.pangu.common.core.validate.AddGroup;
 import com.pangu.common.core.validate.EditGroup;
-import com.pangu.common.core.validate.QueryGroup;
 import com.pangu.common.core.web.controller.BaseController;
 import com.pangu.common.excel.utils.ExcelUtil;
 import com.pangu.common.log.annotation.Log;
 import com.pangu.common.log.enums.BusinessType;
 import com.pangu.common.mybatis.core.page.PageQuery;
+import com.pangu.common.mybatis.core.page.TableDataInfo;
+import com.pangu.iot.manager.driver.domain.bo.PointInfoBO;
+import com.pangu.iot.manager.driver.domain.bo.PointInfoBatchBO;
+import com.pangu.iot.manager.driver.domain.vo.PointInfoVO;
+import com.pangu.iot.manager.driver.service.IPointInfoService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import com.pangu.iot.manager.driver.domain.vo.PointInfoVO;
-import com.pangu.iot.manager.driver.domain.bo.PointInfoBO;
-import com.pangu.iot.manager.driver.service.IPointInfoService;
-import com.pangu.common.mybatis.core.page.TableDataInfo;
 
-import java.util.List;
-import java.util.Arrays;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import javax.servlet.http.HttpServletResponse;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * 点位属性配置信息控制器
@@ -39,6 +38,16 @@ import javax.servlet.http.HttpServletResponse;
 public class PointInfoController extends BaseController {
 
     private final IPointInfoService pointInfoService;
+
+    /**
+     * 新增点位属性配置信息
+     */
+    @SaCheckPermission("manager:driver/point/info:add")
+    @Log(title = "点位属性配置信息", businessType = BusinessType.INSERT)
+    @PostMapping("/batch")
+    public R<Void> addBatch(@Validated(AddGroup.class) @RequestBody PointInfoBatchBO bo) {
+        return toAjax(pointInfoService.batchUpdate(bo));
+    }
 
     /**
      * 查询点位属性配置信息列表

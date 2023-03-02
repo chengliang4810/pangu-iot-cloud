@@ -2,10 +2,7 @@ package com.pangu.iot.manager.driver.domain.vo;
 
 import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import com.alibaba.excel.annotation.ExcelProperty;
-import com.pangu.common.excel.annotation.ExcelDictFormat;
-import com.pangu.common.excel.convert.ExcelDictConvert;
 import lombok.Data;
-import java.util.Date;
 
 
 
@@ -55,6 +52,12 @@ public class PointAttributeVO {
      * 默认值
      */
     @ExcelProperty(value = "默认值")
+    private String defaultValue;
+
+    /**
+     * 值
+     */
+    @ExcelProperty(value = "值")
     private String value;
 
     /**

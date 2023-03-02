@@ -7,9 +7,12 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.pangu.common.core.utils.Assert;
 import com.pangu.common.core.utils.StringUtils;
 import com.pangu.common.mybatis.core.page.PageQuery;
 import com.pangu.common.mybatis.core.page.TableDataInfo;
+import com.pangu.iot.manager.device.domain.Device;
+import com.pangu.iot.manager.device.service.IDeviceService;
 import com.pangu.iot.manager.driver.domain.DriverInfo;
 import com.pangu.iot.manager.driver.domain.bo.DriverInfoBO;
 import com.pangu.iot.manager.driver.domain.bo.DriverInfoBatchBO;
@@ -33,7 +36,7 @@ import java.util.stream.Collectors;
 public class DriverInfoServiceImpl extends ServiceImpl<DriverInfoMapper, DriverInfo> implements IDriverInfoService {
 
     private final DriverInfoMapper baseMapper;
-
+    private final IDeviceService deviceService;
     /**
      * 批量更新驱动程序信息
      *
@@ -44,6 +47,9 @@ public class DriverInfoServiceImpl extends ServiceImpl<DriverInfoMapper, DriverI
     public Boolean batchUpdateDriverInfo(DriverInfoBatchBO bo) {
 
         Long deviceId = bo.getDeviceId();
+        long count = deviceService.count(Wrappers.lambdaQuery(Device.class).eq(Device::getId, deviceId));
+        Assert.isTrue(count > 0, "设备不存在");
+
         Map<Long, String> attributeValue = bo.getAttributeValue();
         List<DriverInfo> driverInfoList = new ArrayList<DriverInfo>(attributeValue.size());
 
@@ -62,7 +68,7 @@ public class DriverInfoServiceImpl extends ServiceImpl<DriverInfoMapper, DriverI
             driverInfo.setValue(value);
             // 数据库存在则更新，不存在则插入 通过主键判断
             if (ObjectUtil.isNotNull(dbDriverInfo)){
-                driverInfo.setId(driverInfo.getId());
+                driverInfo.setId(dbDriverInfo.getId());
             }
             driverInfoList.add(driverInfo);
         });

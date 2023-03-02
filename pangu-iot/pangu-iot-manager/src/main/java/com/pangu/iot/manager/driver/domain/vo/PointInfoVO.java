@@ -2,10 +2,7 @@ package com.pangu.iot.manager.driver.domain.vo;
 
 import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import com.alibaba.excel.annotation.ExcelProperty;
-import com.pangu.common.excel.annotation.ExcelDictFormat;
-import com.pangu.common.excel.convert.ExcelDictConvert;
 import lombok.Data;
-import java.util.Date;
 
 
 
@@ -40,10 +37,10 @@ public class PointInfoVO {
     private Long deviceId;
 
     /**
-     * 位号ID
+     * 设备属性id
      */
-    @ExcelProperty(value = "位号ID")
-    private Long pointId;
+    @ExcelProperty(value = "设备属性id")
+    private Long deviceAttributeId;
 
     /**
      * 值

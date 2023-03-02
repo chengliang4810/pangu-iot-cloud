@@ -1,11 +1,12 @@
 package com.pangu.iot.manager.driver.service;
 
-import com.pangu.manager.api.domain.PointAttribute;
-import com.pangu.iot.manager.driver.domain.vo.PointAttributeVO;
-import com.pangu.iot.manager.driver.domain.bo.PointAttributeBO;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.pangu.common.mybatis.core.page.PageQuery;
 import com.pangu.common.mybatis.core.page.TableDataInfo;
+import com.pangu.iot.manager.driver.domain.bo.PointAttributeBO;
+import com.pangu.iot.manager.driver.domain.vo.DriverPointConfigVO;
+import com.pangu.iot.manager.driver.domain.vo.PointAttributeVO;
+import com.pangu.manager.api.domain.PointAttribute;
 
 import java.util.Collection;
 import java.util.List;
@@ -55,4 +56,13 @@ public interface IPointAttributeService extends IService<PointAttribute> {
      * @return PointAttribute Array
      */
     List<PointAttribute> selectByDriverId(Long driverId);
+
+    /**
+     * 司机配置设备id
+     *
+     * @param deviceId    设备id
+     * @param attributeId 设备属性id
+     * @return {@link List}<{@link DriverPointConfigVO}>
+     */
+    List<DriverPointConfigVO> getDriverPointConfigByDeviceId(Long deviceId, Long attributeId);
 }

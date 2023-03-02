@@ -1,12 +1,13 @@
 package com.pangu.iot.manager.driver.convert;
 
-import java.util.List;
-
-import com.pangu.manager.api.domain.PointAttribute;
-import com.pangu.iot.manager.driver.domain.vo.PointAttributeVO;
-import com.pangu.iot.manager.driver.domain.bo.PointAttributeBO;
 import com.pangu.common.core.convert.CommonConvert;
+import com.pangu.iot.manager.driver.domain.bo.PointAttributeBO;
+import com.pangu.iot.manager.driver.domain.vo.PointAttributeVO;
+import com.pangu.manager.api.domain.PointAttribute;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+
+import java.util.List;
 
 /**
  * 点位属性Convert接口
@@ -48,6 +49,8 @@ public interface PointAttributeConvert extends CommonConvert {
      * @param entity PointAttribute
      * @return pointAttributeVO
      */
+    @Mapping(target = "value", ignore = true)
+    @Mapping(source = "value", target = "defaultValue")
     PointAttributeVO toVo(PointAttribute entity);
 
     /**

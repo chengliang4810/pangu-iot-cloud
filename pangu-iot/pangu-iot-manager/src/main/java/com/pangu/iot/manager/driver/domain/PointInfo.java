@@ -35,9 +35,9 @@ public class PointInfo implements Serializable {
      */
     private Long deviceId;
     /**
-     * 位号ID
+     * 设备属性id
      */
-    private Long pointId;
+    private Long deviceAttributeId;
     /**
      * 值
      */
