@@ -3,6 +3,7 @@ package com.pangu.iot.manager.driver.convert;
 import com.pangu.common.core.convert.CommonConvert;
 import com.pangu.iot.manager.driver.domain.Driver;
 import com.pangu.iot.manager.driver.domain.bo.DriverBO;
+import com.pangu.iot.manager.driver.domain.vo.DriverConfigVO;
 import com.pangu.iot.manager.driver.domain.vo.DriverVO;
 import com.pangu.manager.api.domain.dto.DriverDTO;
 import org.mapstruct.Mapper;
@@ -54,6 +55,15 @@ public interface DriverConvert extends CommonConvert {
      */
     @Mapping(source = "enable", target = "status", qualifiedByName = "longToBool")
     DriverVO toVo(Driver entity);
+
+    /**
+     * Driver转换为DriverVO
+     *
+     * @param entity Driver
+     * @return driverVO
+     */
+    @Mapping(source = "enable", target = "status", qualifiedByName = "longToBool")
+    DriverConfigVO toConfigVo(Driver entity);
 
     /**
      * BO List 转换为 Entity List

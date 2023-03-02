@@ -4,26 +4,25 @@ import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.pangu.common.core.domain.R;
 import com.pangu.common.core.validate.AddGroup;
 import com.pangu.common.core.validate.EditGroup;
-import com.pangu.common.core.validate.QueryGroup;
 import com.pangu.common.core.web.controller.BaseController;
 import com.pangu.common.excel.utils.ExcelUtil;
 import com.pangu.common.log.annotation.Log;
 import com.pangu.common.log.enums.BusinessType;
 import com.pangu.common.mybatis.core.page.PageQuery;
+import com.pangu.common.mybatis.core.page.TableDataInfo;
+import com.pangu.iot.manager.driver.domain.bo.DriverInfoBO;
+import com.pangu.iot.manager.driver.domain.bo.DriverInfoBatchBO;
+import com.pangu.iot.manager.driver.domain.vo.DriverInfoVO;
+import com.pangu.iot.manager.driver.service.IDriverInfoService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import com.pangu.iot.manager.driver.domain.vo.DriverInfoVO;
-import com.pangu.iot.manager.driver.domain.bo.DriverInfoBO;
-import com.pangu.iot.manager.driver.service.IDriverInfoService;
-import com.pangu.common.mybatis.core.page.TableDataInfo;
 
-import java.util.List;
-import java.util.Arrays;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import javax.servlet.http.HttpServletResponse;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * 驱动属性配置信息控制器
@@ -39,6 +38,15 @@ import javax.servlet.http.HttpServletResponse;
 public class DriverInfoController extends BaseController {
 
     private final IDriverInfoService driverInfoService;
+    /**
+     * 批量新增&更新驱动属性配置信息
+     */
+    @SaCheckPermission("manager:driver:info:add")
+    @Log(title = "驱动属性配置信息", businessType = BusinessType.INSERT)
+    @PostMapping("/batch")
+    public R<Void> addBatch(@Validated(AddGroup.class) @RequestBody DriverInfoBatchBO bo) {
+        return toAjax(driverInfoService.batchUpdateDriverInfo(bo));
+    }
 
     /**
      * 查询驱动属性配置信息列表

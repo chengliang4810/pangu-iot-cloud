@@ -2,13 +2,13 @@ package com.pangu.iot.manager.driver.domain.bo;
 
 import com.pangu.common.core.validate.AddGroup;
 import com.pangu.common.core.validate.EditGroup;
+import com.pangu.common.core.web.domain.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import javax.validation.constraints.*;
+import lombok.experimental.Accessors;
 
-import java.util.Date;
-
-import com.pangu.common.core.web.domain.BaseEntity;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 /**
  * 驱动属性业务对象
@@ -18,6 +18,7 @@ import com.pangu.common.core.web.domain.BaseEntity;
  */
 
 @Data
+@Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
 public class DriverAttributeBO extends BaseEntity {
 

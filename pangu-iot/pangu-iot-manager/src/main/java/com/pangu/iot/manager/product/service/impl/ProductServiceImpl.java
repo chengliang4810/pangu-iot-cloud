@@ -110,8 +110,6 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
             bo.setCode(IdUtil.nanoId());
         }
 
-        System.out.println(bo.getDriver());
-
         // 生成主键
         Long productId = IdUtil.getSnowflake().nextId();
         // 初始化超级表

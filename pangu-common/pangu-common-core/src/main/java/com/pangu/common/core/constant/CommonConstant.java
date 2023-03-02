@@ -64,6 +64,18 @@ public interface CommonConstant {
          * 斜线
          */
         String SLASH = "/";
+        /**
+         * 反斜线
+         */
+        String BACKSLASH = "\\";
+        /**
+         * 冒号
+         */
+        String COLON = ":";
+        /**
+         * 逗号
+         */
+        String COMMA = ",";
     }
 
     /**

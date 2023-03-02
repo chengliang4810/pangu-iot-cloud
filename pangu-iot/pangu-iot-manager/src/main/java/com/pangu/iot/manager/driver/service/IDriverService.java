@@ -1,6 +1,7 @@
 package com.pangu.iot.manager.driver.service;
 
 import com.pangu.iot.manager.driver.domain.Driver;
+import com.pangu.iot.manager.driver.domain.vo.DriverConfigVO;
 import com.pangu.iot.manager.driver.domain.vo.DriverVO;
 import com.pangu.iot.manager.driver.domain.bo.DriverBO;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -55,4 +56,12 @@ public interface IDriverService extends IService<Driver> {
      * @return {@link Driver}
      */
     Driver selectByName(String name);
+
+    /**
+     * 被产品驱动程序配置id
+     *
+     * @param deviceId 产品id
+     * @return {@link List}<{@link DriverConfigVO}>
+     */
+    List<DriverConfigVO> getDriverConfigByDeviceId(Long deviceId);
 }

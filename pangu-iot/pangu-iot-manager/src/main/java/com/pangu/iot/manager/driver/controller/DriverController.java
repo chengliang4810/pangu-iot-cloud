@@ -11,6 +11,7 @@ import com.pangu.common.log.enums.BusinessType;
 import com.pangu.common.mybatis.core.page.PageQuery;
 import com.pangu.common.mybatis.core.page.TableDataInfo;
 import com.pangu.iot.manager.driver.domain.bo.DriverBO;
+import com.pangu.iot.manager.driver.domain.vo.DriverConfigVO;
 import com.pangu.iot.manager.driver.domain.vo.DriverVO;
 import com.pangu.iot.manager.driver.service.IDriverService;
 import lombok.RequiredArgsConstructor;
@@ -37,6 +38,19 @@ import java.util.List;
 public class DriverController extends BaseController {
 
     private final IDriverService driverService;
+
+
+    /**
+     * 通过设备ID查询驱动信息以及对应的驱动属性
+     *
+     * @param deviceId 设备ID
+     * @return {@link R}<{@link List}<{@link DriverConfigVO}>>
+     */
+    @GetMapping("/attribute/device/{deviceId}")
+    public R<List<DriverConfigVO>> attributeProduct(@PathVariable Long deviceId) {
+        return R.ok(driverService.getDriverConfigByDeviceId(deviceId));
+    }
+
 
     /**
      * 查询协议驱动表所有数据

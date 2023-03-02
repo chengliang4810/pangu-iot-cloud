@@ -1,6 +1,8 @@
 package com.pangu.iot.manager.driver.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SecureUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -11,22 +13,35 @@ import com.pangu.common.core.utils.StringUtils;
 import com.pangu.common.mybatis.core.page.PageQuery;
 import com.pangu.common.mybatis.core.page.TableDataInfo;
 import com.pangu.common.redis.utils.RedisUtils;
+import com.pangu.iot.manager.device.domain.Device;
+import com.pangu.iot.manager.device.service.IDeviceService;
+import com.pangu.iot.manager.driver.convert.DriverAttributeConvert;
 import com.pangu.iot.manager.driver.convert.DriverConvert;
 import com.pangu.iot.manager.driver.domain.Driver;
 import com.pangu.iot.manager.driver.domain.bo.DriverBO;
 import com.pangu.iot.manager.driver.domain.bo.DriverServiceBO;
+import com.pangu.iot.manager.driver.domain.vo.DriverAttributeVO;
+import com.pangu.iot.manager.driver.domain.vo.DriverConfigVO;
 import com.pangu.iot.manager.driver.domain.vo.DriverServiceVO;
 import com.pangu.iot.manager.driver.domain.vo.DriverVO;
 import com.pangu.iot.manager.driver.mapper.DriverMapper;
+import com.pangu.iot.manager.driver.service.IDriverAttributeService;
+import com.pangu.iot.manager.driver.service.IDriverInfoService;
 import com.pangu.iot.manager.driver.service.IDriverService;
 import com.pangu.iot.manager.driver.service.IDriverServiceService;
+import com.pangu.iot.manager.product.domain.Product;
+import com.pangu.iot.manager.product.service.IProductService;
+import com.pangu.manager.api.domain.DriverAttribute;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import static com.pangu.common.core.constant.CommonConstant.Symbol.COMMA;
 
 /**
  * 协议驱动Service业务层处理
@@ -40,7 +55,63 @@ public class DriverServiceImpl extends ServiceImpl<DriverMapper, Driver> impleme
 
     private final DriverMapper baseMapper;
     private final DriverConvert driverConvert;
+    private final IDeviceService deviceService;
+    private final IProductService productService;
+    private final IDriverInfoService driverInfoService;
     private final IDriverServiceService driverServiceService;
+    private final DriverAttributeConvert driverAttributeConvert;
+    private final IDriverAttributeService driverAttributeService;
+
+
+    @Override
+    public List<DriverConfigVO> getDriverConfigByDeviceId(Long deviceId) {
+        // 设备
+        Device device = deviceService.getById(deviceId);
+        if (device == null) {
+            return null;
+        }
+        // 产品
+        Product product = productService.getById(device.getProductId());
+        if (product == null) {
+            return null;
+        }
+        // 驱动ID
+        String driverIds = product.getDriver();
+        if (StrUtil.isBlank(driverIds)) {
+            return null;
+        }
+
+        // 查询驱动信息
+        List<Driver> driverList = baseMapper.selectList(Wrappers.lambdaQuery(Driver.class).in(Driver::getId, driverIds.split(COMMA)));
+        if (CollectionUtil.isEmpty(driverList)) {
+            return null;
+        }
+
+        List<DriverConfigVO> driverConfigList = new ArrayList<>(driverList.size());
+        // 查询驱动对应属性以及属性值
+        driverList.forEach(driver -> {
+            DriverConfigVO driverVO = driverConvert.toConfigVo(driver);
+
+            // 查询所有属性
+            List<DriverAttribute> driverAttributeList = driverAttributeService.list(Wrappers.lambdaQuery(DriverAttribute.class).eq(DriverAttribute::getDriverId, driver.getId()));
+
+            // 查询属性值
+            List<Long> attributeIds = driverAttributeList.stream().map(DriverAttribute::getId).collect(Collectors.toList());
+            Map<Long, String> attributeValueMap = driverInfoService.getDriverInfoValueMap(deviceId, attributeIds);
+
+            // 组装属性值
+            List<DriverAttributeVO> driverAttributeVOList = driverAttributeConvert.toVoList(driverAttributeList);
+            driverAttributeVOList.forEach(driverAttributeVO -> {
+                driverAttributeVO.setValue(attributeValueMap.get(driverAttributeVO.getId()));
+            });
+
+            driverVO.setAttributeList(driverAttributeVOList);
+            driverConfigList.add(driverVO);
+        });
+
+        return driverConfigList;
+    }
+
 
     @Override
     public Driver selectByName(String name) {

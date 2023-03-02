@@ -1,6 +1,7 @@
 package com.pangu.iot.manager.driver.service;
 
 import com.pangu.iot.manager.driver.domain.DriverInfo;
+import com.pangu.iot.manager.driver.domain.bo.DriverInfoBatchBO;
 import com.pangu.iot.manager.driver.domain.vo.DriverInfoVO;
 import com.pangu.iot.manager.driver.domain.bo.DriverInfoBO;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -9,6 +10,7 @@ import com.pangu.common.mybatis.core.page.TableDataInfo;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 驱动属性配置信息Service接口
@@ -55,4 +57,21 @@ public interface IDriverInfoService extends IService<DriverInfo> {
      * @return DriverInfo Array
      */
     List<DriverInfo>  selectByAttributeId(Long driverAttributeId);
+
+    /**
+     * 查询驱动配置值
+     *
+     * @param deviceId     设备id
+     * @param attributeIds 属性id
+     * @return {@link Map}<{@link Long}, {@link String}>
+     */
+    Map<Long, String> getDriverInfoValueMap(Long deviceId, List<Long> attributeIds);
+
+    /**
+     * 批量更新驱动程序信息
+     *
+     * @param bo 薄
+     * @return int
+     */
+    Boolean batchUpdateDriverInfo(DriverInfoBatchBO bo);
 }

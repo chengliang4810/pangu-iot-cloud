@@ -4,17 +4,18 @@ import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import com.alibaba.excel.annotation.ExcelProperty;
 import lombok.Data;
 
+import java.util.List;
 
 
 /**
- * 驱动属性视图对象
+ * 协议驱动视图对象
  *
  * @author chengliang4810
  * @date 2023-02-28
  */
 @Data
 @ExcelIgnoreUnannotated
-public class DriverAttributeVO {
+public class DriverConfigVO {
 
     private static final long serialVersionUID = 1L;
 
@@ -25,10 +26,10 @@ public class DriverAttributeVO {
     private Long id;
 
     /**
-     * 驱动ID
+     * 协议名称
      */
-    @ExcelProperty(value = "驱动ID")
-    private Long driverId;
+    @ExcelProperty(value = "协议名称")
+    private String name;
 
     /**
      * 显示名称
@@ -36,29 +37,12 @@ public class DriverAttributeVO {
     @ExcelProperty(value = "显示名称")
     private String displayName;
 
-    /**
-     * 名称
-     */
-    @ExcelProperty(value = "名称")
-    private String name;
 
     /**
-     * 类型
+     * 启用|禁用
      */
-    @ExcelProperty(value = "类型")
-    private String type;
-
-    /**
-     * 值
-     */
-    @ExcelProperty(value = "值")
-    private String value;
-
-    /**
-     * 默认值
-     */
-    @ExcelProperty(value = "默认值")
-    private String defaultValue;
+    @ExcelProperty(value = "启用|禁用")
+    private Boolean status;
 
     /**
      * 描述
@@ -66,5 +50,10 @@ public class DriverAttributeVO {
     @ExcelProperty(value = "描述")
     private String description;
 
+
+    /**
+     * 属性列表
+     */
+    private  List<DriverAttributeVO> attributeList;
 
 }

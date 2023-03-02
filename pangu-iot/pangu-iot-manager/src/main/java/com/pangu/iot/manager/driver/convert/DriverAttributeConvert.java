@@ -1,12 +1,13 @@
 package com.pangu.iot.manager.driver.convert;
 
-import java.util.List;
-
-import com.pangu.manager.api.domain.DriverAttribute;
-import com.pangu.iot.manager.driver.domain.vo.DriverAttributeVO;
-import com.pangu.iot.manager.driver.domain.bo.DriverAttributeBO;
 import com.pangu.common.core.convert.CommonConvert;
+import com.pangu.iot.manager.driver.domain.bo.DriverAttributeBO;
+import com.pangu.iot.manager.driver.domain.vo.DriverAttributeVO;
+import com.pangu.manager.api.domain.DriverAttribute;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+
+import java.util.List;
 
 /**
  * 驱动属性Convert接口
@@ -48,6 +49,8 @@ public interface DriverAttributeConvert extends CommonConvert {
      * @param entity DriverAttribute
      * @return driverAttributeVO
      */
+    @Mapping(target = "value", ignore = true)
+    @Mapping(source = "value", target = "defaultValue")
     DriverAttributeVO toVo(DriverAttribute entity);
 
     /**
