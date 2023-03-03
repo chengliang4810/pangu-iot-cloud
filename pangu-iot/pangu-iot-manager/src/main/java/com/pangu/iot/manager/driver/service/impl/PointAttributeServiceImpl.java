@@ -50,7 +50,6 @@ public class PointAttributeServiceImpl extends ServiceImpl<PointAttributeMapper,
     private final IDeviceService deviceService;
     private final IProductService productService;
     private final IDriverService driverService;
-    private final IPointAttributeService pointAttributeService;
     private final IPointInfoService pointInfoService;
     private final DriverConvert driverConvert;
     private final PointAttributeConvert pointAttributeConvert;
@@ -100,7 +99,7 @@ public class PointAttributeServiceImpl extends ServiceImpl<PointAttributeMapper,
             DriverPointConfigVO driverPointConfigVO = driverConvert.toPointConfigVo(driver);
 
             // 查询所有点位属性
-            List<PointAttribute> pointAttributes = pointAttributeService.list(Wrappers.lambdaQuery(PointAttribute.class).eq(PointAttribute::getDriverId, driver.getId()));
+            List<PointAttribute> pointAttributes = baseMapper.selectList(Wrappers.lambdaQuery(PointAttribute.class).eq(PointAttribute::getDriverId, driver.getId()));
 
             // 查询属性值
             List<Long> pointIds = pointAttributes.stream().map(PointAttribute::getId).collect(Collectors.toList());

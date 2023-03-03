@@ -101,7 +101,7 @@ public class RemoteTdEngineServiceImpl implements RemoteTdEngineService {
         try {
             return tdEngineService.selectLastRowData(IotConstants.DEVICE_TABLE_NAME_PREFIX + deviceCode);
         } catch (Exception e) {
-            log.warn("查询今天最后一行数据失败", e);
+            log.warn("查询数据失败: {}", e.getMessage());
         }
         return Collections.emptyMap();
     }
