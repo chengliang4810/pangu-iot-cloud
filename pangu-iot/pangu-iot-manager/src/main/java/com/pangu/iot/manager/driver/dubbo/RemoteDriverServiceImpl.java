@@ -22,6 +22,17 @@ public class RemoteDriverServiceImpl implements RemoteDriverService {
 
     private final IDriverSdkService driverSdkService;
 
+    /**
+     * 驱动程序元数据同步
+     *
+     * @param primaryKey 主键
+     */
+    @Override
+    public void driverMetadataSync(String primaryKey) {
+        driverSdkService.driverMetadataSync(primaryKey);
+    }
+
+
     @Override
     public void driverRegister(DriverDTO driverDto) {
         driverSdkService.driverRegister(driverDto);

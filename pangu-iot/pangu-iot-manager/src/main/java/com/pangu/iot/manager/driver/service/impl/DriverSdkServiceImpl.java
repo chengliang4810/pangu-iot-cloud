@@ -3,12 +3,16 @@ package com.pangu.iot.manager.driver.service.impl;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.crypto.SecureUtil;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.pangu.iot.manager.device.domain.Device;
+import com.pangu.iot.manager.device.service.IDeviceService;
 import com.pangu.iot.manager.driver.convert.DriverConvert;
 import com.pangu.iot.manager.driver.domain.Driver;
 import com.pangu.iot.manager.driver.domain.DriverInfo;
 import com.pangu.iot.manager.driver.domain.DriverService;
 import com.pangu.iot.manager.driver.domain.PointInfo;
 import com.pangu.iot.manager.driver.service.*;
+import com.pangu.iot.manager.product.service.IProductService;
 import com.pangu.manager.api.domain.DriverAttribute;
 import com.pangu.manager.api.domain.PointAttribute;
 import com.pangu.manager.api.domain.dto.DriverDTO;
@@ -27,12 +31,72 @@ import java.util.Map;
 public class DriverSdkServiceImpl implements IDriverSdkService {
 
     private final DriverConvert driverConvert;
+    private final IProductService productService;
     private final IDriverService driverService;
+    private final IDeviceService deviceService;
     private final IPointInfoService pointInfoService;
     private final IDriverInfoService driverInfoService;
     private final IDriverServiceService driverServiceService;
     private final IPointAttributeService pointAttributeService;
     private final IDriverAttributeService driverAttributeService;
+
+
+    /**
+     * 驱动程序元数据同步
+     *
+     * @param primaryKey 主键
+     */
+    @Override
+    public void driverMetadataSync(String primaryKey) {
+        // 查询驱动信息
+        Driver driver = driverService.selectByName(primaryKey);
+        if (ObjectUtil.isNull(driver)) {
+            log.error("Driver does not exist, primaryKey: {}", primaryKey);
+            return;
+        }
+
+        // 查询驱动对应的设备信息
+        List<Long> productIds = productService.listByDriverId(driver.getId());
+        List<Device> deviceList = deviceService.list(Wrappers.lambdaQuery(Device.class).in(Device::getProductId, productIds));
+        if (CollectionUtil.isEmpty(deviceList)) {
+            log.error("Device does not exist, driverId: {}", driver.getId());
+            return;
+        }
+
+
+
+        // 查询驱动信息
+//        DriverInfo driverInfo = driverInfoService.getDriverInfoValueMap(primaryKey);
+//        if (ObjectUtil.isNull(driverInfo)) {
+//            log.error("Driver info does not exist, primaryKey: {}", primaryKey);
+//            return;
+//        }
+//
+//        // 查询驱动属性信息
+//        List<DriverAttribute> driverAttributes = driverAttributeService.listByDriverId(primaryKey);
+//        Map<String, DriverAttribute> driverAttributeMap = new HashMap<>();
+//        if (CollectionUtil.isNotEmpty(driverAttributes)) {
+//            driverAttributes.forEach(driverAttribute -> driverAttributeMap.put(driverAttribute.getName(), driverAttribute));
+//        }
+//
+//        // 查询驱动点位信息
+//        List<PointInfo> pointInfos = pointInfoService.listByDriverId(primaryKey);
+//        Map<String, PointInfo> pointInfoMap = new HashMap<>();
+//        if (CollectionUtil.isNotEmpty(pointInfos)) {
+//            pointInfos.forEach(pointInfo -> pointInfoMap.put(pointInfo.getName(), pointInfo));
+//        }
+//
+//        // 查询驱动点位属性信息
+//        List<PointAttribute> pointAttributes = pointAttributeService.listByDriverId(primaryKey);
+//        Map<String, PointAttribute> pointAttributeMap = new HashMap<>();
+//        if (CollectionUtil.isNotEmpty(pointAttributes)) {
+//            pointAttributes.forEach(pointAttribute -> pointAttributeMap.put(pointAttribute.getName(), pointAttribute));
+//        }
+
+
+
+
+    }
 
     @Override
     @Transactional(rollbackFor = Exception.class)

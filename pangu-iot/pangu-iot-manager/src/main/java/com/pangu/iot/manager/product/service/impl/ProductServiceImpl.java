@@ -27,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static com.pangu.common.core.constant.ConfigKeyConstants.GLOBAL_HOST_GROUP_KEY;
 import static com.pangu.common.core.constant.IotConstants.SUPER_TABLE_PREFIX;
@@ -159,4 +160,16 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         }
         return baseMapper.deleteBatchIds(ids) > 0;
     }
+
+    /**
+     * 通过驱动程序id列表
+     *
+     * @param driverId 司机身份证
+     * @return {@link List}<{@link Long}>
+     */
+    @Override
+    public List<Long> listByDriverId(Long driverId) {
+        return baseMapper.selectList(Wrappers.lambdaQuery(Product.class).apply("find_int_set('{0}', driver)", driverId)).stream().map(Product::getId).collect(Collectors.toList());
+    }
+
 }

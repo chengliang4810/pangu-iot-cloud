@@ -18,4 +18,12 @@ public interface RemoteDriverService {
     void driverRegister(DriverDTO driverDto);
 
 
+    /**
+     * 驱动程序元数据同步
+     *
+     * @param primaryKey 主键
+     */
+    void driverMetadataSync(String primaryKey);
+
+
 }

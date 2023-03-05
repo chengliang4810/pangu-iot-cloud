@@ -54,4 +54,12 @@ public interface IProductService extends IService<Product> {
      * 校验并批量删除产品信息
      */
     Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid);
+
+    /**
+     * 通过驱动程序id列表
+     *
+     * @param driverId 司机身份证
+     * @return {@link List}<{@link Long}>
+     */
+    List<Long> listByDriverId(Long driverId);
 }
