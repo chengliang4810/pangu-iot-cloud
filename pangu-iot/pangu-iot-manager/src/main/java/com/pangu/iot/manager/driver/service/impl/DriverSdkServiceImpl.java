@@ -4,6 +4,7 @@ import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.crypto.SecureUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.pangu.common.core.domain.dto.AttributeInfo;
 import com.pangu.iot.manager.device.domain.Device;
 import com.pangu.iot.manager.device.service.IDeviceService;
 import com.pangu.iot.manager.driver.convert.DriverConvert;
@@ -24,6 +25,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -55,7 +58,12 @@ public class DriverSdkServiceImpl implements IDriverSdkService {
             return;
         }
 
-        // 查询驱动对应的设备信息
+        // 查询驱动属性
+        Map<Long, DriverAttribute> driverAttributeMap = driverAttributeService.getDriverAttributeMap(driver.getId());
+        // 查询点位属性
+        Map<Long, PointAttribute> pointAttributeMap = pointAttributeService.getPointAttributeMap(driver.getId());
+
+        // 查询驱动对应的设备
         List<Long> productIds = productService.listByDriverId(driver.getId());
         List<Device> deviceList = deviceService.list(Wrappers.lambdaQuery(Device.class).in(Device::getProductId, productIds));
         if (CollectionUtil.isEmpty(deviceList)) {
@@ -63,6 +71,17 @@ public class DriverSdkServiceImpl implements IDriverSdkService {
             return;
         }
 
+        // 设备ID
+        Set<Long> deviceIds = deviceList.stream().map(Device::getId).collect(Collectors.toSet());
+
+        // 查询属性配置信息
+        Map<Long, Map<String, AttributeInfo>> driverInfoMap = driverInfoService.getDriverInfoMap(deviceIds, driverAttributeMap);
+
+        // DeviceMap
+        Map<Long, Device> deviceMap = deviceList.stream().collect(Collectors.toMap(Device::getId, device -> device));
+
+        //
+        Map<Long, Map<Long, PointAttribute>> profilePointMap = pointAttributeService.getProfilePointMap(deviceIds);
 
 
         // 查询驱动信息

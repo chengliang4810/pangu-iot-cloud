@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.pangu.common.core.domain.dto.AttributeInfo;
 import com.pangu.common.core.utils.Assert;
 import com.pangu.common.core.utils.StringUtils;
 import com.pangu.common.mybatis.core.page.PageQuery;
@@ -19,10 +20,12 @@ import com.pangu.iot.manager.driver.domain.bo.DriverInfoBatchBO;
 import com.pangu.iot.manager.driver.domain.vo.DriverInfoVO;
 import com.pangu.iot.manager.driver.mapper.DriverInfoMapper;
 import com.pangu.iot.manager.driver.service.IDriverInfoService;
+import com.pangu.manager.api.domain.DriverAttribute;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 /**
@@ -37,6 +40,46 @@ public class DriverInfoServiceImpl extends ServiceImpl<DriverInfoMapper, DriverI
 
     private final DriverInfoMapper baseMapper;
     private final IDeviceService deviceService;
+
+
+    /**
+     * Get driver info map
+     *
+     * @param deviceList         Device Set
+     * @param driverAttributeMap Driver Attribute Map
+     * @return map(deviceId ( driverAttribute.name, ( drverInfo.value, driverAttribute.type)))
+     */
+    @Override
+    public Map<Long, Map<String, AttributeInfo>> getDriverInfoMap(Set<Long> deviceIds, Map<Long, DriverAttribute> driverAttributeMap) {
+        Map<Long, Map<String, AttributeInfo>> driverInfoMap = new ConcurrentHashMap<>(16);
+        deviceIds.forEach(deviceId -> {
+            Map<String, AttributeInfo> infoMap = getDriverInfoMap(deviceId, driverAttributeMap);
+            if (infoMap.size() > 0) {
+                driverInfoMap.put(deviceId, infoMap);
+            }
+        });
+        return driverInfoMap;
+    }
+
+    /**
+     * Get driver info map
+     *
+     * @param deviceId           Device Id
+     * @param driverAttributeMap Driver Attribute Map
+     * @return map(attributeName, attributeInfo ( value, type))
+     */
+    public Map<String, AttributeInfo> getDriverInfoMap(Long deviceId, Map<Long, DriverAttribute> driverAttributeMap) {
+        Map<String, AttributeInfo> attributeInfoMap = new ConcurrentHashMap<>(16);
+            List<DriverInfo> driverInfos = baseMapper.selectList(Wrappers.lambdaQuery(DriverInfo.class)
+                    .eq(DriverInfo::getDeviceId, deviceId));
+            driverInfos.forEach(driverInfo -> {
+                DriverAttribute attribute = driverAttributeMap.get(driverInfo.getDriverAttributeId());
+                attributeInfoMap.put(attribute.getName(), new AttributeInfo(driverInfo.getValue(), attribute.getType()));
+            });
+        return attributeInfoMap;
+    }
+
+
     /**
      * 批量更新驱动程序信息
      *

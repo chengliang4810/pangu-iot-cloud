@@ -1,24 +1,25 @@
 package com.pangu.iot.manager.driver.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.pangu.common.core.utils.StringUtils;
 import com.pangu.common.mybatis.core.page.PageQuery;
 import com.pangu.common.mybatis.core.page.TableDataInfo;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 import com.pangu.iot.manager.driver.domain.bo.DriverAttributeBO;
 import com.pangu.iot.manager.driver.domain.vo.DriverAttributeVO;
-import com.pangu.manager.api.domain.DriverAttribute;
 import com.pangu.iot.manager.driver.mapper.DriverAttributeMapper;
 import com.pangu.iot.manager.driver.service.IDriverAttributeService;
+import com.pangu.manager.api.domain.DriverAttribute;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Collection;
+import java.util.stream.Collectors;
 
 /**
  * 驱动属性Service业务层处理
@@ -32,9 +33,21 @@ public class DriverAttributeServiceImpl extends ServiceImpl<DriverAttributeMappe
 
     private final DriverAttributeMapper baseMapper;
 
+    /**
+     * 驱动属性映射
+     *
+     * @param driverId 司机身份证
+     * @return {@link Map}<{@link Long}, {@link DriverAttribute}>
+     */
     @Override
-    public List<DriverAttribute> selectByDriverId(Long id) {
-        return baseMapper.selectList(Wrappers.lambdaQuery(DriverAttribute.class).eq(DriverAttribute::getDriverId, id));
+    public Map<Long, DriverAttribute> getDriverAttributeMap(Long driverId) {
+        return  this.selectByDriverId(driverId).stream().collect(Collectors.toMap(DriverAttribute::getId, driverAttribute -> driverAttribute));
+    }
+
+
+    @Override
+    public List<DriverAttribute> selectByDriverId(Long driverId) {
+        return baseMapper.selectList(Wrappers.lambdaQuery(DriverAttribute.class).eq(DriverAttribute::getDriverId, driverId));
     }
 
     /**

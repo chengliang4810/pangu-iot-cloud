@@ -24,14 +24,13 @@ import com.pangu.iot.manager.driver.service.IPointAttributeService;
 import com.pangu.iot.manager.driver.service.IPointInfoService;
 import com.pangu.iot.manager.product.domain.Product;
 import com.pangu.iot.manager.product.service.IProductService;
+import com.pangu.manager.api.domain.DriverAttribute;
 import com.pangu.manager.api.domain.PointAttribute;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 import static com.pangu.common.core.constant.CommonConstant.Symbol.COMMA;
@@ -53,6 +52,29 @@ public class PointAttributeServiceImpl extends ServiceImpl<PointAttributeMapper,
     private final IPointInfoService pointInfoService;
     private final DriverConvert driverConvert;
     private final PointAttributeConvert pointAttributeConvert;
+
+
+    @Override
+    public Map<Long, Map<Long, PointAttribute>> getProfilePointMap(Set<Long> deviceIds) {
+        Map<Long, Map<Long, PointAttribute>> profilePointMap = new ConcurrentHashMap<>(16);
+//        deviceIds.forEach(deviceId -> {
+//            Set<String> profileIds = profileBindService.selectProfileIdsByDeviceId(deviceId);
+//            profileIds.forEach(profileId -> profilePointMap.put(profileId, getPointMap(profileId)));
+//        });
+        return profilePointMap;
+    }
+
+    /**
+     * 得到点属性映射
+     *
+     * @param driverId 司机身份证
+     * @return {@link Map}<{@link Long}, {@link DriverAttribute}>
+     */
+    @Override
+    public Map<Long, PointAttribute> getPointAttributeMap(Long driverId) {
+        List<PointAttribute> pointAttributeList = baseMapper.selectList(Wrappers.lambdaQuery(PointAttribute.class).eq(PointAttribute::getDriverId, driverId));
+        return pointAttributeList.stream().collect(Collectors.toMap(PointAttribute::getId, pointAttribute -> pointAttribute));
+    }
 
     /**
      * 司机配置设备id

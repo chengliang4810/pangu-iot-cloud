@@ -6,10 +6,13 @@ import com.pangu.common.mybatis.core.page.TableDataInfo;
 import com.pangu.iot.manager.driver.domain.bo.PointAttributeBO;
 import com.pangu.iot.manager.driver.domain.vo.DriverPointConfigVO;
 import com.pangu.iot.manager.driver.domain.vo.PointAttributeVO;
+import com.pangu.manager.api.domain.DriverAttribute;
 import com.pangu.manager.api.domain.PointAttribute;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * 点位属性Service接口
@@ -65,4 +68,14 @@ public interface IPointAttributeService extends IService<PointAttribute> {
      * @return {@link List}<{@link DriverPointConfigVO}>
      */
     List<DriverPointConfigVO> getDriverPointConfigByDeviceId(Long deviceId, Long attributeId);
+
+    /**
+     * 得到点属性映射
+     *
+     * @param driverId 司机身份证
+     * @return {@link Map}<{@link Long}, {@link DriverAttribute}>
+     */
+    Map<Long, PointAttribute> getPointAttributeMap(Long driverId);
+
+    Map<Long, Map<Long, PointAttribute>> getProfilePointMap(Set<Long> deviceIds);
 }

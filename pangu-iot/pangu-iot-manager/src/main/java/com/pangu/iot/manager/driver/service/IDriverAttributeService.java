@@ -9,6 +9,7 @@ import com.pangu.common.mybatis.core.page.TableDataInfo;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 驱动属性Service接口
@@ -49,4 +50,12 @@ public interface IDriverAttributeService extends IService<DriverAttribute> {
     Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid);
 
     List<DriverAttribute> selectByDriverId(Long id);
+
+    /**
+     * 驱动属性映射
+     *
+     * @param driverId 司机身份证
+     * @return {@link Map}<{@link Long}, {@link DriverAttribute}>
+     */
+    Map<Long, DriverAttribute> getDriverAttributeMap(Long driverId);
 }
