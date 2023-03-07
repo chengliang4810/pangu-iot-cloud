@@ -2,7 +2,7 @@ package com.pangu.iot.manager.device.convert;
 
 import java.util.List;
 
-import com.pangu.iot.manager.device.domain.DeviceAttribute;
+import com.pangu.manager.api.domain.DeviceAttribute;
 import com.pangu.iot.manager.device.domain.vo.DeviceAttributeVO;
 import com.pangu.iot.manager.device.domain.bo.DeviceAttributeBO;
 import com.pangu.common.core.convert.CommonConvert;

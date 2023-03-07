@@ -18,7 +18,7 @@ import com.pangu.common.satoken.utils.LoginHelper;
 import com.pangu.common.zabbix.model.DeviceFunction;
 import com.pangu.data.api.RemoteDeviceStatusService;
 import com.pangu.iot.manager.device.convert.DeviceConvert;
-import com.pangu.iot.manager.device.domain.Device;
+import com.pangu.manager.api.domain.Device;
 import com.pangu.iot.manager.device.domain.DeviceGroupRelation;
 import com.pangu.iot.manager.device.domain.ServiceExecuteRecord;
 import com.pangu.iot.manager.device.domain.bo.DeviceBO;

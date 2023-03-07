@@ -16,7 +16,7 @@ import com.pangu.iot.manager.alarm.domain.bo.ProblemBO;
 import com.pangu.iot.manager.alarm.domain.vo.ProblemVO;
 import com.pangu.iot.manager.alarm.mapper.ProblemMapper;
 import com.pangu.iot.manager.alarm.service.IProblemService;
-import com.pangu.iot.manager.device.domain.Device;
+import com.pangu.manager.api.domain.Device;
 import com.pangu.iot.manager.device.service.IDeviceService;
 import com.pangu.iot.manager.product.domain.ProductEvent;
 import com.pangu.iot.manager.product.service.IProductEventService;

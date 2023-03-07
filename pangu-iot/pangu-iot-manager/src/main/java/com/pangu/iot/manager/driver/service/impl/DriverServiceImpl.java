@@ -13,7 +13,7 @@ import com.pangu.common.core.utils.StringUtils;
 import com.pangu.common.mybatis.core.page.PageQuery;
 import com.pangu.common.mybatis.core.page.TableDataInfo;
 import com.pangu.common.redis.utils.RedisUtils;
-import com.pangu.iot.manager.device.domain.Device;
+import com.pangu.manager.api.domain.Device;
 import com.pangu.iot.manager.device.service.IDeviceService;
 import com.pangu.iot.manager.driver.convert.DriverAttributeConvert;
 import com.pangu.iot.manager.driver.convert.DriverConvert;

@@ -2,7 +2,7 @@ package com.pangu.iot.manager.device.dubbo;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.pangu.common.zabbix.util.TimeUtil;
-import com.pangu.iot.manager.device.domain.Device;
+import com.pangu.manager.api.domain.Device;
 import com.pangu.iot.manager.device.service.IDeviceService;
 import com.pangu.manager.api.RemoteDeviceService;
 import lombok.RequiredArgsConstructor;

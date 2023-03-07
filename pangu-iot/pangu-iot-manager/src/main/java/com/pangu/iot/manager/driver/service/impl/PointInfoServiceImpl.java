@@ -11,8 +11,6 @@ import com.pangu.common.core.utils.Assert;
 import com.pangu.common.core.utils.StringUtils;
 import com.pangu.common.mybatis.core.page.PageQuery;
 import com.pangu.common.mybatis.core.page.TableDataInfo;
-import com.pangu.iot.manager.device.domain.Device;
-import com.pangu.iot.manager.device.domain.DeviceAttribute;
 import com.pangu.iot.manager.device.service.IDeviceAttributeService;
 import com.pangu.iot.manager.device.service.IDeviceService;
 import com.pangu.iot.manager.driver.domain.PointInfo;
@@ -21,10 +19,15 @@ import com.pangu.iot.manager.driver.domain.bo.PointInfoBatchBO;
 import com.pangu.iot.manager.driver.domain.vo.PointInfoVO;
 import com.pangu.iot.manager.driver.mapper.PointInfoMapper;
 import com.pangu.iot.manager.driver.service.IPointInfoService;
+import com.pangu.manager.api.domain.AttributeInfo;
+import com.pangu.manager.api.domain.Device;
+import com.pangu.manager.api.domain.DeviceAttribute;
+import com.pangu.manager.api.domain.PointAttribute;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 /**
@@ -40,6 +43,61 @@ public class PointInfoServiceImpl extends ServiceImpl<PointInfoMapper, PointInfo
     private final PointInfoMapper baseMapper;
     private final IDeviceService deviceService;
     private final IDeviceAttributeService deviceAttributeService;
+
+
+    @Override
+    public Map<Long, Map<Long, Map<String, AttributeInfo>>> getPointInfoMap(List<Device> devices, Map<Long, Map<Long, DeviceAttribute>> profileAttributeMap, Map<Long, PointAttribute> pointAttributeMap) {
+        Map<Long, Map<Long, Map<String, AttributeInfo>>> devicePointInfoMap = new ConcurrentHashMap<>(16);
+        devices.forEach(device -> {
+            Map<Long, Map<String, AttributeInfo>> infoMap = getPointInfoMap(device, profileAttributeMap, pointAttributeMap);
+            if (infoMap.size() > 0) {
+                devicePointInfoMap.put(device.getId(), infoMap);
+            }
+        });
+        return devicePointInfoMap;
+    }
+
+
+    /**
+     * Get point info map
+     *
+     * @param device            Device
+     * @param profilePointMap   Profile Point Map
+     * @param pointAttributeMap Point Attribute Map
+     * @return map(pointId, attribute ( attributeName, attributeInfo ( value, type)))
+     */
+    public Map<Long, Map<String, AttributeInfo>> getPointInfoMap(Device device, Map<Long, Map<Long, DeviceAttribute>> profilePointMap, Map<Long, PointAttribute> pointAttributeMap) {
+        Map<Long, Map<String, AttributeInfo>> attributeInfoMap = new ConcurrentHashMap<>(16);
+        profilePointMap.keySet()
+            .forEach(attributeId -> {
+                    List<PointInfo> pointInfos = this.selectByDeviceIdAndAttributeId(device.getId(), attributeId);
+
+                    Map<String, AttributeInfo> infoMap = new ConcurrentHashMap<>(16);
+                    pointInfos.forEach(pointInfo -> {
+                        PointAttribute attribute = pointAttributeMap.get(pointInfo.getPointAttributeId());
+                        infoMap.put(attribute.getName(), new AttributeInfo(pointInfo.getValue(), attribute.getType()));
+                    });
+
+                    if (infoMap.size() > 0) {
+                        attributeInfoMap.put(attributeId, infoMap);
+                    }
+            });
+        return attributeInfoMap;
+    }
+
+    /**
+     * 查询设备点位属性配置信息列表
+     * @param deviceId
+     * @param attributeId
+     * @return
+     */
+    private List<PointInfo> selectByDeviceIdAndAttributeId(Long deviceId, Long attributeId) {
+        List<PointInfo> pointInfos = baseMapper.selectList(Wrappers.lambdaQuery(PointInfo.class)
+            .eq(PointInfo::getDeviceId, deviceId)
+            .eq(PointInfo::getDeviceAttributeId, attributeId));
+        return pointInfos;
+    }
+
 
     /**
      * 批量更新
@@ -95,10 +153,10 @@ public class PointInfoServiceImpl extends ServiceImpl<PointInfoMapper, PointInfo
      * @return {@link Map}<{@link Long}, {@link String}>
      */
     @Override
-    public Map<Long, String> getPointInfoValueMap(Long deviceId, Long attributeId, List<Long> pointIds) {
+    public Map<Long, String> getPointInfoValueMap(Long deviceId, Long attributeId, Set<Long> pointIds) {
         List<PointInfo> driverInfos = baseMapper.selectList(Wrappers.lambdaQuery(PointInfo.class)
                 .eq(PointInfo::getDeviceId, deviceId)
-                .eq(PointInfo::getPointAttributeId, attributeId)
+                .eq(PointInfo::getDeviceAttributeId, attributeId)
                 .in(PointInfo::getPointAttributeId, pointIds));
         if (CollectionUtil.isEmpty(driverInfos)) {
             return Collections.emptyMap();

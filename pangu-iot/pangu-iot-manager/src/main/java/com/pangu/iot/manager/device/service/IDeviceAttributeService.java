@@ -3,13 +3,16 @@ package com.pangu.iot.manager.device.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.pangu.common.mybatis.core.page.PageQuery;
 import com.pangu.common.mybatis.core.page.TableDataInfo;
-import com.pangu.iot.manager.device.domain.DeviceAttribute;
+import com.pangu.manager.api.domain.DeviceAttribute;
 import com.pangu.iot.manager.device.domain.bo.DeviceAttributeBO;
 import com.pangu.iot.manager.device.domain.bo.LastDataAttributeBO;
 import com.pangu.iot.manager.device.domain.vo.DeviceAttributeVO;
+import com.pangu.manager.api.domain.DriverAttribute;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * 设备属性Service接口
@@ -82,4 +85,13 @@ public interface IDeviceAttributeService extends IService<DeviceAttribute> {
      * @return {@link TableDataInfo}<{@link DeviceAttributeVO}>
      */
     TableDataInfo<DeviceAttributeVO> queryLatestDataList(LastDataAttributeBO bo, PageQuery pageQuery);
+
+    /**
+     * 获取配置文件属性映射
+     *
+     * @param deviceIds 设备id
+     * @return {@link Map}<{@link Long}, {@link Map}<{@link Long}, {@link DriverAttribute}>>
+     */
+    Map<Long, Map<Long, DeviceAttribute>> getProfileAttributeMap(Set<Long> deviceIds);
+
 }

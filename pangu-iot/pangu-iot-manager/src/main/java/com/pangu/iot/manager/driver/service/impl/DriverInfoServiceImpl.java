@@ -7,12 +7,12 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.pangu.common.core.domain.dto.AttributeInfo;
+import com.pangu.manager.api.domain.AttributeInfo;
 import com.pangu.common.core.utils.Assert;
 import com.pangu.common.core.utils.StringUtils;
 import com.pangu.common.mybatis.core.page.PageQuery;
 import com.pangu.common.mybatis.core.page.TableDataInfo;
-import com.pangu.iot.manager.device.domain.Device;
+import com.pangu.manager.api.domain.Device;
 import com.pangu.iot.manager.device.service.IDeviceService;
 import com.pangu.iot.manager.driver.domain.DriverInfo;
 import com.pangu.iot.manager.driver.domain.bo.DriverInfoBO;
@@ -74,6 +74,7 @@ public class DriverInfoServiceImpl extends ServiceImpl<DriverInfoMapper, DriverI
                     .eq(DriverInfo::getDeviceId, deviceId));
             driverInfos.forEach(driverInfo -> {
                 DriverAttribute attribute = driverAttributeMap.get(driverInfo.getDriverAttributeId());
+                System.out.println("attribute = " + attribute  );
                 attributeInfoMap.put(attribute.getName(), new AttributeInfo(driverInfo.getValue(), attribute.getType()));
             });
         return attributeInfoMap;

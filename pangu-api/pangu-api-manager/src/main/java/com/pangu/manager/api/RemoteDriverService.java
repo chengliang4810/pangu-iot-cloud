@@ -1,5 +1,6 @@
 package com.pangu.manager.api;
 
+import com.pangu.manager.api.domain.DriverMetadata;
 import com.pangu.manager.api.domain.dto.DriverDTO;
 
 /**
@@ -23,7 +24,7 @@ public interface RemoteDriverService {
      *
      * @param primaryKey 主键
      */
-    void driverMetadataSync(String primaryKey);
+    DriverMetadata driverMetadataSync(String primaryKey);
 
 
 }

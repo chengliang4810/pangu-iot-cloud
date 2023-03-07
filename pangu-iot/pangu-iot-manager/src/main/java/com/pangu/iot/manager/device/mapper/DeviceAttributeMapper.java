@@ -3,7 +3,7 @@ package com.pangu.iot.manager.device.mapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.pangu.common.mybatis.core.mapper.BaseMapperPlus;
-import com.pangu.iot.manager.device.domain.DeviceAttribute;
+import com.pangu.manager.api.domain.DeviceAttribute;
 import com.pangu.iot.manager.device.domain.vo.DeviceAttributeVO;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;

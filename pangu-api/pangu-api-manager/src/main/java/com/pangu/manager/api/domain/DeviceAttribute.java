@@ -1,4 +1,4 @@
-package com.pangu.iot.manager.device.domain;
+package com.pangu.manager.api.domain;
 
 import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;

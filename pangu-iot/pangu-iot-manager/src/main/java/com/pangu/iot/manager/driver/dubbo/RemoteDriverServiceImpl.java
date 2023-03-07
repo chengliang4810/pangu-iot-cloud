@@ -2,6 +2,7 @@ package com.pangu.iot.manager.driver.dubbo;
 
 import com.pangu.iot.manager.driver.service.IDriverSdkService;
 import com.pangu.manager.api.RemoteDriverService;
+import com.pangu.manager.api.domain.DriverMetadata;
 import com.pangu.manager.api.domain.dto.DriverDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,8 +29,10 @@ public class RemoteDriverServiceImpl implements RemoteDriverService {
      * @param primaryKey 主键
      */
     @Override
-    public void driverMetadataSync(String primaryKey) {
-        driverSdkService.driverMetadataSync(primaryKey);
+    public DriverMetadata driverMetadataSync(String primaryKey) {
+        DriverMetadata driverMetadata = driverSdkService.driverMetadataSync(primaryKey);
+        log.info("driverMetadataSync: {}", driverMetadata);
+        return driverMetadata;
     }
 
 

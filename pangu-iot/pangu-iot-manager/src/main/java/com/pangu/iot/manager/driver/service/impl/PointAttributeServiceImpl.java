@@ -10,7 +10,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.pangu.common.core.utils.StringUtils;
 import com.pangu.common.mybatis.core.page.PageQuery;
 import com.pangu.common.mybatis.core.page.TableDataInfo;
-import com.pangu.iot.manager.device.domain.Device;
+import com.pangu.manager.api.domain.Device;
 import com.pangu.iot.manager.device.service.IDeviceService;
 import com.pangu.iot.manager.driver.convert.DriverConvert;
 import com.pangu.iot.manager.driver.convert.PointAttributeConvert;
@@ -124,7 +124,7 @@ public class PointAttributeServiceImpl extends ServiceImpl<PointAttributeMapper,
             List<PointAttribute> pointAttributes = baseMapper.selectList(Wrappers.lambdaQuery(PointAttribute.class).eq(PointAttribute::getDriverId, driver.getId()));
 
             // 查询属性值
-            List<Long> pointIds = pointAttributes.stream().map(PointAttribute::getId).collect(Collectors.toList());
+            Set<Long> pointIds = pointAttributes.stream().map(PointAttribute::getId).collect(Collectors.toSet());
             Map<Long, String> attributeValueMap = pointInfoService.getPointInfoValueMap(deviceId, attributeId, pointIds);
 
             // 组装属性值

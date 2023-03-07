@@ -1,6 +1,7 @@
 package com.pangu.common.zabbix.model;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Map;
@@ -14,6 +15,7 @@ import java.util.Map;
 
 @Getter
 @Setter
+@NoArgsConstructor
 public class DeviceValue {
 
     /**
@@ -31,4 +33,10 @@ public class DeviceValue {
      */
     private Long clock;
 
+
+    public DeviceValue(String deviceId, Map<String, String> attributes) {
+        this.deviceId = deviceId;
+        this.attributes = attributes;
+        this.clock = System.currentTimeMillis() / 1000;
+    }
 }

@@ -21,6 +21,8 @@ import com.pangu.iot.manager.product.domain.Product;
 import com.pangu.iot.manager.product.domain.ProductEventExpression;
 import com.pangu.iot.manager.product.service.IProductEventExpressionService;
 import com.pangu.iot.manager.product.service.IProductService;
+import com.pangu.manager.api.domain.Device;
+import com.pangu.manager.api.domain.DeviceAttribute;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

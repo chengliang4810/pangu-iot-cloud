@@ -10,7 +10,7 @@ import com.pangu.common.core.utils.StringUtils;
 import com.pangu.common.mybatis.core.page.PageQuery;
 import com.pangu.common.mybatis.core.page.TableDataInfo;
 import com.pangu.iot.manager.device.convert.DeviceStatusFunctionConvert;
-import com.pangu.iot.manager.device.domain.DeviceAttribute;
+import com.pangu.manager.api.domain.DeviceAttribute;
 import com.pangu.iot.manager.device.domain.DeviceStatusFunction;
 import com.pangu.iot.manager.device.domain.bo.DeviceStatusFunctionBO;
 import com.pangu.iot.manager.device.domain.vo.DeviceStatusFunctionVO;

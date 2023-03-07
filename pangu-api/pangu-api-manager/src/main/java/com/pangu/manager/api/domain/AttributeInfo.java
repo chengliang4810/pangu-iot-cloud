@@ -1,4 +1,4 @@
-package com.pangu.common.core.domain.dto;
+package com.pangu.manager.api.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

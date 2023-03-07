@@ -1,5 +1,6 @@
 package com.pangu.iot.manager.driver.service;
 
+import com.pangu.manager.api.domain.DriverMetadata;
 import com.pangu.manager.api.domain.dto.DriverDTO;
 
 public interface IDriverSdkService {
@@ -17,6 +18,6 @@ public interface IDriverSdkService {
      *
      * @param primaryKey 主键
      */
-    void driverMetadataSync(String primaryKey);
+    DriverMetadata driverMetadataSync(String primaryKey);
 
 }

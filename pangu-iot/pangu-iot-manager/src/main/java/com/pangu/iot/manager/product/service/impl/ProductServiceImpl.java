@@ -169,7 +169,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
      */
     @Override
     public List<Long> listByDriverId(Long driverId) {
-        return baseMapper.selectList(Wrappers.lambdaQuery(Product.class).apply("find_int_set('{0}', driver)", driverId)).stream().map(Product::getId).collect(Collectors.toList());
+        return baseMapper.selectList(Wrappers.lambdaQuery(Product.class).apply(" find_in_set('"+driverId+ "', driver)  ")).stream().map(Product::getId).collect(Collectors.toList());
     }
 
 }

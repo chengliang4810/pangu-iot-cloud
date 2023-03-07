@@ -1,7 +1,7 @@
 package com.pangu.iot.manager.device.convert;
 
 import com.pangu.common.core.convert.CommonConvert;
-import com.pangu.iot.manager.device.domain.Device;
+import com.pangu.manager.api.domain.Device;
 import com.pangu.iot.manager.device.domain.bo.DeviceBO;
 import com.pangu.iot.manager.device.domain.vo.DeviceVO;
 import org.mapstruct.Mapper;

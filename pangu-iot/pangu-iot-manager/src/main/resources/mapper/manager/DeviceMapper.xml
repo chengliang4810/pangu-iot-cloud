@@ -3,7 +3,7 @@
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.pangu.iot.manager.device.mapper.DeviceMapper">
-    <resultMap type="com.pangu.iot.manager.device.domain.Device" id="DeviceResult">
+    <resultMap type="com.pangu.manager.api.domain.Device" id="DeviceResult">
         <result property="id" column="id"/>
         <result property="code" column="code"/>
         <result property="productId" column="product_id"/>

@@ -1,12 +1,14 @@
 package com.pangu.iot.driver.service;
 
-import cn.hutool.core.util.RandomUtil;
 import com.pangu.common.core.exception.ServiceException;
 import com.pangu.common.core.utils.JsonUtils;
 import com.pangu.common.sdk.service.DriverDataService;
 import com.pangu.common.zabbix.model.DeviceFunction;
 import com.pangu.common.zabbix.model.DeviceValue;
 import com.pangu.iot.driver.ValueConstant;
+import com.pangu.manager.api.domain.AttributeInfo;
+import com.pangu.manager.api.domain.Device;
+import com.pangu.manager.api.domain.DeviceAttribute;
 import com.serotonin.modbus4j.ModbusFactory;
 import com.serotonin.modbus4j.ModbusMaster;
 import com.serotonin.modbus4j.code.DataType;
@@ -17,18 +19,17 @@ import com.serotonin.modbus4j.ip.IpParameters;
 import com.serotonin.modbus4j.locator.BaseLocator;
 import com.serotonin.modbus4j.msg.WriteCoilRequest;
 import com.serotonin.modbus4j.msg.WriteCoilResponse;
-import javassist.bytecode.AttributeInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Component
-public class DefaultDriverDataService implements DriverDataService {
+public class DefaultDriverDataService extends DriverDataService {
 
     static ModbusFactory modbusFactory;
 
@@ -39,12 +40,19 @@ public class DefaultDriverDataService implements DriverDataService {
     private volatile Map<String, ModbusMaster> masterMap = new HashMap<>(64);
 
     @Override
-    public List<DeviceValue> read() {
-        DeviceValue deviceValue = new DeviceValue();
-        deviceValue.setDeviceId("1623590722222985216");
-        deviceValue.setAttributes(Collections.singletonMap("temp", String.valueOf(RandomUtil.randomInt(1, 100))));
-        deviceValue.setClock(System.currentTimeMillis() / 1000);
-        return Collections.singletonList(deviceValue);
+    public DeviceValue read(Device device, List<DeviceAttribute> attributes) {
+        // 驱动信息
+        Map<String, AttributeInfo> driverInfo = driverContext.getDriverInfoByDeviceId(device.getId().toString());
+        log.info("Driver Info: {}", JsonUtils.toJsonString(driverInfo));
+
+        Map<String, String> attributesMap = attributes.parallelStream().collect(Collectors.toMap(DeviceAttribute::getKey, attribute -> {
+            Map<String, AttributeInfo> pointInfo = driverContext.getPointInfoByDeviceIdAndPointId(device.getId().toString(), attribute.getId());
+            log.info("Point Info: {}", JsonUtils.toJsonString(pointInfo));
+
+            return this.read(device, attribute, driverInfo, pointInfo);
+        }));
+
+        return new DeviceValue(device.getId().toString(), attributesMap);
     }
 
     /**

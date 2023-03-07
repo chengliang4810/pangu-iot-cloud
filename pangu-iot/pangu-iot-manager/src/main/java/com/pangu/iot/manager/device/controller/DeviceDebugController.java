@@ -5,7 +5,7 @@ import com.pangu.common.core.utils.Assert;
 import com.pangu.common.zabbix.model.DeviceValue;
 import com.pangu.common.zabbix.model.ZbxResponse;
 import com.pangu.common.zabbix.service.SenderDataService;
-import com.pangu.iot.manager.device.domain.Device;
+import com.pangu.manager.api.domain.Device;
 import com.pangu.iot.manager.device.domain.bo.DebugDataBO;
 import com.pangu.iot.manager.device.service.IDeviceService;
 import lombok.RequiredArgsConstructor;

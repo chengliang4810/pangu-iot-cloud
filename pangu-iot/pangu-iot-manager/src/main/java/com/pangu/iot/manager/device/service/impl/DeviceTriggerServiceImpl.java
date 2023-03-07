@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.pangu.common.core.utils.Assert;
 import com.pangu.common.zabbix.service.DeviceStatusTriggerService;
 import com.pangu.iot.manager.device.convert.DeviceStatusFunctionConvert;
-import com.pangu.iot.manager.device.domain.DeviceAttribute;
+import com.pangu.manager.api.domain.DeviceAttribute;
 import com.pangu.iot.manager.device.domain.DeviceStatusFunction;
 import com.pangu.iot.manager.device.domain.DeviceStatusFunctionRelation;
 import com.pangu.iot.manager.device.domain.bo.DeviceStatusJudgeRuleBO;

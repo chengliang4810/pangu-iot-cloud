@@ -3,7 +3,7 @@ package com.pangu.iot.manager.device.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.pangu.common.mybatis.core.page.PageQuery;
 import com.pangu.common.mybatis.core.page.TableDataInfo;
-import com.pangu.iot.manager.device.domain.Device;
+import com.pangu.manager.api.domain.Device;
 import com.pangu.iot.manager.device.domain.bo.DeviceBO;
 import com.pangu.iot.manager.device.domain.bo.DeviceStatusBO;
 import com.pangu.iot.manager.device.domain.bo.ServiceExecuteBO;

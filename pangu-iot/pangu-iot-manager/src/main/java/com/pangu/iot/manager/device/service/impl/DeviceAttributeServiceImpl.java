@@ -13,14 +13,16 @@ import com.pangu.common.core.utils.StringUtils;
 import com.pangu.common.mybatis.core.page.PageQuery;
 import com.pangu.common.mybatis.core.page.TableDataInfo;
 import com.pangu.data.api.RemoteTdEngineService;
-import com.pangu.iot.manager.device.domain.Device;
-import com.pangu.iot.manager.device.domain.DeviceAttribute;
+import com.pangu.iot.manager.device.convert.DeviceAttributeConvert;
+import com.pangu.manager.api.domain.Device;
+import com.pangu.manager.api.domain.DeviceAttribute;
 import com.pangu.iot.manager.device.domain.bo.DeviceAttributeBO;
 import com.pangu.iot.manager.device.domain.bo.LastDataAttributeBO;
 import com.pangu.iot.manager.device.domain.vo.DeviceAttributeVO;
 import com.pangu.iot.manager.device.mapper.DeviceAttributeMapper;
 import com.pangu.iot.manager.device.service.IDeviceAttributeService;
 import com.pangu.iot.manager.device.service.IDeviceService;
+import com.pangu.manager.api.domain.DriverAttribute;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -28,6 +30,9 @@ import org.springframework.stereotype.Service;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 /**
  * 设备属性Service业务层处理
@@ -43,8 +48,28 @@ public class DeviceAttributeServiceImpl extends ServiceImpl<DeviceAttributeMappe
     private final IDeviceService deviceService;
     private final DeviceAttributeMapper baseMapper;
     private final RemoteTdEngineService tdEngineService;
+    private final DeviceAttributeConvert deviceAttributeConvert;
+
+
+    /**
+     * 获取配置文件属性映射
+     *
+     * @param deviceIds 设备id
+     * @return {@link Map}<{@link Long}, {@link Map}<{@link Long}, {@link DriverAttribute}>>
+     */
+    @Override
+    public Map<Long, Map<Long, DeviceAttribute>> getProfileAttributeMap(Set<Long> deviceIds) {
+        Map<Long, Map<Long, DeviceAttribute>> attributeVOMap = new ConcurrentHashMap<>(16);
+        deviceIds.forEach(deviceId -> {
+            List<DeviceAttributeVO> attributeVOList = this.queryVOListByDeviceId(deviceId);
+            List<DeviceAttribute> deviceAttributes = deviceAttributeConvert.voListToEntityList(attributeVOList);
+            attributeVOMap.put(deviceId, deviceAttributes.stream().collect(Collectors.toMap(DeviceAttribute::getId, attribute -> attribute)));
+        });
+        return attributeVOMap;
+    }
 
     @Override
+    
     public TableDataInfo<DeviceAttributeVO> queryLatestDataList(LastDataAttributeBO bo, PageQuery pageQuery) {
         // 查询设备信息
         Long deviceId = bo.getDeviceId();

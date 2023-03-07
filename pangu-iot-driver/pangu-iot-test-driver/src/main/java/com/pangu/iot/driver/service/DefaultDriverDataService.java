@@ -5,21 +5,32 @@ import com.pangu.common.core.exception.ServiceException;
 import com.pangu.common.sdk.service.DriverDataService;
 import com.pangu.common.zabbix.model.DeviceFunction;
 import com.pangu.common.zabbix.model.DeviceValue;
+import com.pangu.manager.api.domain.AttributeInfo;
+import com.pangu.manager.api.domain.Device;
+import com.pangu.manager.api.domain.DeviceAttribute;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 @Component
-public class DefaultDriverDataService implements DriverDataService {
+public class DefaultDriverDataService extends DriverDataService {
 
     @Override
-    public List<DeviceValue> read() {
-        DeviceValue deviceValue = new DeviceValue();
-        deviceValue.setDeviceId("1623590722222985216");
-        deviceValue.setAttributes(Collections.singletonMap("temp", String.valueOf(RandomUtil.randomInt(1, 100))));
-        deviceValue.setClock(System.currentTimeMillis() / 1000);
-        return Collections.singletonList(deviceValue);
+    public DeviceValue read(Device device, List<DeviceAttribute> attributes) {
+        return super.read(device, attributes);
+    }
+
+    @Override
+    public String read(Device device, DeviceAttribute attribute, Map<String, AttributeInfo> driverInfo, Map<String, AttributeInfo> pointInfo) {
+
+
+
+//        DeviceValue deviceValue = new DeviceValue();
+//        deviceValue.setDeviceId("1623590722222985216");
+//        deviceValue.setAttributes(Collections.singletonMap("temp", String.valueOf(RandomUtil.randomInt(1, 100))));
+//        deviceValue.setClock(System.currentTimeMillis() / 1000);
+        return  String.valueOf(RandomUtil.randomInt(1, 100));
     }
 
     /**

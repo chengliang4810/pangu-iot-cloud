@@ -1,6 +1,6 @@
 package com.pangu.iot.manager.driver.service;
 
-import com.pangu.common.core.domain.dto.AttributeInfo;
+import com.pangu.manager.api.domain.AttributeInfo;
 import com.pangu.iot.manager.driver.domain.DriverInfo;
 import com.pangu.iot.manager.driver.domain.bo.DriverInfoBatchBO;
 import com.pangu.iot.manager.driver.domain.vo.DriverInfoVO;

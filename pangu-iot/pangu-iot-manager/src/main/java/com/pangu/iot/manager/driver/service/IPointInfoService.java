@@ -1,16 +1,21 @@
 package com.pangu.iot.manager.driver.service;
 
-import com.pangu.iot.manager.driver.domain.PointInfo;
-import com.pangu.iot.manager.driver.domain.bo.PointInfoBatchBO;
-import com.pangu.iot.manager.driver.domain.vo.PointInfoVO;
-import com.pangu.iot.manager.driver.domain.bo.PointInfoBO;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.pangu.common.mybatis.core.page.PageQuery;
 import com.pangu.common.mybatis.core.page.TableDataInfo;
+import com.pangu.iot.manager.driver.domain.PointInfo;
+import com.pangu.iot.manager.driver.domain.bo.PointInfoBO;
+import com.pangu.iot.manager.driver.domain.bo.PointInfoBatchBO;
+import com.pangu.iot.manager.driver.domain.vo.PointInfoVO;
+import com.pangu.manager.api.domain.AttributeInfo;
+import com.pangu.manager.api.domain.Device;
+import com.pangu.manager.api.domain.DeviceAttribute;
+import com.pangu.manager.api.domain.PointAttribute;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * 点位属性配置信息Service接口
@@ -66,7 +71,7 @@ public interface IPointInfoService extends IService<PointInfo> {
      * @param pointIds    点id
      * @return {@link Map}<{@link Long}, {@link String}>
      */
-    Map<Long, String> getPointInfoValueMap(Long deviceId, Long attributeId, List<Long> pointIds);
+    Map<Long, String> getPointInfoValueMap(Long deviceId, Long attributeId, Set<Long> pointIds);
 
     /**
      * 批量更新
@@ -75,4 +80,6 @@ public interface IPointInfoService extends IService<PointInfo> {
      * @return {@link Boolean}
      */
     Boolean batchUpdate(PointInfoBatchBO bo);
+
+    Map<Long, Map<Long, Map<String, AttributeInfo>>> getPointInfoMap(List<Device> deviceIds, Map<Long, Map<Long, DeviceAttribute>> profileAttributeMap, Map<Long, PointAttribute> pointAttributeMap);
 }
