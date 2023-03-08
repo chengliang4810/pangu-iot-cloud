@@ -1,4 +1,4 @@
-package com.pangu.common.sdk.tuils;
+package com.pangu.common.sdk.utils;
 
 import cn.hutool.core.util.ReUtil;
 

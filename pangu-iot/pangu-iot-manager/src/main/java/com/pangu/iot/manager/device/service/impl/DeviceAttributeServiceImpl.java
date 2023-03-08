@@ -50,7 +50,6 @@ public class DeviceAttributeServiceImpl extends ServiceImpl<DeviceAttributeMappe
     private final RemoteTdEngineService tdEngineService;
     private final DeviceAttributeConvert deviceAttributeConvert;
 
-
     /**
      * 获取配置文件属性映射
      *
@@ -69,7 +68,7 @@ public class DeviceAttributeServiceImpl extends ServiceImpl<DeviceAttributeMappe
     }
 
     @Override
-    
+
     public TableDataInfo<DeviceAttributeVO> queryLatestDataList(LastDataAttributeBO bo, PageQuery pageQuery) {
         // 查询设备信息
         Long deviceId = bo.getDeviceId();

@@ -3,6 +3,8 @@ package com.pangu.manager.api.domain;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.io.Serializable;
+
 /**
  * 属性配置
  *
@@ -11,7 +13,7 @@ import lombok.Data;
  */
 @Data
 @AllArgsConstructor
-public class AttributeInfo {
+public class AttributeInfo implements Serializable {
     /**
      * 值，string，需要通过type确定真实的数据类型
      */

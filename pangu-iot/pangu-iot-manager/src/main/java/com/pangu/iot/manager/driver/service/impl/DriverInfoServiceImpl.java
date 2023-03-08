@@ -70,13 +70,16 @@ public class DriverInfoServiceImpl extends ServiceImpl<DriverInfoMapper, DriverI
      */
     public Map<String, AttributeInfo> getDriverInfoMap(Long deviceId, Map<Long, DriverAttribute> driverAttributeMap) {
         Map<String, AttributeInfo> attributeInfoMap = new ConcurrentHashMap<>(16);
-            List<DriverInfo> driverInfos = baseMapper.selectList(Wrappers.lambdaQuery(DriverInfo.class)
-                    .eq(DriverInfo::getDeviceId, deviceId));
-            driverInfos.forEach(driverInfo -> {
-                DriverAttribute attribute = driverAttributeMap.get(driverInfo.getDriverAttributeId());
-                System.out.println("attribute = " + attribute  );
+        // 查询某个设备的所有驱动配置信息
+        List<DriverInfo> driverInfos = baseMapper.selectList(Wrappers.lambdaQuery(DriverInfo.class)
+            .eq(DriverInfo::getDeviceId, deviceId));
+
+        driverInfos.forEach(driverInfo -> {
+            DriverAttribute attribute = driverAttributeMap.get(driverInfo.getDriverAttributeId());
+            if (ObjectUtil.isNotNull(attribute)) {
                 attributeInfoMap.put(attribute.getName(), new AttributeInfo(driverInfo.getValue(), attribute.getType()));
-            });
+            }
+        });
         return attributeInfoMap;
     }
 
@@ -97,12 +100,12 @@ public class DriverInfoServiceImpl extends ServiceImpl<DriverInfoMapper, DriverI
         Map<Long, String> attributeValue = bo.getAttributeValue();
         List<DriverInfo> driverInfoList = new ArrayList<DriverInfo>(attributeValue.size());
 
-        attributeValue.forEach((attributeId,value) -> {
+        attributeValue.forEach((attributeId, value) -> {
             // 查询驱动配置信息
             DriverInfo dbDriverInfo = baseMapper.selectOne(Wrappers.lambdaQuery(DriverInfo.class)
-                    .eq(DriverInfo::getDeviceId, deviceId)
-                    .eq(DriverInfo::getDriverAttributeId, attributeId)
-                    .last("limit 1")
+                .eq(DriverInfo::getDeviceId, deviceId)
+                .eq(DriverInfo::getDriverAttributeId, attributeId)
+                .last("limit 1")
             );
 
             // 构建驱动配置信息
@@ -111,7 +114,7 @@ public class DriverInfoServiceImpl extends ServiceImpl<DriverInfoMapper, DriverI
             driverInfo.setDriverAttributeId(attributeId);
             driverInfo.setValue(value);
             // 数据库存在则更新，不存在则插入 通过主键判断
-            if (ObjectUtil.isNotNull(dbDriverInfo)){
+            if (ObjectUtil.isNotNull(dbDriverInfo)) {
                 driverInfo.setId(dbDriverInfo.getId());
             }
             driverInfoList.add(driverInfo);
@@ -131,8 +134,8 @@ public class DriverInfoServiceImpl extends ServiceImpl<DriverInfoMapper, DriverI
     @Override
     public Map<Long, String> getDriverInfoValueMap(Long deviceId, List<Long> attributeIds) {
         List<DriverInfo> driverInfos = baseMapper.selectList(Wrappers.lambdaQuery(DriverInfo.class)
-                .eq(DriverInfo::getDeviceId, deviceId)
-                .in(DriverInfo::getDriverAttributeId, attributeIds));
+            .eq(DriverInfo::getDeviceId, deviceId)
+            .in(DriverInfo::getDriverAttributeId, attributeIds));
         if (CollectionUtil.isEmpty(driverInfos)) {
             return Collections.emptyMap();
         }
@@ -148,7 +151,7 @@ public class DriverInfoServiceImpl extends ServiceImpl<DriverInfoMapper, DriverI
      * 查询驱动属性配置信息
      */
     @Override
-    public DriverInfoVO queryById(Long id){
+    public DriverInfoVO queryById(Long id) {
         return baseMapper.selectVoById(id);
     }
 
@@ -208,7 +211,7 @@ public class DriverInfoServiceImpl extends ServiceImpl<DriverInfoMapper, DriverI
     /**
      * 保存前的数据校验
      */
-    private void validEntityBeforeSave(DriverInfo entity){
+    private void validEntityBeforeSave(DriverInfo entity) {
         //TODO 做一些数据校验,如唯一约束
     }
 
@@ -217,7 +220,7 @@ public class DriverInfoServiceImpl extends ServiceImpl<DriverInfoMapper, DriverI
      */
     @Override
     public Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid) {
-        if(isValid){
+        if (isValid) {
             //TODO 做一些业务上的校验,判断是否需要校验
         }
         return baseMapper.deleteBatchIds(ids) > 0;

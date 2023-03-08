@@ -1,8 +1,7 @@
 package com.pangu.common.zabbix.model;
 
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.util.Map;
 
@@ -13,8 +12,7 @@ import java.util.Map;
  * @date 2023/01/09 11:24
  */
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 public class DeviceValue {
 

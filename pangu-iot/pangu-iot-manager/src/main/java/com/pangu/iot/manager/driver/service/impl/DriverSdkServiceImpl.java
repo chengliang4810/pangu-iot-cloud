@@ -77,7 +77,8 @@ public class DriverSdkServiceImpl implements IDriverSdkService {
 
         // 设备ID
         Set<Long> deviceIds = deviceList.stream().map(Device::getId).collect(Collectors.toSet());
-
+        Map<String, Long> deviceCodeMap = deviceList.stream().collect(Collectors.toMap(Device::getCode, Device::getId));
+        driverMetadata.setDeviceCodeMap(deviceCodeMap);
         // 查询属性配置信息
         Map<Long, Map<String, AttributeInfo>> driverInfoMap = driverInfoService.getDriverInfoMap(deviceIds, driverAttributeMap);
         driverMetadata.setDriverInfoMap(driverInfoMap);

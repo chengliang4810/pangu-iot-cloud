@@ -28,7 +28,7 @@ public abstract class DriverDataService {
      * @return {@link List}<{@link DeviceValue}>
      */
     public String read(Device device, DeviceAttribute attribute, Map<String, AttributeInfo> driverInfo, Map<String, AttributeInfo> pointInfo) {
-        return null;
+        return "";
     }
 
     /**
@@ -41,10 +41,10 @@ public abstract class DriverDataService {
     public DeviceValue read(Device device, List<DeviceAttribute> attributes){
 
         // 驱动信息
-        Map<String, AttributeInfo> driverInfo = driverContext.getDriverInfoByDeviceId(device.getId().toString());
+        Map<String, AttributeInfo> driverInfo = driverContext.getDriverInfoByDeviceId(device.getId());
 
         Map<String, String> attributesMap = attributes.parallelStream().collect(Collectors.toMap(DeviceAttribute::getKey, attribute -> {
-            Map<String, AttributeInfo> pointInfo = driverContext.getPointInfoByDeviceIdAndPointId(device.getId().toString(), attribute.getId());
+            Map<String, AttributeInfo> pointInfo = driverContext.getPointInfoByDeviceIdAndPointId(device.getId(), attribute.getId());
             return this.read(device, attribute, driverInfo, pointInfo);
         }));
 

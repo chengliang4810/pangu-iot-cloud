@@ -24,6 +24,7 @@ import com.pangu.manager.api.domain.Device;
 import com.pangu.manager.api.domain.DeviceAttribute;
 import com.pangu.manager.api.domain.PointAttribute;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -36,6 +37,7 @@ import java.util.stream.Collectors;
  * @author chengliang4810
  * @date 2023-02-28
  */
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class PointInfoServiceImpl extends ServiceImpl<PointInfoMapper, PointInfo> implements IPointInfoService {
@@ -47,6 +49,11 @@ public class PointInfoServiceImpl extends ServiceImpl<PointInfoMapper, PointInfo
 
     @Override
     public Map<Long, Map<Long, Map<String, AttributeInfo>>> getPointInfoMap(List<Device> devices, Map<Long, Map<Long, DeviceAttribute>> profileAttributeMap, Map<Long, PointAttribute> pointAttributeMap) {
+
+        log.info("devices: {}", devices);
+        log.info("profileAttributeMap: {}", profileAttributeMap);
+        log.info("pointAttributeMap: {}", pointAttributeMap);
+
         Map<Long, Map<Long, Map<String, AttributeInfo>>> devicePointInfoMap = new ConcurrentHashMap<>(16);
         devices.forEach(device -> {
             Map<Long, Map<String, AttributeInfo>> infoMap = getPointInfoMap(device, profileAttributeMap, pointAttributeMap);
@@ -68,20 +75,20 @@ public class PointInfoServiceImpl extends ServiceImpl<PointInfoMapper, PointInfo
      */
     public Map<Long, Map<String, AttributeInfo>> getPointInfoMap(Device device, Map<Long, Map<Long, DeviceAttribute>> profilePointMap, Map<Long, PointAttribute> pointAttributeMap) {
         Map<Long, Map<String, AttributeInfo>> attributeInfoMap = new ConcurrentHashMap<>(16);
-        profilePointMap.keySet()
+        profilePointMap.values().forEach(deviceAttributeMap -> deviceAttributeMap.keySet()
             .forEach(attributeId -> {
-                    List<PointInfo> pointInfos = this.selectByDeviceIdAndAttributeId(device.getId(), attributeId);
+                List<PointInfo> pointInfos = this.selectByDeviceIdAndAttributeId(device.getId(), attributeId);
 
-                    Map<String, AttributeInfo> infoMap = new ConcurrentHashMap<>(16);
-                    pointInfos.forEach(pointInfo -> {
-                        PointAttribute attribute = pointAttributeMap.get(pointInfo.getPointAttributeId());
-                        infoMap.put(attribute.getName(), new AttributeInfo(pointInfo.getValue(), attribute.getType()));
-                    });
+                Map<String, AttributeInfo> infoMap = new ConcurrentHashMap<>(16);
+                pointInfos.forEach(pointInfo -> {
+                    PointAttribute attribute = pointAttributeMap.get(pointInfo.getPointAttributeId());
+                    infoMap.put(attribute.getName(), new AttributeInfo(pointInfo.getValue(), attribute.getType()));
+                });
 
-                    if (infoMap.size() > 0) {
-                        attributeInfoMap.put(attributeId, infoMap);
-                    }
-            });
+                if (infoMap.size() > 0) {
+                    attributeInfoMap.put(attributeId, infoMap);
+                }
+            }));
         return attributeInfoMap;
     }
 
@@ -95,6 +102,7 @@ public class PointInfoServiceImpl extends ServiceImpl<PointInfoMapper, PointInfo
         List<PointInfo> pointInfos = baseMapper.selectList(Wrappers.lambdaQuery(PointInfo.class)
             .eq(PointInfo::getDeviceId, deviceId)
             .eq(PointInfo::getDeviceAttributeId, attributeId));
+        log.info("selectByDeviceIdAndAttributeId pointInfos: {}", pointInfos);
         return pointInfos;
     }
 

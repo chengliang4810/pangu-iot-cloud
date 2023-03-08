@@ -1,13 +1,19 @@
 package com.pangu.common.sdk.context;
 
+import cn.hutool.core.map.MapUtil;
 import com.pangu.common.core.exception.ServiceException;
-import com.pangu.manager.api.domain.*;
+import com.pangu.manager.api.domain.AttributeInfo;
+import com.pangu.manager.api.domain.Device;
+import com.pangu.manager.api.domain.DeviceAttribute;
+import com.pangu.manager.api.domain.DriverMetadata;
 import com.pangu.manager.api.enums.OnlineStatus;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Data
@@ -37,7 +43,7 @@ public class DriverContext {
      * @param deviceId Device Id
      * @return Map<String, AttributeInfo>
      */
-    public Map<String, AttributeInfo> getDriverInfoByDeviceId(String deviceId) {
+    public Map<String, AttributeInfo> getDriverInfoByDeviceId(Long deviceId) {
         return this.driverMetadata.getDriverInfoMap().get(deviceId);
     }
 
@@ -47,9 +53,10 @@ public class DriverContext {
      * @param deviceId Device Id
      * @return Map<String, Map < String, AttributeInfo>>
      */
-    public Map<Long, Map<String, AttributeInfo>> getPointInfoByDeviceId(String deviceId) {
+    public Map<Long, Map<String, AttributeInfo>> getPointInfoByDeviceId(Long deviceId) {
         Map<Long, Map<String, AttributeInfo>> tmpMap = this.driverMetadata.getPointInfoMap().get(deviceId);
-        if (null == tmpMap || tmpMap.size() < 1) {
+        if (MapUtil.isEmpty(tmpMap)) {
+            log.info("this.driverMetadata.getPointInfoMap() : {}", this.driverMetadata.getPointInfoMap());
             //todo 提示信息需要统一替换
             throw new ServiceException("Device(" + deviceId + ") does not exist");
         }
@@ -63,7 +70,7 @@ public class DriverContext {
      * @param pointId  Point Id
      * @return Map<String, AttributeInfo>
      */
-    public Map<String, AttributeInfo> getPointInfoByDeviceIdAndPointId(String deviceId, Long pointId) {
+    public Map<String, AttributeInfo> getPointInfoByDeviceIdAndPointId(Long deviceId, Long pointId) {
         Map<String, AttributeInfo> tmpMap = getPointInfoByDeviceId(deviceId).get(pointId);
         if (null == tmpMap || tmpMap.size() < 1) {
             throw new ServiceException("Point(" + pointId + ") info does not exist");
