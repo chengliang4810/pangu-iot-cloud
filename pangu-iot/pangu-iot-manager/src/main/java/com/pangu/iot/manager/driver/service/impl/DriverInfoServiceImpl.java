@@ -7,12 +7,10 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.pangu.manager.api.domain.AttributeInfo;
 import com.pangu.common.core.utils.Assert;
 import com.pangu.common.core.utils.StringUtils;
 import com.pangu.common.mybatis.core.page.PageQuery;
 import com.pangu.common.mybatis.core.page.TableDataInfo;
-import com.pangu.manager.api.domain.Device;
 import com.pangu.iot.manager.device.service.IDeviceService;
 import com.pangu.iot.manager.driver.domain.DriverInfo;
 import com.pangu.iot.manager.driver.domain.bo.DriverInfoBO;
@@ -20,8 +18,12 @@ import com.pangu.iot.manager.driver.domain.bo.DriverInfoBatchBO;
 import com.pangu.iot.manager.driver.domain.vo.DriverInfoVO;
 import com.pangu.iot.manager.driver.mapper.DriverInfoMapper;
 import com.pangu.iot.manager.driver.service.IDriverInfoService;
+import com.pangu.iot.manager.driver.service.event.DriverEvent;
+import com.pangu.manager.api.domain.AttributeInfo;
+import com.pangu.manager.api.domain.Device;
 import com.pangu.manager.api.domain.DriverAttribute;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -40,7 +42,7 @@ public class DriverInfoServiceImpl extends ServiceImpl<DriverInfoMapper, DriverI
 
     private final DriverInfoMapper baseMapper;
     private final IDeviceService deviceService;
-
+    private final ApplicationContext applicationContext;
 
     /**
      * Get driver info map
@@ -94,8 +96,8 @@ public class DriverInfoServiceImpl extends ServiceImpl<DriverInfoMapper, DriverI
     public Boolean batchUpdateDriverInfo(DriverInfoBatchBO bo) {
 
         Long deviceId = bo.getDeviceId();
-        long count = deviceService.count(Wrappers.lambdaQuery(Device.class).eq(Device::getId, deviceId));
-        Assert.isTrue(count > 0, "设备不存在");
+        Device device = deviceService.getOne(Wrappers.lambdaQuery(Device.class).eq(Device::getId, deviceId).last("limit 1"));
+        Assert.notNull(device, "设备不存在");
 
         Map<Long, String> attributeValue = bo.getAttributeValue();
         List<DriverInfo> driverInfoList = new ArrayList<DriverInfo>(attributeValue.size());
@@ -119,8 +121,12 @@ public class DriverInfoServiceImpl extends ServiceImpl<DriverInfoMapper, DriverI
             }
             driverInfoList.add(driverInfo);
         });
-
-        return baseMapper.insertOrUpdateBatch(driverInfoList);
+        boolean b = baseMapper.insertOrUpdateBatch(driverInfoList);
+        if (b) {
+            // 通知驱动
+            applicationContext.publishEvent(new DriverEvent(this));
+        }
+        return b;
     }
 
 

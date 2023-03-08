@@ -43,7 +43,6 @@ public class DeviceController extends BaseController {
     private final IDeviceService deviceService;
     private final IProductAndAttributeService productAndAttributeService;
 
-
     @PutMapping("/status")
     @SaCheckPermission("manager:device:edit")
     @Log(title = "设备", businessType = BusinessType.UPDATE)

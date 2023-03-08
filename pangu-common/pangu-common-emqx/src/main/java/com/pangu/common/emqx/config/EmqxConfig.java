@@ -81,6 +81,7 @@ public class EmqxConfig {
             //获取类的注解属性
             Topic annotation = AnnotationUtils.findAnnotation(classByteCode, Topic.class);
             String topic = annotation.topic();
+            topic = topic.replace("${spring.application.name}", applicationName);
             int qos = annotation.qos();
             Pattern patten = annotation.patten();
             String group = annotation.group();

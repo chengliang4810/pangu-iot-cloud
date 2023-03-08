@@ -13,7 +13,6 @@ import com.pangu.common.core.utils.StringUtils;
 import com.pangu.common.mybatis.core.page.PageQuery;
 import com.pangu.common.mybatis.core.page.TableDataInfo;
 import com.pangu.common.redis.utils.RedisUtils;
-import com.pangu.manager.api.domain.Device;
 import com.pangu.iot.manager.device.service.IDeviceService;
 import com.pangu.iot.manager.driver.convert.DriverAttributeConvert;
 import com.pangu.iot.manager.driver.convert.DriverConvert;
@@ -31,8 +30,10 @@ import com.pangu.iot.manager.driver.service.IDriverService;
 import com.pangu.iot.manager.driver.service.IDriverServiceService;
 import com.pangu.iot.manager.product.domain.Product;
 import com.pangu.iot.manager.product.service.IProductService;
+import com.pangu.manager.api.domain.Device;
 import com.pangu.manager.api.domain.DriverAttribute;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -49,6 +50,7 @@ import static com.pangu.common.core.constant.CommonConstant.Symbol.COMMA;
  * @author chengliang4810
  * @date 2023-02-28
  */
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class DriverServiceImpl extends ServiceImpl<DriverMapper, Driver> implements IDriverService {
@@ -61,7 +63,6 @@ public class DriverServiceImpl extends ServiceImpl<DriverMapper, Driver> impleme
     private final IDriverServiceService driverServiceService;
     private final DriverAttributeConvert driverAttributeConvert;
     private final IDriverAttributeService driverAttributeService;
-
 
     @Override
     public List<DriverConfigVO> getDriverConfigByDeviceId(Long deviceId) {

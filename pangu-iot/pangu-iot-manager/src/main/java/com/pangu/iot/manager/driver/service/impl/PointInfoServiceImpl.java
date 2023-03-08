@@ -19,12 +19,14 @@ import com.pangu.iot.manager.driver.domain.bo.PointInfoBatchBO;
 import com.pangu.iot.manager.driver.domain.vo.PointInfoVO;
 import com.pangu.iot.manager.driver.mapper.PointInfoMapper;
 import com.pangu.iot.manager.driver.service.IPointInfoService;
+import com.pangu.iot.manager.driver.service.event.DriverEvent;
 import com.pangu.manager.api.domain.AttributeInfo;
 import com.pangu.manager.api.domain.Device;
 import com.pangu.manager.api.domain.DeviceAttribute;
 import com.pangu.manager.api.domain.PointAttribute;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -44,16 +46,12 @@ public class PointInfoServiceImpl extends ServiceImpl<PointInfoMapper, PointInfo
 
     private final PointInfoMapper baseMapper;
     private final IDeviceService deviceService;
+    private final ApplicationContext applicationContext;
     private final IDeviceAttributeService deviceAttributeService;
 
 
     @Override
     public Map<Long, Map<Long, Map<String, AttributeInfo>>> getPointInfoMap(List<Device> devices, Map<Long, Map<Long, DeviceAttribute>> profileAttributeMap, Map<Long, PointAttribute> pointAttributeMap) {
-
-        log.info("devices: {}", devices);
-        log.info("profileAttributeMap: {}", profileAttributeMap);
-        log.info("pointAttributeMap: {}", pointAttributeMap);
-
         Map<Long, Map<Long, Map<String, AttributeInfo>>> devicePointInfoMap = new ConcurrentHashMap<>(16);
         devices.forEach(device -> {
             Map<Long, Map<String, AttributeInfo>> infoMap = getPointInfoMap(device, profileAttributeMap, pointAttributeMap);
@@ -102,7 +100,6 @@ public class PointInfoServiceImpl extends ServiceImpl<PointInfoMapper, PointInfo
         List<PointInfo> pointInfos = baseMapper.selectList(Wrappers.lambdaQuery(PointInfo.class)
             .eq(PointInfo::getDeviceId, deviceId)
             .eq(PointInfo::getDeviceAttributeId, attributeId));
-        log.info("selectByDeviceIdAndAttributeId pointInfos: {}", pointInfos);
         return pointInfos;
     }
 
@@ -149,7 +146,12 @@ public class PointInfoServiceImpl extends ServiceImpl<PointInfoMapper, PointInfo
             pointInfoList.add(pointInfo);
         });
 
-        return baseMapper.insertOrUpdateBatch(pointInfoList);
+        boolean b = baseMapper.insertOrUpdateBatch(pointInfoList);
+        if (b) {
+            // 通知驱动
+            applicationContext.publishEvent(new DriverEvent(this));
+        }
+        return b;
     }
 
     /**

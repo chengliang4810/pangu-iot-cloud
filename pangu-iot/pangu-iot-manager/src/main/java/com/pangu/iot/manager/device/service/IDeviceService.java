@@ -3,6 +3,7 @@ package com.pangu.iot.manager.device.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.pangu.common.mybatis.core.page.PageQuery;
 import com.pangu.common.mybatis.core.page.TableDataInfo;
+import com.pangu.iot.manager.device.domain.bo.DeviceGatewayBindBo;
 import com.pangu.manager.api.domain.Device;
 import com.pangu.iot.manager.device.domain.bo.DeviceBO;
 import com.pangu.iot.manager.device.domain.bo.DeviceStatusBO;
@@ -85,4 +86,20 @@ public interface IDeviceService extends IService<Device> {
      * @param executeType 执行类型
      */
     void executeService(Long deviceId, Long eventId, Integer executeType);
+
+    /**
+     * 网关设备绑定子设备
+     *
+     * @param deviceGatewayBindBo 网关设备绑定博
+     * @return {@link Boolean}
+     */
+    Boolean bindGatewayDevice(DeviceGatewayBindBo deviceGatewayBindBo);
+
+    /**
+     * 查询网关设备绑定设备id
+     *
+     * @param id id
+     * @return {@link List}<{@link Long}>
+     */
+    List<Long> queryGatewayDeviceBindIds(Long id);
 }

@@ -64,4 +64,5 @@ public interface IDriverService extends IService<Driver> {
      * @return {@link List}<{@link DriverConfigVO}>
      */
     List<DriverConfigVO> getDriverConfigByDeviceId(Long deviceId);
+
 }

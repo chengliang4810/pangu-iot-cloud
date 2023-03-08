@@ -31,6 +31,11 @@ public class DeviceBO extends BaseEntity {
     private Long id;
 
     /**
+     * 网关设备id
+     */
+    private Long gatewayDeviceId;
+
+    /**
      * 设备编号
      */
     @Length(min = 2, max = 60, message = "设备ID长度不符合规范", groups = { AddGroup.class })

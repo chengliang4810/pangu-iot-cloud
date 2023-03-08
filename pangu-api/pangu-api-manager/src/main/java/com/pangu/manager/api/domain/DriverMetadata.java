@@ -42,12 +42,6 @@ public class DriverMetadata implements Serializable {
     private Map<Long, Device> deviceMap;
 
     /**
-     * 设备代码映射
-     * deviceCode : deviceId
-     */
-    private Map<String, Long> deviceCodeMap;
-
-    /**
      * profileId(pointId,point)
      */
     private Map<Long, Map<Long, DeviceAttribute>> profileAttributeMap;
@@ -59,7 +53,6 @@ public class DriverMetadata implements Serializable {
         this.driverInfoMap = new ConcurrentHashMap<>(16);
         this.pointInfoMap = new ConcurrentHashMap<>(16);
         this.profileAttributeMap = new ConcurrentHashMap<>(16);
-        this.deviceCodeMap = new ConcurrentHashMap<>(16);
     }
 
 }

@@ -4,8 +4,10 @@ import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.crypto.SecureUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.pangu.iot.manager.device.domain.GatewayDeviceBind;
 import com.pangu.iot.manager.device.service.IDeviceAttributeService;
 import com.pangu.iot.manager.device.service.IDeviceService;
+import com.pangu.iot.manager.device.service.IGatewayDeviceBindService;
 import com.pangu.iot.manager.driver.convert.DriverConvert;
 import com.pangu.iot.manager.driver.domain.Driver;
 import com.pangu.iot.manager.driver.domain.DriverInfo;
@@ -41,6 +43,7 @@ public class DriverSdkServiceImpl implements IDriverSdkService {
     private final IPointAttributeService pointAttributeService;
     private final IDriverAttributeService driverAttributeService;
     private final IDeviceAttributeService deviceAttributeService;
+    private final IGatewayDeviceBindService gatewayDeviceBindService;
 
 
     /**
@@ -67,20 +70,39 @@ public class DriverSdkServiceImpl implements IDriverSdkService {
         Map<Long, PointAttribute> pointAttributeMap = pointAttributeService.getPointAttributeMap(driver.getId());
         driverMetadata.setPointAttributeMap(pointAttributeMap);
 
-        // 查询驱动对应的设备
+        // 查询驱动所对应的网关设备 驱动信息在网关设备上
         List<Long> productIds = productService.listByDriverId(driver.getId());
-        List<Device> deviceList = deviceService.list(Wrappers.lambdaQuery(Device.class).in(Device::getProductId, productIds));
+        List<Device> gatewayDeviceList = deviceService.list(Wrappers.lambdaQuery(Device.class).in(Device::getProductId, productIds));
+        Set<Long> gatewayDeviceIds = gatewayDeviceList.stream().map(Device::getId).collect(Collectors.toSet());
+
+        // 查询网关设备绑定的子设备 点位信息在子设备上
+        List<GatewayDeviceBind> gatewayDeviceBindList = gatewayDeviceBindService.list(Wrappers.lambdaQuery(GatewayDeviceBind.class).in(GatewayDeviceBind::getGatewayDeviceId, gatewayDeviceIds));
+        Set<Long> childDeviceIds = gatewayDeviceBindList.stream().map(GatewayDeviceBind::getDeviceId).collect(Collectors.toSet());
+        List<Device> deviceList = deviceService.list(Wrappers.lambdaQuery(Device.class).in(Device::getId, childDeviceIds));
+
         if (CollectionUtil.isEmpty(deviceList)) {
             log.error("Device does not exist, driverId: {}", driver.getId());
             return driverMetadata;
         }
 
+        // 根据网关ID分组
+        Map<Long, List<GatewayDeviceBind>> gatewayGroupMap = gatewayDeviceBindList.stream().collect(Collectors.groupingBy(GatewayDeviceBind::getGatewayDeviceId));
+
         // 设备ID
         Set<Long> deviceIds = deviceList.stream().map(Device::getId).collect(Collectors.toSet());
-        Map<String, Long> deviceCodeMap = deviceList.stream().collect(Collectors.toMap(Device::getCode, Device::getId));
-        driverMetadata.setDeviceCodeMap(deviceCodeMap);
+
         // 查询属性配置信息
-        Map<Long, Map<String, AttributeInfo>> driverInfoMap = driverInfoService.getDriverInfoMap(deviceIds, driverAttributeMap);
+        Map<Long, Map<String, AttributeInfo>> gatewayDriverInfoMap = driverInfoService.getDriverInfoMap(gatewayDeviceIds, driverAttributeMap);
+        Map<Long, Map<String, AttributeInfo>> driverInfoMap = new HashMap<>(deviceIds.size());
+        gatewayDriverInfoMap.forEach((gatewayId, value) ->{
+            List<GatewayDeviceBind> gatewayDeviceBinds = gatewayGroupMap.get(gatewayId);
+            if (CollectionUtil.isEmpty(gatewayDeviceBinds)) {
+               return;
+            }
+            gatewayDeviceBinds.forEach(gatewayDeviceBind -> {
+                driverInfoMap.put(gatewayDeviceBind.getDeviceId(), value);
+            });
+        });
         driverMetadata.setDriverInfoMap(driverInfoMap);
 
         // DeviceMap

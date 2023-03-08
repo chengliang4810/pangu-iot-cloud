@@ -10,6 +10,8 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.pangu.common.core.utils.StringUtils;
 import com.pangu.common.mybatis.core.page.PageQuery;
 import com.pangu.common.mybatis.core.page.TableDataInfo;
+import com.pangu.iot.manager.device.domain.GatewayDeviceBind;
+import com.pangu.iot.manager.device.service.IGatewayDeviceBindService;
 import com.pangu.manager.api.domain.Device;
 import com.pangu.iot.manager.device.service.IDeviceService;
 import com.pangu.iot.manager.driver.convert.DriverConvert;
@@ -51,6 +53,7 @@ public class PointAttributeServiceImpl extends ServiceImpl<PointAttributeMapper,
     private final IDriverService driverService;
     private final IPointInfoService pointInfoService;
     private final DriverConvert driverConvert;
+    private final IGatewayDeviceBindService gatewayDeviceBindService;
     private final PointAttributeConvert pointAttributeConvert;
 
 
@@ -91,25 +94,43 @@ public class PointAttributeServiceImpl extends ServiceImpl<PointAttributeMapper,
         if (device == null) {
             return null;
         }
-        // 产品
-        Product product = productService.getById(device.getProductId());
-        if (product == null) {
-            return null;
-        }
-        // 驱动ID
-        String driverIds = product.getDriver();
-        if (StrUtil.isBlank(driverIds)) {
+
+        List<GatewayDeviceBind> gatewayDeviceBindList = gatewayDeviceBindService.list(Wrappers.lambdaQuery(GatewayDeviceBind.class).eq(GatewayDeviceBind::getDeviceId, deviceId));
+        List<Long> ids = new ArrayList<>(16);
+
+        gatewayDeviceBindList.forEach(gatewayDeviceBind -> {
+
+            Long gatewayDeviceId = gatewayDeviceBind.getGatewayDeviceId();
+            Device gatewayDevice = deviceService.getById(gatewayDeviceId);
+            if (gatewayDevice == null) {
+                return;
+            }
+            // 产品
+            Product product = productService.getById(gatewayDevice.getProductId());
+            if (product == null) {
+                return;
+            }
+            // 驱动ID
+            String driverIds = product.getDriver();
+            if (StrUtil.isBlank(driverIds)) {
+                return;
+            }
+
+            ids.addAll(Arrays.stream(driverIds.split(COMMA)).map(String::trim).map(Long::valueOf).collect(Collectors.toList()));
+        });
+
+        if (CollectionUtil.isEmpty(ids)) {
             return null;
         }
 
         // 查询驱动信息
-        List<Driver> driverList = driverService.list(Wrappers.lambdaQuery(Driver.class).in(Driver::getId, driverIds.split(COMMA)));
+        List<Driver> driverList = driverService.list(Wrappers.lambdaQuery(Driver.class).in(Driver::getId, ids));
         if (CollectionUtil.isEmpty(driverList)) {
             return null;
         }
 
         // 查询点位属性
-        List<PointAttribute> pointAttributeList = baseMapper.selectList(Wrappers.lambdaQuery(PointAttribute.class).in(PointAttribute::getDriverId, driverIds.split(COMMA)));
+        List<PointAttribute> pointAttributeList = baseMapper.selectList(Wrappers.lambdaQuery(PointAttribute.class).in(PointAttribute::getDriverId, ids));
         if (CollectionUtil.isEmpty(pointAttributeList)) {
             return null;
         }

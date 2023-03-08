@@ -72,6 +72,7 @@
               left join iot_product product on device.product_id = product.id
               left join iot_device_group_relation device_group_relation on device.id = device_group_relation.device_id
               left join iot_device_group device_group on device_group_relation.device_group_id = device_group.id
+              left join iot_gateway_device_bind gateway_device_bind on device.id = gateway_device_bind.device_id
         ${ew.customSqlSegment}
     </select>
 

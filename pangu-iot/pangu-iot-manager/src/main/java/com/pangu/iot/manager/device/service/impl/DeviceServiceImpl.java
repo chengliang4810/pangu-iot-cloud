@@ -18,6 +18,9 @@ import com.pangu.common.satoken.utils.LoginHelper;
 import com.pangu.common.zabbix.model.DeviceFunction;
 import com.pangu.data.api.RemoteDeviceStatusService;
 import com.pangu.iot.manager.device.convert.DeviceConvert;
+import com.pangu.iot.manager.device.domain.GatewayDeviceBind;
+import com.pangu.iot.manager.device.domain.bo.DeviceGatewayBindBo;
+import com.pangu.iot.manager.device.service.IGatewayDeviceBindService;
 import com.pangu.manager.api.domain.Device;
 import com.pangu.iot.manager.device.domain.DeviceGroupRelation;
 import com.pangu.iot.manager.device.domain.ServiceExecuteRecord;
@@ -68,11 +71,48 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> impleme
     private final DeviceMapper baseMapper;
     private final MqttClient mqttClient;
     private final DeviceConvert deviceConvert;
+    private final IGatewayDeviceBindService gatewayDeviceBindService;
     private final IProductServiceService productServiceService;
     private final IProductServiceParamService productServiceParamService;
     private final IProductEventServiceService productEventServiceService;
     private final IDeviceGroupRelationService deviceGroupRelationService;
     private final IServiceExecuteRecordService serviceExecuteRecordService;
+
+
+    /**
+     * 查询网关设备绑定设备id
+     *
+     * @param id id
+     * @return {@link List}<{@link Long}>
+     */
+    @Override
+    public List<Long> queryGatewayDeviceBindIds(Long id) {
+        return gatewayDeviceBindService.list(Wrappers.<GatewayDeviceBind>lambdaQuery().eq(GatewayDeviceBind::getGatewayDeviceId, id)).stream().distinct().map(GatewayDeviceBind::getDeviceId).collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
+    public Boolean bindGatewayDevice(DeviceGatewayBindBo deviceGatewayBindBo) {
+        Long gatewayDeviceId = deviceGatewayBindBo.getGatewayDeviceId();
+        List<Long> deviceIds = deviceGatewayBindBo.getDeviceIds();
+
+        Device gatewayDevice = getById(gatewayDeviceId);
+        Assert.notNull(gatewayDevice, "网关设备不存在");
+
+        // 删除原有绑定关系
+        gatewayDeviceBindService.remove(Wrappers.<GatewayDeviceBind>lambdaQuery().eq(GatewayDeviceBind::getGatewayDeviceId, gatewayDeviceId));
+
+        // 新增绑定关系
+        List<GatewayDeviceBind> gatewayDeviceBinds = new ArrayList<>();
+        deviceIds.forEach(deviceId -> {
+            GatewayDeviceBind gatewayDeviceBind = new GatewayDeviceBind();
+            gatewayDeviceBind.setGatewayDeviceId(gatewayDeviceId);
+            gatewayDeviceBind.setDeviceId(deviceId);
+            gatewayDeviceBinds.add(gatewayDeviceBind);
+        });
+
+        return gatewayDeviceBindService.saveBatch(gatewayDeviceBinds);
+    }
 
     /**
      * 获取设备ID使用code
@@ -130,7 +170,6 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> impleme
     private void buildDeviceStatus(List<DeviceListVO> records) {
         Set<String> ids = records.stream().map(DeviceListVO::getCode).collect(Collectors.toSet());
         Map<String, Integer> deviceStatus = deviceStatusService.getDeviceOnlineStatus(ids);
-        System.out.println("设备状态：" + deviceStatus);
         records.forEach(item -> {
             Integer status = deviceStatus.get(item.getCode());
             item.setOnline(ObjectUtil.isNotNull(status));
@@ -168,6 +207,7 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> impleme
         lqw.in(CollectionUtil.isNotEmpty(bo.getProductIds()), Device.CONST_PRODUCT_ID, bo.getProductIds());
         lqw.like(StringUtils.isNotBlank(bo.getName()), Device.CONST_NAME, bo.getName());
         lqw.eq(StringUtils.isNotBlank(bo.getType()), Device.CONST_TYPE, bo.getType());
+        lqw.in(ObjectUtil.isNotNull(bo.getGatewayDeviceId()), Device.CONST_GATEWAY_DEVICE, bo.getGatewayDeviceId());
         return lqw;
     }
 

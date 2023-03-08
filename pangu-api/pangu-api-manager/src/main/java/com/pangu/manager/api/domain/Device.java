@@ -21,6 +21,7 @@ import java.util.Date;
 @TableName("iot_device")
 public class Device extends BaseEntity {
 
+
     private static final long serialVersionUID=1L;
 
     /**
@@ -77,7 +78,8 @@ public class Device extends BaseEntity {
     /** the constant of field {@link Device#name} */
     public static final String CONST_NAME = "device.name";
     /** the constant of field {@link Device#type} */
-    public static final String CONST_TYPE = "type";
+    public static final String CONST_TYPE = "product.type";
     /** the constant of field {@link Device#status} */
     public static final String CONST_STATUS = "status";
+    public static final String CONST_GATEWAY_DEVICE = "gateway_device_bind.gateway_device_id";
 }
