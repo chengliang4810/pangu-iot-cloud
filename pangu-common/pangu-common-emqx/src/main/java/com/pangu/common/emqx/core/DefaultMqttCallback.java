@@ -1,6 +1,5 @@
 package com.pangu.common.emqx.core;
 
-import com.pangu.common.core.utils.SpringUtils;
 import com.pangu.common.emqx.constant.Pattern;
 import com.pangu.common.emqx.doamin.SubscriptTopic;
 import lombok.SneakyThrows;
@@ -23,17 +22,19 @@ import java.util.List;
 @Slf4j
 public class DefaultMqttCallback implements MqttCallback {
 
-    private final List<SubscriptTopic> topicMap;
+    private final List<SubscriptTopic> topicList;
+    private final MqttAsyncClient client;
 
     /**
      * 默认mqtt回调
      *
-     * @param topicMap 订阅列表
+     * @param client
+     * @param topicList 订阅列表
      */
-    public DefaultMqttCallback(List<SubscriptTopic> topicMap) {
-        this.topicMap = topicMap;
+    public DefaultMqttCallback(MqttAsyncClient client, List<SubscriptTopic> topicList) {
+        this.client = client;
+        this.topicList = topicList;
     }
-
 
     /**
      * 断开连接
@@ -42,13 +43,7 @@ public class DefaultMqttCallback implements MqttCallback {
     @Override
     @SneakyThrows
     public void disconnected(MqttDisconnectResponse mqttDisconnectResponse) {
-        MqttClient client = SpringUtils.getBean(MqttClient.class);
-        MqttConnectionOptions option = SpringUtils.getBean(MqttConnectionOptions.class);
-//        while (!client.isConnected()) {
-//            log.info("client is not connected, try to reconnect");
-//            client.connect(option);
-//            ThreadUtil.sleep(10000);
-//        }
+        log.debug("mqtt disconnected {}", mqttDisconnectResponse);
     }
 
     /**
@@ -95,7 +90,7 @@ public class DefaultMqttCallback implements MqttCallback {
     @Override
     public void messageArrived(String topic, MqttMessage message) throws Exception {
         log.debug("topic: {}, message: {}", topic, message);
-        for (SubscriptTopic subscriptTopic : topicMap) {
+        for (SubscriptTopic subscriptTopic : topicList) {
             if (subscriptTopic.getPattern() != Pattern.NONE && isMatched(subscriptTopic.getTopic(), topic)) {
                 subscriptTopic.getMessageListener().messageArrived(topic, message);
                 return;
@@ -118,22 +113,17 @@ public class DefaultMqttCallback implements MqttCallback {
     /**
      * 连接emq服务器后触发
      */
-    @SneakyThrows
     @Override
-    public void connectComplete(boolean b, String s) {
-        MqttClient client = SpringUtils.getBean(MqttClient.class);
+    @SneakyThrows
+    public void connectComplete(boolean reconnect, String serverURI) {
+        log.debug("mqtt connect complete, reconnect: {}, serverURI: {} isConnected: {}", reconnect, serverURI, client.isConnected());
         if (client.isConnected()) {
-            MqttSubscription[] mqttSubscriptions = new MqttSubscription[topicMap.size()];
-            IMqttMessageListener[] messageListeners = new IMqttMessageListener[topicMap.size()];
-            for (int i = 0; i < topicMap.size(); i++) {
-                mqttSubscriptions[i] = new MqttSubscription(topicMap.get(i).getSubTopic(), topicMap.get(i).getQos());
-                messageListeners[i] = topicMap.get(i).getMessageListener();
-                log.info("订阅主题 {}", topicMap.get(i).getSubTopic());
+            for (SubscriptTopic subscriptTopic : topicList) {
+                IMqttToken subscribeToken = client.subscribe(new MqttSubscription(subscriptTopic.getSubTopic(), subscriptTopic.getQos()));
+                subscribeToken.waitForCompletion(5000);
+                log.info("主题订阅成功 {}", subscriptTopic.getSubTopic());
             }
-            client.subscribe(mqttSubscriptions, messageListeners);
-            log.info("共订阅 {}   个主题!", topicMap.size());
         }
     }
-
 
 }
