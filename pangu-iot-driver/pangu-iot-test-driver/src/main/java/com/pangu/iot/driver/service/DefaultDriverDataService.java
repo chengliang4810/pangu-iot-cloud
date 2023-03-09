@@ -17,14 +17,12 @@ import java.util.Map;
 public class DefaultDriverDataService extends DriverDataService {
 
     @Override
-    public DeviceValue read(Device device, List<DeviceAttribute> attributes) {
+    public DeviceValue read(Device device, List<DeviceAttribute> attributes) throws Exception {
         return super.read(device, attributes);
     }
 
     @Override
     public String read(Device device, DeviceAttribute attribute, Map<String, AttributeInfo> driverInfo, Map<String, AttributeInfo> pointInfo) {
-
-
 
 //        DeviceValue deviceValue = new DeviceValue();
 //        deviceValue.setDeviceId("1623590722222985216");

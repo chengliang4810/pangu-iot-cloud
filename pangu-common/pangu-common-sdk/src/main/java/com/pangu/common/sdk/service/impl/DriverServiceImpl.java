@@ -1,9 +1,9 @@
 package com.pangu.common.sdk.service.impl;
 
 import cn.hutool.core.util.StrUtil;
+import com.pangu.common.emqx.doamin.EmqxClient;
 import com.pangu.common.sdk.service.DriverService;
 import lombok.extern.slf4j.Slf4j;
-import org.eclipse.paho.mqttv5.client.MqttClient;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Component;
@@ -17,7 +17,7 @@ public class DriverServiceImpl  implements DriverService {
     @Resource
     private ApplicationContext applicationContext;
     @Resource
-    private MqttClient mqttClient;
+    private EmqxClient emqxClient;
 
     /**
      * 驱动程序元数据同步

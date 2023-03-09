@@ -89,13 +89,20 @@ public class DefaultMqttCallback implements MqttCallback {
      */
     @Override
     public void messageArrived(String topic, MqttMessage message) throws Exception {
-        log.debug("topic: {}, message: {}", topic, message);
+        log.debug("topic: {}, message: {} topicListSize: {}", topic, message, topicList.size());
         for (SubscriptTopic subscriptTopic : topicList) {
+            // 普通订阅
+            if (subscriptTopic.getPattern() == Pattern.NONE && subscriptTopic.getTopic().equals(topic)) {
+                subscriptTopic.getMessageListener().messageArrived(topic, message);
+                return;
+            }
+            // 共享订阅
             if (subscriptTopic.getPattern() != Pattern.NONE && isMatched(subscriptTopic.getTopic(), topic)) {
                 subscriptTopic.getMessageListener().messageArrived(topic, message);
                 return;
             }
         }
+        log.debug("未找到匹配的主题");
     }
 
     /**

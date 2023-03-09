@@ -80,7 +80,7 @@ public class EmqxConfig {
             //获取类的注解属性
             Topic annotation = AnnotationUtils.findAnnotation(classByteCode, Topic.class);
             String topic = annotation.topic();
-            topic = topic.replace("${spring.application.name}", applicationName.replace("-", ""));
+            topic = topic.replace("${spring.application.name}", applicationName);
             int qos = annotation.qos();
             Pattern patten = annotation.patten();
             String group = annotation.group();
@@ -88,7 +88,7 @@ public class EmqxConfig {
             // 判断共享订阅类型
             String subTopic = topic;
             if (patten == Pattern.SHARE) {
-                group = group.replace("${spring.application.name}", applicationName.replace("-", ""));
+                group = group.replace("${spring.application.name}", applicationName);
                 subTopic = "$share/" + group + "/" + topic;
             } else if (patten == Pattern.QUEUE) {
                 subTopic = "$queue/" + topic;

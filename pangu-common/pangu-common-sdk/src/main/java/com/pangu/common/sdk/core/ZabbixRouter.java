@@ -1,5 +1,6 @@
 package com.pangu.common.sdk.core;
 
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 import com.pangu.common.core.constant.IotConstants;
 import com.pangu.common.core.utils.JsonUtils;
@@ -44,7 +45,7 @@ public class ZabbixRouter extends RouteBuilder {
     @Override
     public void configure() throws Exception {
         // 组织唯一驱动标识
-        String emqClientId = applicationName + ":" + AddressUtils.localHost() + ":" + port;
+        String emqClientId = applicationName + "_" + AddressUtils.localHost() + ":" + port + "_CAMEL";
         String primaryKey = driverProperty.getName() + "_" + AddressUtils.localHost() + "_" + port;
         String mqttUri = "paho-mqtt5:" + StrUtil.format(IotConstants.Topic.Driver.DRIVER_TOPIC_HEARTBEAT_URI_TPL, applicationName, emqProperties.getBroker(), emqClientId, emqProperties.getPassword(), emqProperties.getUserName());
 
@@ -52,29 +53,36 @@ public class ZabbixRouter extends RouteBuilder {
 
         // 发送驱动心跳
         from("timer://DriverHeartbeatTimer?period=" + driverProperty.getSchedule().getHeartbeat() + "&delay=5s")
-            .process(exchange -> {
-                exchange.getMessage().setBody(JsonUtils.toJsonString(new DriverStatus(primaryKey, OnlineStatus.ONLINE)));
-            })
-            .to(mqttUri);
-        //.to("rabbitmq:pangu.exchange.driver.heartbeat?queue=queue.driver.heartbeat&routingKey=driver_route_heartbeat");
+                .process(exchange -> {
+                    exchange.getMessage().setBody(JsonUtils.toJsonString(new DriverStatus(primaryKey, OnlineStatus.ONLINE)));
+                })
+                .to(mqttUri);
 
-        System.out.println("read: " +  driverProperty.getSchedule().getRead());
         // 读取设备数据
-        from("timer://TestTimer2?period=" + driverProperty.getSchedule().getRead())
-            .process(exchange -> {
-                Map<Long, Device> deviceMap = driverContext.getDriverMetadata().getDeviceMap();
+        from("timer://ReadDeviceValueTimer?period=" + driverProperty.getSchedule().getRead())
+                .process(exchange -> {
+                    // 子设备集合
+                    Map<Long, Device> deviceMap = driverContext.getDriverMetadata().getDeviceMap();
+                    List<DeviceValue> deviceValues = new ArrayList<>();
 
-                System.out.println("333333" + deviceMap);
-                deviceMap.values().parallelStream().forEach(device -> {
-                    List<DeviceAttribute> deviceAttributes = new ArrayList<>(driverContext.getDriverMetadata().getProfileAttributeMap().get(device.getId()).values());
-                    DeviceValue deviceValue = driverDataService.read(device, deviceAttributes);
-                    System.out.println("11111"  + deviceValue);
-                    // 读取设备属性值
-                    // List<DeviceValue> deviceValues = driverDataService.batchRead(device, deviceAttributes, driverInfo, pointInfo);
-                });
-                // exchange.getIn().setBody();
-            })
-            .to("zabbix");
+                    try {
+                        // 读取设备数据
+                        for (Device device : deviceMap.values()) {
+                            List<DeviceAttribute> deviceAttributes = new ArrayList<>(driverContext.getDriverMetadata().getProfileAttributeMap().get(device.getId()).values());
+                            DeviceValue deviceValue = driverDataService.read(device, deviceAttributes);
+                            deviceValues.add(deviceValue);
+                        }
+                    } catch (Exception e) {
+                        log.error("读取设备数据异常: {}", e.getMessage());
+                        log.debug("读取设备数据异常: ", e);
+                    }
+                    // 发送设备数据
+                    if (CollectionUtil.isNotEmpty(deviceValues)) {
+                        log.debug("deviceValues:{}", JsonUtils.toJsonString(deviceValues));
+                        exchange.getIn().setBody(deviceValues);
+                    }
+                })
+                .to("zabbix");
 
     }
 

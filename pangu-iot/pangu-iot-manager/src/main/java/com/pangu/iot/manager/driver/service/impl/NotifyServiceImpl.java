@@ -1,5 +1,6 @@
 package com.pangu.iot.manager.driver.service.impl;
 
+import com.pangu.common.emqx.doamin.EmqxClient;
 import com.pangu.iot.manager.driver.domain.Driver;
 import com.pangu.iot.manager.driver.domain.DriverInfo;
 import com.pangu.iot.manager.driver.domain.PointInfo;
@@ -9,8 +10,6 @@ import com.pangu.manager.api.domain.Device;
 import com.pangu.manager.api.domain.DeviceAttribute;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.eclipse.paho.mqttv5.client.MqttClient;
-import org.eclipse.paho.mqttv5.common.MqttException;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -18,7 +17,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class NotifyServiceImpl implements INotifyService {
 
-    private final MqttClient mqttClient;
+    private final EmqxClient emqxClient;
 
     /**
      * 通知所有驱动
@@ -26,11 +25,7 @@ public class NotifyServiceImpl implements INotifyService {
      */
     @Override
     public void notifyAllDriver(Driver driver) {
-        try {
-                mqttClient.publish("pangu/iot/driver/" + driver.getName() + "/metadata/sync", "1".getBytes(), 0, false);
-            } catch (MqttException e) {
-                log.error("Notify Driver[{}] Error: {}", driver.getName(), e.getMessage());
-            }
+        emqxClient.publish("pangu/iot/driver/" + driver.getName() + "/metadata/sync", "1".getBytes(), 0, false);
         log.info("Notify Driver[{}] Success", driver.getName());
     }
 

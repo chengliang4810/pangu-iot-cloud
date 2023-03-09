@@ -94,7 +94,7 @@ public class ZbxSenderService {
             headLength = 0;
         }
 
-        log.info(" Zabbix Trapper 响应数据：{} ", resp.toString());
+        log.debug(" Zabbix Trapper 响应数据：{} ", resp.toString());
 
         resStream.close();
         reqStream.close();
@@ -165,7 +165,7 @@ public class ZbxSenderService {
             trapperSocket.setSoTimeout(1000);
             Assert.notNull(zbxServerIp, "zbxServerIp is null");
             Assert.notNull(zbxSenderPort, "zbxSenderPort is null");
-            log.info("zbxServerIp:{},zbxSenderPort:{}", zbxServerIp, zbxSenderPort);
+            log.debug("zbxServerIp:{}, zbxSenderPort:{}", zbxServerIp, zbxSenderPort);
             trapperSocket.connect(new InetSocketAddress(zbxServerIp.toString(), NumberUtil.parseInt(zbxSenderPort.toString())));
         } catch (Exception e) {
             log.error("connect zabbix socket fail [ip:{}, port: {}] : {}", zbxServerIp, zbxSenderPort, e.getMessage());

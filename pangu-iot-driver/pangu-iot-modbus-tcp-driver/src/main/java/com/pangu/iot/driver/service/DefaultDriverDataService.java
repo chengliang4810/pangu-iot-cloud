@@ -24,7 +24,7 @@ import org.springframework.stereotype.Component;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static com.pangu.common.sdk.utils.DriverUtil.attribute;
 
@@ -41,22 +41,18 @@ public class DefaultDriverDataService extends DriverDataService {
     private volatile Map<String, ModbusMaster> masterMap = new HashMap<>(64);
 
     @Override
-    public DeviceValue read(Device device, List<DeviceAttribute> attributes) {
+    public DeviceValue read(Device device, List<DeviceAttribute> attributes) throws Exception {
         // 驱动信息
         Map<String, AttributeInfo> driverInfo = driverContext.getDriverInfoByDeviceId(device.getId());
-        log.info("Driver Info: {}", JsonUtils.toJsonString(driverInfo));
+        log.debug("Driver Info: {}", JsonUtils.toJsonString(driverInfo));
+        Map<String, String> attributesMap = new ConcurrentHashMap<>(attributes.size());
 
-        Map<String, String> attributesMap = attributes.parallelStream().collect(Collectors.toMap(DeviceAttribute::getKey, attribute -> {
+        for (DeviceAttribute attribute : attributes) {
             Map<String, AttributeInfo> pointInfo = driverContext.getPointInfoByDeviceIdAndPointId(device.getId(), attribute.getId());
-            log.info("Point Info: {}", JsonUtils.toJsonString(pointInfo));
-
-            try {
-                ModbusMaster master = getMaster(device.getId().toString(), driverInfo);
-                return readValue(master, pointInfo, attribute.getValueType());
-            } catch (ModbusInitException | ModbusTransportException | ErrorResponseException e) {
-                throw new RuntimeException(e);
-            }
-        }));
+            ModbusMaster master = getMaster(device.getId().toString(), driverInfo);
+            String value =  readValue(master, pointInfo, attribute.getValueType());
+            attributesMap.put(attribute.getKey(), value);
+        }
 
         return new DeviceValue(device.getCode(), attributesMap);
     }
@@ -111,7 +107,7 @@ public class DefaultDriverDataService extends DriverDataService {
         int slaveId = attribute(pointInfo, "slaveId");
         int functionCode = attribute(pointInfo, "functionCode");
         int offset = attribute(pointInfo, "offset");
-        log.info("Modbus Tcp Read Value Info slaveId: {}, functionCode: {}, offset: {}", slaveId, functionCode, offset);
+        log.debug("Modbus Tcp Read Value Info slaveId: {}, functionCode: {}, offset: {}", slaveId, functionCode, offset);
         switch (functionCode) {
             case 1:
                 BaseLocator<Boolean> coilLocator = BaseLocator.coilStatus(slaveId, offset);
@@ -175,7 +171,6 @@ public class DefaultDriverDataService extends DriverDataService {
      * @return Modbus Data Type
      */
     public int getValueType(String type) {
-        log.info("Modbus Tcp Value Type {}", type);
         switch (type) {
             case "0":
                 return DataType.EIGHT_BYTE_FLOAT;

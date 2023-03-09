@@ -1,6 +1,5 @@
 package com.pangu.common.sdk.mqtt;
 
-import cn.hutool.core.util.NumberUtil;
 import com.pangu.common.emqx.annotation.Topic;
 import com.pangu.common.emqx.core.MqttConsumer;
 import com.pangu.common.sdk.context.DriverContext;
@@ -23,7 +22,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 @Topic(topic = "iot/driver/${spring.application.name}/metadata/sync", qos = 2)
-public class DriverMetadataSyncCallback extends MqttConsumer<Integer> {
+public class DriverMetadataSyncCallback extends MqttConsumer<String> {
 
     @Value("${spring.application.name}")
     private String serviceName;
@@ -39,7 +38,7 @@ public class DriverMetadataSyncCallback extends MqttConsumer<Integer> {
      * @param entity 实体
      */
     @Override
-    protected void messageHandler(String topic, Integer entity) {
+    protected void messageHandler(String topic, String entity) {
         log.info("DriverMetadataSyncCallback messageHandler topic:{}, entity:{}", topic, entity);
         DriverMetadata driverMetadata = remoteDriverService.driverMetadataSync(serviceName);
         driverContext.setDriverMetadata(driverMetadata);
@@ -52,9 +51,9 @@ public class DriverMetadataSyncCallback extends MqttConsumer<Integer> {
      * @return {@link }
      */
     @Override
-    public Integer decoder(MqttMessage message) {
+    public String decoder(MqttMessage message) {
         byte[] payload = message.getPayload();
-        return NumberUtil.toInt(payload);
+        return new String(payload);
     }
 
 }

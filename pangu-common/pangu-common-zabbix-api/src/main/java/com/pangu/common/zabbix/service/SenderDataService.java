@@ -38,7 +38,7 @@ public class SenderDataService {
      */
     public ZbxResponse sendData(List<ZbxItemValue> itemValue) {
         Assert.notEmpty(itemValue, "itemValue is null");
-        log.info("send data to zabbix: {}", itemValue);
+        log.debug("send data to zabbix: {}", itemValue);
         try {
             ZabbixTrapper zabbixTrapper = new ZabbixTrapper(itemValue);
             return senderService.sendData(gson.toJson(zabbixTrapper));

@@ -1,11 +1,10 @@
 package com.pangu.iot.manager.driver.service.event;
 
+import com.pangu.common.emqx.doamin.EmqxClient;
 import com.pangu.iot.manager.driver.service.IDriverService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.eclipse.paho.mqttv5.client.MqttClient;
-import org.eclipse.paho.mqttv5.common.MqttException;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 
@@ -15,17 +14,16 @@ import org.springframework.stereotype.Component;
 public class DriverMetadataSyncEvent implements ApplicationListener<DriverEvent> {
 
     private final IDriverService driverService;
-    private final MqttClient mqttClient;
+    private final EmqxClient emqxClient;
 
     @Override
     @SneakyThrows
     public void onApplicationEvent(DriverEvent event) {
         driverService.list().parallelStream().forEach(driver -> {
-            try {
-                mqttClient.publish("pangu/iot/driver/" + driver.getName() + "/metadata/sync", "1".getBytes(), 0, false);
-            } catch (MqttException e) {
-                throw new RuntimeException(e);
-            }
+                String topic = "iot/driver/" + driver.getName() + "/metadata/sync";
+                log.info("DriverMetadataSyncEvent topic:{}", topic);
+                // iot/driver/pangu-iot-test-driver/metadata/sync
+                emqxClient.publish(topic, "update".getBytes(), 2, true);
         });
     }
 

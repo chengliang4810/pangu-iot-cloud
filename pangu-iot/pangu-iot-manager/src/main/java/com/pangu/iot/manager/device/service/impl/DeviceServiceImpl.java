@@ -11,6 +11,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.pangu.common.core.utils.Assert;
 import com.pangu.common.core.utils.JsonUtils;
 import com.pangu.common.core.utils.StringUtils;
+import com.pangu.common.emqx.doamin.EmqxClient;
 import com.pangu.common.mybatis.core.page.PageQuery;
 import com.pangu.common.mybatis.core.page.TableDataInfo;
 import com.pangu.common.redis.utils.RedisUtils;
@@ -18,13 +19,11 @@ import com.pangu.common.satoken.utils.LoginHelper;
 import com.pangu.common.zabbix.model.DeviceFunction;
 import com.pangu.data.api.RemoteDeviceStatusService;
 import com.pangu.iot.manager.device.convert.DeviceConvert;
-import com.pangu.iot.manager.device.domain.GatewayDeviceBind;
-import com.pangu.iot.manager.device.domain.bo.DeviceGatewayBindBo;
-import com.pangu.iot.manager.device.service.IGatewayDeviceBindService;
-import com.pangu.manager.api.domain.Device;
 import com.pangu.iot.manager.device.domain.DeviceGroupRelation;
+import com.pangu.iot.manager.device.domain.GatewayDeviceBind;
 import com.pangu.iot.manager.device.domain.ServiceExecuteRecord;
 import com.pangu.iot.manager.device.domain.bo.DeviceBO;
+import com.pangu.iot.manager.device.domain.bo.DeviceGatewayBindBo;
 import com.pangu.iot.manager.device.domain.bo.DeviceStatusBO;
 import com.pangu.iot.manager.device.domain.bo.ServiceExecuteBO;
 import com.pangu.iot.manager.device.domain.vo.DeviceDetailVO;
@@ -33,6 +32,7 @@ import com.pangu.iot.manager.device.domain.vo.DeviceVO;
 import com.pangu.iot.manager.device.mapper.DeviceMapper;
 import com.pangu.iot.manager.device.service.IDeviceGroupRelationService;
 import com.pangu.iot.manager.device.service.IDeviceService;
+import com.pangu.iot.manager.device.service.IGatewayDeviceBindService;
 import com.pangu.iot.manager.device.service.IServiceExecuteRecordService;
 import com.pangu.iot.manager.product.domain.ProductEventService;
 import com.pangu.iot.manager.product.domain.ProductService;
@@ -40,12 +40,11 @@ import com.pangu.iot.manager.product.domain.ProductServiceParam;
 import com.pangu.iot.manager.product.service.IProductEventServiceService;
 import com.pangu.iot.manager.product.service.IProductServiceParamService;
 import com.pangu.iot.manager.product.service.IProductServiceService;
+import com.pangu.manager.api.domain.Device;
 import com.pangu.system.api.model.LoginUser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboReference;
-import org.eclipse.paho.mqttv5.client.MqttClient;
-import org.eclipse.paho.mqttv5.common.MqttException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -69,7 +68,7 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> impleme
     private final RemoteDeviceStatusService deviceStatusService;
 
     private final DeviceMapper baseMapper;
-    private final MqttClient mqttClient;
+    private final EmqxClient emqxClient;
     private final DeviceConvert deviceConvert;
     private final IGatewayDeviceBindService gatewayDeviceBindService;
     private final IProductServiceService productServiceService;
@@ -337,16 +336,12 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> impleme
         }
         //下发命令 执行
         if (executeStatus){
-            try {
                 DeviceFunction deviceFunction = new DeviceFunction();
                 deviceFunction.setDeviceId(deviceId.toString());
                 deviceFunction.setIdentifier(productService.getMark());
                 deviceFunction.setParams(paramStr);
                 String topic = "iot/device/" + deviceId + "/function/" + serviceId + "/exec";
-                mqttClient.publish(topic, JsonUtils.toJsonString(deviceFunction).getBytes(), 2, false);
-            } catch (MqttException e) {
-                throw new RuntimeException(e);
-            }
+                emqxClient.publish(topic,JsonUtils.toJsonString(deviceFunction), 2);
         }
 
         //记录服务日志
