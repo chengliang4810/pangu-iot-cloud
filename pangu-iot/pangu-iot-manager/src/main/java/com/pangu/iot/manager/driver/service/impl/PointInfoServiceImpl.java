@@ -20,6 +20,8 @@ import com.pangu.iot.manager.driver.domain.vo.PointInfoVO;
 import com.pangu.iot.manager.driver.mapper.PointInfoMapper;
 import com.pangu.iot.manager.driver.service.IPointInfoService;
 import com.pangu.iot.manager.driver.service.event.DriverEvent;
+import com.pangu.iot.manager.product.domain.ProductService;
+import com.pangu.iot.manager.product.service.IProductServiceService;
 import com.pangu.manager.api.domain.AttributeInfo;
 import com.pangu.manager.api.domain.Device;
 import com.pangu.manager.api.domain.DeviceAttribute;
@@ -46,6 +48,7 @@ public class PointInfoServiceImpl extends ServiceImpl<PointInfoMapper, PointInfo
 
     private final PointInfoMapper baseMapper;
     private final IDeviceService deviceService;
+    private final IProductServiceService productServiceService;
     private final ApplicationContext applicationContext;
     private final IDeviceAttributeService deviceAttributeService;
 
@@ -119,7 +122,11 @@ public class PointInfoServiceImpl extends ServiceImpl<PointInfoMapper, PointInfo
         Long deviceAttributeId = bo.getDeviceAttributeId();
         // 验证属性是否存在
         DeviceAttribute deviceAttribute = deviceAttributeService.getById(deviceAttributeId);
-        Assert.notNull(deviceAttribute, "属性不存在");
+
+        if (ObjectUtil.isNull(deviceAttribute)){
+            ProductService service = productServiceService.getById(deviceAttributeId);
+            Assert.notNull(service, "属性/功能不存在");
+        }
 
         Map<Long, String> attributeValue = bo.getAttributeValue();
         List<PointInfo> pointInfoList = new ArrayList<PointInfo>(attributeValue.size());

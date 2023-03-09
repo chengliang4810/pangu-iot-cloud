@@ -1,6 +1,5 @@
 package com.pangu.iot.driver.service;
 
-import com.pangu.common.core.exception.ServiceException;
 import com.pangu.common.core.utils.JsonUtils;
 import com.pangu.common.sdk.service.DriverDataService;
 import com.pangu.common.zabbix.model.DeviceFunction;
@@ -63,10 +62,14 @@ public class DefaultDriverDataService extends DriverDataService {
      * @param deviceFunction
      */
     @Override
-    public Boolean control(DeviceFunction deviceFunction) {
-        // 通过异常信息记录日志
-        throw new ServiceException("暂不支持控制设备");
-        // return true;
+    public Boolean control(DeviceFunction deviceFunction) throws Exception {
+        String identifier = deviceFunction.getIdentifier();
+        // 驱动信息
+        Map<String, AttributeInfo> driverInfo = driverContext.getDriverInfoByDeviceId(deviceFunction.getDeviceId());
+        Map<String, AttributeInfo> pointInfo =  driverContext.getPointInfoByDeviceIdAndPointId(deviceFunction.getDeviceId(), deviceFunction.getServiceId());
+        ModbusMaster modbusMaster = getMaster(deviceFunction.getDeviceId().toString(), driverInfo);
+        // return writeValue(modbusMaster, pointInfo, value.getType(), value.getValue());
+        return false;
     }
 
 

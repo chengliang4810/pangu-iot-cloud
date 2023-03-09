@@ -39,7 +39,6 @@ public class DriverMetadataSyncCallback extends MqttConsumer<String> {
      */
     @Override
     protected void messageHandler(String topic, String entity) {
-        log.info("DriverMetadataSyncCallback messageHandler topic:{}, entity:{}", topic, entity);
         DriverMetadata driverMetadata = remoteDriverService.driverMetadataSync(serviceName);
         driverContext.setDriverMetadata(driverMetadata);
     }

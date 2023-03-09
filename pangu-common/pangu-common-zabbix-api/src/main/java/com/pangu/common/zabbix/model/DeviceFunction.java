@@ -2,9 +2,9 @@ package com.pangu.common.zabbix.model;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
+import org.apache.ibatis.javassist.bytecode.AttributeInfo;
 
 import java.io.Serializable;
-import java.util.Map;
 
 /**
  * 设备功能
@@ -19,18 +19,20 @@ public class DeviceFunction implements Serializable {
     /**
      * 设备id
      */
-    private String deviceId;
+    private Long deviceId;
 
-
+    /**
+     * 功能id
+     */
+    private Long serviceId;
     /**
      * 标识符
      */
     private String identifier;
 
-
     /**
      * 参数
      */
-    private Map<String, String> params;
+    private AttributeInfo value;
 
 }

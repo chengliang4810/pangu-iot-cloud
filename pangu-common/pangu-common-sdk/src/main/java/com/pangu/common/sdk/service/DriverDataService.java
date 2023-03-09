@@ -66,7 +66,9 @@ public abstract class DriverDataService {
      * @param deviceFunction 控制设备功能参数
      * @return {@link Boolean} 控制成功返回true，否则返回false
      */
-    public abstract Boolean control(DeviceFunction deviceFunction);
+    public Boolean control(DeviceFunction deviceFunction) throws Exception {
+        throw new ServiceException("该驱动不支持控制设备");
+    }
 
     public void setDriverContext(DriverContext driverContext) {
         this.driverContext = driverContext;

@@ -40,7 +40,7 @@ public class ProductService extends BaseEntity {
     /**
      * 执行方式 0-同步 1-异步
      */
-    private Long async;
+    private Integer async;
 
 //    @TableField(exist = false)
 //    private Long relationId;

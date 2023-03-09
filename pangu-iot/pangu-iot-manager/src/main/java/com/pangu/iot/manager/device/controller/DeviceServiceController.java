@@ -32,7 +32,7 @@ public class DeviceServiceController {
      */
     @PostMapping("/execute")
     public R<ZbxResponse> execute(@RequestBody ServiceExecuteBO serviceExecute) {
-        deviceService.executeService(serviceExecute.getDeviceId(), serviceExecute.getServiceId(), serviceExecute.getServiceParams(), 0);
+        deviceService.executeService(serviceExecute);
         return R.ok();
     }
 

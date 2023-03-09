@@ -66,16 +66,7 @@ public interface IDeviceService extends IService<Device> {
      */
     Boolean updateDeviceStatus(DeviceStatusBO deviceStatusBO);
 
-    /**
-     * 执行服务
-     * 执行功能
-     *
-     * @param deviceId      设备id
-     * @param serviceId     服务id
-     * @param serviceParams 服务参数
-     * @param executeType   执行类型 0 手动 1 自动
-     */
-    void executeService(Long deviceId, Long serviceId, List<ServiceExecuteBO.ServiceParam> serviceParams, Integer executeType);
+    void executeService(ServiceExecuteBO serviceExecute);
 
     /**
      * 执行服务
@@ -102,4 +93,6 @@ public interface IDeviceService extends IService<Device> {
      * @return {@link List}<{@link Long}>
      */
     List<Long> queryGatewayDeviceBindIds(Long id);
+
+
 }

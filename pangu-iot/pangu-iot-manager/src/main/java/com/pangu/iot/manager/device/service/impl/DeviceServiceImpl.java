@@ -293,23 +293,25 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> impleme
 
         // 构建参数
         List<ProductServiceParam> paramList = productServiceParamService.list(Wrappers.<ProductServiceParam>lambdaQuery().eq(ProductServiceParam::getServiceId, serviceId));
-        List<ServiceExecuteBO.ServiceParam> serviceParams = new ArrayList<>();
-        paramList.forEach(param -> {
-            ServiceExecuteBO.ServiceParam serviceParam = new ServiceExecuteBO.ServiceParam();
-            serviceParam.setKey(param.getKey());
-            serviceParam.setValue(param.getValue());
-            serviceParams.add(serviceParam);
-        });
+//        List<ServiceExecuteBO.ServiceParam> serviceParams = new ArrayList<>();
+//        paramList.forEach(param -> {
+//            ServiceExecuteBO.ServiceParam serviceParam = new ServiceExecuteBO.ServiceParam();
+//            serviceParam.setKey(param.getKey());
+//            serviceParam.setValue(param.getValue());
+//            serviceParams.add(serviceParam);
+//        });
 
         // 执行
-        executeService(deviceId, serviceId, serviceParams, executeType);
+ //       executeService(deviceId, serviceId, serviceParams, executeType);
     }
 
     @Override
-    public void executeService(Long deviceId, Long serviceId, List<ServiceExecuteBO.ServiceParam> serviceParams, Integer executeType) {
+    public void executeService(ServiceExecuteBO serviceExecute) {
+        Long deviceId = serviceExecute.getDeviceId();
+        Long serviceId = serviceExecute.getServiceId();
+        Object value = serviceExecute.getValue();
         long startTime = System.currentTimeMillis();
         boolean executeStatus = true;
-        Assert.notNull(executeType, "执行类型不能为空");
         // 查询设备信息
         Device device = getById(deviceId);
         if (ObjectUtil.isNull(device)){
@@ -320,28 +322,17 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> impleme
             executeStatus = false;
         }
 
-        List<ProductServiceParam> paramList = productServiceParamService.list(Wrappers.<ProductServiceParam>lambdaQuery().eq(ProductServiceParam::getServiceId, serviceId));
-        Map<String, String> paramStr = null;
-        if (CollectionUtil.isNotEmpty(paramList)) {
-            paramStr = paramList.parallelStream().collect(Collectors.toMap(ProductServiceParam::getKey, ProductServiceParam::getValue, (a, b) -> a));
+        Map<String, String> paramStr = Collections.singletonMap(productService.getMark(), JsonUtils.toJsonString(value));
 
-            if (CollectionUtil.isNotEmpty(serviceParams)) {
-                Map<String, String> userParam = serviceParams.parallelStream().collect(Collectors.toMap(ServiceExecuteBO.ServiceParam::getKey, ServiceExecuteBO.ServiceParam::getValue, (a, b) -> a));
-                for (Map.Entry<String, String> param : paramStr.entrySet()) {
-                    if (userParam.get(param.getKey()) != null) {
-                        param.setValue(userParam.get(param.getKey()));
-                    }
-                }
-            }
-        }
         //下发命令 执行
         if (executeStatus){
-                DeviceFunction deviceFunction = new DeviceFunction();
-                deviceFunction.setDeviceId(deviceId.toString());
-                deviceFunction.setIdentifier(productService.getMark());
-                deviceFunction.setParams(paramStr);
-                String topic = "iot/device/" + deviceId + "/function/" + serviceId + "/exec";
-                emqxClient.publish(topic,JsonUtils.toJsonString(deviceFunction), 2);
+            DeviceFunction deviceFunction = new DeviceFunction();
+            deviceFunction.setDeviceId(deviceId);
+            deviceFunction.setServiceId(serviceId);
+            deviceFunction.setIdentifier(productService.getMark());
+            // deviceFunction.setValue(new AttributeInfo(value.toString(), productService.getDataType()));
+            String topic = "iot/device/" + deviceId + "/function/" + productService.getMark() + "/exec";
+            emqxClient.publish(topic,JsonUtils.toJsonString(deviceFunction), 2);
         }
 
         //记录服务日志
@@ -354,7 +345,7 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> impleme
         ProductService service = productServiceService.getById(serviceId);
         serviceExecuteRecord.setServiceName(service.getName());
         serviceExecuteRecord.setCreateTime(new Date());
-        serviceExecuteRecord.setExecuteType(executeType);
+        serviceExecuteRecord.setExecuteType(1);
         serviceExecuteRecord.setExecuteUser(getLoginUsername());
         serviceExecuteRecord.setExecuteStatus(executeStatus);
         serviceExecuteRecordService.save(serviceExecuteRecord);
