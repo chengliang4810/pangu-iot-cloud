@@ -4,7 +4,7 @@ import com.pangu.common.core.exception.ServiceException;
 import com.pangu.common.sdk.context.DriverContext;
 import com.pangu.common.zabbix.model.DeviceFunction;
 import com.pangu.common.zabbix.model.DeviceValue;
-import com.pangu.manager.api.domain.AttributeInfo;
+import com.pangu.common.core.domain.dto.AttributeInfo;
 import com.pangu.manager.api.domain.Device;
 import com.pangu.manager.api.domain.DeviceAttribute;
 import lombok.extern.slf4j.Slf4j;

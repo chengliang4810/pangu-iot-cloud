@@ -1,6 +1,7 @@
 package com.pangu.manager.api.domain;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.pangu.common.core.domain.dto.AttributeInfo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -25,6 +26,7 @@ public class DriverMetadata implements Serializable {
     private Long driverId;
     private Map<Long, DriverAttribute> driverAttributeMap;
     private Map<Long, PointAttribute> pointAttributeMap;
+    private Map<Long, Map<Long, ProductService>> profileServiceMap;
 
     /**
      * deviceId(driverAttribute.name,(driverInfo.value,driverAttribute.type))

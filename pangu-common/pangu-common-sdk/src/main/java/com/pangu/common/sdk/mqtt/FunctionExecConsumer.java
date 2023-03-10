@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-@Topic(topic = "iot/device/#/function/#/exec", qos = 2, patten = Pattern.SHARE, group = "${spring.application.name}Group")
+@Topic(topic = "iot/device/+/function/+/exec", qos = 2, patten = Pattern.SHARE, group = "${spring.application.name}Group")
 public class FunctionExecConsumer extends MqttConsumer<DeviceFunction> {
 
     private final DriverContext driverContext;
@@ -30,17 +30,19 @@ public class FunctionExecConsumer extends MqttConsumer<DeviceFunction> {
      */
     @Override
     protected void messageHandler(String topic, DeviceFunction deviceFunction) {
+        log.debug("topic: {}, deviceFunction: {}", topic, JsonUtils.toJsonString(deviceFunction));
         // 设备是否属于该驱动， 属于则调用执行功能方法
         if (driverContext.getDriverMetadata().getDeviceMap().containsKey(deviceFunction.getDeviceId())) {
             // 捕捉异常，记录日志
             try {
-                driverDataService.control(deviceFunction);
+                Boolean result = driverDataService.control(deviceFunction);
+                log.info("控制设备: {} , 参数: {}", result, deviceFunction);
             } catch (Exception e){
                 log.error("控制设备失败: ", e);
             }
             return;
         }
-        log.warn("设备不属于该驱动管理: {}", deviceFunction.getDeviceId());
+        log.debug("设备不属于该驱动管理: {}", deviceFunction.getDeviceId());
     }
 
     /**

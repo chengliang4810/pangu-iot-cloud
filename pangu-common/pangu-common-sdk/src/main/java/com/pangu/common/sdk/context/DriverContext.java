@@ -2,7 +2,7 @@ package com.pangu.common.sdk.context;
 
 import cn.hutool.core.map.MapUtil;
 import com.pangu.common.core.exception.ServiceException;
-import com.pangu.manager.api.domain.AttributeInfo;
+import com.pangu.common.core.domain.dto.AttributeInfo;
 import com.pangu.manager.api.domain.Device;
 import com.pangu.manager.api.domain.DeviceAttribute;
 import com.pangu.manager.api.domain.DriverMetadata;

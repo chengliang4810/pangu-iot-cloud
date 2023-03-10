@@ -1,8 +1,8 @@
 package com.pangu.iot.manager.product.convert;
 
 import com.pangu.common.core.convert.CommonConvert;
-import com.pangu.iot.manager.device.enums.IotDataType;
-import com.pangu.iot.manager.product.domain.ProductService;
+import com.pangu.common.core.enums.IotDataType;
+import com.pangu.manager.api.domain.ProductService;
 import com.pangu.iot.manager.product.domain.bo.ProductServiceBO;
 import com.pangu.iot.manager.product.domain.vo.ProductServiceVO;
 import org.mapstruct.Mapper;

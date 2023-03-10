@@ -4,10 +4,12 @@ import com.pangu.common.emqx.constant.Pattern;
 import com.pangu.common.emqx.doamin.SubscriptTopic;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.eclipse.paho.mqttv5.client.*;
+import org.eclipse.paho.mqttv5.client.IMqttToken;
+import org.eclipse.paho.mqttv5.client.MqttAsyncClient;
+import org.eclipse.paho.mqttv5.client.MqttCallback;
+import org.eclipse.paho.mqttv5.client.MqttDisconnectResponse;
 import org.eclipse.paho.mqttv5.common.MqttException;
 import org.eclipse.paho.mqttv5.common.MqttMessage;
-import org.eclipse.paho.mqttv5.common.MqttSubscription;
 import org.eclipse.paho.mqttv5.common.packet.MqttProperties;
 import org.eclipse.paho.mqttv5.common.util.MqttTopicValidator;
 
@@ -89,7 +91,7 @@ public class DefaultMqttCallback implements MqttCallback {
      */
     @Override
     public void messageArrived(String topic, MqttMessage message) throws Exception {
-        log.debug("topic: {}, message: {} topicListSize: {}", topic, message, topicList.size());
+        log.debug("topic: {}", topic);
         for (SubscriptTopic subscriptTopic : topicList) {
             // 普通订阅
             if (subscriptTopic.getPattern() == Pattern.NONE && subscriptTopic.getTopic().equals(topic)) {
@@ -126,9 +128,13 @@ public class DefaultMqttCallback implements MqttCallback {
         log.debug("mqtt connect complete, reconnect: {}, serverURI: {} isConnected: {}", reconnect, serverURI, client.isConnected());
         if (client.isConnected()) {
             for (SubscriptTopic subscriptTopic : topicList) {
-                IMqttToken subscribeToken = client.subscribe(new MqttSubscription(subscriptTopic.getSubTopic(), subscriptTopic.getQos()));
-                subscribeToken.waitForCompletion(5000);
-                log.info("主题订阅成功 {}", subscriptTopic.getSubTopic());
+                try {
+                    IMqttToken subscribeToken = client.subscribe(subscriptTopic.getSubTopic(), subscriptTopic.getQos());
+                    subscribeToken.waitForCompletion(5000);
+                    log.info("主题订阅成功 {}", subscriptTopic.getSubTopic());
+                } catch (Exception e) {
+                    log.error("主题订阅失败 {} : message: {}", subscriptTopic.getSubTopic(), e.getMessage());
+                }
             }
         }
     }

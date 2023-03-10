@@ -2,7 +2,7 @@ package com.pangu.common.sdk.utils;
 
 import cn.hutool.core.convert.Convert;
 import com.pangu.common.core.constant.ValueConstant;
-import com.pangu.manager.api.domain.AttributeInfo;
+import com.pangu.common.core.domain.dto.AttributeInfo;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.UnsupportedEncodingException;
@@ -37,7 +37,7 @@ public class DriverUtil {
      * @param <T>   T
      * @return T
      */
-    public static <T> T value(String type, String value) {
+    public static <T> T value(String type, Object value) {
         return Convert.convertByClassName(getTypeClassName(type), value);
     }
 
@@ -275,6 +275,7 @@ public class DriverUtil {
                 className = Short.class.getName();
                 break;
             case ValueConstant.Type.INT:
+            case ValueConstant.Type.INTEGER:
                 className = Integer.class.getName();
                 break;
             case ValueConstant.Type.LONG:

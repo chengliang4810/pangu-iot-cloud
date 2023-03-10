@@ -1,8 +1,8 @@
 package com.pangu.common.zabbix.model;
 
+import com.pangu.common.core.domain.dto.AttributeInfo;
 import lombok.Data;
 import lombok.experimental.Accessors;
-import org.apache.ibatis.javassist.bytecode.AttributeInfo;
 
 import java.io.Serializable;
 
@@ -25,6 +25,7 @@ public class DeviceFunction implements Serializable {
      * 功能id
      */
     private Long serviceId;
+
     /**
      * 标识符
      */

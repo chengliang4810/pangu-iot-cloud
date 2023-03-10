@@ -1,24 +1,24 @@
 package com.pangu.iot.manager.product.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
-import com.pangu.common.core.utils.StringUtils;
-import com.pangu.common.mybatis.core.page.PageQuery;
-import com.pangu.common.mybatis.core.page.TableDataInfo;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.pangu.common.mybatis.core.page.PageQuery;
+import com.pangu.common.mybatis.core.page.TableDataInfo;
+import com.pangu.iot.manager.device.service.IDeviceService;
+import com.pangu.iot.manager.product.domain.ProductServiceRelation;
 import com.pangu.iot.manager.product.domain.bo.ProductServiceRelationBO;
 import com.pangu.iot.manager.product.domain.vo.ProductServiceRelationVO;
-import com.pangu.iot.manager.product.domain.ProductServiceRelation;
 import com.pangu.iot.manager.product.mapper.ProductServiceRelationMapper;
 import com.pangu.iot.manager.product.service.IProductServiceRelationService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Collection;
 
 /**
  * 产品功能关联关系Service业务层处理

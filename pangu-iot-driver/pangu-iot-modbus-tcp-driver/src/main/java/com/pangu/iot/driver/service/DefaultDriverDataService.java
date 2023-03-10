@@ -1,10 +1,11 @@
 package com.pangu.iot.driver.service;
 
+import com.pangu.common.core.domain.dto.AttributeInfo;
+import com.pangu.common.core.enums.IotDataType;
 import com.pangu.common.core.utils.JsonUtils;
 import com.pangu.common.sdk.service.DriverDataService;
 import com.pangu.common.zabbix.model.DeviceFunction;
 import com.pangu.common.zabbix.model.DeviceValue;
-import com.pangu.manager.api.domain.AttributeInfo;
 import com.pangu.manager.api.domain.Device;
 import com.pangu.manager.api.domain.DeviceAttribute;
 import com.serotonin.modbus4j.ModbusFactory;
@@ -26,6 +27,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static com.pangu.common.sdk.utils.DriverUtil.attribute;
+import static com.pangu.common.sdk.utils.DriverUtil.value;
 
 @Slf4j
 @Component
@@ -63,13 +65,11 @@ public class DefaultDriverDataService extends DriverDataService {
      */
     @Override
     public Boolean control(DeviceFunction deviceFunction) throws Exception {
-        String identifier = deviceFunction.getIdentifier();
         // 驱动信息
         Map<String, AttributeInfo> driverInfo = driverContext.getDriverInfoByDeviceId(deviceFunction.getDeviceId());
         Map<String, AttributeInfo> pointInfo =  driverContext.getPointInfoByDeviceIdAndPointId(deviceFunction.getDeviceId(), deviceFunction.getServiceId());
         ModbusMaster modbusMaster = getMaster(deviceFunction.getDeviceId().toString(), driverInfo);
-        // return writeValue(modbusMaster, pointInfo, value.getType(), value.getValue());
-        return false;
+        return writeValue(modbusMaster, pointInfo, deviceFunction.getValue().getType(), deviceFunction.getValue().getValue());
     }
 
 
@@ -144,22 +144,40 @@ public class DefaultDriverDataService extends DriverDataService {
      * @throws ModbusTransportException ModbusTransportException
      * @throws ErrorResponseException   ErrorResponseException
      */
-    public boolean writeValue(ModbusMaster modbusMaster, Map<String, AttributeInfo> pointInfo, String type, String value) throws ModbusTransportException, ErrorResponseException {
+    public boolean writeValue(ModbusMaster modbusMaster, Map<String, AttributeInfo> pointInfo, String type, Object value) throws ModbusTransportException, ErrorResponseException {
         int slaveId =  attribute(pointInfo, "slaveId");
         int functionCode = attribute(pointInfo, "functionCode");
         int offset = attribute(pointInfo, "offset");
         switch (functionCode) {
             case 1:
-                boolean coilValue = false;//value(type, value);
+                boolean coilValue = value(type, value);
                 WriteCoilRequest coilRequest = new WriteCoilRequest(slaveId, offset, coilValue);
                 WriteCoilResponse coilResponse = (WriteCoilResponse) modbusMaster.send(coilRequest);
                 return !coilResponse.isException();
             case 3:
-                BaseLocator<Number> locator = BaseLocator.holdingRegister(slaveId, offset, getValueType(type));
-                modbusMaster.setValue(locator, ""); //value(type, value));
+                BaseLocator<Number> locator = BaseLocator.holdingRegister(slaveId, offset, getDataType(type));
+                Object obj = value(type, value);
+                modbusMaster.setValue(locator, obj);
                 return true;
             default:
                 return false;
+        }
+    }
+
+
+    public int getDataType(String type) {
+        IotDataType iotDataType = IotDataType.valueOf(type);
+        switch (iotDataType) {
+            case array:
+            case enums:
+            case string:
+                return DataType.VARCHAR;
+            case decimal:
+                return DataType.EIGHT_BYTE_FLOAT;
+            case bool:
+            case integer:
+            default:
+                return DataType.TWO_BYTE_INT_SIGNED;
         }
     }
 

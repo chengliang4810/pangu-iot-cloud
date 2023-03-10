@@ -78,7 +78,6 @@ public class ZabbixRouter extends RouteBuilder {
                     }
                     // 发送设备数据
                     if (CollectionUtil.isNotEmpty(deviceValues)) {
-                        log.debug("deviceValues:{}", JsonUtils.toJsonString(deviceValues));
                         exchange.getIn().setBody(deviceValues);
                     }
                 })

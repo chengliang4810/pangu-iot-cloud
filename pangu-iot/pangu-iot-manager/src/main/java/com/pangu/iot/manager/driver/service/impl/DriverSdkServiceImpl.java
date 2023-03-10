@@ -1,9 +1,11 @@
 package com.pangu.iot.manager.driver.service.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.crypto.SecureUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.pangu.common.core.domain.dto.AttributeInfo;
 import com.pangu.iot.manager.device.domain.GatewayDeviceBind;
 import com.pangu.iot.manager.device.service.IDeviceAttributeService;
 import com.pangu.iot.manager.device.service.IDeviceService;
@@ -15,6 +17,7 @@ import com.pangu.iot.manager.driver.domain.DriverService;
 import com.pangu.iot.manager.driver.domain.PointInfo;
 import com.pangu.iot.manager.driver.service.*;
 import com.pangu.iot.manager.product.service.IProductService;
+import com.pangu.iot.manager.product.service.IProductServiceService;
 import com.pangu.manager.api.domain.*;
 import com.pangu.manager.api.domain.dto.DriverDTO;
 import lombok.RequiredArgsConstructor;
@@ -40,6 +43,7 @@ public class DriverSdkServiceImpl implements IDriverSdkService {
     private final IPointInfoService pointInfoService;
     private final IDriverInfoService driverInfoService;
     private final IDriverServiceService driverServiceService;
+    private final IProductServiceService productServiceService;
     private final IPointAttributeService pointAttributeService;
     private final IDriverAttributeService driverAttributeService;
     private final IDeviceAttributeService deviceAttributeService;
@@ -108,11 +112,29 @@ public class DriverSdkServiceImpl implements IDriverSdkService {
         // DeviceMap
         Map<Long, Device> deviceMap = deviceList.stream().collect(Collectors.toMap(Device::getId, device -> device));
         driverMetadata.setDeviceMap(deviceMap);
-        //
+        // 属性信息
         Map<Long, Map<Long, DeviceAttribute>> profileAttributeMap = deviceAttributeService.getProfileAttributeMap(deviceIds);
         driverMetadata.setProfileAttributeMap(profileAttributeMap);
 
+        // 属性配置信息
         Map<Long, Map<Long, Map<String, AttributeInfo>>> devicePointInfoMap = pointInfoService.getPointInfoMap(deviceList, profileAttributeMap, pointAttributeMap);
+
+        // 功能信息
+        Map<Long, Map<Long, ProductService>> profileServiceMap = productServiceService.getProfileServiceMap(deviceIds);
+        driverMetadata.setProfileServiceMap(profileServiceMap);
+        log.debug("profileServiceMap: {}", profileServiceMap);
+
+        // 功能配置信息
+        Map<Long, Map<Long, Map<String, AttributeInfo>>> devicePointInfoMapByService = pointInfoService.getPointInfoMapByProductService(deviceList, profileServiceMap, pointAttributeMap);
+        log.debug("devicePointInfoMapByService: {}", devicePointInfoMapByService);
+        // 合并
+        devicePointInfoMap.forEach((deviceId, pointInfoMap) -> {
+            Map<Long, Map<String, AttributeInfo>> servicePointInfoMap = devicePointInfoMapByService.get(deviceId);
+            if (MapUtil.isNotEmpty(servicePointInfoMap)) {
+                pointInfoMap.putAll(servicePointInfoMap);
+            }
+        });
+
         driverMetadata.setPointInfoMap(devicePointInfoMap);
 
         return driverMetadata;

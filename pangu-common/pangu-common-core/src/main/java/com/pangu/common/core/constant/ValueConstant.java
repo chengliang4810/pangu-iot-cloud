@@ -15,6 +15,7 @@ public interface ValueConstant {
         String BYTE = "byte";
         String SHORT = "short";
         String INT = "int";
+        String INTEGER = "integer";
         String LONG = "long";
         String FLOAT = "float";
         String DOUBLE = "double";

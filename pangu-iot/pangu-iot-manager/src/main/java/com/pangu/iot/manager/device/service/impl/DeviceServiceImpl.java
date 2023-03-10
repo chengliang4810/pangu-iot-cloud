@@ -35,11 +35,12 @@ import com.pangu.iot.manager.device.service.IDeviceService;
 import com.pangu.iot.manager.device.service.IGatewayDeviceBindService;
 import com.pangu.iot.manager.device.service.IServiceExecuteRecordService;
 import com.pangu.iot.manager.product.domain.ProductEventService;
-import com.pangu.iot.manager.product.domain.ProductService;
+import com.pangu.manager.api.domain.ProductService;
 import com.pangu.iot.manager.product.domain.ProductServiceParam;
 import com.pangu.iot.manager.product.service.IProductEventServiceService;
 import com.pangu.iot.manager.product.service.IProductServiceParamService;
 import com.pangu.iot.manager.product.service.IProductServiceService;
+import com.pangu.common.core.domain.dto.AttributeInfo;
 import com.pangu.manager.api.domain.Device;
 import com.pangu.system.api.model.LoginUser;
 import lombok.RequiredArgsConstructor;
@@ -76,7 +77,6 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> impleme
     private final IProductEventServiceService productEventServiceService;
     private final IDeviceGroupRelationService deviceGroupRelationService;
     private final IServiceExecuteRecordService serviceExecuteRecordService;
-
 
     /**
      * 查询网关设备绑定设备id
@@ -330,9 +330,10 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> impleme
             deviceFunction.setDeviceId(deviceId);
             deviceFunction.setServiceId(serviceId);
             deviceFunction.setIdentifier(productService.getMark());
-            // deviceFunction.setValue(new AttributeInfo(value.toString(), productService.getDataType()));
+            deviceFunction.setValue(new AttributeInfo(value, productService.getDataType().name()));
             String topic = "iot/device/" + deviceId + "/function/" + productService.getMark() + "/exec";
-            emqxClient.publish(topic,JsonUtils.toJsonString(deviceFunction), 2);
+            emqxClient.publish(topic, JsonUtils.toJsonString(deviceFunction), 2);
+            log.info("下发命令成功，topic：{}，命令：{}", topic, JsonUtils.toJsonString(deviceFunction));
         }
 
         //记录服务日志

@@ -1,9 +1,9 @@
-package com.pangu.iot.manager.product.domain;
+package com.pangu.manager.api.domain;
 
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.pangu.common.core.web.domain.BaseEntity;
-import com.pangu.iot.manager.device.enums.IotDataType;
+import com.pangu.common.core.enums.IotDataType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

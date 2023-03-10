@@ -7,7 +7,8 @@ import com.pangu.iot.manager.driver.domain.PointInfo;
 import com.pangu.iot.manager.driver.domain.bo.PointInfoBO;
 import com.pangu.iot.manager.driver.domain.bo.PointInfoBatchBO;
 import com.pangu.iot.manager.driver.domain.vo.PointInfoVO;
-import com.pangu.manager.api.domain.AttributeInfo;
+import com.pangu.common.core.domain.dto.AttributeInfo;
+import com.pangu.manager.api.domain.ProductService;
 import com.pangu.manager.api.domain.Device;
 import com.pangu.manager.api.domain.DeviceAttribute;
 import com.pangu.manager.api.domain.PointAttribute;
@@ -82,4 +83,6 @@ public interface IPointInfoService extends IService<PointInfo> {
     Boolean batchUpdate(PointInfoBatchBO bo);
 
     Map<Long, Map<Long, Map<String, AttributeInfo>>> getPointInfoMap(List<Device> deviceIds, Map<Long, Map<Long, DeviceAttribute>> profileAttributeMap, Map<Long, PointAttribute> pointAttributeMap);
+
+    Map<Long, Map<Long, Map<String, AttributeInfo>>> getPointInfoMapByProductService(List<Device> deviceList, Map<Long, Map<Long, ProductService>> profileServiceMap, Map<Long, PointAttribute> pointAttributeMap);
 }

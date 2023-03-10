@@ -19,7 +19,7 @@ import com.pangu.iot.manager.driver.domain.vo.DriverInfoVO;
 import com.pangu.iot.manager.driver.mapper.DriverInfoMapper;
 import com.pangu.iot.manager.driver.service.IDriverInfoService;
 import com.pangu.iot.manager.driver.service.event.DriverEvent;
-import com.pangu.manager.api.domain.AttributeInfo;
+import com.pangu.common.core.domain.dto.AttributeInfo;
 import com.pangu.manager.api.domain.Device;
 import com.pangu.manager.api.domain.DriverAttribute;
 import lombok.RequiredArgsConstructor;

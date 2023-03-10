@@ -11,9 +11,10 @@ import com.pangu.common.core.utils.Assert;
 import com.pangu.common.core.utils.StringUtils;
 import com.pangu.common.mybatis.core.page.PageQuery;
 import com.pangu.common.mybatis.core.page.TableDataInfo;
+import com.pangu.iot.manager.device.mapper.DeviceMapper;
 import com.pangu.iot.manager.product.convert.ProductServiceConvert;
 import com.pangu.iot.manager.product.domain.ProductEventService;
-import com.pangu.iot.manager.product.domain.ProductService;
+import com.pangu.manager.api.domain.ProductService;
 import com.pangu.iot.manager.product.domain.ProductServiceParam;
 import com.pangu.iot.manager.product.domain.ProductServiceRelation;
 import com.pangu.iot.manager.product.domain.bo.ProductServiceBO;
@@ -23,14 +24,14 @@ import com.pangu.iot.manager.product.service.IProductEventServiceService;
 import com.pangu.iot.manager.product.service.IProductServiceParamService;
 import com.pangu.iot.manager.product.service.IProductServiceRelationService;
 import com.pangu.iot.manager.product.service.IProductServiceService;
+import com.pangu.manager.api.domain.Device;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 /**
  * 产品功能Service业务层处理
@@ -42,6 +43,7 @@ import java.util.Map;
 @Service
 public class ProductServiceServiceImpl extends ServiceImpl<ProductServiceMapper, ProductService> implements IProductServiceService {
 
+    private final DeviceMapper deviceMapper;
     private final ProductServiceMapper baseMapper;
     private final IProductServiceParamService serviceParamService;
     private final ProductServiceConvert productServiceConvert;
@@ -232,4 +234,33 @@ public class ProductServiceServiceImpl extends ServiceImpl<ProductServiceMapper,
         serviceRelationService.remove(Wrappers.<ProductServiceRelation>lambdaQuery().in(ProductServiceRelation::getServiceId, ids));
         return flag;
     }
+
+    /**
+     * 获取配置文件服务地图
+     *
+     * @param deviceIds 设备id
+     * @return {@link Map}<{@link Long}, {@link Map}<{@link Long}, {@link ProductService}>>
+     */
+    @Override
+    public Map<Long, Map<Long, ProductService>> getProfileServiceMap(Set<Long> deviceIds) {
+        Map<Long, Map<Long, ProductService>> attributeVOMap = new ConcurrentHashMap<>(16);
+        deviceIds.forEach(deviceId -> {
+            List<ProductService> productServiceList = getProductServiceByDeviceId(deviceId);
+            attributeVOMap.put(deviceId, productServiceList.stream().collect(Collectors.toMap(ProductService::getId, productService -> productService)));
+        });
+        return attributeVOMap;
+    }
+
+
+    private List<ProductService> getProductServiceByDeviceId(Long deviceId){
+        Device device = deviceMapper.selectById(deviceId);
+        Assert.notNull(device, "设备不存在");
+        List<ProductServiceRelation> serviceRelations = serviceRelationService.list(Wrappers.<ProductServiceRelation>lambdaQuery().in(ProductServiceRelation::getRelationId, Arrays.asList(device.getProductId(), device.getId())));
+        if (CollectionUtil.isEmpty(serviceRelations)){
+            return Collections.emptyList();
+        }
+        List<Long> ids = serviceRelations.stream().map(ProductServiceRelation::getServiceId).collect(Collectors.toList());
+        return baseMapper.selectList(Wrappers.lambdaQuery(ProductService.class).in(ProductService::getId, ids));
+    }
+
 }

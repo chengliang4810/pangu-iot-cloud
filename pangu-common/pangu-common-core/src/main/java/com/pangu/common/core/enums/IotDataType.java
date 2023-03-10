@@ -1,4 +1,4 @@
-package com.pangu.iot.manager.device.enums;
+package com.pangu.common.core.enums;
 
 import lombok.Getter;
 

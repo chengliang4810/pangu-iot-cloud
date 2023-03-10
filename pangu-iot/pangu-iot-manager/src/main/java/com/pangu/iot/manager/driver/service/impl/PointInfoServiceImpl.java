@@ -20,9 +20,9 @@ import com.pangu.iot.manager.driver.domain.vo.PointInfoVO;
 import com.pangu.iot.manager.driver.mapper.PointInfoMapper;
 import com.pangu.iot.manager.driver.service.IPointInfoService;
 import com.pangu.iot.manager.driver.service.event.DriverEvent;
-import com.pangu.iot.manager.product.domain.ProductService;
+import com.pangu.manager.api.domain.ProductService;
 import com.pangu.iot.manager.product.service.IProductServiceService;
-import com.pangu.manager.api.domain.AttributeInfo;
+import com.pangu.common.core.domain.dto.AttributeInfo;
 import com.pangu.manager.api.domain.Device;
 import com.pangu.manager.api.domain.DeviceAttribute;
 import com.pangu.manager.api.domain.PointAttribute;
@@ -48,8 +48,8 @@ public class PointInfoServiceImpl extends ServiceImpl<PointInfoMapper, PointInfo
 
     private final PointInfoMapper baseMapper;
     private final IDeviceService deviceService;
-    private final IProductServiceService productServiceService;
     private final ApplicationContext applicationContext;
+    private final IProductServiceService productServiceService;
     private final IDeviceAttributeService deviceAttributeService;
 
 
@@ -65,6 +65,35 @@ public class PointInfoServiceImpl extends ServiceImpl<PointInfoMapper, PointInfo
         return devicePointInfoMap;
     }
 
+    @Override
+    public Map<Long, Map<Long, Map<String, AttributeInfo>>> getPointInfoMapByProductService(List<Device> devices, Map<Long, Map<Long, ProductService>> profileServiceMap, Map<Long, PointAttribute> pointAttributeMap) {
+        Map<Long, Map<Long, Map<String, AttributeInfo>>> devicePointInfoMap = new ConcurrentHashMap<>(16);
+        devices.forEach(device -> {
+            Map<Long, Map<String, AttributeInfo>> infoMap = getPointInfoMapByProductService(device, profileServiceMap, pointAttributeMap);
+            if (infoMap.size() > 0) {
+                devicePointInfoMap.put(device.getId(), infoMap);
+            }
+        });
+        return devicePointInfoMap;
+    }
+
+    private Map<Long, Map<String, AttributeInfo>> getPointInfoMapByProductService(Device device, Map<Long, Map<Long, ProductService>> profilePointMap, Map<Long, PointAttribute> pointAttributeMap) {
+        Map<Long, Map<String, AttributeInfo>> attributeInfoMap = new ConcurrentHashMap<>(16);
+        profilePointMap.values().forEach(deviceAttributeMap -> deviceAttributeMap.keySet()
+                .forEach(attributeId -> {
+                    List<PointInfo> pointInfos = this.selectByDeviceIdAndAttributeId(device.getId(), attributeId);
+                    Map<String, AttributeInfo> infoMap = new ConcurrentHashMap<>(16);
+                    pointInfos.forEach(pointInfo -> {
+                        PointAttribute attribute = pointAttributeMap.get(pointInfo.getPointAttributeId());
+                        infoMap.put(attribute.getName(), new AttributeInfo(pointInfo.getValue(), attribute.getType()));
+                    });
+
+                    if (infoMap.size() > 0) {
+                        attributeInfoMap.put(attributeId, infoMap);
+                    }
+                }));
+        return attributeInfoMap;
+    }
 
     /**
      * Get point info map
@@ -79,7 +108,6 @@ public class PointInfoServiceImpl extends ServiceImpl<PointInfoMapper, PointInfo
         profilePointMap.values().forEach(deviceAttributeMap -> deviceAttributeMap.keySet()
             .forEach(attributeId -> {
                 List<PointInfo> pointInfos = this.selectByDeviceIdAndAttributeId(device.getId(), attributeId);
-
                 Map<String, AttributeInfo> infoMap = new ConcurrentHashMap<>(16);
                 pointInfos.forEach(pointInfo -> {
                     PointAttribute attribute = pointAttributeMap.get(pointInfo.getPointAttributeId());
