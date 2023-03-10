@@ -1,11 +1,13 @@
 package com.pangu.common.sdk.mqtt;
 
+import com.pangu.common.core.domain.dto.DeviceExecuteResult;
 import com.pangu.common.core.utils.JsonUtils;
 import com.pangu.common.emqx.annotation.Topic;
 import com.pangu.common.emqx.constant.Pattern;
 import com.pangu.common.emqx.core.MqttConsumer;
 import com.pangu.common.sdk.context.DriverContext;
 import com.pangu.common.sdk.service.DriverDataService;
+import com.pangu.common.sdk.service.DriverService;
 import com.pangu.common.zabbix.model.DeviceFunction;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +22,7 @@ public class FunctionExecConsumer extends MqttConsumer<DeviceFunction> {
 
     private final DriverContext driverContext;
     private final DriverDataService driverDataService;
+    private final DriverService driverService;
 
 
     /**
@@ -34,11 +37,16 @@ public class FunctionExecConsumer extends MqttConsumer<DeviceFunction> {
         // 设备是否属于该驱动， 属于则调用执行功能方法
         if (driverContext.getDriverMetadata().getDeviceMap().containsKey(deviceFunction.getDeviceId())) {
             // 捕捉异常，记录日志
+            DeviceExecuteResult deviceExecuteResult = new DeviceExecuteResult().setDeviceId(deviceFunction.getDeviceId()).setSuccess(false).setIdentifier(deviceFunction.getIdentifier()).setUuid(deviceFunction.getUuid());
             try {
                 Boolean result = driverDataService.control(deviceFunction);
+                deviceExecuteResult.setSuccess(result);
                 log.info("控制设备: {} , 参数: {}", result, deviceFunction);
             } catch (Exception e){
                 log.error("控制设备失败: ", e);
+            } finally {
+                // 通知管理平台执行结果
+                driverService.notifyDeviceFunctionResult(deviceExecuteResult);
             }
             return;
         }

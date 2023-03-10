@@ -1,23 +1,16 @@
-package com.pangu.common.zabbix.model;
+package com.pangu.common.core.domain.dto;
 
-import com.pangu.common.core.domain.dto.AttributeInfo;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 
-/**
- * 设备功能
- *
- * @author chengliang
- * @date 2023/02/17
- */
 @Data
 @Accessors(chain = true)
-public class DeviceFunction implements Serializable {
+public class DeviceExecuteResult implements Serializable {
 
     /**
-     * 流水编号
+     * 流水号
      */
     private Long uuid;
 
@@ -27,7 +20,7 @@ public class DeviceFunction implements Serializable {
     private Long deviceId;
 
     /**
-     * 功能id
+     * 服务id
      */
     private Long serviceId;
 
@@ -37,8 +30,9 @@ public class DeviceFunction implements Serializable {
     private String identifier;
 
     /**
-     * 参数
+     * 成功
      */
-    private AttributeInfo value;
+    private Boolean success;
+
 
 }

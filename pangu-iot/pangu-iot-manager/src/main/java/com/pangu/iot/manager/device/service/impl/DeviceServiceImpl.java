@@ -2,12 +2,16 @@ package com.pangu.iot.manager.device.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.thread.ThreadUtil;
+import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.pangu.common.core.domain.dto.AttributeInfo;
 import com.pangu.common.core.utils.Assert;
 import com.pangu.common.core.utils.JsonUtils;
 import com.pangu.common.core.utils.StringUtils;
@@ -35,13 +39,12 @@ import com.pangu.iot.manager.device.service.IDeviceService;
 import com.pangu.iot.manager.device.service.IGatewayDeviceBindService;
 import com.pangu.iot.manager.device.service.IServiceExecuteRecordService;
 import com.pangu.iot.manager.product.domain.ProductEventService;
-import com.pangu.manager.api.domain.ProductService;
 import com.pangu.iot.manager.product.domain.ProductServiceParam;
 import com.pangu.iot.manager.product.service.IProductEventServiceService;
 import com.pangu.iot.manager.product.service.IProductServiceParamService;
 import com.pangu.iot.manager.product.service.IProductServiceService;
-import com.pangu.common.core.domain.dto.AttributeInfo;
 import com.pangu.manager.api.domain.Device;
+import com.pangu.manager.api.domain.ProductService;
 import com.pangu.system.api.model.LoginUser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -324,16 +327,36 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> impleme
 
         Map<String, String> paramStr = Collections.singletonMap(productService.getMark(), JsonUtils.toJsonString(value));
 
+        long snowflakeNextId = IdUtil.getSnowflakeNextId();
         //下发命令 执行
         if (executeStatus){
             DeviceFunction deviceFunction = new DeviceFunction();
             deviceFunction.setDeviceId(deviceId);
             deviceFunction.setServiceId(serviceId);
             deviceFunction.setIdentifier(productService.getMark());
+            deviceFunction.setUuid(snowflakeNextId);
             deviceFunction.setValue(new AttributeInfo(value, productService.getDataType().name()));
             String topic = "iot/device/" + deviceId + "/function/" + productService.getMark() + "/exec";
             emqxClient.publish(topic, JsonUtils.toJsonString(deviceFunction), 2);
             log.info("下发命令成功，topic：{}，命令：{}", topic, JsonUtils.toJsonString(deviceFunction));
+
+            if (productService.getAsync() == 0){
+                // 执行结果
+                String result = RedisUtils.getCacheObject("iot:device:" + deviceId + ":function:" + productService.getMark() + ":" + deviceFunction.getUuid());
+                for (int i = 0; i < 30; i++) {
+                    if (StrUtil.isNotBlank(result)) {
+                        break;
+                    }
+                    ThreadUtil.sleep(100);
+                    result = RedisUtils.getCacheObject("iot:device:" + deviceId + ":function:" + productService.getMark() + ":" + deviceFunction.getUuid());
+                }
+
+                executeStatus = StrUtil.isNotBlank(result) && "success".equals(result);
+                RedisUtils.deleteObject("iot:device:" + deviceId + ":function:" + productService.getMark() + ":" + deviceFunction.getUuid());
+
+            } else {
+                executeStatus = false;
+            }
         }
 
         //记录服务日志
@@ -344,6 +367,7 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> impleme
         }
 
         ProductService service = productServiceService.getById(serviceId);
+        serviceExecuteRecord.setId(snowflakeNextId);
         serviceExecuteRecord.setServiceName(service.getName());
         serviceExecuteRecord.setCreateTime(new Date());
         serviceExecuteRecord.setExecuteType(1);
@@ -352,6 +376,8 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> impleme
         serviceExecuteRecordService.save(serviceExecuteRecord);
 
         log.info("执行功能耗时：{}ms", System.currentTimeMillis() - startTime);
+
+
     }
 
     /**

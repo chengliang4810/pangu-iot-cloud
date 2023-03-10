@@ -1,6 +1,8 @@
 package com.pangu.common.sdk.service;
 
 
+import com.pangu.common.core.domain.dto.DeviceExecuteResult;
+
 /**
  * 驱动服务
  *
@@ -16,6 +18,8 @@ public interface DriverService {
      */
     void driverMetadataSync(String primaryKey);
 
+
+    void notifyDeviceFunctionResult(DeviceExecuteResult deviceExecuteResult);
 
     /**
      * Close ApplicationContext

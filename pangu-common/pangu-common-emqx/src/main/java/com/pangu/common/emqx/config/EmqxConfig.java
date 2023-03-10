@@ -9,7 +9,6 @@ import com.pangu.common.emqx.properties.EmqProperties;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.paho.mqttv5.client.IMqttMessageListener;
-import org.eclipse.paho.mqttv5.client.IMqttToken;
 import org.eclipse.paho.mqttv5.client.MqttAsyncClient;
 import org.eclipse.paho.mqttv5.client.MqttConnectionOptions;
 import org.eclipse.paho.mqttv5.client.persist.MemoryPersistence;
@@ -98,12 +97,8 @@ public class EmqxConfig {
 
         // 添加回调监听
         client.setCallback(new DefaultMqttCallback(client, topicMap));
-
         // 链接服务器并获取连接的Token
-        IMqttToken iMqttToken = client.connect(options);
-//        iMqttToken.waitForCompletion(5000);
-//        boolean complete = iMqttToken.isComplete();
-//        log.info("mqtt建立连接：{}", complete);
+        client.connect(options);
         return new EmqxClient(client);
     }
 

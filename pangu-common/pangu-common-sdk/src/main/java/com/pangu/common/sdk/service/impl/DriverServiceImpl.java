@@ -1,7 +1,9 @@
 package com.pangu.common.sdk.service.impl;
 
 import cn.hutool.core.util.StrUtil;
-import com.pangu.common.emqx.doamin.EmqxClient;
+import com.pangu.common.core.domain.dto.DeviceExecuteResult;
+import com.pangu.common.core.utils.JsonUtils;
+import com.pangu.common.emqx.utils.EmqxUtil;
 import com.pangu.common.sdk.service.DriverService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationContext;
@@ -16,8 +18,11 @@ public class DriverServiceImpl  implements DriverService {
 
     @Resource
     private ApplicationContext applicationContext;
-    @Resource
-    private EmqxClient emqxClient;
+
+    @Override
+    public void notifyDeviceFunctionResult(DeviceExecuteResult deviceExecuteResult) {
+        EmqxUtil.getClient().publish("iot/device/" + deviceExecuteResult.getDeviceId() + "/function/" + deviceExecuteResult.getIdentifier() + "/exec/callback", JsonUtils.toJsonString(deviceExecuteResult));
+    }
 
     /**
      * 驱动程序元数据同步

@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.pangu.common.core.web.domain.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 /**
  * 功能执行记录对象 iot_service_execute_record
@@ -13,6 +14,7 @@ import lombok.EqualsAndHashCode;
  * @date 2023-02-14
  */
 @Data
+@NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @TableName("iot_service_execute_record")
 public class ServiceExecuteRecord extends BaseEntity {
@@ -50,5 +52,12 @@ public class ServiceExecuteRecord extends BaseEntity {
     private Long executeRuleId;
 
     private Boolean executeStatus;
+
+
+    public ServiceExecuteRecord(Long id, Boolean executeStatus) {
+        this.id = id;
+        this.executeStatus = executeStatus;
+    }
+
 
 }
