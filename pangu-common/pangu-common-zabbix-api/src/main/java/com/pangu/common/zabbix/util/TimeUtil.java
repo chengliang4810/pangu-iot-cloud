@@ -45,9 +45,14 @@ public class TimeUtil {
         return Timestamp.valueOf(LocalDateTime.ofEpochSecond(clock, ns, ZoneOffset.of("+8")));
     }
 
-
-    public static String formatTime(Date createTime) {
-
-        return null;
+    /**
+     * 得到第二次之间
+     *
+     * @param problemTime 问题时间
+     * @param now         现在
+     * @return boolean
+     */
+    public static long getSecondBetween(LocalDateTime problemTime, LocalDateTime now) {
+        return problemTime.toEpochSecond(ZoneOffset.of("+8")) - now.toEpochSecond(ZoneOffset.of("+8"));
     }
 }

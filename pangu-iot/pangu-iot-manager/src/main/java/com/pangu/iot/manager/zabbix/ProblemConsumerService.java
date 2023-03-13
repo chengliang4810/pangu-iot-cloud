@@ -2,6 +2,7 @@ package com.pangu.iot.manager.zabbix;
 
 import cn.hutool.core.util.NumberUtil;
 import com.pangu.common.core.constant.IotConstants;
+import com.pangu.common.zabbix.domain.ProblemMessage;
 import com.pangu.common.zabbix.model.ZbxProblem;
 import com.pangu.common.zabbix.model.ZbxTag;
 import com.pangu.common.zabbix.service.ReceiveProblemService;
@@ -14,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -30,39 +32,62 @@ public class ProblemConsumerService implements ReceiveProblemService {
     /**
      * 接收ZBX事件，处理
      *
-     * @param zbxProblem ZBX事件
+     * @param problemMessage ZBX事件
      */
     @Override
-    public void receiveProblems(ZbxProblem zbxProblem) {
-        // 设备告警等
-        // log.info("接收到ZBX事件：{}", zbxProblem);
+    public void receiveProblems(ProblemMessage problemMessage) {
+        ZbxProblem zbxProblem = problemMessage.getData();
+
 
         List<ZbxTag> itemTags = zbxProblem.getItemTags();
         Map<String, String> tagMap = itemTags.stream().collect(Collectors.toMap(ZbxTag::getTag, ZbxTag::getValue));
 
         if (tagMap.containsKey(IotConstants.DEVICE_STATUS_OFFLINE_TAG)){
             // 设备离线
-            deviceStatusService.offline(zbxProblem.getHostname());
-            log.info("设备离线：{}", zbxProblem);
+            this.deviceOffline(problemMessage);
         } else if (tagMap.containsKey(IotConstants.DEVICE_STATUS_ONLINE_TAG)) {
             // 设备上线
-            log.info("设备上线：{}", zbxProblem);
+            log.debug("设备上线：{}", zbxProblem);
             deviceStatusService.online(zbxProblem.getHostname(), zbxProblem.getClock());
+            problemMessage.ack();
         } else if (tagMap.containsKey(IotConstants.ALARM_TAG_NAME)){
             // 设备告警
             // hostname = device_id = 1623590722269122560
             // name= 事件id event_rule_id
             alarmRecord(zbxProblem);
             // zbxProblem(eventid=32956, hostname=1623590722269122560, severity=3, name=1623589728705613824, clock=1676269468, groups=[1611599188680720384, 1611785596489895936], itemTags=[ZbxTag(tag=__alarm__, value=1623590722269122560), ZbxTag(tag=__product_id__, value=1623587503962886144), ZbxTag(tag=__attribute_key__, value=temp)])
-            log.info("设备告警：{}", zbxProblem);
+            log.debug("设备告警：{}", zbxProblem);
 
             if (tagMap.containsKey(IotConstants.EXECUTE_TAG_NAME)){
                 deviceServiceExecute(zbxProblem);
             }
 
+            problemMessage.ack();
         } else {
-            log.info("未知事件：{}", zbxProblem);
+            log.warn("未知事件：{}", zbxProblem);
+            problemMessage.ack();
         }
+    }
+
+
+    /**
+     * 设备离线
+     *
+     * @param problemMessage 问题信息
+     */
+    private void deviceOffline(ProblemMessage problemMessage){
+        ZbxProblem zbxProblem = problemMessage.getData();
+        // 如果超过3秒则不执行设备离线函数
+        LocalDateTime problemTime = TimeUtil.toLocalDateTime(zbxProblem.getClock());
+        if (TimeUtil.getSecondBetween(problemTime, LocalDateTime.now()) > 3){
+            log.debug("设备离线超时：{}", zbxProblem);
+            problemMessage.ack();
+            return;
+        }
+        // 设备离线
+        deviceStatusService.offline(zbxProblem.getHostname());
+        log.debug("设备离线：{}", zbxProblem);
+        problemMessage.ack();
     }
 
     /**

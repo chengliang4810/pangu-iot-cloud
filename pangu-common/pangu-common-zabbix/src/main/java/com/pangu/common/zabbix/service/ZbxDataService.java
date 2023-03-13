@@ -5,6 +5,8 @@ import cn.hutool.core.util.ObjectUtil;
 import com.pangu.common.core.constant.CommonConstant;
 import com.pangu.common.core.utils.Assert;
 import com.pangu.common.core.utils.JsonUtils;
+import com.pangu.common.zabbix.domain.DataMessage;
+import com.pangu.common.zabbix.domain.ProblemMessage;
 import com.pangu.common.zabbix.model.ItemValue;
 import com.pangu.common.zabbix.model.ZbxProblem;
 import com.pangu.common.zabbix.model.ZbxValue;
@@ -49,59 +51,47 @@ public class ZbxDataService {
     @RabbitHandler
     @RabbitListener(queues = "#{zabbixInputDataQueue.name}", ackMode= "MANUAL")
     public void receiveMessage(Channel channel, Message message) {
-        long deliveryTag = message.getMessageProperties().getDeliveryTag();
         ThreadUtil.execAsync(() -> {
-            try {
-                if (receiveDataService == null && receiveProblemService == null){
-                    //负载到不进行消费的服务，消息重新投递
-                    ThreadUtil.execAsync(() -> {
-                        try {
-                            ThreadUtil.sleep(1000);
-                            channel.basicReject(deliveryTag, true);
-                        } catch (IOException e) {
-                            log.debug("消息确认失败");
-                        }
-                    });
-                    return;
-                }
+            if (receiveDataService == null && receiveProblemService == null){
+                //负载到不进行消费的服务，消息重新投递
+                asyncRedelivery(channel, message);
+                log.warn("没有接收数据或问题的服务");
+                return;
+            }
+            Map<String, Object> result = JsonUtils.parseObject(message.getBody(), Map.class);
 
-                Map<String, Object> result = JsonUtils.parseObject(message.getBody(), Map.class);
-
-                if (ObjectUtil.isNotNull(receiveDataService) && ObjectUtil.isNotNull(result.get("itemid"))){
-                    receiveDataService.receiveData(JsonUtils.parseObject(message.getBody(), ZbxValue.class));
-                    // 消息确认
-                    channel.basicAck(deliveryTag, false);
-                } else if (ObjectUtil.isNotNull(receiveProblemService) && ObjectUtil.isNotNull(result.get("eventid"))){
-                    receiveProblemService.receiveProblems(JsonUtils.parseObject(message.getBody(), ZbxProblem.class));
-                    // 消息确认
-                    channel.basicAck(deliveryTag, false);
-                    // receiveDataService.receiveProblems(JsonUtils.parseObject(message.getBody(), ZbxProblem.class));
-                } else {
-                    //负载到不进行消费的服务，消息重新投递
-                    ThreadUtil.execAsync(() -> {
-                        try {
-                            ThreadUtil.sleep(1000);
-                            channel.basicReject(deliveryTag, true);
-                        } catch (IOException e) {
-                            log.debug("消息确认失败");
-                        }
-                    });
-                    //channel.basicReject(deliveryTag, true);
-                    //log.info("未知的zabbix数据类型 {}", result);
-                }
-                 // 消息确认
-                 // channel.basicAck(deliveryTag, false);
-            } catch (IOException e) {
-                try {
-                    channel.basicReject(deliveryTag, true);
-                } catch (IOException ex) {
-                    log.debug("消息确认失败");
-                }
-                throw new RuntimeException(e);
+            if (ObjectUtil.isNotNull(receiveDataService) && ObjectUtil.isNotNull(result.get("itemid"))){
+                // 实时数据
+                ZbxValue zbxValue = JsonUtils.parseObject(message.getBody(), ZbxValue.class);
+                receiveDataService.receiveData(new DataMessage(channel, message, zbxValue));
+            } else if (ObjectUtil.isNotNull(receiveProblemService) && ObjectUtil.isNotNull(result.get("eventid"))){
+                // 问题数据
+                ZbxProblem zbxProblem = JsonUtils.parseObject(message.getBody(), ZbxProblem.class);
+                receiveProblemService.receiveProblems(new ProblemMessage(channel, message, zbxProblem));
+            } else {
+                //负载到不进行消费的服务，消息重新投递
+                asyncRedelivery(channel, message);
             }
         });
     }
 
+
+    /**
+     * 异步返还
+     *
+     * @param channel 通道
+     * @param message 消息
+     */
+    private void asyncRedelivery(Channel channel, Message message) {
+        ThreadUtil.execAsync(() -> {
+            try {
+                ThreadUtil.sleep(1000);
+                channel.basicReject(message.getMessageProperties().getDeliveryTag(), true);
+            } catch (IOException e) {
+                log.debug("消息确认失败");
+            }
+        });
+    }
 
     /**
      * 通过rabbitmq发送单条数据到Zabbix

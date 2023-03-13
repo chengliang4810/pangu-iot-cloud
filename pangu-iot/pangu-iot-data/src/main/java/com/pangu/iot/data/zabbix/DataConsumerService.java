@@ -1,6 +1,7 @@
 package com.pangu.iot.data.zabbix;
 
 import com.pangu.common.core.constant.IotConstants;
+import com.pangu.common.zabbix.domain.DataMessage;
 import com.pangu.common.zabbix.model.ZbxTag;
 import com.pangu.common.zabbix.model.ZbxValue;
 import com.pangu.common.zabbix.service.ReceiveDataService;
@@ -34,18 +35,20 @@ public class DataConsumerService implements ReceiveDataService {
     /**
      * 接收ZBX数据，处理
      *
-     * @param zbxValue ZBX数据
+     * @param dataMessage ZBX数据
      */
     @Override
-    public void receiveData(ZbxValue zbxValue) {
-        // 过滤Zabbix server，暂不处理
+    public void receiveData(DataMessage dataMessage) {
+        dataMessage.ack();
+        ZbxValue zbxValue = dataMessage.getData();
+        // 过滤Zabbix server不处理
         if (zbxValue.getHostname().equals("Zabbix server")){
             return;
         }
-        log.info("接收到ZBX数据：{}", zbxValue);
+        log.debug("接收到ZBX数据：{}", zbxValue);
         Map<String, String> tagMap = zbxValue.getItemTags().stream().collect(Collectors.toMap(ZbxTag::getTag, ZbxTag::getValue));
         if (!tagMap.containsKey(IotConstants.PRODUCT_ID_TAG_NAME)){
-            log.info("未知产品：{}", zbxValue);
+            log.warn("未知产品：{}", zbxValue);
             return;
         }
         // 存入tdengine

@@ -22,7 +22,7 @@ public class DriverHeartbeatReceiver extends MqttConsumer<DriverStatus> {
 
     @Override
     protected void messageHandler(String topic, DriverStatus entity) {
-        log.info("收到驱动心跳: {}", entity);
+        log.debug("收到驱动心跳: {}", entity);
         RedisUtils.setCacheObject(IotConstants.RedisKey.DRIVER_HEARTBEAT + entity.getPrimaryKey(), LocalDateTime.now(), Duration.ofSeconds(30));
     }
 
