@@ -75,15 +75,15 @@ public class DeviceStatusServiceImpl implements DeviceStatusService  {
      * @return int
      */
     @Override
-    public Map<String, Integer> getOnlineStatus(Set<?> deviceId) {
+    public Map<Long, Integer> getOnlineStatus(Set<Long> deviceId) {
         if (ObjectUtil.isEmpty(deviceId)){
             return Collections.EMPTY_MAP;
         }
-        Map<String, Integer> resultMap = new HashMap<>(deviceId.size());
+        Map<Long, Integer> resultMap = new HashMap<>(deviceId.size());
         deviceId.forEach(id -> {
             Integer value = RedisUtils.getCacheObject(DEVICE_STATUS_CACHE_PREFIX + id);
             if (ObjectUtil.isNotNull(value)) {
-                resultMap.put(id.toString(), value);
+                resultMap.put(id, value);
             }
         });
         return resultMap;

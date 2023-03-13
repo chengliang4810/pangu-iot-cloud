@@ -40,6 +40,6 @@ public interface DeviceStatusService {
      * @param deviceId 设备id
      * @return {@link Map}<{@link String} deviceId, {@link Integer} clock>
      */
-    Map<String, Integer> getOnlineStatus(Set<?> deviceId);
+    Map<Long, Integer> getOnlineStatus(Set<Long> deviceId);
 
 }

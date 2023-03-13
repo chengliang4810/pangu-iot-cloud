@@ -170,10 +170,10 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> impleme
      * @param records 记录
      */
     private void buildDeviceStatus(List<DeviceListVO> records) {
-        Set<String> ids = records.stream().map(DeviceListVO::getCode).collect(Collectors.toSet());
-        Map<String, Integer> deviceStatus = deviceStatusService.getDeviceOnlineStatus(ids);
+        Set<Long> ids = records.stream().map(DeviceListVO::getId).collect(Collectors.toSet());
+        Map<Long, Integer> deviceStatus = deviceStatusService.getDeviceOnlineStatus(ids);
         records.forEach(item -> {
-            Integer status = deviceStatus.get(item.getCode());
+            Integer status = deviceStatus.get(item.getId());
             item.setOnline(ObjectUtil.isNotNull(status));
         });
     }

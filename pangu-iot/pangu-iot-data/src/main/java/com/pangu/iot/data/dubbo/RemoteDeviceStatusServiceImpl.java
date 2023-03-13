@@ -24,7 +24,7 @@ public class RemoteDeviceStatusServiceImpl implements com.pangu.data.api.RemoteD
      * @return {@link Map}<{@link String}, {@link Integer}>
      */
     @Override
-    public Map<String, Integer> getDeviceOnlineStatus(Set<String> deviceCode) {
+    public Map<Long, Integer> getDeviceOnlineStatus(Set<Long> deviceCode) {
         return deviceStatusService.getOnlineStatus(deviceCode);
     }
 

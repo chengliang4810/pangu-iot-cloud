@@ -13,7 +13,7 @@ public interface RemoteDeviceStatusService {
     /**
      * 通过设备ID获取设备在线状态以及时间
      */
-    Map<String, Integer> getDeviceOnlineStatus(Set<String> deviceCode);
+    Map<Long, Integer> getDeviceOnlineStatus(Set<Long> deviceCode);
 
     /**
      * 设备上线
