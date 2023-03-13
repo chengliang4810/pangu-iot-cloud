@@ -94,6 +94,11 @@
 
         <dependency>
             <groupId>com.pangu</groupId>
+            <artifactId>pangu-common-emqx</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.pangu</groupId>
             <artifactId>pangu-api-data</artifactId>
         </dependency>
 

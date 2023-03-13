@@ -140,4 +140,18 @@ public class JsonUtils {
         return JSONUtil.isTypeJSONArray(json);
     }
 
+    /**
+     * json字符串字节
+     *
+     * @param object 对象
+     * @return {@link byte[]}
+     */
+    public static byte[] toJsonStringBytes(Object object) {
+        if (ObjectUtil.isNull(object)) {
+            return new byte[0];
+        }
+        String jsonString = JsonUtils.toJsonString(object, true);
+        assert jsonString != null;
+        return jsonString.getBytes();
+    }
 }
