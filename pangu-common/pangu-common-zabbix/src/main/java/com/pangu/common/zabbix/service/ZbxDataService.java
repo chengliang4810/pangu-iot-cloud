@@ -78,7 +78,7 @@ public class ZbxDataService {
 
     /**
      * 异步返还
-     *
+     * 加入线程阻塞，避免消息快速的重复投递造成死循环
      * @param channel 通道
      * @param message 消息
      */
