@@ -21,7 +21,7 @@ import java.util.Objects;
 /**
  * 字典数据json序列化工具
  *
- * @author chengliang4810
+ * @author itino
  */
 @Slf4j
 public class DictDataJsonSerializer extends JsonSerializer<String> implements ContextualSerializer {

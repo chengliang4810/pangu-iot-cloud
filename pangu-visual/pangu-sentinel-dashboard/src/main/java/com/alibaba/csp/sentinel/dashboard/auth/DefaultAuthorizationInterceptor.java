@@ -29,8 +29,8 @@ import java.lang.reflect.Method;
  * <p>
  * move from old {@link AuthorizationInterceptor}.
  *
- * @author chengliang4810
- * @author chengliang4810
+ * @author lkxiaolou
+ * @author wxq
  * @since 1.7.1
  */
 public class DefaultAuthorizationInterceptor implements AuthorizationInterceptor {
@@ -43,7 +43,7 @@ public class DefaultAuthorizationInterceptor implements AuthorizationInterceptor
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
-        throws Exception {
+            throws Exception {
         if (handler.getClass().isAssignableFrom(HandlerMethod.class)) {
             Method method = ((HandlerMethod) handler).getMethod();
 

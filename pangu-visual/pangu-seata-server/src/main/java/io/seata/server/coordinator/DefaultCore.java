@@ -46,14 +46,14 @@ import static io.seata.server.session.BranchSessionHandler.CONTINUE;
 /**
  * The type Default core.
  *
- * @author chengliang4810
+ * @author sharajava
  */
 public class DefaultCore implements Core {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DefaultCore.class);
 
     private static final int RETRY_XAER_NOTA_TIMEOUT = ConfigurationFactory.getInstance().getInt(XAER_NOTA_RETRY_TIMEOUT,
-        DefaultValues.DEFAULT_XAER_NOTA_RETRY_TIMEOUT);
+            DefaultValues.DEFAULT_XAER_NOTA_RETRY_TIMEOUT);
 
     private static Map<BranchType, AbstractCore> coreMap = new ConcurrentHashMap<>();
 
@@ -64,7 +64,7 @@ public class DefaultCore implements Core {
      */
     public DefaultCore(RemotingServer remotingServer) {
         List<AbstractCore> allCore = EnhancedServiceLoader.loadAll(AbstractCore.class,
-            new Class[]{RemotingServer.class}, new Object[]{remotingServer});
+            new Class[] {RemotingServer.class}, new Object[] {remotingServer});
         if (CollectionUtils.isNotEmpty(allCore)) {
             for (AbstractCore core : allCore) {
                 coreMap.put(core.getHandleBranchType(), core);
@@ -202,7 +202,7 @@ public class DefaultCore implements Core {
                 }
                 try {
                     BranchStatus branchStatus = getCore(branchSession.getBranchType()).branchCommit(globalSession, branchSession);
-                    if (isXaerNotaTimeout(globalSession, branchStatus)) {
+                    if (isXaerNotaTimeout(globalSession,branchStatus)) {
                         LOGGER.info("Commit branch XAER_NOTA retry timeout, xid = {} branchId = {}", globalSession.getXid(), branchSession.getBranchId());
                         branchStatus = BranchStatus.PhaseTwo_Committed;
                     }
@@ -233,7 +233,7 @@ public class DefaultCore implements Core {
                     }
                 } catch (Exception ex) {
                     StackTraceLogger.error(LOGGER, ex, "Committing branch transaction exception: {}",
-                        new String[]{branchSession.toString()});
+                        new String[] {branchSession.toString()});
                     if (!retrying) {
                         globalSession.queueToRetryCommit();
                         throw new TransactionException(ex);
@@ -284,7 +284,7 @@ public class DefaultCore implements Core {
         if (!shouldRollBack) {
             return globalSession.getStatus();
         }
-
+        
         boolean rollbackSuccess = doGlobalRollback(globalSession, false);
         return rollbackSuccess ? GlobalStatus.Rollbacked : globalSession.getStatus();
     }
@@ -329,7 +329,7 @@ public class DefaultCore implements Core {
                 } catch (Exception ex) {
                     StackTraceLogger.error(LOGGER, ex,
                         "Rollback branch transaction exception, xid = {} branchId = {} exception = {}",
-                        new String[]{globalSession.getXid(), String.valueOf(branchSession.getBranchId()), ex.getMessage()});
+                        new String[] {globalSession.getXid(), String.valueOf(branchSession.getBranchId()), ex.getMessage()});
                     if (!retrying) {
                         globalSession.queueToRetryRollback();
                     }
@@ -381,9 +381,9 @@ public class DefaultCore implements Core {
 
     private boolean isXaerNotaTimeout(GlobalSession globalSession, BranchStatus branchStatus) {
         if (BranchStatus.PhaseTwo_CommitFailed_XAER_NOTA_Retryable.equals(branchStatus) ||
-            BranchStatus.PhaseTwo_RollbackFailed_XAER_NOTA_Retryable.equals(branchStatus)) {
+                BranchStatus.PhaseTwo_RollbackFailed_XAER_NOTA_Retryable.equals(branchStatus)) {
             return System.currentTimeMillis() > globalSession.getBeginTime() + globalSession.getTimeout() +
-                Math.max(RETRY_XAER_NOTA_TIMEOUT, globalSession.getTimeout());
+                    Math.max(RETRY_XAER_NOTA_TIMEOUT, globalSession.getTimeout());
         } else {
             return false;
         }

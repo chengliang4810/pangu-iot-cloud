@@ -24,7 +24,7 @@ import io.seata.core.rpc.RegisterCheckAuthHandler;
 import static io.seata.common.DefaultValues.DEFAULT_SERVER_ENABLE_CHECK_AUTH;
 
 /**
- * @author chengliang4810
+ * @author slievrly
  */
 public abstract class AbstractCheckAuthHandler implements RegisterCheckAuthHandler {
 

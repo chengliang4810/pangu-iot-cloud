@@ -28,9 +28,8 @@ import io.seata.core.lock.RowLock;
 
 /**
  * GlobalLockVO
- *
- * @author chengliang4810
  * @author: zhongxiang.wang
+ * @author miaoxueyu
  */
 public class GlobalLockVO {
 
@@ -54,7 +53,6 @@ public class GlobalLockVO {
 
     /**
      * convert RowLock list to GlobalLockVO list
-     *
      * @param rowLocks the RowLock list
      * @return the GlobalLockVO list
      */
@@ -73,7 +71,6 @@ public class GlobalLockVO {
 
     /**
      * convert RowLock to GlobalLockVO
-     *
      * @param rowLock the RowLock
      * @return the GlobalLockVO
      */
@@ -185,15 +182,15 @@ public class GlobalLockVO {
     @Override
     public String toString() {
         return "GlobalLockVO{" +
-            "xid='" + xid + '\'' +
-            ", transactionId=" + transactionId +
-            ", branchId=" + branchId +
-            ", resourceId='" + resourceId + '\'' +
-            ", tableName='" + tableName + '\'' +
-            ", pk='" + pk + '\'' +
-            ", rowKey='" + rowKey + '\'' +
-            ", gmtCreate=" + gmtCreate +
-            ", gmtModified=" + gmtModified +
-            '}';
+                "xid='" + xid + '\'' +
+                ", transactionId=" + transactionId +
+                ", branchId=" + branchId +
+                ", resourceId='" + resourceId + '\'' +
+                ", tableName='" + tableName + '\'' +
+                ", pk='" + pk + '\'' +
+                ", rowKey='" + rowKey + '\'' +
+                ", gmtCreate=" + gmtCreate +
+                ", gmtModified=" + gmtModified +
+                '}';
     }
 }

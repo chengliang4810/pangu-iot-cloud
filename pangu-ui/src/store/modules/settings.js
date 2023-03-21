@@ -1,6 +1,6 @@
 import defaultSettings from '@/settings'
 
-const {sideTheme, showSettings, topNav, tagsView, fixedHeader, sidebarLogo, dynamicTitle} = defaultSettings
+const { sideTheme, showSettings, topNav, tagsView, fixedHeader, sidebarLogo, dynamicTitle } = defaultSettings
 
 const storageSetting = JSON.parse(localStorage.getItem('layout-setting')) || ''
 const state = {
@@ -15,7 +15,7 @@ const state = {
   dynamicTitle: storageSetting.dynamicTitle === undefined ? dynamicTitle : storageSetting.dynamicTitle
 }
 const mutations = {
-  CHANGE_SETTING: (state, {key, value}) => {
+  CHANGE_SETTING: (state, { key, value }) => {
     if (state.hasOwnProperty(key)) {
       state[key] = value
     }
@@ -24,11 +24,11 @@ const mutations = {
 
 const actions = {
   // 修改布局设置
-  changeSetting({commit}, data) {
+  changeSetting({ commit }, data) {
     commit('CHANGE_SETTING', data)
   },
   // 设置网页标题
-  setTitle({commit}, title) {
+  setTitle({ commit }, title) {
     state.title = title
   }
 }

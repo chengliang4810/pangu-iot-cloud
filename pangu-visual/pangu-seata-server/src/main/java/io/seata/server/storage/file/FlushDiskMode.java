@@ -16,7 +16,7 @@
 package io.seata.server.storage.file;
 
 /**
- * @author chengliang4810
+ * @author lizhao
  */
 public enum FlushDiskMode {
     /**

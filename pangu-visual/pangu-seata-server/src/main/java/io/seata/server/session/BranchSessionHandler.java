@@ -20,7 +20,7 @@ import io.seata.core.exception.TransactionException;
 /**
  * The Functional Interface Branch session handler
  *
- * @author chengliang4810
+ * @author wang.liang
  * @since 1.5.0
  */
 @FunctionalInterface

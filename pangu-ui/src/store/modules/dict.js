@@ -2,7 +2,7 @@ const state = {
   dict: new Array()
 }
 const mutations = {
-  SET_DICT: (state, {key, value}) => {
+  SET_DICT: (state, { key, value }) => {
     if (key !== null && key !== "") {
       state.dict.push({
         key: key,
@@ -28,15 +28,15 @@ const mutations = {
 
 const actions = {
   // 设置字典
-  setDict({commit}, data) {
+  setDict({ commit }, data) {
     commit('SET_DICT', data)
   },
   // 删除字典
-  removeDict({commit}, key) {
+  removeDict({ commit }, key) {
     commit('REMOVE_DICT', key)
   },
   // 清空字典
-  cleanDict({commit}) {
+  cleanDict({ commit }) {
     commit('CLEAN_DICT')
   }
 }

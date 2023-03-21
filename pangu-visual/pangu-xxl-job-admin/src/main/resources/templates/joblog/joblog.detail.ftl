@@ -15,8 +15,7 @@
                 <#-- icon -->
                 <div class="navbar-header">
                     <a class="navbar-brand"><b>${I18n.joblog_rolling_log}</b> Console</a>
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
-                            data-target="#navbar-collapse">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
                         <i class="fa fa-bars"></i>
                     </button>
                 </div>
@@ -32,8 +31,8 @@
                 <div class="navbar-custom-menu">
                     <ul class="nav navbar-nav">
                         <li>
-                            <a href="javascript:window.location.reload();">
-                                <i class="fa fa-fw fa-refresh"></i>
+                            <a href="javascript:window.location.reload();" >
+                                <i class="fa fa-fw fa-refresh" ></i>
                                 ${I18n.joblog_rolling_log_refresh}
                             </a>
                         </li>
@@ -44,11 +43,11 @@
         </nav>
     </header>
 
-    <div class="content-wrapper">
+    <div class="content-wrapper" >
         <section class="content">
-            <pre style="font-size:12px;position:relative;">
+            <pre style="font-size:12px;position:relative;" >
                 <div id="logConsole"></div>
-                <li class="fa fa-refresh fa-spin" style="font-size: 20px;float: left;" id="logConsoleRunning"></li>
+                <li class="fa fa-refresh fa-spin" style="font-size: 20px;float: left;" id="logConsoleRunning" ></li>
             </pre>
         </section>
     </div>

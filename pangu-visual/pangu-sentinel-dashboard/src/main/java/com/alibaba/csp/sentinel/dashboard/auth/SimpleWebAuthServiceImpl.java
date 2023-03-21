@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 /**
- * @author chengliang4810
+ * @author cdfive
  * @since 1.6.0
  */
 public class SimpleWebAuthServiceImpl implements AuthService<HttpServletRequest> {

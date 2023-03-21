@@ -17,7 +17,7 @@ import java.util.Properties;
 /**
  * i18n util
  *
- * @author chengliang4810
+ * @author xuxueli 2018-01-17 20:39:06
  */
 public class I18nUtil {
     private static Logger logger = LoggerFactory.getLogger(I18nUtil.class);

@@ -26,7 +26,7 @@ import io.seata.server.store.TransactionStoreManager.LogOperation;
 /**
  * The type Transaction write store.
  *
- * @author chengliang4810
+ * @author slievrly
  */
 public class TransactionWriteStore implements SessionStorable {
     private SessionStorable sessionRequest;
@@ -46,8 +46,7 @@ public class TransactionWriteStore implements SessionStorable {
     /**
      * Instantiates a new Transaction write store.
      */
-    public TransactionWriteStore() {
-    }
+    public TransactionWriteStore() {}
 
     /**
      * Gets session request.

@@ -5,7 +5,7 @@ import java.util.Date;
 /**
  * xxl-job log for glue, used to track job code process
  *
- * @author chengliang4810
+ * @author xuxueli 2016-5-19 17:57:46
  */
 public class XxlJobLogGlue {
 

@@ -23,7 +23,7 @@ public class RouterFunctionConfiguration {
     @Bean
     public RouterFunction routerFunction() {
         return RouterFunctions.route(
-            RequestPredicates.GET("/code").and(RequestPredicates.accept(MediaType.TEXT_PLAIN)),
-            validateCodeHandler);
+                RequestPredicates.GET("/code").and(RequestPredicates.accept(MediaType.TEXT_PLAIN)),
+                validateCodeHandler);
     }
 }

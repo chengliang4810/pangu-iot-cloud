@@ -25,7 +25,7 @@ export default {
   },
   watch: {
     defaultTheme: {
-      handler: function (val, oldVal) {
+      handler: function(val, oldVal) {
         this.theme = val
       },
       immediate: true
@@ -35,7 +35,7 @@ export default {
     }
   },
   created() {
-    if (this.defaultTheme !== ORIGINAL_THEME) {
+    if(this.defaultTheme !== ORIGINAL_THEME) {
       this.setTheme(this.defaultTheme)
     }
   },
@@ -77,7 +77,7 @@ export default {
           return new RegExp(oldVal, 'i').test(text) && !/Chalk Variables/.test(text)
         })
       styles.forEach(style => {
-        const {innerText} = style
+        const { innerText } = style
         if (typeof innerText !== 'string') return
         style.innerText = this.updateStyle(innerText, originalCluster, themeCluster)
       })

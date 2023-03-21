@@ -2,6 +2,7 @@ package com.pangu.system.api.domain;
 
 import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import com.alibaba.excel.annotation.ExcelProperty;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.pangu.common.core.constant.UserConstants;
@@ -89,6 +90,12 @@ public class SysDictData extends BaseEntity {
     @ExcelProperty(value = "状态", converter = ExcelDictConvert.class)
     @ExcelDictFormat(dictType = "sys_normal_disable")
     private String status;
+
+    /**
+     * 分组字段
+     */
+    @TableField("`groups`")
+    private String groups;
 
     /**
      * 备注

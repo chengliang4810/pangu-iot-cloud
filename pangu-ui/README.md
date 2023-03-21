@@ -2,7 +2,7 @@
 
 ```bash
 # 克隆项目
-git clone xxxxx
+git clone https://gitee.com/y_project/PanGu-Vue
 
 # 进入项目目录
 cd pangu-ui

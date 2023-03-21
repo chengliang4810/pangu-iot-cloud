@@ -53,7 +53,7 @@ import io.seata.server.store.TransactionStoreManager;
 /**
  * The type File based session manager.
  *
- * @author chengliang4810
+ * @author slievrly
  */
 @LoadLevel(name = "file", scope = Scope.PROTOTYPE)
 public class FileSessionManager extends AbstractSessionManager implements Reloadable {
@@ -105,7 +105,7 @@ public class FileSessionManager extends AbstractSessionManager implements Reload
     }
 
     @Override
-    public GlobalSession findGlobalSession(String xid) {
+    public GlobalSession findGlobalSession(String xid)  {
         return sessionMap.get(xid);
     }
 
@@ -242,22 +242,22 @@ public class FileSessionManager extends AbstractSessionManager implements Reload
         if (!(transactionStoreManager instanceof ReloadableStore)) {
             return;
         }
-        while (((ReloadableStore) transactionStoreManager).hasRemaining(isHistory)) {
-            List<TransactionWriteStore> stores = ((ReloadableStore) transactionStoreManager).readWriteStore(READ_SIZE,
+        while (((ReloadableStore)transactionStoreManager).hasRemaining(isHistory)) {
+            List<TransactionWriteStore> stores = ((ReloadableStore)transactionStoreManager).readWriteStore(READ_SIZE,
                 isHistory);
             restore(stores, removedGlobalBuffer, unhandledBranchBuffer);
         }
     }
 
     private void restore(List<TransactionWriteStore> stores, Set<String> removedGlobalBuffer,
-                         Map<String, Map<Long, BranchSession>> unhandledBranchBuffer) {
+        Map<String, Map<Long, BranchSession>> unhandledBranchBuffer) {
         for (TransactionWriteStore store : stores) {
             TransactionStoreManager.LogOperation logOperation = store.getOperate();
             SessionStorable sessionStorable = store.getSessionRequest();
             switch (logOperation) {
                 case GLOBAL_ADD:
                 case GLOBAL_UPDATE: {
-                    GlobalSession globalSession = (GlobalSession) sessionStorable;
+                    GlobalSession globalSession = (GlobalSession)sessionStorable;
                     if (globalSession.getTransactionId() == 0) {
                         LOGGER.error(
                             "Restore globalSession from file failed, the transactionId is zero , xid:" + globalSession
@@ -287,7 +287,7 @@ public class FileSessionManager extends AbstractSessionManager implements Reload
                     break;
                 }
                 case GLOBAL_REMOVE: {
-                    GlobalSession globalSession = (GlobalSession) sessionStorable;
+                    GlobalSession globalSession = (GlobalSession)sessionStorable;
                     if (globalSession.getTransactionId() == 0) {
                         LOGGER.error(
                             "Restore globalSession from file failed, the transactionId is zero , xid:" + globalSession
@@ -308,7 +308,7 @@ public class FileSessionManager extends AbstractSessionManager implements Reload
                 }
                 case BRANCH_ADD:
                 case BRANCH_UPDATE: {
-                    BranchSession branchSession = (BranchSession) sessionStorable;
+                    BranchSession branchSession = (BranchSession)sessionStorable;
                     if (branchSession.getTransactionId() == 0) {
                         LOGGER.error(
                             "Restore branchSession from file failed, the transactionId is zero , xid:" + branchSession
@@ -333,7 +333,7 @@ public class FileSessionManager extends AbstractSessionManager implements Reload
                     break;
                 }
                 case BRANCH_REMOVE: {
-                    BranchSession branchSession = (BranchSession) sessionStorable;
+                    BranchSession branchSession = (BranchSession)sessionStorable;
                     String xid = branchSession.getXid();
                     if (removedGlobalBuffer.contains(xid)) {
                         break;

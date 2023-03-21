@@ -20,8 +20,8 @@ import org.springframework.web.servlet.HandlerInterceptor;
 /**
  * The web interceptor for privilege-based authorization.
  *
- * @author chengliang4810
- * @author chengliang4810
+ * @author lkxiaolou
+ * @author wxq
  * @since 1.7.1
  */
 public interface AuthorizationInterceptor extends HandlerInterceptor {

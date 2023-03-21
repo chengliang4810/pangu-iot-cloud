@@ -1,13 +1,15 @@
 <component name="ProjectRunConfigurationManager">
-    <configuration default="false" name="pangu-monitor" type="docker-deploy" factoryName="dockerfile"
-                   server-name="Docker">
-        <deployment type="dockerfile">
-            <settings>
-                <option name="imageTag" value="pangu/pangu-monitor:1.4.0"/>
-                <option name="buildOnly" value="true"/>
-                <option name="sourceFilePath" value="pangu-visual/pangu-monitor/Dockerfile"/>
-            </settings>
-        </deployment>
-        <method v="2"/>
-    </configuration>
+  <configuration default="false" name="pangu-monitor" type="docker-deploy" factoryName="dockerfile" server-name="Docker">
+    <deployment type="dockerfile">
+      <settings>
+        <option name="imageTag" value="pangu/pangu-monitor:1.0.0" />
+        <option name="containerName" value="pangu-monitor" />
+        <option name="commandLineOptions" value="-m 1024M --memory-swap 2048M --restart=always -d --network  host" />
+        <option name="sourceFilePath" value="pangu-visual/pangu-monitor/Dockerfile" />
+      </settings>
+    </deployment>
+    <method v="2">
+      <option name="Maven.BeforeRunTask" enabled="true" file="$PROJECT_DIR$/pangu-visual/pangu-monitor/pom.xml" goal="clean package" />
+    </method>
+  </configuration>
 </component>

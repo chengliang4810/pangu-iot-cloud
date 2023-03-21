@@ -135,7 +135,7 @@ public class BeanCopyUtils {
      * BeanCopier属性缓存<br>
      * 缓存用于防止多次反射造成的性能问题
      *
-     * @author chengliang4810
+     * @author Looly
      * @since 5.4.1
      */
     public enum BeanCopierCache {
@@ -170,7 +170,7 @@ public class BeanCopyUtils {
         private String genKey(Class<?> srcClass, Class<?> targetClass, Converter converter) {
             final StringBuilder key = StrUtil.builder()
                 .append(srcClass.getName()).append('#').append(targetClass.getName());
-            if (null != converter) {
+            if(null != converter){
                 key.append('#').append(converter.getClass().getName());
             }
             return key.toString();

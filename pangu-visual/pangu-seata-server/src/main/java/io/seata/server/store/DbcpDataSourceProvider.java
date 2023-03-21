@@ -23,10 +23,9 @@ import javax.sql.DataSource;
 
 /**
  * The dbcp datasource provider
- *
- * @author chengliang4810
- * @author chengliang4810
- * @author chengliang4810
+ * @author zhangsen
+ * @author ggndnn
+ * @author will
  */
 @LoadLevel(name = "dbcp")
 public class DbcpDataSourceProvider extends AbstractDataSourceProvider {

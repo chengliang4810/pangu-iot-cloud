@@ -21,7 +21,7 @@ import java.util.List;
  * Repository interface for aggregated metrics data.
  *
  * @param <T> type of metrics
- * @author chengliang4810
+ * @author Eric Zhao
  */
 public interface MetricsRepository<T> {
 

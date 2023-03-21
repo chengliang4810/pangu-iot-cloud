@@ -112,7 +112,7 @@ public class DefaultCoordinator extends AbstractTCInboundHandler implements Tran
      * The Transaction undo log delete period.
      */
     protected static final long UNDO_LOG_DELETE_PERIOD = CONFIG.getLong(
-        ConfigurationKeys.TRANSACTION_UNDO_LOG_DELETE_PERIOD, 24 * 60 * 60 * 1000);
+            ConfigurationKeys.TRANSACTION_UNDO_LOG_DELETE_PERIOD, 24 * 60 * 60 * 1000);
 
     /**
      * The Transaction undo log delay delete period
@@ -132,13 +132,13 @@ public class DefaultCoordinator extends AbstractTCInboundHandler implements Tran
     private static final int BRANCH_ASYNC_POOL_SIZE = Runtime.getRuntime().availableProcessors();
 
     private static final Duration MAX_COMMIT_RETRY_TIMEOUT = ConfigurationFactory.getInstance().getDuration(
-        ConfigurationKeys.MAX_COMMIT_RETRY_TIMEOUT, DurationUtil.DEFAULT_DURATION, 100);
+            ConfigurationKeys.MAX_COMMIT_RETRY_TIMEOUT, DurationUtil.DEFAULT_DURATION, 100);
 
     private static final Duration MAX_ROLLBACK_RETRY_TIMEOUT = ConfigurationFactory.getInstance().getDuration(
-        ConfigurationKeys.MAX_ROLLBACK_RETRY_TIMEOUT, DurationUtil.DEFAULT_DURATION, 100);
+            ConfigurationKeys.MAX_ROLLBACK_RETRY_TIMEOUT, DurationUtil.DEFAULT_DURATION, 100);
 
     private static final boolean ROLLBACK_RETRY_TIMEOUT_UNLOCK_ENABLE = ConfigurationFactory.getInstance().getBoolean(
-        ConfigurationKeys.ROLLBACK_RETRY_TIMEOUT_UNLOCK_ENABLE, false);
+            ConfigurationKeys.ROLLBACK_RETRY_TIMEOUT_UNLOCK_ENABLE, false);
 
     private final ScheduledThreadPoolExecutor retryRollbacking =
         new ScheduledThreadPoolExecutor(1, new NamedThreadFactory(RETRY_ROLLBACKING, 1));
@@ -155,18 +155,18 @@ public class DefaultCoordinator extends AbstractTCInboundHandler implements Tran
     private final ScheduledThreadPoolExecutor undoLogDelete =
         new ScheduledThreadPoolExecutor(1, new NamedThreadFactory(UNDOLOG_DELETE, 1));
 
-    private final GlobalStatus[] rollbackingStatuses = new GlobalStatus[]{GlobalStatus.TimeoutRollbacking,
+    private final GlobalStatus[] rollbackingStatuses = new GlobalStatus[] {GlobalStatus.TimeoutRollbacking,
         GlobalStatus.TimeoutRollbackRetrying, GlobalStatus.RollbackRetrying, GlobalStatus.Rollbacking};
 
     private final GlobalStatus[] retryCommittingStatuses =
-        new GlobalStatus[]{GlobalStatus.Committing, GlobalStatus.CommitRetrying};
+        new GlobalStatus[] {GlobalStatus.Committing, GlobalStatus.CommitRetrying};
 
     private final ThreadPoolExecutor branchRemoveExecutor = new ThreadPoolExecutor(BRANCH_ASYNC_POOL_SIZE, BRANCH_ASYNC_POOL_SIZE,
-        Integer.MAX_VALUE, TimeUnit.MILLISECONDS,
-        new ArrayBlockingQueue<>(
-            CONFIG.getInt(ConfigurationKeys.SESSION_BRANCH_ASYNC_QUEUE_SIZE, DEFAULT_BRANCH_ASYNC_QUEUE_SIZE)
-        ), new NamedThreadFactory("branchSessionRemove", BRANCH_ASYNC_POOL_SIZE),
-        new ThreadPoolExecutor.CallerRunsPolicy());
+            Integer.MAX_VALUE, TimeUnit.MILLISECONDS,
+            new ArrayBlockingQueue<>(
+                    CONFIG.getInt(ConfigurationKeys.SESSION_BRANCH_ASYNC_QUEUE_SIZE, DEFAULT_BRANCH_ASYNC_QUEUE_SIZE)
+            ), new NamedThreadFactory("branchSessionRemove", BRANCH_ASYNC_POOL_SIZE),
+            new ThreadPoolExecutor.CallerRunsPolicy());
 
     private RemotingServer remotingServer;
 
@@ -232,18 +232,18 @@ public class DefaultCoordinator extends AbstractTCInboundHandler implements Tran
 
     @Override
     protected void doGlobalBegin(GlobalBeginRequest request, GlobalBeginResponse response, RpcContext rpcContext)
-        throws TransactionException {
+            throws TransactionException {
         response.setXid(core.begin(rpcContext.getApplicationId(), rpcContext.getTransactionServiceGroup(),
-            request.getTransactionName(), request.getTimeout()));
+                request.getTransactionName(), request.getTimeout()));
         if (LOGGER.isInfoEnabled()) {
             LOGGER.info("Begin new global transaction applicationId: {},transactionServiceGroup: {}, transactionName: {},timeout:{},xid:{}",
-                rpcContext.getApplicationId(), rpcContext.getTransactionServiceGroup(), request.getTransactionName(), request.getTimeout(), response.getXid());
+                    rpcContext.getApplicationId(), rpcContext.getTransactionServiceGroup(), request.getTransactionName(), request.getTimeout(), response.getXid());
         }
     }
 
     @Override
     protected void doGlobalCommit(GlobalCommitRequest request, GlobalCommitResponse response, RpcContext rpcContext)
-        throws TransactionException {
+            throws TransactionException {
         MDC.put(RootContext.MDC_KEY_XID, request.getXid());
         response.setGlobalStatus(core.commit(request.getXid()));
     }
@@ -257,14 +257,14 @@ public class DefaultCoordinator extends AbstractTCInboundHandler implements Tran
 
     @Override
     protected void doGlobalStatus(GlobalStatusRequest request, GlobalStatusResponse response, RpcContext rpcContext)
-        throws TransactionException {
+            throws TransactionException {
         MDC.put(RootContext.MDC_KEY_XID, request.getXid());
         response.setGlobalStatus(core.getStatus(request.getXid()));
     }
 
     @Override
     protected void doGlobalReport(GlobalReportRequest request, GlobalReportResponse response, RpcContext rpcContext)
-        throws TransactionException {
+            throws TransactionException {
         MDC.put(RootContext.MDC_KEY_XID, request.getXid());
         response.setGlobalStatus(core.globalReport(request.getXid(), request.getGlobalStatus()));
     }
@@ -274,25 +274,25 @@ public class DefaultCoordinator extends AbstractTCInboundHandler implements Tran
                                     RpcContext rpcContext) throws TransactionException {
         MDC.put(RootContext.MDC_KEY_XID, request.getXid());
         response.setBranchId(
-            core.branchRegister(request.getBranchType(), request.getResourceId(), rpcContext.getClientId(),
-                request.getXid(), request.getApplicationData(), request.getLockKey()));
+                core.branchRegister(request.getBranchType(), request.getResourceId(), rpcContext.getClientId(),
+                        request.getXid(), request.getApplicationData(), request.getLockKey()));
     }
 
     @Override
     protected void doBranchReport(BranchReportRequest request, BranchReportResponse response, RpcContext rpcContext)
-        throws TransactionException {
+            throws TransactionException {
         MDC.put(RootContext.MDC_KEY_XID, request.getXid());
         MDC.put(RootContext.MDC_KEY_BRANCH_ID, String.valueOf(request.getBranchId()));
         core.branchReport(request.getBranchType(), request.getXid(), request.getBranchId(), request.getStatus(),
-            request.getApplicationData());
+                request.getApplicationData());
     }
 
     @Override
     protected void doLockCheck(GlobalLockQueryRequest request, GlobalLockQueryResponse response, RpcContext rpcContext)
-        throws TransactionException {
+            throws TransactionException {
         MDC.put(RootContext.MDC_KEY_XID, request.getXid());
         response.setLockable(
-            core.lockQuery(request.getBranchType(), request.getResourceId(), request.getXid(), request.getLockKey()));
+                core.lockQuery(request.getBranchType(), request.getResourceId(), request.getXid(), request.getLockKey()));
     }
 
     /**
@@ -312,8 +312,8 @@ public class DefaultCoordinator extends AbstractTCInboundHandler implements Tran
         SessionHelper.forEach(beginGlobalsessions, globalSession -> {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug(
-                    globalSession.getXid() + " " + globalSession.getStatus() + " " + globalSession.getBeginTime() + " "
-                        + globalSession.getTimeout());
+                        globalSession.getXid() + " " + globalSession.getStatus() + " " + globalSession.getBeginTime() + " "
+                                + globalSession.getTimeout());
             }
             SessionHolder.lockAndExecute(globalSession, () -> {
                 if (globalSession.getStatus() != GlobalStatus.Begin || !globalSession.isTimeout()) {
@@ -431,7 +431,7 @@ public class DefaultCoordinator extends AbstractTCInboundHandler implements Tran
     protected void handleAsyncCommitting() {
         SessionCondition sessionCondition = new SessionCondition(GlobalStatus.AsyncCommitting);
         Collection<GlobalSession> asyncCommittingSessions =
-            SessionHolder.getAsyncCommittingSessionManager().findGlobalSessions(sessionCondition);
+                SessionHolder.getAsyncCommittingSessionManager().findGlobalSessions(sessionCondition);
         if (CollectionUtils.isEmpty(asyncCommittingSessions)) {
             return;
         }
@@ -457,7 +457,7 @@ public class DefaultCoordinator extends AbstractTCInboundHandler implements Tran
             return;
         }
         short saveDays = CONFIG.getShort(ConfigurationKeys.TRANSACTION_UNDO_LOG_SAVE_DAYS,
-            UndoLogDeleteRequest.DEFAULT_SAVE_DAYS);
+                UndoLogDeleteRequest.DEFAULT_SAVE_DAYS);
         for (Map.Entry<String, Channel> channelEntry : rmChannels.entrySet()) {
             String resourceId = channelEntry.getKey();
             UndoLogDeleteRequest deleteRequest = new UndoLogDeleteRequest();
@@ -549,7 +549,6 @@ public class DefaultCoordinator extends AbstractTCInboundHandler implements Tran
 
     /**
      * only used for mock test
-     *
      * @param remotingServer
      */
     public void setRemotingServer(RemotingServer remotingServer) {
@@ -573,7 +572,6 @@ public class DefaultCoordinator extends AbstractTCInboundHandler implements Tran
 
         /**
          * If you use this construct, the task will remove the branchSession provided by the parameter
-         *
          * @param globalSession the globalSession
          */
         public BranchRemoveTask(GlobalSession globalSession, BranchSession branchSession) {
@@ -583,7 +581,6 @@ public class DefaultCoordinator extends AbstractTCInboundHandler implements Tran
 
         /**
          * If you use this construct, the task will remove all branchSession
-         *
          * @param globalSession the globalSession
          */
         public BranchRemoveTask(GlobalSession globalSession) {
@@ -615,10 +612,10 @@ public class DefaultCoordinator extends AbstractTCInboundHandler implements Tran
                 MDC.put(RootContext.MDC_KEY_BRANCH_ID, String.valueOf(bt.getBranchId()));
                 globalSession.removeBranch(bt);
                 LOGGER.info("Asynchronous delete branchSession successfully, xid = {}, branchId = {}",
-                    globalSession.getXid(), bt.getBranchId());
+                        globalSession.getXid(), bt.getBranchId());
             } catch (TransactionException transactionException) {
                 LOGGER.error("Asynchronous delete branchSession error, xid = {}, branchId = {}",
-                    globalSession.getXid(), bt.getBranchId(), transactionException);
+                        globalSession.getXid(), bt.getBranchId(), transactionException);
             } finally {
                 MDC.remove(RootContext.MDC_KEY_BRANCH_ID);
             }

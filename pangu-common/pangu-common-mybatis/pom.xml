@@ -15,7 +15,7 @@
         pangu-common-mybatis 数据库服务
     </description>
 
-    <dependencies>
+	<dependencies>
         <dependency>
             <groupId>com.pangu</groupId>
             <artifactId>pangu-common-satoken</artifactId>

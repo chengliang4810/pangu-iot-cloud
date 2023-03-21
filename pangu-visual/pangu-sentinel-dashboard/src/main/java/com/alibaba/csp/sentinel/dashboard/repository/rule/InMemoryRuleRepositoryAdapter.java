@@ -25,7 +25,7 @@ import com.alibaba.csp.sentinel.dashboard.discovery.MachineInfo;
 import com.alibaba.csp.sentinel.util.AssertUtil;
 
 /**
- * @author chengliang4810
+ * @author leyou
  */
 public abstract class InMemoryRuleRepositoryAdapter<T extends RuleEntity> implements RuleRepository<T, Long> {
 
@@ -48,7 +48,7 @@ public abstract class InMemoryRuleRepositoryAdapter<T extends RuleEntity> implem
         if (processedEntity != null) {
             allRules.put(processedEntity.getId(), processedEntity);
             machineRules.computeIfAbsent(MachineInfo.of(processedEntity.getApp(), processedEntity.getIp(),
-                    processedEntity.getPort()), e -> new ConcurrentHashMap<>(32))
+                processedEntity.getPort()), e -> new ConcurrentHashMap<>(32))
                 .put(processedEntity.getId(), processedEntity);
             appRules.computeIfAbsent(processedEntity.getApp(), v -> new ConcurrentHashMap<>(32))
                 .put(processedEntity.getId(), processedEntity);

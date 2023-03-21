@@ -15,7 +15,7 @@
         pangu-common-sms 短信模块
     </description>
 
-    <dependencies>
+	<dependencies>
 
         <dependency>
             <groupId>com.pangu</groupId>

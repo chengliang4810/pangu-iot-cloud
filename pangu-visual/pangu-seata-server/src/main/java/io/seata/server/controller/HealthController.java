@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
- * @author chengliang4810
+ * @author spilledyear@outlook.com
  */
 @Controller
 @RequestMapping

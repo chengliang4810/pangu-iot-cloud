@@ -65,7 +65,7 @@ public interface GenConstants {
      * 数据库数字类型
      */
     String[] COLUMNTYPE_NUMBER = {"tinyint", "smallint", "mediumint", "int", "number", "integer",
-        "bigint", "float", "double", "decimal"};
+            "bigint", "float", "double", "decimal"};
 
     /**
      * BO对象 不需要添加字段

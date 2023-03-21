@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import {mergeRecursive} from "@/utils/pangu";
+import { mergeRecursive } from "@/utils/ruoyi";
 import DictMeta from './DictMeta'
 import DictData from './DictData'
 
@@ -22,7 +22,7 @@ export default class Dict {
 
   init(options) {
     if (options instanceof Array) {
-      options = {types: options}
+      options = { types: options }
     }
     const opts = mergeRecursive(DEFAULT_DICT_OPTIONS, options)
     if (opts.types === undefined) {

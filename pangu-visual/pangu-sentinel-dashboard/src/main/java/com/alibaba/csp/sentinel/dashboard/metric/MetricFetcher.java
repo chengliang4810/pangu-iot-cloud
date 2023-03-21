@@ -64,7 +64,7 @@ import org.springframework.stereotype.Component;
 /**
  * Fetch metric of machines.
  *
- * @author chengliang4810
+ * @author leyou
  */
 @Component
 public class MetricFetcher {
@@ -103,7 +103,7 @@ public class MetricFetcher {
             new NamedThreadFactory("sentinel-dashboard-metrics-fetchService", true), handler);
         fetchWorker = new ThreadPoolExecutor(cores, cores,
             keepAliveTime, TimeUnit.MILLISECONDS, new ArrayBlockingQueue<>(queueSize),
-            new NamedThreadFactory("sentinel-dashboard-metrics-fetchWorker", true), handler);
+            new NamedThreadFactory("sentinel-dashboard-metrics-fetchWorker",true), handler);
         IOReactorConfig ioConfig = IOReactorConfig.custom()
             .setConnectTimeout(3000)
             .setSoTimeout(3000)
@@ -364,9 +364,9 @@ public class MetricFetcher {
     }
 
     private static final Set<String> RES_EXCLUSION_SET = new HashSet<String>() {{
-        add(Constants.TOTAL_IN_RESOURCE_NAME);
-        add(Constants.SYSTEM_LOAD_RESOURCE_NAME);
-        add(Constants.CPU_USAGE_RESOURCE_NAME);
+       add(Constants.TOTAL_IN_RESOURCE_NAME);
+       add(Constants.SYSTEM_LOAD_RESOURCE_NAME);
+       add(Constants.CPU_USAGE_RESOURCE_NAME);
     }};
 
 }

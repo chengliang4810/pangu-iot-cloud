@@ -29,7 +29,6 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.StringJoiner;
 import java.util.stream.Collectors;
-
 import com.google.common.collect.Lists;
 import io.seata.common.exception.StoreException;
 import io.seata.common.io.FileLoader;
@@ -51,12 +50,11 @@ import static io.seata.common.Constants.ROW_LOCK_KEY_SPLIT_CHAR;
 import static io.seata.core.constants.RedisKeyConstants.DEFAULT_REDIS_SEATA_GLOBAL_LOCK_PREFIX;
 import static io.seata.core.constants.RedisKeyConstants.DEFAULT_REDIS_SEATA_ROW_LOCK_PREFIX;
 import static io.seata.core.exception.TransactionExceptionCode.LockKeyConflictFailFast;
-
 /**
  * The redis lock store operation
  *
- * @author chengliang4810
- * @author chengliang4810
+ * @author funkye
+ * @author wangzhongxiang
  */
 public class RedisLocker extends AbstractLocker {
 
@@ -108,7 +106,7 @@ public class RedisLocker extends AbstractLocker {
                         acquireLockLuaByFile.append(line);
                         acquireLockLuaByFile.append(WHITE_SPACE);
                     }
-                    // if it fails to read the file, pipeline mode is used
+                // if it fails to read the file, pipeline mode is used
                 } catch (IOException e) {
                     LOGGER.info("redis locker use pipeline mode");
                     return;
@@ -163,7 +161,7 @@ public class RedisLocker extends AbstractLocker {
                 }
             });
             List<List<String>> existedLockInfos =
-                Lists.partition((List<String>) (List) pipeline1.syncAndReturnAll(), autoCommit ? 1 : 2);
+                    Lists.partition((List<String>)(List)pipeline1.syncAndReturnAll(), autoCommit ? 1 : 2);
 
             // When the local transaction and the global transaction are enabled,
             // the branch registration fails to acquire the global lock,
@@ -243,9 +241,9 @@ public class RedisLocker extends AbstractLocker {
         String needLockXid = rowLocks.get(0).getXid();
         Long branchId = rowLocks.get(0).getBranchId();
         List<LockDO> needLockDOs = rowLocks.stream()
-            .map(this::convertToLockDO)
-            .filter(LambdaUtils.distinctByKey(LockDO::getRowKey))
-            .collect(Collectors.toList());
+                .map(this::convertToLockDO)
+                .filter(LambdaUtils.distinctByKey(LockDO::getRowKey))
+                .collect(Collectors.toList());
         ArrayList<String> keys = new ArrayList<>();
         ArrayList<String> args = new ArrayList<>();
         int size = needLockDOs.size();
@@ -332,7 +330,7 @@ public class RedisLocker extends AbstractLocker {
             String xid = rowLocks.get(0).getXid();
             try (Pipeline pipeline = jedis.pipelined()) {
                 lockKeys.forEach(key -> pipeline.hget(key, XID));
-                List<String> existedXids = (List<String>) (List) pipeline.syncAndReturnAll();
+                List<String> existedXids = (List<String>)(List)pipeline.syncAndReturnAll();
                 return existedXids.stream().allMatch(existedXid -> existedXid == null || xid.equals(existedXid));
             }
         }

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>com.pangu</groupId>
+        <artifactId>pangu-common</artifactId>
+        <version>1.0.0</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>pangu-common-sdk</artifactId>
+
+    <description>
+        pangu-common-sdk 驱动SDK
+    </description>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <!-- SpringCloud Alibaba Nacos -->
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+        </dependency>
+
+        <!-- SpringCloud Alibaba Nacos Config -->
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
+        </dependency>
+
+        <!-- SpringBoot Actuator -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+
+        <!-- zabbix-api -->
+        <dependency>
+            <groupId>com.pangu</groupId>
+            <artifactId>pangu-common-zabbix-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.pangu</groupId>
+            <artifactId>pangu-api-manager</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.pangu</groupId>
+            <artifactId>pangu-common-dubbo</artifactId>
+        </dependency>
+
+        <!-- pangu Common Core-->
+        <dependency>
+            <groupId>com.pangu</groupId>
+            <artifactId>pangu-common-core</artifactId>
+        </dependency>
+
+        <!-- Camel Starter -->
+        <dependency>
+            <groupId>org.apache.camel.springboot</groupId>
+            <artifactId>camel-spring-boot-starter</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.camel.springboot</groupId>
+            <artifactId>camel-paho-mqtt5-starter</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.camel.springboot</groupId>
+            <artifactId>camel-jackson-starter</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.camel.springboot</groupId>
+            <artifactId>camel-stream-starter</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.camel.springboot</groupId>
+            <artifactId>camel-rabbitmq-starter</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.pangu</groupId>
+            <artifactId>pangu-common-emqx</artifactId>
+        </dependency>
+
+
+
+    </dependencies>
+</project>

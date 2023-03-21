@@ -19,7 +19,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * @author chengliang4810
+ * @author Eric Zhao
  * @since 1.4.1
  */
 public class ClusterGroupEntity {

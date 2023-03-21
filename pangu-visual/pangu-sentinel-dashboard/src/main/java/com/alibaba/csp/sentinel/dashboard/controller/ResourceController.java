@@ -34,7 +34,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * @author chengliang4810
+ * @author Carpenter Lee
  */
 @RestController
 @RequestMapping(value = "/resource")
@@ -82,7 +82,7 @@ public class ResourceController {
             }
             if (StringUtil.isNotEmpty(searchKey)) {
                 nodeVos = nodeVos.stream().filter(node -> node.getResource()
-                        .toLowerCase().contains(searchKey.toLowerCase()))
+                    .toLowerCase().contains(searchKey.toLowerCase()))
                     .collect(Collectors.toList());
             }
             return Result.ofSuccess(ResourceVo.fromNodeVoList(nodeVos));

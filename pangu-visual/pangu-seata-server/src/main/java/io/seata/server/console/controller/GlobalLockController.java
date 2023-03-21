@@ -29,7 +29,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Global Lock Controller
- *
  * @author: zhongxiang.wang
  */
 @RestController
@@ -41,7 +40,6 @@ public class GlobalLockController {
 
     /**
      * Query locks by param
-     *
      * @param param the param
      * @return the list of GlobalLockVO
      */

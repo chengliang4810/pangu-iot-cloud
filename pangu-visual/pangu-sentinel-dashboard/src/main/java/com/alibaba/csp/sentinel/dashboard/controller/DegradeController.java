@@ -37,8 +37,8 @@ import java.util.List;
 /**
  * Controller regarding APIs of degrade rules. Refactored since 1.8.0.
  *
- * @author chengliang4810
- * @author chengliang4810
+ * @author Carpenter Lee
+ * @author Eric Zhao
  */
 @RestController
 @RequestMapping("/degrade")
@@ -103,7 +103,7 @@ public class DegradeController {
     @PutMapping("/rule/{id}")
     @AuthAction(PrivilegeType.WRITE_RULE)
     public Result<DegradeRuleEntity> apiUpdateRule(@PathVariable("id") Long id,
-                                                   @RequestBody DegradeRuleEntity entity) {
+                                                     @RequestBody DegradeRuleEntity entity) {
         if (id == null || id <= 0) {
             return Result.ofFail(-1, "id can't be null or negative");
         }
@@ -198,7 +198,7 @@ public class DegradeController {
             || strategy > RuleConstant.DEGRADE_GRADE_EXCEPTION_COUNT) {
             return Result.ofFail(-1, "Invalid circuit breaker strategy: " + strategy);
         }
-        if (entity.getMinRequestAmount() == null || entity.getMinRequestAmount() <= 0) {
+        if (entity.getMinRequestAmount()  == null || entity.getMinRequestAmount() <= 0) {
             return Result.ofFail(-1, "Invalid minRequestAmount");
         }
         if (entity.getStatIntervalMs() == null || entity.getStatIntervalMs() <= 0) {

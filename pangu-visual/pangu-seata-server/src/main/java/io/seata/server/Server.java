@@ -40,7 +40,7 @@ import static io.seata.spring.boot.autoconfigure.StarterConstants.REGISTRY_PREFE
 /**
  * The type Server.
  *
- * @author chengliang4810
+ * @author slievrly
  */
 public class Server {
     /**
@@ -63,9 +63,9 @@ public class Server {
         System.setProperty(ConfigurationKeys.STORE_MODE, parameterParser.getStoreMode());
 
         ThreadPoolExecutor workingThreads = new ThreadPoolExecutor(NettyServerConfig.getMinServerPoolSize(),
-            NettyServerConfig.getMaxServerPoolSize(), NettyServerConfig.getKeepAliveTime(), TimeUnit.SECONDS,
-            new LinkedBlockingQueue<>(NettyServerConfig.getMaxTaskQueueSize()),
-            new NamedThreadFactory("ServerHandlerThread", NettyServerConfig.getMaxServerPoolSize()), new ThreadPoolExecutor.CallerRunsPolicy());
+                NettyServerConfig.getMaxServerPoolSize(), NettyServerConfig.getKeepAliveTime(), TimeUnit.SECONDS,
+                new LinkedBlockingQueue<>(NettyServerConfig.getMaxTaskQueueSize()),
+                new NamedThreadFactory("ServerHandlerThread", NettyServerConfig.getMaxServerPoolSize()), new ThreadPoolExecutor.CallerRunsPolicy());
 
         NettyRemotingServer nettyRemotingServer = new NettyRemotingServer(workingThreads);
         UUIDGenerator.init(parameterParser.getServerNode());

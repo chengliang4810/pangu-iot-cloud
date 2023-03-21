@@ -17,6 +17,12 @@
 
     <dependencies>
 
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
         <!-- SpringCloud Alibaba Nacos -->
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
@@ -85,6 +91,26 @@
         <dependency>
             <groupId>com.pangu</groupId>
             <artifactId>pangu-api-resource</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.pangu</groupId>
+            <artifactId>pangu-api-data</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.pangu</groupId>
+            <artifactId>pangu-api-manager</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.pangu</groupId>
+            <artifactId>pangu-common-zabbix</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.pangu</groupId>
+            <artifactId>pangu-common-emqx</artifactId>
         </dependency>
 
     </dependencies>

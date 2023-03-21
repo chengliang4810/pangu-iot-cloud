@@ -82,7 +82,6 @@ body {
         margin-left: 60px;
         margin-right: 5px;
     }
-
     /* Remove the padding we set earlier */
     .header,
     .marketing,
@@ -90,12 +89,10 @@ body {
         padding-left: 0;
         padding-right: 0;
     }
-
     /* Space out the masthead */
     .header {
         margin-bottom: 30px;
     }
-
     /* Remove the bottom border on the jumbotron for visual effect */
     .jumbotron {
         border-bottom: 0;
@@ -112,9 +109,9 @@ body {
     font-size: 15px;
 }
 
-.navbar-inverse .navbar-nav > .open > a,
-.navbar-inverse .navbar-nav > .open > a:focus,
-.navbar-inverse .navbar-nav > .open > a:hover {
+.navbar-inverse .navbar-nav>.open>a,
+.navbar-inverse .navbar-nav>.open>a:focus,
+.navbar-inverse .navbar-nav>.open>a:hover {
     background-color: #1b926c;
 }
 
@@ -122,12 +119,10 @@ body {
     .navbar-left {
         float: left !important;
     }
-
     .navbar-right {
         float: right !important;
         margin-right: 0%;
     }
-
     .navbar-right ~ .navbar-right {
         margin-right: 0;
     }
@@ -141,7 +136,7 @@ body {
     background: #DDD;
 }
 
-.dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus {
+.dropdown-menu>li>a:hover, .dropdown-menu>li>a:focus {
     background: #1d9d74;
     /*background: #d9d9d9;*/
     color: white;
@@ -392,7 +387,7 @@ body {
 }
 
 .form-control {
-    height: 32px;
+    height : 32px;
 }
 
 .form-control:focus {
@@ -448,30 +443,30 @@ body {
     font-size: 12px;
 }
 
-.bootstrap-tagsinput > .dropdown-menu > .active > a,
-.bootstrap-tagsinput > .dropdown-menu > .active > a:focus,
-.bootstrap-tagsinput > .dropdown-menu > .active > a:hover {
+.bootstrap-tagsinput > .dropdown-menu>.active>a,
+.bootstrap-tagsinput > .dropdown-menu>.active>a:focus,
+.bootstrap-tagsinput > .dropdown-menu>.active>a:hover {
     background-color: #1d9d74;
     background-image: -webkit-linear-gradient(top, #1d9d74 0, #1d9d74 100%);
     background-image: -o-linear-gradient(top, #1d9d74 0, #1d9d74 100%);
     background-image: -webkit-gradient(linear, left top, left bottom, from(#1d9d74), to(#1d9d74));
     background-image: linear-gradient(to bottom, #1d9d74 0, #1d9d74 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#1d9d74', endColorstr='#1d9d74', GradientType=0);
+    filter: progid: DXImageTransform.Microsoft.gradient(startColorstr='#1d9d74', endColorstr='#1d9d74', GradientType=0);
     background-repeat: repeat-x;
 }
 
-.bootstrap-tagsinput > .dropdown-menu > .active > a,
-.bootstrap-tagsinput > .dropdown-menu > .active > a:focus,
-.bootstrap-tagsinput > .dropdown-menu > .active > a:hover {
+.bootstrap-tagsinput > .dropdown-menu>.active>a,
+.bootstrap-tagsinput > .dropdown-menu>.active>a:focus,
+.bootstrap-tagsinput > .dropdown-menu>.active>a:hover {
     color: #fff;
     text-decoration: none;
     background-color: #1d9d74;
     outline: 0;
 }
 
-.bootstrap-tagsinput > .dropdown-menu > .active > a,
-.bootstrap-tagsinput > .dropdown-menu > .active > a:hover,
-.bootstrap-tagsinput > .dropdown-menu > .active > a:focus {
+.bootstrap-tagsinput > .dropdown-menu>.active>a,
+.bootstrap-tagsinput > .dropdown-menu>.active>a:hover,
+.bootstrap-tagsinput > .dropdown-menu>.active>a:focus {
     color: white;
     text-decoration: none;
     outline: 0;
@@ -587,19 +582,21 @@ body {
 }
 
 .pagination > .btn.active {
-    color: #ffffff;
+        color: #ffffff;
     background-color: #1d9d74;
     border-color: #1d9d74;
 }
 
 
+
+
 .datepicker > .table > thead > tr > td, .datepicker > .table > tbody > tr > td,
-.timepicker > .table > thead > tr > td, .timepicker > .table > tbody > tr > td {
+.timepicker > .table > thead > tr > td, .timepicker > .table > tbody > tr > td   {
     padding: 5px 3px;
 }
 
 .datepicker > .table > thead > tr > td > .btn, .datepicker > .table > tbody > tr > td > .btn,
-.timepicker > .table > thead > tr > td > .btn, .timepicker > .table > tbody > tr > td > .btn {
+.timepicker > .table > thead > tr > td > .btn, .timepicker > .table > tbody > tr > td > .btn  {
     border: 1px solid #FFFDFD;
 }
 
@@ -614,7 +611,7 @@ body {
 .timepicker > .table > thead > tr > td > .btn-default:active,
 .timepicker > .table > tbody > tr > td > .btn-default:hover,
 .timepicker > .table > tbody > tr > td > .btn-default:focus,
-.timepicker > .table > tbody > tr > td > .btn-default:active {
+.timepicker > .table > tbody > tr > td > .btn-default:active  {
     color: #1d9d74;
     border-color: #1d9d74;
     background: white;
@@ -631,27 +628,27 @@ body {
     padding: 4px 0px;
 }
 
-.datepicker > .table > thead > tr > td > a.btn.active,
+.datepicker > .table > thead > tr > td > a.btn.active, 
 .datepicker > .table > tbody > tr > td > a.btn.active,
-.timepicker > .table > thead > tr > td > a.btn.active,
+.timepicker > .table > thead > tr > td > a.btn.active, 
 .timepicker > .table > tbody > tr > td > a.btn.active {
-    /*    color: #ffffff;
-        background-color: #1d9d74;
-        border-color: #1d9d74;*/
-    color: #1d9d74;
+/*    color: #ffffff;
+    background-color: #1d9d74;
+    border-color: #1d9d74;*/
+        color: #1d9d74;
     border-color: #1d9d74;
     background: white;
-    box-shadow: inset 0 0px 0px rgba(0, 0, 0, 0.125);
+    box-shadow: inset 0 0px 0px rgba(0,0,0,0.125);
 }
 
 .datepicker > .table > thead > tr > td:not(:first-child):last-child > a,
-.timepicker > .table > thead > tr > td:not(:first-child):last-child > a {
+.timepicker > .table > thead > tr > td:not(:first-child):last-child > a  {
     height: 25px;
     width: 50px;
     padding: 5px 0px;
 }
 
-.datepicker > .table > tbody > tr > td > a,
+.datepicker > .table > tbody > tr > td > a, 
 .timepicker > .table > tbody > tr > td > a {
     margin-left: 8px;
 }
@@ -664,9 +661,7 @@ body {
 .highlight-border {
     border-color: #337ab7;
     box-shadow: 0px 0px 0px rgba(0, 0, 0, 0.075) inset, 0px 0px 0px rgba(29, 157, 116, 1);
-}
-
-.browsehappy {
+}.browsehappy {
     margin: 0.2em 0;
     background: #ccc;
     color: #000;
@@ -751,7 +746,6 @@ body {
         margin-left: 60px;
         margin-right: 5px;
     }
-
     /* Remove the padding we set earlier */
     .header,
     .marketing,
@@ -759,12 +753,10 @@ body {
         padding-left: 0;
         padding-right: 0;
     }
-
     /* Space out the masthead */
     .header {
         margin-bottom: 30px;
     }
-
     /* Remove the bottom border on the jumbotron for visual effect */
     .jumbotron {
         border-bottom: 0;
@@ -781,9 +773,9 @@ body {
     font-size: 15px;
 }
 
-.navbar-inverse .navbar-nav > .open > a,
-.navbar-inverse .navbar-nav > .open > a:focus,
-.navbar-inverse .navbar-nav > .open > a:hover {
+.navbar-inverse .navbar-nav>.open>a,
+.navbar-inverse .navbar-nav>.open>a:focus,
+.navbar-inverse .navbar-nav>.open>a:hover {
     background-color: #1b926c;
 }
 
@@ -791,12 +783,10 @@ body {
     .navbar-left {
         float: left !important;
     }
-
     .navbar-right {
         float: right !important;
         margin-right: 0%;
     }
-
     .navbar-right ~ .navbar-right {
         margin-right: 0;
     }
@@ -810,7 +800,7 @@ body {
     background: #DDD;
 }
 
-.dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus {
+.dropdown-menu>li>a:hover, .dropdown-menu>li>a:focus {
     background: #1d9d74;
     /*background: #d9d9d9;*/
     color: white;
@@ -1070,7 +1060,7 @@ body {
 }
 
 .form-control {
-    height: 32px;
+    height : 32px;
 }
 
 .form-control:focus {
@@ -1126,30 +1116,30 @@ body {
     font-size: 12px;
 }
 
-.bootstrap-tagsinput > .dropdown-menu > .active > a,
-.bootstrap-tagsinput > .dropdown-menu > .active > a:focus,
-.bootstrap-tagsinput > .dropdown-menu > .active > a:hover {
+.bootstrap-tagsinput > .dropdown-menu>.active>a,
+.bootstrap-tagsinput > .dropdown-menu>.active>a:focus,
+.bootstrap-tagsinput > .dropdown-menu>.active>a:hover {
     background-color: #1d9d74;
     background-image: -webkit-linear-gradient(top, #1d9d74 0, #1d9d74 100%);
     background-image: -o-linear-gradient(top, #1d9d74 0, #1d9d74 100%);
     background-image: -webkit-gradient(linear, left top, left bottom, from(#1d9d74), to(#1d9d74));
     background-image: linear-gradient(to bottom, #1d9d74 0, #1d9d74 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#1d9d74', endColorstr='#1d9d74', GradientType=0);
+    filter: progid: DXImageTransform.Microsoft.gradient(startColorstr='#1d9d74', endColorstr='#1d9d74', GradientType=0);
     background-repeat: repeat-x;
 }
 
-.bootstrap-tagsinput > .dropdown-menu > .active > a,
-.bootstrap-tagsinput > .dropdown-menu > .active > a:focus,
-.bootstrap-tagsinput > .dropdown-menu > .active > a:hover {
+.bootstrap-tagsinput > .dropdown-menu>.active>a,
+.bootstrap-tagsinput > .dropdown-menu>.active>a:focus,
+.bootstrap-tagsinput > .dropdown-menu>.active>a:hover {
     color: #fff;
     text-decoration: none;
     background-color: #1d9d74;
     outline: 0;
 }
 
-.bootstrap-tagsinput > .dropdown-menu > .active > a,
-.bootstrap-tagsinput > .dropdown-menu > .active > a:hover,
-.bootstrap-tagsinput > .dropdown-menu > .active > a:focus {
+.bootstrap-tagsinput > .dropdown-menu>.active>a,
+.bootstrap-tagsinput > .dropdown-menu>.active>a:hover,
+.bootstrap-tagsinput > .dropdown-menu>.active>a:focus {
     color: white;
     text-decoration: none;
     outline: 0;
@@ -1253,19 +1243,21 @@ body {
 }
 
 .pagination > .btn.active {
-    color: #ffffff;
+        color: #ffffff;
     background-color: #449d44;
     border-color: #449d44;
 }
 
 
+
+
 .datepicker > .table > thead > tr > td, .datepicker > .table > tbody > tr > td,
-.timepicker > .table > thead > tr > td, .timepicker > .table > tbody > tr > td {
+.timepicker > .table > thead > tr > td, .timepicker > .table > tbody > tr > td   {
     padding: 5px 3px;
 }
 
 .datepicker > .table > thead > tr > td > .btn, .datepicker > .table > tbody > tr > td > .btn,
-.timepicker > .table > thead > tr > td > .btn, .timepicker > .table > tbody > tr > td > .btn {
+.timepicker > .table > thead > tr > td > .btn, .timepicker > .table > tbody > tr > td > .btn  {
     border: 1px solid #FFFDFD;
 }
 
@@ -1280,7 +1272,7 @@ body {
 .timepicker > .table > thead > tr > td > .btn-default:active,
 .timepicker > .table > tbody > tr > td > .btn-default:hover,
 .timepicker > .table > tbody > tr > td > .btn-default:focus,
-.timepicker > .table > tbody > tr > td > .btn-default:active {
+.timepicker > .table > tbody > tr > td > .btn-default:active  {
     color: #1d9d74;
     border-color: #1d9d74;
     background: white;
@@ -1297,27 +1289,27 @@ body {
     padding: 4px 0px;
 }
 
-.datepicker > .table > thead > tr > td > a.btn.active,
+.datepicker > .table > thead > tr > td > a.btn.active, 
 .datepicker > .table > tbody > tr > td > a.btn.active,
-.timepicker > .table > thead > tr > td > a.btn.active,
+.timepicker > .table > thead > tr > td > a.btn.active, 
 .timepicker > .table > tbody > tr > td > a.btn.active {
-    /*    color: #ffffff;
-        background-color: #1d9d74;
-        border-color: #1d9d74;*/
-    color: #1d9d74;
+/*    color: #ffffff;
+    background-color: #1d9d74;
+    border-color: #1d9d74;*/
+        color: #1d9d74;
     border-color: #1d9d74;
     background: white;
-    box-shadow: inset 0 0px 0px rgba(0, 0, 0, 0.125);
+    box-shadow: inset 0 0px 0px rgba(0,0,0,0.125);
 }
 
 .datepicker > .table > thead > tr > td:not(:first-child):last-child > a,
-.timepicker > .table > thead > tr > td:not(:first-child):last-child > a {
+.timepicker > .table > thead > tr > td:not(:first-child):last-child > a  {
     height: 25px;
     width: 50px;
     padding: 5px 0px;
 }
 
-.datepicker > .table > tbody > tr > td > a,
+.datepicker > .table > tbody > tr > td > a, 
 .timepicker > .table > tbody > tr > td > a {
     margin-left: 8px;
 }
@@ -1334,24 +1326,24 @@ body {
 
 
 .sortorder:after {
-    content: '\25b2';
+  content: '\25b2';   
+}
+.sortorder.reverse:after {
+  content: '\25bc';   
 }
 
-.sortorder.reverse:after {
-    content: '\25bc';
-}
 
 
 .input-control select {
-    -moz-appearance: none;
-    -webkit-appearance: none;
-    appearance: none;
-    position: relative;
-    border: 1px #d9d9d9 solid;
-    width: 100%;
-    height: 100%;
-    padding: .3125rem;
-    z-index: 0;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
+  position: relative;
+  border: 1px #d9d9d9 solid;
+  width: 100%;
+  height: 100%;
+  padding: .3125rem;
+  z-index: 0;
 }
 
 .navbar-inverse {
@@ -1392,7 +1384,7 @@ body {
 }
 
 .sidebar ul li:hover {
-    color: red;
+    color:red;
 }
 
 .form-control {
@@ -1407,9 +1399,7 @@ body {
 .highlight-border {
     border-color: #337ab7;
     box-shadow: 0px 0px 0px rgba(0, 0, 0, 0.075) inset, 0px 0px 0px rgba(29, 157, 116, 1);
-}
-
-.browsehappy {
+}.browsehappy {
     margin: 0.2em 0;
     background: #ccc;
     color: #000;
@@ -1452,7 +1442,7 @@ body {
 
 .btn-tab-active,
 .btn-tab-active:hover,
-.btn-tab-active:focus,
+.btn-tab-active:focus, 
 .btn-tab-default:hover,
 .btn-tab-default:focus,
 .btn-tab-default:active {
@@ -1461,7 +1451,6 @@ body {
     background: white;
     font-weight: 600;
 }
-
 .btn-tab-default {
     color: #777;
     background: white;

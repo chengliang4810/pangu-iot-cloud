@@ -7,7 +7,7 @@ import lombok.Getter;
 /**
  * 桶访问策略配置
  *
- * @author chengliang4810
+ * @author 陈賝
  */
 @Getter
 @AllArgsConstructor
@@ -26,7 +26,7 @@ public enum AccessPolicyType {
     /**
      * custom
      */
-    CUSTOM("2", CannedAccessControlList.PublicRead, PolicyType.READ);
+    CUSTOM("2",CannedAccessControlList.PublicRead, PolicyType.READ);
 
     /**
      * 桶 权限类型

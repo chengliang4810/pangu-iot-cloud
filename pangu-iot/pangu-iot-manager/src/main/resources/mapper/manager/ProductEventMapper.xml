@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pangu.iot.manager.product.mapper.ProductEventMapper">
+
+    <resultMap type="com.pangu.iot.manager.product.domain.ProductEvent" id="ProductEventResult">
+    <result property="id" column="id"/>
+    <result property="name" column="name"/>
+    <result property="level" column="level"/>
+    <result property="expLogic" column="exp_logic"/>
+    <result property="notify" column="notify"/>
+    <result property="classify" column="classify"/>
+    <result property="taskId" column="task_id"/>
+    <result property="triggerType" column="trigger_type"/>
+    <result property="createBy" column="create_by"/>
+    <result property="createTime" column="create_time"/>
+    <result property="updateBy" column="update_by"/>
+    <result property="updateTime" column="update_time"/>
+    <result property="remark" column="remark"/>
+    </resultMap>
+
+
+</mapper>

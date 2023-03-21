@@ -76,7 +76,7 @@ import java.util.stream.Collectors;
 /**
  * Communicate with Sentinel client.
  *
- * @author chengliang4810
+ * @author leyou
  */
 @Component
 public class SentinelApiClient {
@@ -145,26 +145,26 @@ public class SentinelApiClient {
 
     protected boolean isSupportPost(String app, String ip, int port) {
         return StringUtil.isNotEmpty(app) && Optional.ofNullable(appManagement.getDetailApp(app))
-            .flatMap(e -> e.getMachine(ip, port))
-            .flatMap(m -> VersionUtils.parseVersion(m.getVersion())
-                .map(v -> v.greaterOrEqual(version160)))
-            .orElse(false);
+                .flatMap(e -> e.getMachine(ip, port))
+                .flatMap(m -> VersionUtils.parseVersion(m.getVersion())
+                    .map(v -> v.greaterOrEqual(version160)))
+                .orElse(false);
     }
 
     /**
      * Check whether target instance (identified by tuple of app-ip:port)
      * supports the form of "xxxxx; xx=xx" in "Content-Type" header.
      *
-     * @param app  target app name
-     * @param ip   target node's address
+     * @param app target app name
+     * @param ip target node's address
      * @param port target node's port
      */
     protected boolean isSupportEnhancedContentType(String app, String ip, int port) {
         return StringUtil.isNotEmpty(app) && Optional.ofNullable(appManagement.getDetailApp(app))
-            .flatMap(e -> e.getMachine(ip, port))
-            .flatMap(m -> VersionUtils.parseVersion(m.getVersion())
-                .map(v -> v.greaterOrEqual(version171)))
-            .orElse(false);
+                .flatMap(e -> e.getMachine(ip, port))
+                .flatMap(m -> VersionUtils.parseVersion(m.getVersion())
+                    .map(v -> v.greaterOrEqual(version171)))
+                .orElse(false);
     }
 
     private StringBuilder queryString(Map<String, String> params) {
@@ -299,7 +299,7 @@ public class SentinelApiClient {
         } else {
             // Using POST
             return executeCommand(
-                postRequest(urlBuilder.toString(), params, isSupportEnhancedContentType(app, ip, port)));
+                    postRequest(urlBuilder.toString(), params, isSupportEnhancedContentType(app, ip, port)));
         }
     }
 
@@ -355,7 +355,7 @@ public class SentinelApiClient {
             params.put("type", type);
         }
         return executeCommand(ip, port, api, params, false)
-            .thenApply(json -> JSON.parseArray(json, ruleType));
+                .thenApply(json -> JSON.parseArray(json, ruleType));
     }
 
     @Nullable
@@ -391,7 +391,7 @@ public class SentinelApiClient {
             AssertUtil.notEmpty(ip, "Bad machine IP");
             AssertUtil.isTrue(port > 0, "Bad machine port");
             String data = JSON.toJSONString(
-                entities.stream().map(r -> r.toRule()).collect(Collectors.toList()));
+                    entities.stream().map(r -> r.toRule()).collect(Collectors.toList()));
             Map<String, String> params = new HashMap<>(2);
             params.put("type", type);
             params.put("data", data);
@@ -526,9 +526,9 @@ public class SentinelApiClient {
         params.put("type", AUTHORITY_TYPE);
         List<AuthorityRule> rules = fetchRules(ip, port, AUTHORITY_TYPE, AuthorityRule.class);
         return Optional.ofNullable(rules).map(r -> r.stream()
-            .map(e -> AuthorityRuleEntity.fromAuthorityRule(app, ip, port, e))
-            .collect(Collectors.toList())
-        ).orElse(null);
+                    .map(e -> AuthorityRuleEntity.fromAuthorityRule(app, ip, port, e))
+                    .collect(Collectors.toList())
+                ).orElse(null);
     }
 
     /**
@@ -768,17 +768,17 @@ public class SentinelApiClient {
 
         try {
             return executeCommand(ip, port, FETCH_GATEWAY_API_PATH, false)
-                .thenApply(r -> {
-                    List<ApiDefinitionEntity> entities = JSON.parseArray(r, ApiDefinitionEntity.class);
-                    if (entities != null) {
-                        for (ApiDefinitionEntity entity : entities) {
-                            entity.setApp(app);
-                            entity.setIp(ip);
-                            entity.setPort(port);
+                    .thenApply(r -> {
+                        List<ApiDefinitionEntity> entities = JSON.parseArray(r, ApiDefinitionEntity.class);
+                        if (entities != null) {
+                            for (ApiDefinitionEntity entity : entities) {
+                                entity.setApp(app);
+                                entity.setIp(ip);
+                                entity.setPort(port);
+                            }
                         }
-                    }
-                    return entities;
-                });
+                        return entities;
+                    });
         } catch (Exception ex) {
             logger.warn("Error when fetching gateway apis", ex);
             return AsyncUtils.newFailedFuture(ex);
@@ -795,7 +795,7 @@ public class SentinelApiClient {
             AssertUtil.notEmpty(ip, "Bad machine IP");
             AssertUtil.isTrue(port > 0, "Bad machine port");
             String data = JSON.toJSONString(
-                apis.stream().map(r -> r.toApiDefinition()).collect(Collectors.toList()));
+                    apis.stream().map(r -> r.toApiDefinition()).collect(Collectors.toList()));
             Map<String, String> params = new HashMap<>(2);
             params.put("data", data);
             String result = executeCommand(app, ip, port, MODIFY_GATEWAY_API_PATH, params, true).get();
@@ -814,11 +814,11 @@ public class SentinelApiClient {
 
         try {
             return executeCommand(ip, port, FETCH_GATEWAY_FLOW_RULE_PATH, false)
-                .thenApply(r -> {
-                    List<GatewayFlowRule> gatewayFlowRules = JSON.parseArray(r, GatewayFlowRule.class);
-                    List<GatewayFlowRuleEntity> entities = gatewayFlowRules.stream().map(rule -> GatewayFlowRuleEntity.fromGatewayFlowRule(app, ip, port, rule)).collect(Collectors.toList());
-                    return entities;
-                });
+                    .thenApply(r -> {
+                        List<GatewayFlowRule> gatewayFlowRules = JSON.parseArray(r, GatewayFlowRule.class);
+                        List<GatewayFlowRuleEntity> entities = gatewayFlowRules.stream().map(rule -> GatewayFlowRuleEntity.fromGatewayFlowRule(app, ip, port, rule)).collect(Collectors.toList());
+                        return entities;
+                    });
         } catch (Exception ex) {
             logger.warn("Error when fetching gateway flow rules", ex);
             return AsyncUtils.newFailedFuture(ex);
@@ -835,7 +835,7 @@ public class SentinelApiClient {
             AssertUtil.notEmpty(ip, "Bad machine IP");
             AssertUtil.isTrue(port > 0, "Bad machine port");
             String data = JSON.toJSONString(
-                rules.stream().map(r -> r.toGatewayFlowRule()).collect(Collectors.toList()));
+                    rules.stream().map(r -> r.toGatewayFlowRule()).collect(Collectors.toList()));
             Map<String, String> params = new HashMap<>(2);
             params.put("data", data);
             String result = executeCommand(app, ip, port, MODIFY_GATEWAY_FLOW_RULE_PATH, params, true).get();

@@ -22,7 +22,7 @@ import java.util.Objects;
 /**
  * Entity for {@link ApiPredicateItem}.
  *
- * @author chengliang4810
+ * @author cdfive
  * @since 1.7.0
  */
 public class ApiPredicateItemEntity {
@@ -57,15 +57,11 @@ public class ApiPredicateItemEntity {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
+        if (this == o) { return true; }
+        if (o == null || getClass() != o.getClass()) { return false; }
         ApiPredicateItemEntity that = (ApiPredicateItemEntity) o;
         return Objects.equals(pattern, that.pattern) &&
-            Objects.equals(matchStrategy, that.matchStrategy);
+                Objects.equals(matchStrategy, that.matchStrategy);
     }
 
     @Override
@@ -76,8 +72,8 @@ public class ApiPredicateItemEntity {
     @Override
     public String toString() {
         return "ApiPredicateItemEntity{" +
-            "pattern='" + pattern + '\'' +
-            ", matchStrategy=" + matchStrategy +
-            '}';
+                "pattern='" + pattern + '\'' +
+                ", matchStrategy=" + matchStrategy +
+                '}';
     }
 }

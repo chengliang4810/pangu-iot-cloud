@@ -73,8 +73,7 @@
           size="mini"
           @click="handleFile"
           v-hasPermi="['system:oss:upload']"
-        >上传文件
-        </el-button>
+        >上传文件</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -84,8 +83,7 @@
           size="mini"
           @click="handleImage"
           v-hasPermi="['system:oss:upload']"
-        >上传图片
-        </el-button>
+        >上传图片</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -96,8 +94,7 @@
           :disabled="multiple"
           @click="handleDelete"
           v-hasPermi="['system:oss:remove']"
-        >删除
-        </el-button>
+        >删除</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -106,8 +103,7 @@
           size="mini"
           @click="handlePreviewListResource(!previewListResource)"
           v-hasPermi="['system:oss:edit']"
-        >预览开关 : {{previewListResource ? "禁用" : "启用"}}
-        </el-button>
+        >预览开关 : {{previewListResource ? "禁用" : "启用"}}</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -117,8 +113,7 @@
           size="mini"
           @click="handleOssConfig"
           v-hasPermi="['system:oss:list']"
-        >配置管理
-        </el-button>
+        >配置管理</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
@@ -127,11 +122,11 @@
               :header-cell-class-name="handleHeaderClass"
               @header-click="handleHeaderCLick"
               v-if="showTable">
-      <el-table-column type="selection" width="55" align="center"/>
+      <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="对象存储主键" align="center" prop="ossId" v-if="false"/>
-      <el-table-column label="文件名" align="center" prop="fileName"/>
-      <el-table-column label="原名" align="center" prop="originalName"/>
-      <el-table-column label="文件后缀" align="center" prop="fileSuffix"/>
+      <el-table-column label="文件名" align="center" prop="fileName" />
+      <el-table-column label="原名" align="center" prop="originalName" />
+      <el-table-column label="文件后缀" align="center" prop="fileSuffix" />
       <el-table-column label="文件展示" align="center" prop="url">
         <template slot-scope="scope">
           <el-image
@@ -144,12 +139,12 @@
         </template>
       </el-table-column>
       <el-table-column label="创建时间" align="center" prop="createTime" width="180"
-                       sortable="custom">
+                       sortable="custom" >
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="上传人" align="center" prop="createBy"/>
+      <el-table-column label="上传人" align="center" prop="createBy" />
       <el-table-column label="服务商" align="center" prop="service"
                        sortable="custom"/>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
@@ -160,16 +155,14 @@
             icon="el-icon-edit"
             @click="handleDownload(scope.row)"
             v-hasPermi="['system:oss:download']"
-          >下载
-          </el-button>
+          >下载</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
             v-hasPermi="['system:oss:remove']"
-          >删除
-          </el-button>
+          >删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -199,7 +192,7 @@
 </template>
 
 <script>
-import {listOss, delOss} from "@/api/system/oss";
+import { listOss, delOss } from "@/api/system/oss";
 
 export default {
   name: "Oss",
@@ -253,7 +246,7 @@ export default {
       // 表单校验
       rules: {
         file: [
-          {required: true, message: "文件不能为空", trigger: "blur"}
+          { required: true, message: "文件不能为空", trigger: "blur" }
         ]
       }
     };
@@ -274,8 +267,8 @@ export default {
         this.previewListResource = response.msg === undefined ? true : response.msg === 'true';
       });
       listOss(this.queryParams).then(response => {
-        this.ossList = response.rows;
-        this.total = response.total;
+        this.ossList = response.data.rows;
+        this.total = response.data.total;
         this.loading = false;
         this.showTable = true;
       });
@@ -315,7 +308,7 @@ export default {
     // 多选框选中数据
     handleSelectionChange(selection) {
       this.ids = selection.map(item => item.ossId)
-      this.single = selection.length !== 1
+      this.single = selection.length!==1
       this.multiple = !selection.length
     },
     // 设置列的排序为我们自定义的排序
@@ -365,7 +358,7 @@ export default {
     },
     /** 任务日志列表查询 */
     handleOssConfig() {
-      this.$router.push({path: '/system/oss-config/index'})
+      this.$router.push({ path: '/system/oss-config/index'})
     },
     /** 文件按钮操作 */
     handleFile() {

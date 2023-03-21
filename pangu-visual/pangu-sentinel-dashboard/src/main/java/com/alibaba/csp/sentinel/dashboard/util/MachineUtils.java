@@ -21,7 +21,7 @@ import com.alibaba.csp.sentinel.util.StringUtil;
 import com.alibaba.csp.sentinel.util.function.Tuple2;
 
 /**
- * @author chengliang4810
+ * @author Eric Zhao
  */
 public final class MachineUtils {
 
@@ -55,6 +55,5 @@ public final class MachineUtils {
         }
     }
 
-    private MachineUtils() {
-    }
+    private MachineUtils() {}
 }

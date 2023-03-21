@@ -64,4 +64,30 @@ public interface CommonConvert {
     }
 
 
+    @Named("intToBool")
+    default boolean intToBoolean(Integer value) {
+        if (value == null) {
+            return false;
+        }
+        return value == 1;
+    }
+
+
+    @Named("longToBool")
+    default boolean longToBool(Long value) {
+        if (value == null) {
+            return false;
+        }
+        return value == 1;
+    }
+
+    @Named("boolToLong")
+    default Long boolToLong(Boolean value) {
+        if (value == null) {
+            return 0L;
+        }
+        return Boolean.TRUE.equals(value) ? 1L : 0L;
+    }
+
+
 }

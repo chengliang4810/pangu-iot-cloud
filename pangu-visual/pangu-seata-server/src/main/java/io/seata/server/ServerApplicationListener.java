@@ -16,7 +16,6 @@
 package io.seata.server;
 
 import java.util.Properties;
-
 import io.seata.common.holder.ObjectHolder;
 import io.seata.common.util.StringUtils;
 import io.seata.config.Configuration;
@@ -41,15 +40,15 @@ import static io.seata.core.constants.ConfigurationKeys.SERVER_SERVICE_PORT_CAME
 import static io.seata.core.constants.ConfigurationKeys.SERVER_SERVICE_PORT_CONFIG;
 
 /**
- * @author chengliang4810
- * @author chengliang4810
+ * @author slievrly
+ * @author funkye
  */
 public class ServerApplicationListener implements GenericApplicationListener {
 
     @Override
     public boolean supportsEventType(ResolvableType eventType) {
         return eventType.getRawClass() != null
-            && ApplicationEnvironmentPreparedEvent.class.isAssignableFrom(eventType.getRawClass());
+                && ApplicationEnvironmentPreparedEvent.class.isAssignableFrom(eventType.getRawClass());
     }
 
     @Override
@@ -57,17 +56,17 @@ public class ServerApplicationListener implements GenericApplicationListener {
         if (!(event instanceof ApplicationEnvironmentPreparedEvent)) {
             return;
         }
-        ApplicationEnvironmentPreparedEvent environmentPreparedEvent = (ApplicationEnvironmentPreparedEvent) event;
+        ApplicationEnvironmentPreparedEvent environmentPreparedEvent = (ApplicationEnvironmentPreparedEvent)event;
         ConfigurableEnvironment environment = environmentPreparedEvent.getEnvironment();
         ObjectHolder.INSTANCE.setObject(OBJECT_KEY_SPRING_CONFIGURABLE_ENVIRONMENT, environment);
         SeataCoreEnvironmentPostProcessor.init();
         SeataServerEnvironmentPostProcessor.init();
-        Configuration config = ConfigurationFactory.getInstance();
+        Configuration config  = ConfigurationFactory.getInstance();
         // Load by priority
         System.setProperty("sessionMode",
-            config.getConfig(STORE_SESSION_MODE, config.getConfig(STORE_MODE, "file")));
+                config.getConfig(STORE_SESSION_MODE, config.getConfig(STORE_MODE, "file")));
         System.setProperty("lockMode",
-            config.getConfig(STORE_LOCK_MODE, config.getConfig(STORE_MODE, "file")));
+                config.getConfig(STORE_LOCK_MODE, config.getConfig(STORE_MODE, "file")));
 
         String[] args = environmentPreparedEvent.getArgs();
 

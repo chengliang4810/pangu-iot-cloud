@@ -1,6 +1,6 @@
 <template>
   <div>
-    <svg-icon :icon-class="isFullscreen?'exit-fullscreen':'fullscreen'" @click="click"/>
+    <svg-icon :icon-class="isFullscreen?'exit-fullscreen':'fullscreen'" @click="click" />
   </div>
 </template>
 
@@ -23,7 +23,7 @@ export default {
   methods: {
     click() {
       if (!screenfull.isEnabled) {
-        this.$message({message: '你的浏览器不支持全屏', type: 'warning'})
+        this.$message({ message: '你的浏览器不支持全屏', type: 'warning' })
         return false
       }
       screenfull.toggle()

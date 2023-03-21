@@ -38,8 +38,8 @@ import java.util.concurrent.TimeUnit;
 /**
  * Flow rule controller.
  *
- * @author chengliang4810
- * @author chengliang4810
+ * @author leyou
+ * @author Eric Zhao
  */
 @RestController
 @RequestMapping(value = "/v1/flow")
@@ -160,10 +160,10 @@ public class FlowControllerV1 {
     @PutMapping("/save.json")
     @AuthAction(PrivilegeType.WRITE_RULE)
     public Result<FlowRuleEntity> apiUpdateFlowRule(Long id, String app,
-                                                    String limitApp, String resource, Integer grade,
-                                                    Double count, Integer strategy, String refResource,
-                                                    Integer controlBehavior, Integer warmUpPeriodSec,
-                                                    Integer maxQueueingTimeMs) {
+                                                  String limitApp, String resource, Integer grade,
+                                                  Double count, Integer strategy, String refResource,
+                                                  Integer controlBehavior, Integer warmUpPeriodSec,
+                                                  Integer maxQueueingTimeMs) {
         if (id == null) {
             return Result.ofFail(-1, "id can't be null");
         }

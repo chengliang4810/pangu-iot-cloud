@@ -25,7 +25,7 @@ import io.seata.server.session.GlobalSession;
 /**
  * The type Metrics publisher.
  *
- * @author chengliang4810
+ * @author slievrly
  */
 public class MetricsPublisher {
 

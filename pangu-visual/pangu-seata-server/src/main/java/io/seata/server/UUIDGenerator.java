@@ -20,7 +20,7 @@ import io.seata.common.util.IdWorker;
 /**
  * The type Uuid generator.
  *
- * @author chengliang4810
+ * @author sharajava
  */
 public class UUIDGenerator {
 
@@ -28,7 +28,6 @@ public class UUIDGenerator {
 
     /**
      * generate UUID using snowflake algorithm
-     *
      * @return UUID
      */
     public static long generateUUID() {
@@ -44,7 +43,6 @@ public class UUIDGenerator {
 
     /**
      * init IdWorker
-     *
      * @param serverNode the server node id, consider as machine id in snowflake
      */
     public static void init(Long serverNode) {

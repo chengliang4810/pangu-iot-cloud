@@ -22,7 +22,7 @@ import java.util.List;
 import com.alibaba.csp.sentinel.dashboard.datasource.entity.MetricEntity;
 
 /**
- * @author chengliang4810
+ * @author leyou
  */
 public class MetricVo implements Comparable<MetricVo> {
     private Long id;

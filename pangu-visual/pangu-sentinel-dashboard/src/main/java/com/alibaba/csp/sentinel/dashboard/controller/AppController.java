@@ -35,7 +35,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * @author chengliang4810
+ * @author Carpenter Lee
  */
 @RestController
 @RequestMapping(value = "/app")
@@ -66,12 +66,12 @@ public class AppController {
         Collections.sort(list, Comparator.comparing(MachineInfo::getApp).thenComparing(MachineInfo::getIp).thenComparingInt(MachineInfo::getPort));
         return Result.ofSuccess(MachineInfoVo.fromMachineInfoList(list));
     }
-
+    
     @RequestMapping(value = "/{app}/machine/remove.json")
     public Result<String> removeMachineById(
-        @PathVariable("app") String app,
-        @RequestParam(name = "ip") String ip,
-        @RequestParam(name = "port") int port) {
+            @PathVariable("app") String app,
+            @RequestParam(name = "ip") String ip,
+            @RequestParam(name = "port") int port) {
         AppInfo appInfo = appManagement.getDetailApp(app);
         if (appInfo == null) {
             return Result.ofSuccess(null);

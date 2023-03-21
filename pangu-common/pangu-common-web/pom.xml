@@ -15,7 +15,7 @@
         pangu-common-web web服务
     </description>
 
-    <dependencies>
+	<dependencies>
 
         <!-- SpringBoot Web容器 -->
         <dependency>

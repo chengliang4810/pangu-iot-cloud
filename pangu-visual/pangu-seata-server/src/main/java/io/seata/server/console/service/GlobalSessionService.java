@@ -21,14 +21,12 @@ import io.seata.console.result.PageResult;
 
 /**
  * Global session service
- *
- * @author chengliang4810
+ * @author wangzhongxiang
  */
 public interface GlobalSessionService {
 
     /**
      * Query global session
-     *
      * @param param the param
      * @return the GlobalSessionVO list
      */

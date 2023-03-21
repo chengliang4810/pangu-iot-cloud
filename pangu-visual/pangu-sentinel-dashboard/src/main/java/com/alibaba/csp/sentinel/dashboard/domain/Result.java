@@ -16,8 +16,8 @@
 package com.alibaba.csp.sentinel.dashboard.domain;
 
 /**
- * @author chengliang4810
- * @author chengliang4810
+ * @author leyou
+ * @author Eric Zhao
  */
 public class Result<R> {
 

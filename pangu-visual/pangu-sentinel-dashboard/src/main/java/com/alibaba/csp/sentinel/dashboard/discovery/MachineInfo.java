@@ -90,7 +90,7 @@ public class MachineInfo implements Comparable<MachineInfo> {
     public long getHeartbeatVersion() {
         return heartbeatVersion;
     }
-
+    
     public void setHeartbeatVersion(long heartbeatVersion) {
         this.heartbeatVersion = heartbeatVersion;
     }
@@ -103,15 +103,15 @@ public class MachineInfo implements Comparable<MachineInfo> {
         this.version = version;
         return this;
     }
-
+    
     public boolean isHealthy() {
         long delta = System.currentTimeMillis() - lastHeartbeat;
         return delta < DashboardConfig.getUnhealthyMachineMillis();
     }
-
+    
     /**
      * whether dead should be removed
-     *
+     * 
      * @return
      */
     public boolean isDead() {
@@ -121,11 +121,11 @@ public class MachineInfo implements Comparable<MachineInfo> {
         }
         return false;
     }
-
+    
     public long getLastHeartbeat() {
         return lastHeartbeat;
     }
-
+    
     public void setLastHeartbeat(long lastHeartbeat) {
         this.lastHeartbeat = lastHeartbeat;
     }
@@ -161,13 +161,9 @@ public class MachineInfo implements Comparable<MachineInfo> {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof MachineInfo)) {
-            return false;
-        }
-        MachineInfo that = (MachineInfo) o;
+        if (this == o) { return true; }
+        if (!(o instanceof MachineInfo)) { return false; }
+        MachineInfo that = (MachineInfo)o;
         return Objects.equals(app, that.app) &&
             Objects.equals(ip, that.ip) &&
             Objects.equals(port, that.port);

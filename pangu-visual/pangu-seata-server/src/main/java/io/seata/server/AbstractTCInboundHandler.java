@@ -48,7 +48,7 @@ import org.slf4j.LoggerFactory;
 /**
  * The type Abstract tc inbound handler.
  *
- * @author chengliang4810
+ * @author sharajava
  */
 public abstract class AbstractTCInboundHandler extends AbstractExceptionHandler implements TCInboundHandler {
 
@@ -99,7 +99,6 @@ public abstract class AbstractTCInboundHandler extends AbstractExceptionHandler 
                         e);
                 }
             }
-
             @Override
             public void onTransactionException(GlobalCommitRequest request, GlobalCommitResponse response,
                                                TransactionException tex) {

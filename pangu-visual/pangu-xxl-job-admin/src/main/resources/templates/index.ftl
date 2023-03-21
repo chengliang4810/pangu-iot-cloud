@@ -1,37 +1,35 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <#import "./common/common.macro.ftl" as netCommon>
-    <@netCommon.commonStyle />
+  	<#import "./common/common.macro.ftl" as netCommon>
+	<@netCommon.commonStyle />
     <!-- daterangepicker -->
-    <link rel="stylesheet"
-          href="${request.contextPath}/static/adminlte/bower_components/bootstrap-daterangepicker/daterangepicker.css">
+    <link rel="stylesheet" href="${request.contextPath}/static/adminlte/bower_components/bootstrap-daterangepicker/daterangepicker.css">
     <title>${I18n.admin_name}</title>
 </head>
-<body
-    class="hold-transition skin-blue sidebar-mini <#if cookieMap?exists && cookieMap["xxljob_adminlte_settings"]?exists && "off" == cookieMap["xxljob_adminlte_settings"].value >sidebar-collapse</#if> ">
+<body class="hold-transition skin-blue sidebar-mini <#if cookieMap?exists && cookieMap["xxljob_adminlte_settings"]?exists && "off" == cookieMap["xxljob_adminlte_settings"].value >sidebar-collapse</#if> ">
 <div class="wrapper">
-    <!-- header -->
-    <@netCommon.commonHeader />
-    <!-- left -->
-    <@netCommon.commonLeft "index" />
+	<!-- header -->
+	<@netCommon.commonHeader />
+	<!-- left -->
+	<@netCommon.commonLeft "index" />
+	
+	<!-- Content Wrapper. Contains page content -->
+	<div class="content-wrapper">
+		<!-- Content Header (Page header) -->
+		<section class="content-header">
+			<h1>${I18n.job_dashboard_name}</h1>
+			<!--
+			<h1>运行报表<small>任务调度中心</small></h1>
+			<ol class="breadcrumb">
+				<li><a><i class="fa fa-dashboard"></i>调度中心</a></li>
+				<li class="active">使用教程</li>
+			</ol>
+			-->
+		</section>
 
-    <!-- Content Wrapper. Contains page content -->
-    <div class="content-wrapper">
-        <!-- Content Header (Page header) -->
-        <section class="content-header">
-            <h1>${I18n.job_dashboard_name}</h1>
-            <!--
-            <h1>运行报表<small>任务调度中心</small></h1>
-            <ol class="breadcrumb">
-                <li><a><i class="fa fa-dashboard"></i>调度中心</a></li>
-                <li class="active">使用教程</li>
-            </ol>
-            -->
-        </section>
-
-        <!-- Main content -->
-        <section class="content">
+		<!-- Main content -->
+		<section class="content">
 
             <!-- 任务信息 -->
             <div class="row">
@@ -54,7 +52,7 @@
                 </div>
 
                 <#-- 调度信息 -->
-                <div class="col-md-4 col-sm-6 col-xs-12">
+                <div class="col-md-4 col-sm-6 col-xs-12" >
                     <div class="info-box bg-yellow">
                         <span class="info-box-icon"><i class="fa fa-calendar"></i></span>
 
@@ -63,7 +61,7 @@
                             <span class="info-box-number">${jobLogCount}</span>
 
                             <div class="progress">
-                                <div class="progress-bar" style="width: 100%"></div>
+                                <div class="progress-bar" style="width: 100%" ></div>
                             </div>
                             <span class="progress-description">
                                 ${I18n.job_dashboard_trigger_num_tip}
@@ -104,8 +102,7 @@
 
                             <!-- tools box -->
                             <div class="pull-right box-tools">
-                                <button type="button" class="btn btn-primary btn-sm daterange pull-right"
-                                        data-toggle="tooltip" id="filterTime">
+                                <button type="button" class="btn btn-primary btn-sm daterange pull-right" data-toggle="tooltip" id="filterTime" >
                                     <i class="fa fa-calendar"></i>
                                 </button>
                                 <#--<button type="button" class="btn btn-primary btn-sm pull-right" data-widget="collapse" data-toggle="tooltip" title="" style="margin-right: 5px;" data-original-title="Collapse">
@@ -131,19 +128,18 @@
                 </div>
             </div>
 
-        </section>
-        <!-- /.content -->
-    </div>
-    <!-- /.content-wrapper -->
-
-    <!-- footer -->
-    <@netCommon.commonFooter />
+		</section>
+		<!-- /.content -->
+	</div>
+	<!-- /.content-wrapper -->
+	
+	<!-- footer -->
+	<@netCommon.commonFooter />
 </div>
 <@netCommon.commonScript />
 <!-- daterangepicker -->
 <script src="${request.contextPath}/static/adminlte/bower_components/moment/moment.min.js"></script>
-<script
-    src="${request.contextPath}/static/adminlte/bower_components/bootstrap-daterangepicker/daterangepicker.js"></script>
+<script src="${request.contextPath}/static/adminlte/bower_components/bootstrap-daterangepicker/daterangepicker.js"></script>
 <#-- echarts -->
 <script src="${request.contextPath}/static/plugins/echarts/echarts.common.min.js"></script>
 <script src="${request.contextPath}/static/js/index.js"></script>

@@ -1,11 +1,11 @@
 /**
  * Cluster state control service.
  *
- * @author chengliang4810
+ * @author Eric Zhao
  */
 angular.module('sentinelDashboardApp').service('ClusterStateService', ['$http', function ($http) {
 
-    this.fetchClusterUniversalStateSingle = function (app, ip, port) {
+    this.fetchClusterUniversalStateSingle = function(app, ip, port) {
         var param = {
             app: app,
             ip: ip,
@@ -18,28 +18,28 @@ angular.module('sentinelDashboardApp').service('ClusterStateService', ['$http', 
         });
     };
 
-    this.fetchClusterUniversalStateOfApp = function (app) {
+    this.fetchClusterUniversalStateOfApp = function(app) {
         return $http({
             url: '/cluster/state/' + app,
             method: 'GET'
         });
     };
 
-    this.fetchClusterServerStateOfApp = function (app) {
+    this.fetchClusterServerStateOfApp = function(app) {
         return $http({
             url: '/cluster/server_state/' + app,
             method: 'GET'
         });
     };
 
-    this.fetchClusterClientStateOfApp = function (app) {
+    this.fetchClusterClientStateOfApp = function(app) {
         return $http({
             url: '/cluster/client_state/' + app,
             method: 'GET'
         });
     };
 
-    this.modifyClusterConfig = function (config) {
+    this.modifyClusterConfig = function(config) {
         return $http({
             url: '/cluster/config/modify_single',
             data: config,
@@ -47,7 +47,7 @@ angular.module('sentinelDashboardApp').service('ClusterStateService', ['$http', 
         });
     };
 
-    this.applyClusterFullAssignOfApp = function (app, clusterMap) {
+    this.applyClusterFullAssignOfApp = function(app, clusterMap) {
         return $http({
             url: '/cluster/assign/all_server/' + app,
             data: clusterMap,
@@ -55,7 +55,7 @@ angular.module('sentinelDashboardApp').service('ClusterStateService', ['$http', 
         });
     };
 
-    this.applyClusterSingleServerAssignOfApp = function (app, request) {
+    this.applyClusterSingleServerAssignOfApp = function(app, request) {
         return $http({
             url: '/cluster/assign/single_server/' + app,
             data: request,
@@ -63,7 +63,7 @@ angular.module('sentinelDashboardApp').service('ClusterStateService', ['$http', 
         });
     };
 
-    this.applyClusterServerBatchUnbind = function (app, machineSet) {
+    this.applyClusterServerBatchUnbind = function(app, machineSet) {
         return $http({
             url: '/cluster/assign/unbind_server/' + app,
             data: machineSet,

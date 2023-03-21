@@ -20,7 +20,7 @@ import java.util.List;
 /**
  * job code controller
  *
- * @author chengliang4810
+ * @author xuxueli 2015-12-19 16:13:16
  */
 @Controller
 @RequestMapping("/jobcode")

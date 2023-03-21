@@ -37,8 +37,8 @@ import static java.util.Objects.isNull;
 /**
  * Global Session File ServiceImpl
  *
- * @author chengliang4810
- * @author chengliang4810
+ * @author zhongxiang.wang
+ * @author miaoxueyu
  */
 @Component
 @org.springframework.context.annotation.Configuration
@@ -54,12 +54,13 @@ public class GlobalSessionFileServiceImpl implements GlobalSessionService {
         final Collection<GlobalSession> allSessions = SessionHolder.getRootSessionManager().allSessions();
 
         final List<GlobalSession> filteredSessions = allSessions
-            .parallelStream()
-            .filter(obtainPredicate(param))
-            .collect(Collectors.toList());
+                .parallelStream()
+                .filter(obtainPredicate(param))
+                .collect(Collectors.toList());
 
         return PageResult.build(SessionConverter.convertGlobalSession(filteredSessions), param.getPageNum(), param.getPageSize());
     }
+
 
 
     /**
@@ -75,25 +76,25 @@ public class GlobalSessionFileServiceImpl implements GlobalSessionService {
                 // xid
                 (isBlank(param.getXid()) || session.getXid().contains(param.getXid()))
 
-                    &&
-                    // applicationId
-                    (isBlank(param.getApplicationId()) || session.getApplicationId().contains(param.getApplicationId()))
+                &&
+                // applicationId
+                (isBlank(param.getApplicationId()) || session.getApplicationId().contains(param.getApplicationId()))
 
-                    &&
-                    // status
-                    (isNull(param.getStatus()) || Objects.equals(session.getStatus().getCode(), param.getStatus()))
+                &&
+                // status
+                (isNull(param.getStatus()) || Objects.equals(session.getStatus().getCode(), param.getStatus()))
 
-                    &&
-                    // transactionName
-                    (isBlank(param.getTransactionName()) || session.getTransactionName().contains(param.getTransactionName()))
+                &&
+                // transactionName
+                (isBlank(param.getTransactionName()) || session.getTransactionName().contains(param.getTransactionName()))
 
-                    &&
-                    // timeStart
-                    (isNull(param.getTimeStart()) || param.getTimeStart() <= session.getBeginTime())
+                &&
+                // timeStart
+                (isNull(param.getTimeStart()) || param.getTimeStart() <= session.getBeginTime())
 
-                    &&
-                    // timeEnd
-                    (isNull(param.getTimeEnd()) || param.getTimeEnd() >= session.getBeginTime());
+                &&
+                // timeEnd
+                (isNull(param.getTimeEnd()) || param.getTimeEnd() >= session.getBeginTime());
 
         };
     }

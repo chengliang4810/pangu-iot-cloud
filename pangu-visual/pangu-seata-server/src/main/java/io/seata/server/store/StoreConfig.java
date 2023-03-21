@@ -23,7 +23,7 @@ import static io.seata.core.constants.ConfigurationKeys.STORE_FILE_PREFIX;
 
 
 /**
- * @author chengliang4810
+ * @author lizhao
  */
 public class StoreConfig {
 

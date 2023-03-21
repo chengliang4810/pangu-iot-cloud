@@ -6,6 +6,6 @@
  * Controller of the sentinelDashboardApp
  */
 angular.module('sentinelDashboardApp')
-    .controller('HomeCtrl', ['$scope', '$position', function ($scope, $position) {
-        // do noting
-    }]);
+  .controller('HomeCtrl', ['$scope', '$position', function ($scope, $position) {
+    // do noting
+  }]);

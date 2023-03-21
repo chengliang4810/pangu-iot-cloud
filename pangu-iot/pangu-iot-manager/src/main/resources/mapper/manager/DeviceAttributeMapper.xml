@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pangu.iot.manager.device.mapper.DeviceAttributeMapper">
+
+    <resultMap type="com.pangu.manager.api.domain.DeviceAttribute" id="DeviceAttributeResult">
+    <result property="id" column="id"/>
+    <result property="productId" column="product_id"/>
+    <result property="deviceId" column="device_id"/>
+    <result property="name" column="name"/>
+    <result property="key" column="key"/>
+    <result property="valueType" column="value_type"/>
+    <result property="source" column="source"/>
+    <result property="unit" column="unit"/>
+    <result property="masterItemId" column="master_item_id"/>
+    <result property="dependencyAttrId" column="dependency_attr_id"/>
+    <result property="zbxId" column="zbx_id"/>
+    <result property="templateId" column="template_id"/>
+    <result property="valueMapId" column="value_map_id"/>
+    <result property="createBy" column="create_by"/>
+    <result property="createTime" column="create_time"/>
+    <result property="updateBy" column="update_by"/>
+    <result property="updateTime" column="update_time"/>
+    <result property="remark" column="remark"/>
+    </resultMap>
+
+
+</mapper>

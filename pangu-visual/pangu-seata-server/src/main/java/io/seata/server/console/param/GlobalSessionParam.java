@@ -92,11 +92,11 @@ public class GlobalSessionParam extends BaseParam implements Serializable {
     @Override
     public String toString() {
         return "GlobalSessionParam{" +
-            "xid='" + xid + '\'' +
-            ", applicationId='" + applicationId + '\'' +
-            ", status=" + status +
-            ", transactionName='" + transactionName + '\'' +
-            ", withBranch=" + withBranch +
-            '}';
+                "xid='" + xid + '\'' +
+                ", applicationId='" + applicationId + '\'' +
+                ", status=" + status +
+                ", transactionName='" + transactionName + '\'' +
+                ", withBranch=" + withBranch +
+                '}';
     }
 }

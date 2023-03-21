@@ -47,7 +47,7 @@ import static io.seata.core.constants.RedisKeyConstants.DEFAULT_LOG_QUERY_LIMIT;
 /**
  * The type Database transaction store manager.
  *
- * @author chengliang4810
+ * @author zhangsen
  */
 public class DataBaseTransactionStoreManager extends AbstractTransactionStoreManager
     implements TransactionStoreManager {
@@ -145,7 +145,7 @@ public class DataBaseTransactionStoreManager extends AbstractTransactionStoreMan
     /**
      * Read session global session.
      *
-     * @param xid                the xid
+     * @param xid the xid
      * @param withBranchSessions the withBranchSessions
      * @return the global session
      */
@@ -192,7 +192,7 @@ public class DataBaseTransactionStoreManager extends AbstractTransactionStoreMan
         Map<String, List<BranchTransactionDO>> finalBranchTransactionDOsMap = branchTransactionDOsMap;
         return globalTransactionDOs.stream()
             .map(globalTransactionDO -> getGlobalSession(globalTransactionDO,
-                finalBranchTransactionDOsMap.get(globalTransactionDO.getXid()), withBranchSessions))
+                    finalBranchTransactionDOsMap.get(globalTransactionDO.getXid()), withBranchSessions))
             .collect(Collectors.toList());
     }
 
@@ -219,12 +219,12 @@ public class DataBaseTransactionStoreManager extends AbstractTransactionStoreMan
     }
 
     private GlobalSession getGlobalSession(GlobalTransactionDO globalTransactionDO,
-                                           List<BranchTransactionDO> branchTransactionDOs) {
+        List<BranchTransactionDO> branchTransactionDOs) {
         return getGlobalSession(globalTransactionDO, branchTransactionDOs, true);
     }
 
     private GlobalSession getGlobalSession(GlobalTransactionDO globalTransactionDO,
-                                           List<BranchTransactionDO> branchTransactionDOs, boolean withBranchSessions) {
+        List<BranchTransactionDO> branchTransactionDOs, boolean withBranchSessions) {
         GlobalSession globalSession = SessionConverter.convertGlobalSession(globalTransactionDO, !withBranchSessions);
         // branch transactions
         if (CollectionUtils.isNotEmpty(branchTransactionDOs)) {

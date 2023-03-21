@@ -16,7 +16,7 @@
 package com.alibaba.csp.sentinel.dashboard.domain.cluster.request;
 
 /**
- * @author chengliang4810
+ * @author Eric Zhao
  * @since 1.4.0
  */
 public interface ClusterModifyRequest {

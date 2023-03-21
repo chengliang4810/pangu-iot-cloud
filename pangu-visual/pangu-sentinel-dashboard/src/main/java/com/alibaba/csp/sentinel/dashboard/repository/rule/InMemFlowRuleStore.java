@@ -25,7 +25,7 @@ import org.springframework.stereotype.Component;
 /**
  * Store {@link FlowRuleEntity} in memory.
  *
- * @author chengliang4810
+ * @author leyou
  */
 @Component
 public class InMemFlowRuleStore extends InMemoryRuleRepositoryAdapter<FlowRuleEntity> {

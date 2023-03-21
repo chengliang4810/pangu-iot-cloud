@@ -37,8 +37,7 @@
           size="mini"
           @click="handleAdd"
           v-hasPermi="['demo:tree:add']"
-        >新增
-        </el-button>
+        >新增</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -47,8 +46,7 @@
           icon="el-icon-sort"
           size="mini"
           @click="toggleExpandAll"
-        >展开/折叠
-        </el-button>
+        >展开/折叠</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
@@ -61,10 +59,10 @@
       :default-expand-all="isExpandAll"
       :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
     >
-      <el-table-column label="父id" prop="parentId"/>
-      <el-table-column label="部门id" align="center" prop="deptId"/>
-      <el-table-column label="用户id" align="center" prop="userId"/>
-      <el-table-column label="树节点名" align="center" prop="treeName"/>
+      <el-table-column label="父id" prop="parentId" />
+      <el-table-column label="部门id" align="center" prop="deptId" />
+      <el-table-column label="用户id" align="center" prop="userId" />
+      <el-table-column label="树节点名" align="center" prop="treeName" />
       <el-table-column label="创建时间" align="center" prop="createTime" width="180">
         <template #default="scope">
           <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d}') }}</span>
@@ -78,24 +76,21 @@
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
             v-hasPermi="['demo:tree:edit']"
-          >修改
-          </el-button>
+          >修改</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-plus"
             @click="handleAdd(scope.row)"
             v-hasPermi="['demo:tree:add']"
-          >新增
-          </el-button>
+          >新增</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
             v-hasPermi="['demo:tree:remove']"
-          >删除
-          </el-button>
+          >删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -104,16 +99,16 @@
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="父id" prop="parentId">
-          <treeselect v-model="form.parentId" :options="treeOptions" :normalizer="normalizer" placeholder="请选择父id"/>
+          <treeselect v-model="form.parentId" :options="treeOptions" :normalizer="normalizer" placeholder="请选择父id" />
         </el-form-item>
         <el-form-item label="部门id" prop="deptId">
-          <el-input v-model="form.deptId" placeholder="请输入部门id"/>
+          <el-input v-model="form.deptId" placeholder="请输入部门id" />
         </el-form-item>
         <el-form-item label="用户id" prop="userId">
-          <el-input v-model="form.userId" placeholder="请输入用户id"/>
+          <el-input v-model="form.userId" placeholder="请输入用户id" />
         </el-form-item>
         <el-form-item label="树节点名" prop="treeName">
-          <el-input v-model="form.treeName" placeholder="请输入树节点名"/>
+          <el-input v-model="form.treeName" placeholder="请输入树节点名" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -125,7 +120,7 @@
 </template>
 
 <script>
-import {listTree, getTree, delTree, addTree, updateTree} from "@/api/demo/tree";
+import { listTree, getTree, delTree, addTree, updateTree } from "@/api/demo/tree";
 import Treeselect from "@riophae/vue-treeselect";
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 
@@ -166,7 +161,7 @@ export default {
       // 表单校验
       rules: {
         treeName: [
-          {required: true, message: "树节点名不能为空", trigger: "blur"}
+          { required: true, message: "树节点名不能为空", trigger: "blur" }
         ],
       }
     };
@@ -203,7 +198,7 @@ export default {
     getTreeselect() {
       listTree().then(response => {
         this.treeOptions = [];
-        const data = {id: 0, treeName: '顶级节点', children: []};
+        const data = { id: 0, treeName: '顶级节点', children: [] };
         data.children = this.handleTree(response.data, "id", "parentId");
         this.treeOptions.push(data);
       });

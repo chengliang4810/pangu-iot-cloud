@@ -63,8 +63,7 @@ public class TestBatchController extends BaseController {
             testDemo.setOrderNum(-1);
             testDemo.setTestKey("批量新增");
             testDemo.setValue("测试新增");
-            list.add(testDemo);
-        }
+            list.add(testDemo);        }
         testDemoMapper.insertBatch(list);
         for (int i = 0; i < list.size(); i++) {
             TestDemo testDemo = list.get(i);

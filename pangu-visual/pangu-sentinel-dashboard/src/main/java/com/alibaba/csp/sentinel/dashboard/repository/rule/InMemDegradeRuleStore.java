@@ -22,7 +22,7 @@ import com.alibaba.csp.sentinel.dashboard.datasource.entity.rule.DegradeRuleEnti
 import org.springframework.stereotype.Component;
 
 /**
- * @author chengliang4810
+ * @author leyou
  */
 @Component
 public class InMemDegradeRuleStore extends InMemoryRuleRepositoryAdapter<DegradeRuleEntity> {

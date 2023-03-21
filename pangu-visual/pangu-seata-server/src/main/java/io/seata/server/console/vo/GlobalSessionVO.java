@@ -24,7 +24,6 @@ import io.seata.core.constants.ServerTableColumnsName;
 
 /**
  * GlobalSessionVO
- *
  * @author: zhongxiang.wang
  */
 public class GlobalSessionVO {
@@ -201,18 +200,18 @@ public class GlobalSessionVO {
     @Override
     public String toString() {
         return "GlobalSessionVO{" +
-            "xid='" + xid + '\'' +
-            ", transactionId=" + transactionId +
-            ", status=" + status +
-            ", applicationId='" + applicationId + '\'' +
-            ", transactionServiceGroup='" + transactionServiceGroup + '\'' +
-            ", transactionName='" + transactionName + '\'' +
-            ", timeout=" + timeout +
-            ", beginTime=" + beginTime +
-            ", applicationData='" + applicationData + '\'' +
-            ", gmtCreate=" + gmtCreate +
-            ", gmtModified=" + gmtModified +
-            ", branchSessionVOs=" + branchSessionVOs +
-            '}';
+                "xid='" + xid + '\'' +
+                ", transactionId=" + transactionId +
+                ", status=" + status +
+                ", applicationId='" + applicationId + '\'' +
+                ", transactionServiceGroup='" + transactionServiceGroup + '\'' +
+                ", transactionName='" + transactionName + '\'' +
+                ", timeout=" + timeout +
+                ", beginTime=" + beginTime +
+                ", applicationData='" + applicationData + '\'' +
+                ", gmtCreate=" + gmtCreate +
+                ", gmtModified=" + gmtModified +
+                ", branchSessionVOs=" + branchSessionVOs +
+                '}';
     }
 }

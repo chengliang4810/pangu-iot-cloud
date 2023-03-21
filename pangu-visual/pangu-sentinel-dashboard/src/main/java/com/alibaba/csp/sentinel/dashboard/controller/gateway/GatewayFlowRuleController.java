@@ -44,7 +44,7 @@ import static com.alibaba.csp.sentinel.dashboard.datasource.entity.gateway.Gatew
 /**
  * Gateway flow rule Controller for manage gateway flow rules.
  *
- * @author chengliang4810
+ * @author cdfive
  * @since 1.7.0
  */
 @RestController
@@ -133,7 +133,7 @@ public class GatewayFlowRuleController {
             // 参数属性 0-ClientIP 1-Remote Host 2-Header 3-URL参数 4-Cookie
             Integer parseStrategy = paramItem.getParseStrategy();
             if (!Arrays.asList(PARAM_PARSE_STRATEGY_CLIENT_IP, PARAM_PARSE_STRATEGY_HOST, PARAM_PARSE_STRATEGY_HEADER
-                , PARAM_PARSE_STRATEGY_URL_PARAM, PARAM_PARSE_STRATEGY_COOKIE).contains(parseStrategy)) {
+                    , PARAM_PARSE_STRATEGY_URL_PARAM, PARAM_PARSE_STRATEGY_COOKIE).contains(parseStrategy)) {
                 return Result.ofFail(-1, "invalid parseStrategy: " + parseStrategy);
             }
             itemEntity.setParseStrategy(paramItem.getParseStrategy());
@@ -278,7 +278,7 @@ public class GatewayFlowRuleController {
             // 参数属性 0-ClientIP 1-Remote Host 2-Header 3-URL参数 4-Cookie
             Integer parseStrategy = paramItem.getParseStrategy();
             if (!Arrays.asList(PARAM_PARSE_STRATEGY_CLIENT_IP, PARAM_PARSE_STRATEGY_HOST, PARAM_PARSE_STRATEGY_HEADER
-                , PARAM_PARSE_STRATEGY_URL_PARAM, PARAM_PARSE_STRATEGY_COOKIE).contains(parseStrategy)) {
+                    , PARAM_PARSE_STRATEGY_URL_PARAM, PARAM_PARSE_STRATEGY_COOKIE).contains(parseStrategy)) {
                 return Result.ofFail(-1, "invalid parseStrategy: " + parseStrategy);
             }
             itemEntity.setParseStrategy(paramItem.getParseStrategy());

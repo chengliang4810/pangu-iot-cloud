@@ -3,6 +3,8 @@ package com.pangu.common.core.utils;
 import cn.hutool.core.lang.Dict;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.json.JSONUtil;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -17,7 +19,7 @@ import java.util.List;
 /**
  * JSON 工具类
  *
- * @author chengliang4810
+ * @author 芋道源码
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class JsonUtils {
@@ -36,6 +38,23 @@ public class JsonUtils {
             return OBJECT_MAPPER.writeValueAsString(object);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+
+    public static String toJsonString(Object object, boolean ignoreNull) {
+        if (ObjectUtil.isNull(object)) {
+            return null;
+        }
+        try {
+            if (ignoreNull){
+                OBJECT_MAPPER.setSerializationInclusion(JsonInclude.Include.NON_DEFAULT);
+            }
+            return OBJECT_MAPPER.writeValueAsString(object);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        } finally {
+            OBJECT_MAPPER.setSerializationInclusion(JsonInclude.Include.ALWAYS);
         }
     }
 
@@ -108,4 +127,31 @@ public class JsonUtils {
         }
     }
 
+    /**
+     * 判断Json字符串是否是json数组结构
+     *
+     * @param json 数据
+     * @return boolean
+     */
+    public static boolean isJsonArray(String json) {
+        if (StringUtils.isBlank(json)) {
+            return false;
+        }
+        return JSONUtil.isTypeJSONArray(json);
+    }
+
+    /**
+     * json字符串字节
+     *
+     * @param object 对象
+     * @return {@link byte[]}
+     */
+    public static byte[] toJsonStringBytes(Object object) {
+        if (ObjectUtil.isNull(object)) {
+            return new byte[0];
+        }
+        String jsonString = JsonUtils.toJsonString(object, true);
+        assert jsonString != null;
+        return jsonString.getBytes();
+    }
 }

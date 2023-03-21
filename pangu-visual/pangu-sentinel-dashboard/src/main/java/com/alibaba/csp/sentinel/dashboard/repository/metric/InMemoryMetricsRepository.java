@@ -33,8 +33,8 @@ import java.util.stream.Collectors;
 /**
  * Caches metrics data in a period of time in memory.
  *
- * @author chengliang4810
- * @author chengliang4810
+ * @author Carpenter Lee
+ * @author Eric Zhao
  */
 @Component
 public class InMemoryMetricsRepository implements MetricsRepository<MetricEntity> {
@@ -57,13 +57,13 @@ public class InMemoryMetricsRepository implements MetricsRepository<MetricEntity
         readWriteLock.writeLock().lock();
         try {
             allMetrics.computeIfAbsent(entity.getApp(), e -> new HashMap<>(16))
-                .computeIfAbsent(entity.getResource(), e -> new LinkedHashMap<Long, MetricEntity>() {
-                    @Override
-                    protected boolean removeEldestEntry(Entry<Long, MetricEntity> eldest) {
-                        // Metric older than {@link #MAX_METRIC_LIVE_TIME_MS} will be removed.
-                        return eldest.getKey() < TimeUtil.currentTimeMillis() - MAX_METRIC_LIVE_TIME_MS;
-                    }
-                }).put(entity.getTimestamp().getTime(), entity);
+                    .computeIfAbsent(entity.getResource(), e -> new LinkedHashMap<Long, MetricEntity>() {
+                        @Override
+                        protected boolean removeEldestEntry(Entry<Long, MetricEntity> eldest) {
+                            // Metric older than {@link #MAX_METRIC_LIVE_TIME_MS} will be removed.
+                            return eldest.getKey() < TimeUtil.currentTimeMillis() - MAX_METRIC_LIVE_TIME_MS;
+                        }
+                    }).put(entity.getTimestamp().getTime(), entity);
         } finally {
             readWriteLock.writeLock().unlock();
         }
@@ -147,18 +147,18 @@ public class InMemoryMetricsRepository implements MetricsRepository<MetricEntity
             }
             // Order by last minute b_qps DESC.
             return resourceCount.entrySet()
-                .stream()
-                .sorted((o1, o2) -> {
-                    MetricEntity e1 = o1.getValue();
-                    MetricEntity e2 = o2.getValue();
-                    int t = e2.getBlockQps().compareTo(e1.getBlockQps());
-                    if (t != 0) {
-                        return t;
-                    }
-                    return e2.getPassQps().compareTo(e1.getPassQps());
-                })
-                .map(Entry::getKey)
-                .collect(Collectors.toList());
+                    .stream()
+                    .sorted((o1, o2) -> {
+                        MetricEntity e1 = o1.getValue();
+                        MetricEntity e2 = o2.getValue();
+                        int t = e2.getBlockQps().compareTo(e1.getBlockQps());
+                        if (t != 0) {
+                            return t;
+                        }
+                        return e2.getPassQps().compareTo(e1.getPassQps());
+                    })
+                    .map(Entry::getKey)
+                    .collect(Collectors.toList());
         } finally {
             readWriteLock.readLock().unlock();
         }

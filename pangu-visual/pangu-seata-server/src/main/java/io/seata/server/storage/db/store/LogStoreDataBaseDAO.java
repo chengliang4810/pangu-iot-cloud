@@ -45,7 +45,7 @@ import static io.seata.common.DefaultValues.DEFAULT_STORE_DB_GLOBAL_TABLE;
 /**
  * The type Log store data base dao.
  *
- * @author chengliang4810
+ * @author zhangsen
  */
 public class LogStoreDataBaseDAO implements LogStore {
 
@@ -507,7 +507,7 @@ public class LogStoreDataBaseDAO implements LogStore {
         } else if ("postgresql".equalsIgnoreCase(dbType)) {
             String sql = "select current_schema";
             try (PreparedStatement ps = conn.prepareStatement(sql);
-                 ResultSet rs = ps.executeQuery()) {
+                ResultSet rs = ps.executeQuery()) {
                 String schema = null;
                 if (rs.next()) {
                     schema = rs.getString(1);

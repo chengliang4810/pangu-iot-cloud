@@ -25,7 +25,7 @@ import ch.qos.logback.core.spi.LifeCycle;
 import io.seata.core.constants.ConfigurationKeys;
 
 /**
- * @author chengliang4810
+ * @author wang.liang
  */
 public class SystemPropertyLoggerContextListener extends ContextAwareBase implements LoggerContextListener, LifeCycle {
 

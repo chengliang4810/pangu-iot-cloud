@@ -1,20 +1,19 @@
-$(function () {
+$(function() {
 
     // trigger fail, end
-    if (!(triggerCode == 200 || handleCode != 0)) {
+    if ( !(triggerCode == 200 || handleCode != 0) ) {
         $('#logConsoleRunning').hide();
-        $('#logConsole').append('<span style="color: red;">' + I18n.joblog_rolling_log_triggerfail + '</span>');
+        $('#logConsole').append('<span style="color: red;">'+ I18n.joblog_rolling_log_triggerfail +'</span>');
         return;
     }
 
     // pull log
     var fromLineNum = 1;    // [from, to], start as 1
     var pullFailCount = 0;
-
     function pullLog() {
         // pullFailCount, max=20
         if (pullFailCount++ > 20) {
-            logRunStop('<span style="color: red;">' + I18n.joblog_rolling_log_failoften + '</span>');
+            logRunStop('<span style="color: red;">'+ I18n.joblog_rolling_log_failoften +'</span>');
             return;
         }
 
@@ -22,17 +21,17 @@ $(function () {
         console.log("pullLog, fromLineNum:" + fromLineNum);
 
         $.ajax({
-            type: 'POST',
+            type : 'POST',
             async: false,   // sync, make log ordered
-            url: base_url + '/joblog/logDetailCat',
-            data: {
-                "executorAddress": executorAddress,
-                "triggerTime": triggerTime,
-                "logId": logId,
-                "fromLineNum": fromLineNum
+            url : base_url + '/joblog/logDetailCat',
+            data : {
+                "executorAddress":executorAddress,
+                "triggerTime":triggerTime,
+                "logId":logId,
+                "fromLineNum":fromLineNum
             },
-            dataType: "json",
-            success: function (data) {
+            dataType : "json",
+            success : function(data){
 
                 if (data.code == 200) {
                     if (!data.content) {
@@ -43,7 +42,7 @@ $(function () {
                         console.log('pullLog fromLineNum not match');
                         return;
                     }
-                    if (fromLineNum > data.content.toLineNum) {
+                    if (fromLineNum > data.content.toLineNum ) {
                         console.log('pullLog already line-end');
 
                         // valid end
@@ -64,7 +63,7 @@ $(function () {
                     scrollTo(0, document.body.scrollHeight);        // $('#logConsolePre').scrollTop( document.body.scrollHeight + 300 );
 
                 } else {
-                    console.log('pullLog fail:' + data.msg);
+                    console.log('pullLog fail:'+data.msg);
                 }
             }
         });
@@ -83,8 +82,7 @@ $(function () {
     var logRun = setInterval(function () {
         pullLog()
     }, 3000);
-
-    function logRunStop(content) {
+    function logRunStop(content){
         $('#logConsoleRunning').hide();
         logRun = window.clearInterval(logRun);
         $('#logConsole').append(content);

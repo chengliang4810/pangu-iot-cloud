@@ -21,7 +21,7 @@ import java.util.*;
 /**
  * job group controller
  *
- * @author chengliang4810
+ * @author xuxueli 2016-10-02 20:52:56
  */
 @Controller
 @RequestMapping("/jobgroup")

@@ -23,8 +23,8 @@
     <!-- 上传提示 -->
     <div class="el-upload__tip" slot="tip" v-if="showTip">
       请上传
-      <template v-if="fileSize"> 大小不超过 <b style="color: #f56c6c">{{ fileSize }}MB</b></template>
-      <template v-if="fileType"> 格式为 <b style="color: #f56c6c">{{ fileType.join("/") }}</b></template>
+      <template v-if="fileSize"> 大小不超过 <b style="color: #f56c6c">{{ fileSize }}MB</b> </template>
+      <template v-if="fileType"> 格式为 <b style="color: #f56c6c">{{ fileType.join("/") }}</b> </template>
       的文件
     </div>
 
@@ -43,8 +43,8 @@
 </template>
 
 <script>
-import {getToken} from "@/utils/auth";
-import {delOss, listByIds} from "@/api/system/oss";
+import { getToken } from "@/utils/auth";
+import { delOss, listByIds } from "@/api/system/oss";
 
 export default {
   props: {
@@ -56,7 +56,7 @@ export default {
     },
     // 大小限制(MB)
     fileSize: {
-      type: Number,
+       type: Number,
       default: 5,
     },
     // 文件类型, 例如['png', 'jpg', 'jpeg']
@@ -100,7 +100,7 @@ export default {
           // 然后将数组转为对象数组
           this.fileList = list.map(item => {
             // 此处name使用ossId 防止删除出现重名
-            item = {name: item.ossId, url: item.url, ossId: item.ossId};
+            item = { name: item.ossId, url: item.url, ossId: item.ossId };
             return item;
           });
         } else {
@@ -157,7 +157,7 @@ export default {
     // 上传成功回调
     handleUploadSuccess(res, file) {
       if (res.code === 200) {
-        this.uploadList.push({name: res.data.fileName, url: res.data.url, ossId: res.data.ossId});
+        this.uploadList.push({ name: res.data.fileName, url: res.data.url, ossId: res.data.ossId });
         this.uploadedSuccessfully();
       } else {
         this.number--;
@@ -214,18 +214,17 @@ export default {
 <style scoped lang="scss">
 // .el-upload--picture-card 控制加号部分
 ::v-deep.hide .el-upload--picture-card {
-  display: none;
+    display: none;
 }
-
 // 去掉动画效果
 ::v-deep .el-list-enter-active,
 ::v-deep .el-list-leave-active {
-  transition: all 0s;
+    transition: all 0s;
 }
 
 ::v-deep .el-list-enter, .el-list-leave-active {
-  opacity: 0;
-  transform: translateY(0);
+    opacity: 0;
+    transform: translateY(0);
 }
 </style>
 

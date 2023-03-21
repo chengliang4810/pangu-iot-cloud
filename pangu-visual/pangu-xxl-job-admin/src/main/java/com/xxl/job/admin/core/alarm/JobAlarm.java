@@ -4,7 +4,7 @@ import com.xxl.job.admin.core.model.XxlJobInfo;
 import com.xxl.job.admin.core.model.XxlJobLog;
 
 /**
- * @author chengliang4810
+ * @author xuxueli 2020-01-19
  */
 public interface JobAlarm {
 

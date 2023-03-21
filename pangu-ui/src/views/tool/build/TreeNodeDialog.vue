@@ -71,7 +71,7 @@
   </div>
 </template>
 <script>
-import {isNumberStr} from '@/utils/index'
+import { isNumberStr } from '@/utils/index'
 
 export default {
   components: {},
@@ -120,10 +120,8 @@ export default {
       this.dataType = isNumberStr(val) ? 'number' : 'string'
     }
   },
-  created() {
-  },
-  mounted() {
-  },
+  created() {},
+  mounted() {},
   methods: {
     onOpen() {
       this.formData = {
@@ -131,8 +129,7 @@ export default {
         value: undefined
       }
     },
-    onClose() {
-    },
+    onClose() {},
     close() {
       this.$emit('update:visible', false)
     },

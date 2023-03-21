@@ -28,7 +28,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Global Session Controller
- *
  * @author: zhongxiang.wang
  */
 @RestController
@@ -40,9 +39,8 @@ public class GlobalSessionController {
 
     /**
      * Query all globalSession
-     *
      * @param param param for query globalSession
-     * @return the list of GlobalSessionVO
+     * @return  the list of GlobalSessionVO
      */
     @GetMapping("query")
     public PageResult<GlobalSessionVO> query(@ModelAttribute GlobalSessionParam param) {

@@ -38,7 +38,7 @@ app.controller('SentinelClusterAppTokenClientListController', ['$scope', '$state
                 alert('请输入有效的 Token Server IP');
                 return false;
             }
-            if (config.serverPort === undefined || config.serverPort <= 0 || config.serverPort > 65535) {
+            if (config.serverPort === undefined || config.serverPort <= 0 ||  config.serverPort > 65535) {
                 alert('请输入有效的 Token Server 端口');
                 return false;
             }

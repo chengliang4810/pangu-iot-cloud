@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>com.pangu</groupId>
+        <artifactId>pangu-iot-cloud</artifactId>
+        <version>1.0.0</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <modules>
+        <module>pangu-iot-test-driver</module>
+        <module>pangu-iot-modbus-tcp-driver</module>
+    </modules>
+
+    <artifactId>pangu-iot-driver</artifactId>
+    <packaging>pom</packaging>
+
+    <description>
+        pangu-iot-driver物联网驱动模块
+    </description>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>com.pangu</groupId>
+            <artifactId>pangu-common-sentinel</artifactId>
+        </dependency>
+
+        <!-- PanGu Common Log -->
+        <dependency>
+            <groupId>com.pangu</groupId>
+            <artifactId>pangu-common-log</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.pangu</groupId>
+            <artifactId>pangu-common-dict</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.pangu</groupId>
+            <artifactId>pangu-common-doc</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.pangu</groupId>
+            <artifactId>pangu-common-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.pangu</groupId>
+            <artifactId>pangu-common-dubbo</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.pangu</groupId>
+            <artifactId>pangu-common-seata</artifactId>
+        </dependency>
+
+
+        <dependency>
+            <groupId>com.pangu</groupId>
+            <artifactId>pangu-common-sdk</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.pangu</groupId>
+            <artifactId>pangu-common-emqx</artifactId>
+        </dependency>
+    </dependencies>
+
+</project>

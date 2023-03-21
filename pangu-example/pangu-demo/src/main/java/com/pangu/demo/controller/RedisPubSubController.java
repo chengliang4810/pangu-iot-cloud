@@ -20,7 +20,7 @@ public class RedisPubSubController {
     /**
      * 发布消息
      *
-     * @param key   通道Key
+     * @param key 通道Key
      * @param value 发送内容
      */
     @GetMapping("/pub")

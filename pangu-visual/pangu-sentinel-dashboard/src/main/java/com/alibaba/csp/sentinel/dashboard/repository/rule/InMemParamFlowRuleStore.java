@@ -23,7 +23,7 @@ import com.alibaba.csp.sentinel.slots.block.flow.param.ParamFlowClusterConfig;
 import org.springframework.stereotype.Component;
 
 /**
- * @author chengliang4810
+ * @author Eric Zhao
  * @since 0.2.1
  */
 @Component

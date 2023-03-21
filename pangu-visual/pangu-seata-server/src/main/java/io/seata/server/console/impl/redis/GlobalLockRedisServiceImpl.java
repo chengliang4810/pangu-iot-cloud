@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-
 import io.seata.common.util.CollectionUtils;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.stereotype.Component;
@@ -30,7 +29,6 @@ import io.seata.server.console.vo.GlobalLockVO;
 import io.seata.server.console.service.GlobalLockService;
 import io.seata.server.storage.redis.JedisPooledFactory;
 import redis.clients.jedis.Jedis;
-
 import static io.seata.common.Constants.ROW_LOCK_KEY_SPLIT_CHAR;
 import static io.seata.common.exception.FrameworkErrorCode.ParameterRequired;
 import static io.seata.common.util.StringUtils.isNotBlank;
@@ -41,7 +39,6 @@ import static io.seata.core.constants.RedisKeyConstants.SPLIT;
 
 /**
  * Global Lock Redis Service Impl
- *
  * @author: zhongxiang.wang
  * @author: doubleDimple
  */
@@ -59,17 +56,17 @@ public class GlobalLockRedisServiceImpl implements GlobalLockService {
         if (isNotBlank(param.getXid())) {
             globalLockVos = queryGlobalByXid(param.getXid());
             total = globalLockVos.size();
-            return PageResult.success(globalLockVos, total, param.getPageNum(), param.getPageSize());
+            return PageResult.success(globalLockVos,total,param.getPageNum(),param.getPageSize());
         } else if (isNotBlank(param.getTableName()) && isNotBlank(param.getPk()) && isNotBlank(param.getResourceId())) {
             //SEATA_ROW_LOCK_jdbc:mysql://116.62.62.26/seata-order^^^order^^^2188
             String tableName = param.getTableName();
             String pk = param.getPk();
             String resourceId = param.getResourceId();
-            globalLockVos = queryGlobalLockByRowKey(buildRowKey(tableName, pk, resourceId));
+            globalLockVos = queryGlobalLockByRowKey(buildRowKey(tableName,pk,resourceId));
             total = globalLockVos.size();
-            return PageResult.success(globalLockVos, total, param.getPageNum(), param.getPageSize());
+            return PageResult.success(globalLockVos,total,param.getPageNum(),param.getPageSize());
         } else {
-            return PageResult.failure(ParameterRequired.getErrCode(), "only three parameters of tableName,pk,resourceId or Xid are supported");
+            return PageResult.failure(ParameterRequired.getErrCode(),"only three parameters of tableName,pk,resourceId or Xid are supported");
         }
     }
 
@@ -77,7 +74,7 @@ public class GlobalLockRedisServiceImpl implements GlobalLockService {
         return readGlobalLockByRowKey(buildRowKey);
     }
 
-    private String buildRowKey(String tableName, String pk, String resourceId) {
+    private String buildRowKey(String tableName, String pk,String resourceId) {
         return DEFAULT_REDIS_SEATA_ROW_LOCK_PREFIX + resourceId + SPLIT + tableName + SPLIT + pk;
     }
 
@@ -92,10 +89,10 @@ public class GlobalLockRedisServiceImpl implements GlobalLockService {
             Map<String, String> mapGlobalKeys = jedis.hgetAll(key);
             if (CollectionUtils.isNotEmpty(mapGlobalKeys)) {
                 List<String> rowLockKeys = new ArrayList<>();
-                mapGlobalKeys.forEach((k, v) -> rowLockKeys.addAll(Arrays.asList(v.split(ROW_LOCK_KEY_SPLIT_CHAR))));
+                mapGlobalKeys.forEach((k,v) -> rowLockKeys.addAll(Arrays.asList(v.split(ROW_LOCK_KEY_SPLIT_CHAR))));
                 for (String rowLoclKey : rowLockKeys) {
                     Map<String, String> mapRowLockKey = jedis.hgetAll(rowLoclKey);
-                    GlobalLockVO vo = (GlobalLockVO) BeanUtils.mapToObject(mapRowLockKey, GlobalLockVO.class);
+                    GlobalLockVO vo = (GlobalLockVO)BeanUtils.mapToObject(mapRowLockKey, GlobalLockVO.class);
                     if (vo != null) {
                         vos.add(vo);
                     }
@@ -111,7 +108,7 @@ public class GlobalLockRedisServiceImpl implements GlobalLockService {
         List<GlobalLockVO> vos = new ArrayList<>();
         try (Jedis jedis = JedisPooledFactory.getJedisInstance()) {
             Map<String, String> map = jedis.hgetAll(key);
-            GlobalLockVO vo = (GlobalLockVO) BeanUtils.mapToObject(map, GlobalLockVO.class);
+            GlobalLockVO vo = (GlobalLockVO)BeanUtils.mapToObject(map, GlobalLockVO.class);
             if (vo != null) {
                 vos.add(vo);
             }

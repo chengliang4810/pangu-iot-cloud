@@ -24,7 +24,7 @@ import java.util.List;
 /**
  * The interface Transaction store manager.
  *
- * @author chengliang4810
+ * @author slievrly
  */
 public interface TransactionStoreManager {
 
@@ -49,7 +49,7 @@ public interface TransactionStoreManager {
     /**
      * Read session global session.
      *
-     * @param xid                the xid
+     * @param xid the xid
      * @param withBranchSessions the withBranchSessions
      * @return the global session
      */
@@ -58,7 +58,7 @@ public interface TransactionStoreManager {
     /**
      * Read session global session.
      *
-     * @param statuses           the statuses
+     * @param statuses the statuses
      * @param withBranchSessions the withBranchSessions
      * @return the global session list
      */
@@ -86,27 +86,27 @@ public interface TransactionStoreManager {
         /**
          * Global add log operation.
          */
-        GLOBAL_ADD((byte) 1),
+        GLOBAL_ADD((byte)1),
         /**
          * Global update log operation.
          */
-        GLOBAL_UPDATE((byte) 2),
+        GLOBAL_UPDATE((byte)2),
         /**
          * Global remove log operation.
          */
-        GLOBAL_REMOVE((byte) 3),
+        GLOBAL_REMOVE((byte)3),
         /**
          * Branch add log operation.
          */
-        BRANCH_ADD((byte) 4),
+        BRANCH_ADD((byte)4),
         /**
          * Branch update log operation.
          */
-        BRANCH_UPDATE((byte) 5),
+        BRANCH_UPDATE((byte)5),
         /**
          * Branch remove log operation.
          */
-        BRANCH_REMOVE((byte) 6);
+        BRANCH_REMOVE((byte)6);
 
         private byte code;
 

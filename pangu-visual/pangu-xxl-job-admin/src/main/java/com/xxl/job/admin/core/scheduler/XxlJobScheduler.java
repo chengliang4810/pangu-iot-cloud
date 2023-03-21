@@ -13,7 +13,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 /**
- * @author chengliang4810
+ * @author xuxueli 2018-10-28 00:18:17
  */
 
 public class XxlJobScheduler {

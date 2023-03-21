@@ -15,7 +15,7 @@
         pangu-common-oss oss服务
     </description>
 
-    <dependencies>
+	<dependencies>
 
         <dependency>
             <groupId>com.pangu</groupId>

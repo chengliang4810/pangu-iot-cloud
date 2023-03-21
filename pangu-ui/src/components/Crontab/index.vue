@@ -70,34 +70,34 @@
         <p class="title">时间表达式</p>
         <table>
           <thead>
-          <th v-for="item of tabTitles" width="40" :key="item">{{item}}</th>
-          <th>Cron 表达式</th>
+            <th v-for="item of tabTitles" width="40" :key="item">{{item}}</th>
+            <th>Cron 表达式</th>
           </thead>
           <tbody>
-          <td>
-            <span>{{crontabValueObj.second}}</span>
-          </td>
-          <td>
-            <span>{{crontabValueObj.min}}</span>
-          </td>
-          <td>
-            <span>{{crontabValueObj.hour}}</span>
-          </td>
-          <td>
-            <span>{{crontabValueObj.day}}</span>
-          </td>
-          <td>
-            <span>{{crontabValueObj.month}}</span>
-          </td>
-          <td>
-            <span>{{crontabValueObj.week}}</span>
-          </td>
-          <td>
-            <span>{{crontabValueObj.year}}</span>
-          </td>
-          <td>
-            <span>{{crontabValueString}}</span>
-          </td>
+            <td>
+              <span>{{crontabValueObj.second}}</span>
+            </td>
+            <td>
+              <span>{{crontabValueObj.min}}</span>
+            </td>
+            <td>
+              <span>{{crontabValueObj.hour}}</span>
+            </td>
+            <td>
+              <span>{{crontabValueObj.day}}</span>
+            </td>
+            <td>
+              <span>{{crontabValueObj.month}}</span>
+            </td>
+            <td>
+              <span>{{crontabValueObj.week}}</span>
+            </td>
+            <td>
+              <span>{{crontabValueObj.year}}</span>
+            </td>
+            <td>
+              <span>{{crontabValueString}}</span>
+            </td>
           </tbody>
         </table>
       </div>
@@ -329,7 +329,7 @@ export default {
     },
   },
   computed: {
-    crontabValueString: function () {
+    crontabValueString: function() {
       let obj = this.crontabValueObj;
       let str =
         obj.second +
@@ -363,7 +363,7 @@ export default {
       // 隐藏部分组件
     },
   },
-  mounted: function () {
+  mounted: function() {
     this.resolveExp();
   },
 };
@@ -373,7 +373,6 @@ export default {
   text-align: center;
   margin-top: 20px;
 }
-
 .popup-main {
   position: relative;
   margin: 10px auto;
@@ -382,14 +381,12 @@ export default {
   font-size: 12px;
   overflow: hidden;
 }
-
 .popup-title {
   overflow: hidden;
   line-height: 34px;
   padding-top: 6px;
   background: #f2f2f2;
 }
-
 .popup-result {
   box-sizing: border-box;
   line-height: 24px;
@@ -398,7 +395,6 @@ export default {
   border: 1px solid #ccc;
   position: relative;
 }
-
 .popup-result .title {
   position: absolute;
   top: -28px;
@@ -410,13 +406,11 @@ export default {
   line-height: 30px;
   background: #fff;
 }
-
 .popup-result table {
   text-align: center;
   width: 100%;
   margin: 0 auto;
 }
-
 .popup-result table span {
   display: block;
   width: 100%;
@@ -427,7 +421,6 @@ export default {
   overflow: hidden;
   border: 1px solid #e8e8e8;
 }
-
 .popup-result-scroll {
   font-size: 12px;
   line-height: 24px;

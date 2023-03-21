@@ -27,7 +27,7 @@ import org.slf4j.LoggerFactory;
 /**
  * The type Transaction propagation filter.
  *
- * @author chengliang4810
+ * @author sharajava
  */
 @Activate(group = {DubboConstants.PROVIDER, DubboConstants.CONSUMER}, order = 100)
 public class ApacheDubboTransactionPropagationFilter implements Filter {
@@ -74,7 +74,7 @@ public class ApacheDubboTransactionPropagationFilter implements Filter {
                 }
                 if (!rpcXid.equalsIgnoreCase(unbindXid)) {
                     LOGGER.warn("xid in change during RPC from {} to {},branchType from {} to {}", rpcXid, unbindXid,
-                        rpcBranchType != null ? rpcBranchType : "AT", previousBranchType);
+                            rpcBranchType != null ? rpcBranchType : "AT", previousBranchType);
                     if (unbindXid != null) {
                         RootContext.bind(unbindXid);
                         LOGGER.warn("bind xid [{}] back to RootContext", unbindXid);
@@ -94,7 +94,6 @@ public class ApacheDubboTransactionPropagationFilter implements Filter {
 
     /**
      * get rpc xid
-     *
      * @return
      */
     private String getRpcXid() {

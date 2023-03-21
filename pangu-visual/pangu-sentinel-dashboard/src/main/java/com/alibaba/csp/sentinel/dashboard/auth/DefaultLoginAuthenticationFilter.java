@@ -40,7 +40,7 @@ import java.util.List;
  * <p>
  * The excluded urls and urlSuffixes could be configured in {@code application.properties} file.
  *
- * @author chengliang4810
+ * @author cdfive
  * @since 1.6.0
  */
 public class DefaultLoginAuthenticationFilter implements LoginAuthenticationFilter {
@@ -77,14 +77,14 @@ public class DefaultLoginAuthenticationFilter implements LoginAuthenticationFilt
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
-        throws IOException, ServletException {
+            throws IOException, ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
 
         String servletPath = httpRequest.getServletPath();
 
         // Exclude the urls which needn't auth
         boolean authFilterExcludeMatch = authFilterExcludeUrls.stream()
-            .anyMatch(authFilterExcludeUrl -> PATH_MATCHER.match(authFilterExcludeUrl, servletPath));
+                .anyMatch(authFilterExcludeUrl -> PATH_MATCHER.match(authFilterExcludeUrl, servletPath));
         if (authFilterExcludeMatch) {
             chain.doFilter(request, response);
             return;

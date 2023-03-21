@@ -17,7 +17,7 @@ import java.time.LocalTime;
 /**
  * 测试分布式锁的样例
  *
- * @author chengliang4810
+ * @author shenxinquan
  */
 @Slf4j
 @RestController

@@ -47,8 +47,7 @@
           size="mini"
           @click="handleAdd"
           v-hasPermi="['demo:demo:add']"
-        >新增
-        </el-button>
+        >新增</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -59,8 +58,7 @@
           :disabled="single"
           @click="handleUpdate"
           v-hasPermi="['demo:demo:edit']"
-        >修改
-        </el-button>
+        >修改</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -71,8 +69,7 @@
           :disabled="multiple"
           @click="handleDelete"
           v-hasPermi="['demo:demo:remove']"
-        >删除
-        </el-button>
+        >删除</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -82,8 +79,7 @@
           size="mini"
           @click="handleImport"
           v-hasPermi="['demo:demo:import']"
-        >导入(校验)
-        </el-button>
+        >导入(校验)</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -93,32 +89,31 @@
           size="mini"
           @click="handleExport"
           v-hasPermi="['demo:demo:export']"
-        >导出
-        </el-button>
+        >导出</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
     <el-table v-loading="loading" :data="demoList" @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="55" align="center"/>
+      <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="主键" align="center" prop="id" v-if="false"/>
-      <el-table-column label="部门id" align="center" prop="deptId"/>
-      <el-table-column label="用户id" align="center" prop="userId"/>
-      <el-table-column label="排序号" align="center" prop="orderNum"/>
-      <el-table-column label="key键" align="center" prop="testKey"/>
-      <el-table-column label="值" align="center" prop="value"/>
+      <el-table-column label="部门id" align="center" prop="deptId" />
+      <el-table-column label="用户id" align="center" prop="userId" />
+      <el-table-column label="排序号" align="center" prop="orderNum" />
+      <el-table-column label="key键" align="center" prop="testKey" />
+      <el-table-column label="值" align="center" prop="value" />
       <el-table-column label="创建时间" align="center" prop="createTime" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="创建人" align="center" prop="createBy"/>
+      <el-table-column label="创建人" align="center" prop="createBy" />
       <el-table-column label="更新时间" align="center" prop="updateTime" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.updateTime, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="更新人" align="center" prop="updateBy"/>
+      <el-table-column label="更新人" align="center" prop="updateBy" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -127,16 +122,14 @@
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
             v-hasPermi="['demo:demo:edit']"
-          >修改
-          </el-button>
+          >修改</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
             v-hasPermi="['demo:demo:remove']"
-          >删除
-          </el-button>
+          >删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -153,19 +146,19 @@
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="部门id" prop="deptId">
-          <el-input v-model="form.deptId" placeholder="请输入部门id"/>
+          <el-input v-model="form.deptId" placeholder="请输入部门id" />
         </el-form-item>
         <el-form-item label="用户id" prop="userId">
-          <el-input v-model="form.userId" placeholder="请输入用户id"/>
+          <el-input v-model="form.userId" placeholder="请输入用户id" />
         </el-form-item>
         <el-form-item label="排序号" prop="orderNum">
-          <el-input v-model="form.orderNum" placeholder="请输入排序号"/>
+          <el-input v-model="form.orderNum" placeholder="请输入排序号" />
         </el-form-item>
         <el-form-item label="key键" prop="testKey">
-          <el-input v-model="form.testKey" placeholder="请输入key键"/>
+          <el-input v-model="form.testKey" placeholder="请输入key键" />
         </el-form-item>
         <el-form-item label="值" prop="value">
-          <el-input v-model="form.value" placeholder="请输入值"/>
+          <el-input v-model="form.value" placeholder="请输入值" />
         </el-form-item>
         <el-form-item label="创建时间" prop="createTime">
           <el-date-picker clearable size="small"
@@ -207,12 +200,13 @@
 </template>
 
 <script>
-import {listDemo, pageDemo, getDemo, delDemo, addDemo, updateDemo} from "@/api/demo/demo";
+import { listDemo, pageDemo, getDemo, delDemo, addDemo, updateDemo } from "@/api/demo/demo";
 import {getToken} from "@/utils/auth";
 
 export default {
   name: "Demo",
-  components: {},
+  components: {
+  },
   data() {
     return {
       //按钮loading
@@ -246,7 +240,7 @@ export default {
         // 是否禁用上传
         isUploading: false,
         // 设置上传的请求头部
-        headers: {Authorization: "Bearer " + getToken()},
+        headers: { Authorization: "Bearer " + getToken() },
         // 上传的地址
         url: process.env.VUE_APP_BASE_API + "/demo/demo/importData"
       },
@@ -263,10 +257,10 @@ export default {
       // 表单校验
       rules: {
         testKey: [
-          {required: true, message: "key键不能为空", trigger: "blur"}
+          { required: true, message: "key键不能为空", trigger: "blur" }
         ],
         value: [
-          {required: true, message: "值不能为空", trigger: "blur"}
+          { required: true, message: "值不能为空", trigger: "blur" }
         ],
       }
     };
@@ -284,8 +278,8 @@ export default {
         this.queryParams.params["endCreateTime"] = this.daterangeCreateTime[1];
       }
       listDemo(this.queryParams).then(response => {
-        this.demoList = response.rows;
-        this.total = response.total;
+        this.demoList = response.data.rows;
+        this.total = response.data.total;
         this.loading = false;
       });
     },
@@ -298,8 +292,8 @@ export default {
         this.queryParams.params["endCreateTime"] = this.daterangeCreateTime[1];
       }
       pageDemo(this.queryParams).then(response => {
-        this.demoList = response.rows;
-        this.total = response.total;
+        this.demoList = response.data.rows;
+        this.total = response.data.total;
         this.loading = false;
       });
     },
@@ -345,7 +339,7 @@ export default {
     // 多选框选中数据
     handleSelectionChange(selection) {
       this.ids = selection.map(item => item.id)
-      this.single = selection.length !== 1
+      this.single = selection.length!==1
       this.multiple = !selection.length
     },
     /** 新增按钮操作 */
@@ -425,7 +419,7 @@ export default {
       this.upload.open = false;
       this.upload.isUploading = false;
       this.$refs.upload.clearFiles();
-      this.$alert(response.msg, "导入结果", {dangerouslyUseHTMLString: true});
+      this.$alert(response.msg, "导入结果", { dangerouslyUseHTMLString: true });
       this.getList();
     },
     // 提交上传文件

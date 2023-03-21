@@ -199,13 +199,6 @@ public class GenTableServiceImpl implements IGenTableService {
     }
 
     /**
-     *
-     */
-    private void test() {
-
-    }
-
-    /**
      * 导入表结构
      *
      * @param tableList 导入表列表

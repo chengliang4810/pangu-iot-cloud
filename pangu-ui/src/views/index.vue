@@ -63,16 +63,14 @@
             icon="el-icon-cloudy"
             plain
             @click="goTarget('https://gitee.com/JavaLionLi/PanGu-Cloud-Plus')"
-          >访问码云
-          </el-button
+            >访问码云</el-button
           >
           <el-button
             size="mini"
             icon="el-icon-s-home"
             plain
             @click="goTarget('https://github.com/JavaLionLi/PanGu-Cloud-Plus')"
-          >访问主页
-          </el-button
+            >访问主页</el-button
           >
           <el-button
             type="primary"
@@ -80,8 +78,7 @@
             icon="el-icon-cloudy"
             plain
             @click="goTarget('https://gitee.com/JavaLionLi/PanGu-Cloud-Plus/wikis/pages?sort_id=5303316&doc_id=2056143')"
-          >更新日志
-          </el-button
+          >更新日志</el-button
           >
         </p>
       </el-col>
@@ -120,7 +117,7 @@
         </el-row>
       </el-col>
     </el-row>
-    <el-divider/>
+    <el-divider />
     <el-row :gutter="20">
       <el-col :xs="24" :sm="24" :md="12" :lg="8">
         <el-card class="update-log">
@@ -129,12 +126,10 @@
           </div>
           <div class="body">
             <p>
-              <i class="el-icon-s-promotion"></i> 官网：
-              <el-link
+              <i class="el-icon-s-promotion"></i> 官网：<el-link
                 href="https://gitee.com/JavaLionLi/PanGu-Cloud-Plus"
                 target="_blank"
-              >https://gitee.com/JavaLionLi/PanGu-Cloud-Plus
-              </el-link
+                >https://gitee.com/JavaLionLi/PanGu-Cloud-Plus</el-link
               >
             </p>
           </div>
@@ -169,14 +164,12 @@ export default {
     font-size: 17.5px;
     border-left: 5px solid #eee;
   }
-
   hr {
     margin-top: 20px;
     margin-bottom: 20px;
     border: 0;
     border-top: 1px solid #eee;
   }
-
   .col-item {
     margin-bottom: 20px;
   }

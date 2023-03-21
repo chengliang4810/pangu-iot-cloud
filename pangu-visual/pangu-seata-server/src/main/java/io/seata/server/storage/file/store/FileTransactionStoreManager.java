@@ -55,7 +55,7 @@ import static io.seata.core.context.RootContext.MDC_KEY_BRANCH_ID;
 /**
  * The type File transaction store manager.
  *
- * @author chengliang4810
+ * @author slievrly
  */
 public class FileTransactionStoreManager extends AbstractTransactionStoreManager
     implements TransactionStoreManager, ReloadableStore {
@@ -598,11 +598,11 @@ public class FileTransactionStoreManager extends AbstractTransactionStoreManager
                 flushOnCondition(currFileChannel);
             }
             if (storeRequest instanceof SyncFlushRequest) {
-                syncFlush((SyncFlushRequest) storeRequest);
+                syncFlush((SyncFlushRequest)storeRequest);
             } else if (storeRequest instanceof AsyncFlushRequest) {
-                async((AsyncFlushRequest) storeRequest);
+                async((AsyncFlushRequest)storeRequest);
             } else if (storeRequest instanceof CloseFileRequest) {
-                closeAndFlush((CloseFileRequest) storeRequest);
+                closeAndFlush((CloseFileRequest)storeRequest);
             }
         }
 

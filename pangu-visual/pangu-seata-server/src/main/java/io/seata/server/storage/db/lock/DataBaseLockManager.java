@@ -16,7 +16,6 @@
 package io.seata.server.storage.db.lock;
 
 import javax.sql.DataSource;
-
 import io.seata.common.executor.Initialize;
 import io.seata.common.loader.EnhancedServiceLoader;
 import io.seata.common.loader.LoadLevel;
@@ -32,7 +31,7 @@ import io.seata.server.session.GlobalSession;
 /**
  * The type db lock manager.
  *
- * @author chengliang4810
+ * @author zjinlei
  */
 @LoadLevel(name = "db")
 public class DataBaseLockManager extends AbstractLockManager implements Initialize {

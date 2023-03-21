@@ -32,24 +32,24 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * Health Controller.
  *
- * @author chengliang4810
+ * @author <a href="mailto:huangxiaoyu1018@gmail.com">hxy1991</a>
  */
 @RestController("consoleHealth")
 @RequestMapping("/v1/console/health")
 public class HealthController {
-
+    
     private static final Logger LOGGER = LoggerFactory.getLogger(HealthController.class);
-
+    
     private final PersistService persistService;
-
+    
     private final OperatorController apiCommands;
-
+    
     @Autowired
     public HealthController(PersistService persistService, OperatorController apiCommands) {
         this.persistService = persistService;
         this.apiCommands = apiCommands;
     }
-
+    
     /**
      * Whether the Nacos is in broken states or not, and cannot recover except by being restarted.
      *
@@ -60,7 +60,7 @@ public class HealthController {
     public ResponseEntity<String> liveness() {
         return ResponseEntity.ok().body("OK");
     }
-
+    
     /**
      * Ready to receive the request or not.
      *
@@ -71,22 +71,22 @@ public class HealthController {
     public ResponseEntity<String> readiness(HttpServletRequest request) {
         boolean isConfigReadiness = isConfigReadiness();
         boolean isNamingReadiness = isNamingReadiness(request);
-
+        
         if (isConfigReadiness && isNamingReadiness) {
             return ResponseEntity.ok().body("OK");
         }
-
+        
         if (!isConfigReadiness && !isNamingReadiness) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Config and Naming are not in readiness");
         }
-
+        
         if (!isConfigReadiness) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Config is not in readiness");
         }
-
+        
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Naming is not in readiness");
     }
-
+    
     private boolean isConfigReadiness() {
         // check db
         try {
@@ -97,7 +97,7 @@ public class HealthController {
         }
         return false;
     }
-
+    
     private boolean isNamingReadiness(HttpServletRequest request) {
         try {
             apiCommands.metrics(request);

@@ -11,7 +11,9 @@
     <modules>
         <module>pangu-api-bom</module>
         <module>pangu-api-system</module>
+        <module>pangu-api-data</module>
         <module>pangu-api-resource</module>
+        <module>pangu-api-manager</module>
     </modules>
 
     <artifactId>pangu-api</artifactId>

@@ -22,7 +22,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Objects;
 import javax.sql.DataSource;
-
 import io.seata.common.exception.ShouldNeverHappenException;
 import io.seata.common.loader.EnhancedServiceLoader;
 import io.seata.common.loader.LoadLevel;
@@ -46,7 +45,7 @@ import org.slf4j.LoggerFactory;
 import static io.seata.core.constants.ConfigurationKeys.DISTRIBUTED_LOCK_DB_TABLE;
 
 /**
- * @author chengliang4810
+ * @author chd
  */
 @LoadLevel(name = "db", scope = Scope.SINGLETON)
 public class DataBaseDistributedLocker implements DistributedLocker {
@@ -122,7 +121,7 @@ public class DataBaseDistributedLocker implements DistributedLocker {
 
             if (distributedLockDOFromDB.getExpireTime() >= System.currentTimeMillis()) {
                 LOGGER.debug("the distribute lock for key :{} is holding by :{}, acquire lock failure.",
-                    distributedLockDO.getLockKey(), distributedLockDOFromDB.getLockValue());
+                        distributedLockDO.getLockKey(), distributedLockDOFromDB.getLockValue());
                 connection.commit();
                 return false;
             }
@@ -147,8 +146,7 @@ public class DataBaseDistributedLocker implements DistributedLocker {
                     connection.setAutoCommit(true);
                 }
                 IOUtil.close(connection);
-            } catch (SQLException ignore) {
-            }
+            } catch (SQLException ignore) { }
         }
     }
 
@@ -171,9 +169,9 @@ public class DataBaseDistributedLocker implements DistributedLocker {
             }
 
             if (distributedLockDOFromDB.getExpireTime() >= System.currentTimeMillis()
-                && !Objects.equals(distributedLockDOFromDB.getLockValue(), distributedLockDO.getLockValue())) {
+                    && !Objects.equals(distributedLockDOFromDB.getLockValue(), distributedLockDO.getLockValue())) {
                 LOGGER.debug("the distribute lock for key :{} is holding by :{}, skip the release lock.",
-                    distributedLockDO.getLockKey(), distributedLockDOFromDB.getLockValue());
+                        distributedLockDO.getLockKey(), distributedLockDOFromDB.getLockValue());
                 connection.commit();
                 return true;
             }
@@ -201,14 +199,13 @@ public class DataBaseDistributedLocker implements DistributedLocker {
                     connection.setAutoCommit(true);
                 }
                 IOUtil.close(connection);
-            } catch (SQLException ignore) {
-            }
+            } catch (SQLException ignore) { }
         }
     }
 
     protected DistributedLockDO getDistributedLockDO(Connection connection, String key) throws SQLException {
         try (PreparedStatement pst = connection.prepareStatement(DistributedLockSqlFactory.getDistributedLogStoreSql(dbType)
-            .getSelectDistributeForUpdateSql(distributedLockTable))) {
+                .getSelectDistributeForUpdateSql(distributedLockTable))) {
 
             pst.setString(1, key);
             ResultSet resultSet = pst.executeQuery();
@@ -226,7 +223,7 @@ public class DataBaseDistributedLocker implements DistributedLocker {
 
     protected boolean insertDistribute(Connection connection, DistributedLockDO distributedLockDO) throws SQLException {
         try (PreparedStatement insertPst = connection.prepareStatement(DistributedLockSqlFactory.getDistributedLogStoreSql(dbType)
-            .getInsertSql(distributedLockTable))) {
+                .getInsertSql(distributedLockTable))) {
             insertPst.setString(1, distributedLockDO.getLockKey());
             insertPst.setString(2, distributedLockDO.getLockValue());
             if (distributedLockDO.getExpireTime() > 0) {
@@ -239,7 +236,7 @@ public class DataBaseDistributedLocker implements DistributedLocker {
 
     protected boolean updateDistributedLock(Connection connection, DistributedLockDO distributedLockDO) throws SQLException {
         try (PreparedStatement updatePst = connection.prepareStatement(DistributedLockSqlFactory.getDistributedLogStoreSql(dbType)
-            .getUpdateSql(distributedLockTable))) {
+                .getUpdateSql(distributedLockTable))) {
             updatePst.setString(1, distributedLockDO.getLockValue());
             if (distributedLockDO.getExpireTime() > 0) {
                 distributedLockDO.setExpireTime(distributedLockDO.getExpireTime() + System.currentTimeMillis());

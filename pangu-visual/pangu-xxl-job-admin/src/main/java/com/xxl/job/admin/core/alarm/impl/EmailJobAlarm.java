@@ -21,7 +21,7 @@ import java.util.Set;
 /**
  * job alarm by email
  *
- * @author chengliang4810
+ * @author xuxueli 2020-01-19
  */
 @Component
 public class EmailJobAlarm implements JobAlarm {

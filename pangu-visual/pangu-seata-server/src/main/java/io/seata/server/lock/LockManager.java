@@ -26,7 +26,7 @@ import io.seata.server.session.GlobalSession;
 /**
  * The interface Lock manager.
  *
- * @author chengliang4810
+ * @author sharajava
  */
 public interface LockManager {
 
@@ -43,7 +43,7 @@ public interface LockManager {
      * Acquire lock boolean.
      *
      * @param branchSession the branch session
-     * @param autoCommit    the auto commit
+     * @param autoCommit the auto commit
      * @param skipCheckLock whether skip check lock or not
      * @return the boolean
      * @throws TransactionException the transaction exception
@@ -96,10 +96,10 @@ public interface LockManager {
 
     /**
      * update lock status.
-     *
-     * @param xid        the xid
+     * @param xid the xid
      * @param lockStatus the lock status
      * @throws TransactionException the transaction exception
+     *
      */
     void updateLockStatus(String xid, LockStatus lockStatus) throws TransactionException;
 

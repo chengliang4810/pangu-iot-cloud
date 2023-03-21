@@ -12,10 +12,16 @@
     <artifactId>pangu-iot-data</artifactId>
 
     <description>
-        pangu-iot-data数据服务
+        pangu-iot-data管理模块
     </description>
 
     <dependencies>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
 
         <!-- SpringCloud Alibaba Nacos -->
         <dependency>
@@ -40,9 +46,30 @@
             <artifactId>pangu-common-sentinel</artifactId>
         </dependency>
 
+        <!-- PanGu Common Log -->
+        <dependency>
+            <groupId>com.pangu</groupId>
+            <artifactId>pangu-common-log</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.pangu</groupId>
+            <artifactId>pangu-common-dict</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>com.pangu</groupId>
             <artifactId>pangu-common-doc</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.pangu</groupId>
+            <artifactId>pangu-common-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.pangu</groupId>
+            <artifactId>pangu-common-mybatis</artifactId>
         </dependency>
 
         <dependency>
@@ -57,54 +84,27 @@
 
         <dependency>
             <groupId>com.pangu</groupId>
-            <artifactId>pangu-common-web</artifactId>
+            <artifactId>pangu-common-tdengine</artifactId>
         </dependency>
 
         <dependency>
             <groupId>com.pangu</groupId>
-            <artifactId>pangu-common-log</artifactId>
+            <artifactId>pangu-common-zabbix</artifactId>
         </dependency>
 
         <dependency>
             <groupId>com.pangu</groupId>
-            <artifactId>pangu-common-oss</artifactId>
+            <artifactId>pangu-common-emqx</artifactId>
         </dependency>
 
         <dependency>
             <groupId>com.pangu</groupId>
-            <artifactId>pangu-common-mail</artifactId>
+            <artifactId>pangu-api-data</artifactId>
         </dependency>
 
         <dependency>
             <groupId>com.pangu</groupId>
-            <artifactId>pangu-common-sms</artifactId>
-        </dependency>
-
-        <!-- 短信 用哪个导入哪个依赖 -->
-        <!--        <dependency>-->
-        <!--            <groupId>com.aliyun</groupId>-->
-        <!--            <artifactId>dysmsapi20170525</artifactId>-->
-        <!--        </dependency>-->
-
-        <!--        <dependency>-->
-        <!--            <groupId>com.tencentcloudapi</groupId>-->
-        <!--            <artifactId>tencentcloud-sdk-java-sms</artifactId>-->
-        <!--        </dependency>-->
-
-        <dependency>
-            <groupId>com.pangu</groupId>
-            <artifactId>pangu-common-mybatis</artifactId>
-        </dependency>
-
-        <!-- PanGu Api System -->
-        <dependency>
-            <groupId>com.pangu</groupId>
-            <artifactId>pangu-api-system</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.pangu</groupId>
-            <artifactId>pangu-api-resource</artifactId>
+            <artifactId>pangu-api-manager</artifactId>
         </dependency>
 
     </dependencies>

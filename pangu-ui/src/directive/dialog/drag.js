@@ -1,7 +1,7 @@
 /**
- * v-dialogDrag 弹窗拖拽
- * Copyright (c) 2019 pangu
- */
+* v-dialogDrag 弹窗拖拽
+* Copyright (c) 2019 ruoyi
+*/
 
 export default {
   bind(el, binding, vnode, oldVnode) {
@@ -38,8 +38,7 @@ export default {
       } else {
         styL = +sty.left.replace(/\px/g, '');
         styT = +sty.top.replace(/\px/g, '');
-      }
-      ;
+      };
 
       // 鼠标拖拽事件
       document.onmousemove = function (e) {

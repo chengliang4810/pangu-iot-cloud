@@ -3,12 +3,9 @@
         <span style="font-size: 30px;font-weight: bold;">{{app}}</span>
     </div>
     <div class="col-md-6">
-        <button class="btn btn-default-inverse" style="float: right; margin-right: 10px;" ng-if="!loadError"
-                ng-click="newServerDialog()">
-            <i class="fa fa-plus"></i>&nbsp;&nbsp;新增 Token Server
-        </button>
-        <a class="btn btn-default-inverse" style="float: right; margin-right: 10px;"
-           ui-sref="dashboard.clusterAppClientList({app: app})">
+        <button class="btn btn-default-inverse" style="float: right; margin-right: 10px;" ng-if="!loadError" ng-click="newServerDialog()">
+            <i class="fa fa-plus"></i>&nbsp;&nbsp;新增 Token Server</button>
+        <a class="btn btn-default-inverse" style="float: right; margin-right: 10px;" ui-sref="dashboard.clusterAppClientList({app: app})">
             Token Client 列表
         </a>
     </div>
@@ -77,18 +74,12 @@
                                 <span ng-if="!serverVO.belongToApp">未知</span>
                             </td>
                             <td>
+                                <button class="btn btn-xs btn-outline-primary" type="button" ng-if="serverVO.belongToApp"
+                                        ng-click="viewConnectionDetail(serverVO)" style="font-size: 12px; height:25px;">连接详情</button>
                                 <button class="btn btn-xs btn-outline-primary" type="button"
-                                        ng-if="serverVO.belongToApp"
-                                        ng-click="viewConnectionDetail(serverVO)" style="font-size: 12px; height:25px;">
-                                    连接详情
-                                </button>
-                                <button class="btn btn-xs btn-outline-primary" type="button"
-                                        ng-click="modifyServerAssignConfig(serverVO)"
-                                        style="font-size: 12px; height:25px;">管理
-                                </button>
+                                        ng-click="modifyServerAssignConfig(serverVO)" style="font-size: 12px; height:25px;">管理</button>
                                 <button class="btn btn-xs btn-outline-danger" type="button"
-                                        ng-click="unbindServer(serverVO.id)" style="font-size: 12px; height:25px;">移除
-                                </button>
+                                        ng-click="unbindServer(serverVO.id)" style="font-size: 12px; height:25px;">移除</button>
                             </td>
                         </tr>
                         </tbody>

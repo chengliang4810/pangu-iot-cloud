@@ -29,7 +29,7 @@ import java.util.Set;
 /**
  * Entity for {@link ApiDefinition}.
  *
- * @author chengliang4810
+ * @author cdfive
  * @since 1.7.0
  */
 public class ApiDefinitionEntity implements RuleEntity {
@@ -174,21 +174,17 @@ public class ApiDefinitionEntity implements RuleEntity {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
+        if (this == o) { return true; }
+        if (o == null || getClass() != o.getClass()) { return false; }
         ApiDefinitionEntity entity = (ApiDefinitionEntity) o;
         return Objects.equals(id, entity.id) &&
-            Objects.equals(app, entity.app) &&
-            Objects.equals(ip, entity.ip) &&
-            Objects.equals(port, entity.port) &&
-            Objects.equals(gmtCreate, entity.gmtCreate) &&
-            Objects.equals(gmtModified, entity.gmtModified) &&
-            Objects.equals(apiName, entity.apiName) &&
-            Objects.equals(predicateItems, entity.predicateItems);
+                Objects.equals(app, entity.app) &&
+                Objects.equals(ip, entity.ip) &&
+                Objects.equals(port, entity.port) &&
+                Objects.equals(gmtCreate, entity.gmtCreate) &&
+                Objects.equals(gmtModified, entity.gmtModified) &&
+                Objects.equals(apiName, entity.apiName) &&
+                Objects.equals(predicateItems, entity.predicateItems);
     }
 
     @Override
@@ -199,14 +195,14 @@ public class ApiDefinitionEntity implements RuleEntity {
     @Override
     public String toString() {
         return "ApiDefinitionEntity{" +
-            "id=" + id +
-            ", app='" + app + '\'' +
-            ", ip='" + ip + '\'' +
-            ", port=" + port +
-            ", gmtCreate=" + gmtCreate +
-            ", gmtModified=" + gmtModified +
-            ", apiName='" + apiName + '\'' +
-            ", predicateItems=" + predicateItems +
-            '}';
+                "id=" + id +
+                ", app='" + app + '\'' +
+                ", ip='" + ip + '\'' +
+                ", port=" + port +
+                ", gmtCreate=" + gmtCreate +
+                ", gmtModified=" + gmtModified +
+                ", apiName='" + apiName + '\'' +
+                ", predicateItems=" + predicateItems +
+                '}';
     }
 }

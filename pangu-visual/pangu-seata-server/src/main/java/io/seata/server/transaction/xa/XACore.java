@@ -24,7 +24,7 @@ import io.seata.server.coordinator.AbstractCore;
 /**
  * The type XA core.
  *
- * @author chengliang4810
+ * @author sharajava
  */
 public class XACore extends AbstractCore {
 

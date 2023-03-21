@@ -14,7 +14,7 @@
 import InnerLink from "../InnerLink/index"
 
 export default {
-  components: {InnerLink},
+  components: { InnerLink },
   computed: {
     iframeViews() {
       return this.$store.state.tagsView.iframeViews

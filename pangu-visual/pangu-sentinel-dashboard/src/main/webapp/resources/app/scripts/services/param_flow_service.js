@@ -1,44 +1,44 @@
 /**
  * Parameter flow control service.
- *
- * @author chengliang4810
+ * 
+ * @author Eric Zhao
  */
 angular.module('sentinelDashboardApp').service('ParamFlowService', ['$http', function ($http) {
-    this.queryMachineRules = function (app, ip, port) {
-        var param = {
-            app: app,
-            ip: ip,
-            port: port
-        };
-        return $http({
-            url: '/paramFlow/rules',
-            params: param,
-            method: 'GET'
-        });
+  this.queryMachineRules = function(app, ip, port) {
+    var param = {
+      app: app,
+      ip: ip,
+      port: port
     };
+    return $http({
+      url: '/paramFlow/rules',
+      params: param,
+      method: 'GET'
+    });
+  };
 
-    this.addNewRule = function (rule) {
-        return $http({
-            url: '/paramFlow/rule',
-            data: rule,
-            method: 'POST'
-        });
-    };
+  this.addNewRule = function(rule) {
+    return $http({
+      url: '/paramFlow/rule',
+      data: rule,
+      method: 'POST'
+    });
+  };
 
-    this.saveRule = function (entity) {
-        return $http({
-            url: '/paramFlow/rule/' + entity.id,
-            data: entity,
-            method: 'PUT'
-        });
-    };
+  this.saveRule = function (entity) {
+    return $http({
+      url: '/paramFlow/rule/' + entity.id,
+      data: entity,
+      method: 'PUT'
+    });
+  };
 
-    this.deleteRule = function (entity) {
-        return $http({
-            url: '/paramFlow/rule/' + entity.id,
-            method: 'DELETE'
-        });
-    };
+  this.deleteRule = function (entity) {
+    return $http({
+      url: '/paramFlow/rule/' + entity.id,
+      method: 'DELETE'
+    });
+  };
 
     function isNumberClass(classType) {
         return classType === 'int' || classType === 'double' ||
@@ -57,7 +57,7 @@ angular.module('sentinelDashboardApp').service('ParamFlowService', ['$http', fun
         return num === undefined || num === '' || isNaN(num);
     }
 
-    function notGoodNumberBetweenExclusive(num, l, r) {
+    function notGoodNumberBetweenExclusive(num, l ,r) {
         return num === undefined || num === '' || isNaN(num) || num < l || num > r;
     }
 
@@ -72,33 +72,33 @@ angular.module('sentinelDashboardApp').service('ParamFlowService', ['$http', fun
             notNumberAtLeastZero(curExItem.count);
     }
 
-    this.checkRuleValid = function (rule) {
-        if (!rule.resource || rule.resource === '') {
-            alert('资源名称不能为空');
-            return false;
-        }
-        if (rule.grade != 1) {
-            alert('未知的限流模式');
-            return false;
-        }
-        if (rule.count < 0) {
-            alert('限流阈值必须大于等于 0');
-            return false;
-        }
-        if (rule.paramIdx === undefined || rule.paramIdx === '' || isNaN(rule.paramIdx) || rule.paramIdx < 0) {
-            alert('热点参数索引必须大于等于 0');
-            return false;
-        }
-        if (rule.paramFlowItemList !== undefined) {
-            for (var i = 0; i < rule.paramFlowItemList.length; i++) {
-                var item = rule.paramFlowItemList[i];
-                if (notValidParamItem(item)) {
-                    alert('热点参数例外项不合法，请检查值和类型是否正确：参数为 ' + item.object + ', 类型为 ' +
-                        item.classType + ', 限流阈值为 ' + item.count);
-                    return false;
-                }
-            }
-        }
-        return true;
-    };
+  this.checkRuleValid = function (rule) {
+      if (!rule.resource || rule.resource === '') {
+          alert('资源名称不能为空');
+          return false;
+      }
+      if (rule.grade != 1) {
+          alert('未知的限流模式');
+          return false;
+      }
+      if (rule.count < 0) {
+          alert('限流阈值必须大于等于 0');
+          return false;
+      }
+      if (rule.paramIdx === undefined || rule.paramIdx === '' || isNaN(rule.paramIdx) || rule.paramIdx < 0) {
+          alert('热点参数索引必须大于等于 0');
+          return false;
+      }
+      if (rule.paramFlowItemList !== undefined) {
+          for (var i = 0; i < rule.paramFlowItemList.length; i++) {
+              var item = rule.paramFlowItemList[i];
+              if (notValidParamItem(item)) {
+                  alert('热点参数例外项不合法，请检查值和类型是否正确：参数为 ' + item.object + ', 类型为 ' +
+                      item.classType + ', 限流阈值为 ' + item.count);
+                  return false;
+              }
+          }
+      }
+      return true;
+  };
 }]);

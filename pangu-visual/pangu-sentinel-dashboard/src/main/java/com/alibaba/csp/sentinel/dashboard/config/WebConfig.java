@@ -40,7 +40,7 @@ import javax.annotation.PostConstruct;
 import javax.servlet.Filter;
 
 /**
- * @author chengliang4810
+ * @author leyou
  */
 @Configuration
 public class WebConfig implements WebMvcConfigurer {

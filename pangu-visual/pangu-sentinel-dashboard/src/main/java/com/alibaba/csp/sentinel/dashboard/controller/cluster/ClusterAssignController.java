@@ -35,7 +35,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * @author chengliang4810
+ * @author Eric Zhao
  * @since 1.4.1
  */
 @RestController
@@ -50,7 +50,7 @@ public class ClusterAssignController {
     @PostMapping("/all_server/{app}")
     public Result<ClusterAppAssignResultVO> apiAssignAllClusterServersOfApp(@PathVariable String app,
                                                                             @RequestBody
-                                                                            ClusterAppFullAssignRequest assignRequest) {
+                                                                                ClusterAppFullAssignRequest assignRequest) {
         if (StringUtil.isEmpty(app)) {
             return Result.ofFail(-1, "app cannot be null or empty");
         }

@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * 权限拦截
  *
- * @author chengliang4810
+ * @author xuxueli 2015-12-12 18:09:04
  */
 @Component
 public class PermissionInterceptor implements AsyncHandlerInterceptor {

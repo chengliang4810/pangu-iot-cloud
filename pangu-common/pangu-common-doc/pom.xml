@@ -15,7 +15,7 @@
         pangu-common-swagger系统接口
     </description>
 
-    <dependencies>
+	<dependencies>
 
         <!-- SpringBoot core -->
         <dependency>

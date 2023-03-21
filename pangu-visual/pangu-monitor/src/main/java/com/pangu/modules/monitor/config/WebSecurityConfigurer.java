@@ -27,22 +27,22 @@ public class WebSecurityConfigurer {
         successHandler.setDefaultTargetUrl(adminContextPath + "/");
 
         return httpSecurity
-            .headers().frameOptions().disable()
-            .and().authorizeRequests()
-            .antMatchers(adminContextPath + "/assets/**"
-                , adminContextPath + "/login"
-                , adminContextPath + "/actuator/**"
-                , adminContextPath + "/instances/**"
-            ).permitAll()
-            .anyRequest().authenticated()
-            .and()
-            .formLogin().loginPage(adminContextPath + "/login")
-            .successHandler(successHandler).and()
-            .logout().logoutUrl(adminContextPath + "/logout")
-            .and()
-            .httpBasic().and()
-            .csrf()
-            .disable()
-            .build();
+                .headers().frameOptions().disable()
+                .and().authorizeRequests()
+                .antMatchers(adminContextPath + "/assets/**"
+                        , adminContextPath + "/login"
+                        , adminContextPath + "/actuator/**"
+                        , adminContextPath + "/instances/**"
+                ).permitAll()
+                .anyRequest().authenticated()
+                .and()
+                .formLogin().loginPage(adminContextPath + "/login")
+                .successHandler(successHandler).and()
+                .logout().logoutUrl(adminContextPath + "/logout")
+                .and()
+                .httpBasic().and()
+                .csrf()
+                .disable()
+                .build();
     }
 }

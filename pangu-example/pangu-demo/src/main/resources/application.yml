@@ -53,7 +53,7 @@ easy-es:
   # 是否开启EE自动配置
   enable: false
   # es连接地址+端口 格式必须为ip:port,如果是集群则可用逗号隔开
-  address: localhost:9200
+  address : localhost:9200
   # 默认为http
   schema: http
   # 注意ES建议使用账号认证 不使用会报警告日志

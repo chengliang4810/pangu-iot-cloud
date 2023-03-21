@@ -22,7 +22,7 @@ import java.util.Objects;
 /**
  * Entity for {@link GatewayParamFlowItem}.
  *
- * @author chengliang4810
+ * @author cdfive
  * @since 1.7.0
  */
 public class GatewayParamFlowItemEntity {
@@ -69,17 +69,13 @@ public class GatewayParamFlowItemEntity {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
+        if (this == o) { return true; }
+        if (o == null || getClass() != o.getClass()) { return false; }
         GatewayParamFlowItemEntity that = (GatewayParamFlowItemEntity) o;
         return Objects.equals(parseStrategy, that.parseStrategy) &&
-            Objects.equals(fieldName, that.fieldName) &&
-            Objects.equals(pattern, that.pattern) &&
-            Objects.equals(matchStrategy, that.matchStrategy);
+                Objects.equals(fieldName, that.fieldName) &&
+                Objects.equals(pattern, that.pattern) &&
+                Objects.equals(matchStrategy, that.matchStrategy);
     }
 
     @Override
@@ -90,10 +86,10 @@ public class GatewayParamFlowItemEntity {
     @Override
     public String toString() {
         return "GatewayParamFlowItemEntity{" +
-            "parseStrategy=" + parseStrategy +
-            ", fieldName='" + fieldName + '\'' +
-            ", pattern='" + pattern + '\'' +
-            ", matchStrategy=" + matchStrategy +
-            '}';
+                "parseStrategy=" + parseStrategy +
+                ", fieldName='" + fieldName + '\'' +
+                ", pattern='" + pattern + '\'' +
+                ", matchStrategy=" + matchStrategy +
+                '}';
     }
 }

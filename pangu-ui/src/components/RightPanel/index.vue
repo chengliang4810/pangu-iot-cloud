@@ -1,9 +1,9 @@
 <template>
   <div ref="rightPanel" class="rightPanel-container">
-    <div class="rightPanel-background"/>
+    <div class="rightPanel-background" />
     <div class="rightPanel">
       <div class="rightPanel-items">
-        <slot/>
+        <slot />
       </div>
     </div>
   </div>
@@ -104,7 +104,6 @@ export default {
   cursor: pointer;
   color: #fff;
   line-height: 48px;
-
   i {
     font-size: 24px;
     line-height: 48px;

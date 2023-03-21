@@ -3,7 +3,7 @@ package com.xxl.job.admin.core.scheduler;
 import com.xxl.job.admin.core.util.I18nUtil;
 
 /**
- * @author chengliang4810
+ * @author xuxueli 2020-10-29 21:11:23
  */
 public enum ScheduleTypeEnum {
 

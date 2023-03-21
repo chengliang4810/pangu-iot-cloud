@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * @author chengliang4810
+ * @author hisenyuan
  * @since 1.7.0
  */
 @RestController

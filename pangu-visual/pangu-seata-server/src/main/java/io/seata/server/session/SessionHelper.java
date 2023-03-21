@@ -40,7 +40,7 @@ import org.slf4j.MDC;
 /**
  * The type Session helper.
  *
- * @author chengliang4810
+ * @author sharajava
  */
 public class SessionHelper {
     private static final Logger LOGGER = LoggerFactory.getLogger(SessionHelper.class);
@@ -51,7 +51,7 @@ public class SessionHelper {
     private static final Configuration CONFIG = ConfigurationFactory.getInstance();
 
     private static final Boolean ENABLE_BRANCH_ASYNC_REMOVE = CONFIG.getBoolean(
-        ConfigurationKeys.ENABLE_BRANCH_ASYNC_REMOVE, false);
+            ConfigurationKeys.ENABLE_BRANCH_ASYNC_REMOVE, false);
 
     /**
      * The instance of DefaultCoordinator
@@ -80,7 +80,7 @@ public class SessionHelper {
      * @return the branch session
      */
     public static BranchSession newBranchByGlobal(GlobalSession globalSession, BranchType branchType, String resourceId,
-                                                  String applicationData, String lockKeys, String clientId) {
+            String applicationData, String lockKeys, String clientId) {
         BranchSession branchSession = new BranchSession();
 
         branchSession.setXid(globalSession.getXid());
@@ -204,9 +204,9 @@ public class SessionHelper {
 
     public static boolean isTimeoutGlobalStatus(GlobalStatus status) {
         return status == GlobalStatus.TimeoutRollbacked
-            || status == GlobalStatus.TimeoutRollbackFailed
-            || status == GlobalStatus.TimeoutRollbacking
-            || status == GlobalStatus.TimeoutRollbackRetrying;
+                || status == GlobalStatus.TimeoutRollbackFailed
+                || status == GlobalStatus.TimeoutRollbacking
+                || status == GlobalStatus.TimeoutRollbackRetrying;
     }
 
     /**
@@ -259,13 +259,12 @@ public class SessionHelper {
 
     /**
      * remove branchSession from globalSession
-     *
      * @param globalSession the globalSession
      * @param branchSession the branchSession
-     * @param isAsync       if asynchronous remove
+     * @param isAsync if asynchronous remove
      */
     public static void removeBranch(GlobalSession globalSession, BranchSession branchSession, boolean isAsync)
-        throws TransactionException {
+            throws TransactionException {
         if (Objects.equals(Boolean.TRUE, ENABLE_BRANCH_ASYNC_REMOVE) && isAsync) {
             COORDINATOR.doBranchRemoveAsync(globalSession, branchSession);
         } else {
@@ -275,12 +274,11 @@ public class SessionHelper {
 
     /**
      * remove branchSession from globalSession
-     *
      * @param globalSession the globalSession
-     * @param isAsync       if asynchronous remove
+     * @param isAsync if asynchronous remove
      */
     public static void removeAllBranch(GlobalSession globalSession, boolean isAsync)
-        throws TransactionException {
+            throws TransactionException {
         List<BranchSession> branchSessions = globalSession.getSortedBranches();
         if (branchSessions == null || branchSessions.isEmpty()) {
             return;

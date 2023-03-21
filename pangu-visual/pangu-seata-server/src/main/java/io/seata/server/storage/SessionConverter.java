@@ -20,7 +20,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.Collections;
-
 import io.seata.common.util.CollectionUtils;
 import io.seata.common.util.StringUtils;
 import io.seata.server.console.vo.BranchSessionVO;
@@ -38,8 +37,8 @@ import org.springframework.beans.BeanUtils;
 /**
  * The session converter
  *
- * @author chengliang4810
- * @author chengliang4810
+ * @author wangzhongxiang
+ * @author doubleDimple
  */
 public class SessionConverter {
 
@@ -48,9 +47,9 @@ public class SessionConverter {
             return null;
         }
         GlobalSession session = new GlobalSession(globalTransactionDO.getApplicationId(),
-            globalTransactionDO.getTransactionServiceGroup(),
-            globalTransactionDO.getTransactionName(),
-            globalTransactionDO.getTimeout(), lazyLoadBranch);
+                globalTransactionDO.getTransactionServiceGroup(),
+                globalTransactionDO.getTransactionName(),
+                globalTransactionDO.getTimeout(), lazyLoadBranch);
         session.setXid(globalTransactionDO.getXid());
         session.setTransactionId(globalTransactionDO.getTransactionId());
         session.setStatus(GlobalStatus.get(globalTransactionDO.getStatus()));
@@ -83,9 +82,9 @@ public class SessionConverter {
     public static GlobalTransactionDO convertGlobalTransactionDO(SessionStorable session) {
         if (session == null || !(session instanceof GlobalSession)) {
             throw new IllegalArgumentException(
-                "The parameter of SessionStorable is not available, SessionStorable:" + StringUtils.toString(session));
+                    "The parameter of SessionStorable is not available, SessionStorable:" + StringUtils.toString(session));
         }
-        GlobalSession globalSession = (GlobalSession) session;
+        GlobalSession globalSession = (GlobalSession)session;
 
         GlobalTransactionDO globalTransactionDO = new GlobalTransactionDO();
         globalTransactionDO.setXid(globalSession.getXid());
@@ -103,9 +102,9 @@ public class SessionConverter {
     public static BranchTransactionDO convertBranchTransactionDO(SessionStorable session) {
         if (session == null || !(session instanceof BranchSession)) {
             throw new IllegalArgumentException(
-                "The parameter of SessionStorable is not available, SessionStorable:" + StringUtils.toString(session));
+                    "The parameter of SessionStorable is not available, SessionStorable:" + StringUtils.toString(session));
         }
-        BranchSession branchSession = (BranchSession) session;
+        BranchSession branchSession = (BranchSession)session;
         BranchTransactionDO branchTransactionDO = new BranchTransactionDO();
         branchTransactionDO.setXid(branchSession.getXid());
         branchTransactionDO.setBranchId(branchSession.getBranchId());
@@ -123,7 +122,7 @@ public class SessionConverter {
         if (CollectionUtils.isNotEmpty(globalSessions)) {
             for (GlobalSession globalSession : globalSessions) {
                 GlobalSessionVO globalSessionVO = new GlobalSessionVO();
-                BeanUtils.copyProperties(globalSession, globalSessionVO);
+                BeanUtils.copyProperties(globalSession,globalSessionVO);
                 globalSessionVO.setStatus(globalSession.getStatus().getCode());
                 globalSessionVO.setTimeout(Long.valueOf(globalSession.getTimeout()));
                 globalSessionVO.setBranchSessionVOs(converToBranchSession(globalSession.getBranchSessions()));
@@ -137,7 +136,7 @@ public class SessionConverter {
         if (CollectionUtils.isNotEmpty(branchSessions)) {
             for (BranchSession branchSession : branchSessions) {
                 BranchSessionVO branchSessionVONew = new BranchSessionVO();
-                BeanUtils.copyProperties(branchSession, branchSessionVONew);
+                BeanUtils.copyProperties(branchSession,branchSessionVONew);
 
                 branchSessionVONew.setBranchType(branchSession.getBranchType().name());
                 branchSessionVONew.setStatus(branchSession.getStatus().getCode());
@@ -163,16 +162,16 @@ public class SessionConverter {
 
         for (GlobalSession session : filteredSessions) {
             result.add(new GlobalSessionVO(
-                session.getXid(),
-                session.getTransactionId(),
-                session.getStatus().getCode(),
-                session.getApplicationId(),
-                session.getTransactionServiceGroup(),
-                session.getTransactionName(),
-                (long) session.getTimeout(),
-                session.getBeginTime(),
-                session.getApplicationData(),
-                convertBranchSession(session.getBranchSessions())
+                    session.getXid(),
+                    session.getTransactionId(),
+                    session.getStatus().getCode(),
+                    session.getApplicationId(),
+                    session.getTransactionServiceGroup(),
+                    session.getTransactionName(),
+                    (long) session.getTimeout(),
+                    session.getBeginTime(),
+                    session.getApplicationData(),
+                    convertBranchSession(session.getBranchSessions())
             ));
         }
         return result;
@@ -194,15 +193,15 @@ public class SessionConverter {
 
         for (BranchSession session : branchSessions) {
             result.add(new BranchSessionVO(
-                session.getXid(),
-                session.getTransactionId(),
-                session.getBranchId(),
-                session.getResourceGroupId(),
-                session.getResourceId(),
-                session.getBranchType().name(),
-                session.getStatus().getCode(),
-                session.getClientId(),
-                session.getApplicationData()
+                    session.getXid(),
+                    session.getTransactionId(),
+                    session.getBranchId(),
+                    session.getResourceGroupId(),
+                    session.getResourceId(),
+                    session.getBranchType().name(),
+                    session.getStatus().getCode(),
+                    session.getClientId(),
+                    session.getApplicationData()
             ));
         }
         return result;

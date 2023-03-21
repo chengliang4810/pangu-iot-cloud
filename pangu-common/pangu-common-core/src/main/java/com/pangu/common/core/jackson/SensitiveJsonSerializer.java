@@ -20,7 +20,7 @@ import java.util.Objects;
 /**
  * 数据脱敏json序列化工具
  *
- * @author chengliang4810
+ * @author Yjoioooo
  */
 @Slf4j
 public class SensitiveJsonSerializer extends JsonSerializer<String> implements ContextualSerializer {

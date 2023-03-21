@@ -17,7 +17,6 @@ package io.seata.server.storage.db.lock;
 
 import java.util.List;
 import javax.sql.DataSource;
-
 import io.seata.common.exception.DataAccessException;
 import io.seata.common.exception.StoreException;
 import io.seata.common.util.CollectionUtils;
@@ -29,7 +28,7 @@ import io.seata.core.store.LockStore;
 /**
  * The type Data base locker.
  *
- * @author chengliang4810
+ * @author zhangsen
  */
 public class DataBaseLocker extends AbstractLocker {
 

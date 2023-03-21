@@ -1,6 +1,6 @@
 FROM rabbitmq:3.10.6-management
 
-MAINTAINER Lion Li
+MAINTAINER chengliang4810
 
 ADD ./rabbitmq_delayed_message_exchange-3.10.2.ez /plugins
 

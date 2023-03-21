@@ -16,7 +16,7 @@
 package com.alibaba.csp.sentinel.dashboard.rule;
 
 /**
- * @author chengliang4810
+ * @author Eric Zhao
  * @since 1.4.0
  */
 public interface DynamicRulePublisher<T> {
@@ -24,7 +24,7 @@ public interface DynamicRulePublisher<T> {
     /**
      * Publish rules to remote rule configuration center for given application name.
      *
-     * @param app   app name
+     * @param app app name
      * @param rules list of rules to push
      * @throws Exception if some error occurs
      */

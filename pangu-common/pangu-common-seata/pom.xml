@@ -15,7 +15,7 @@
         pangu-common-seata 分布式事务
     </description>
 
-    <dependencies>
+	<dependencies>
 
         <dependency>
             <groupId>org.apache.dubbo</groupId>

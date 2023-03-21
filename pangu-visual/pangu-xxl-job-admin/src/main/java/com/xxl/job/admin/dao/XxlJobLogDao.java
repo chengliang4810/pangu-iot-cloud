@@ -11,7 +11,7 @@ import java.util.Map;
 /**
  * job log
  *
- * @author chengliang4810
+ * @author xuxueli 2016-1-12 18:03:06
  */
 @Mapper
 public interface XxlJobLogDao {

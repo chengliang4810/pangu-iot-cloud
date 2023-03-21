@@ -28,7 +28,7 @@ import java.util.List;
 /**
  * Metrics manager for init
  *
- * @author chengliang4810
+ * @author zhengyangyong
  */
 public class MetricsManager {
     private static class SingletonHolder {

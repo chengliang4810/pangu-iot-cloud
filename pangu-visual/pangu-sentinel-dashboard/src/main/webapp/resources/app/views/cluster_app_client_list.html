@@ -3,8 +3,7 @@
         <span style="font-size: 30px;font-weight: bold;">{{app}}</span>
     </div>
     <div class="col-md-6">
-        <a class="btn btn-default-inverse" style="float: right; margin-right: 10px;"
-           ui-sref="dashboard.clusterAppServerList({app: app})">
+        <a class="btn btn-default-inverse" style="float: right; margin-right: 10px;" ui-sref="dashboard.clusterAppServerList({app: app})">
             Token Server 列表
         </a>
     </div>
@@ -48,22 +47,16 @@
                         <tbody>
                         <tr ng-repeat="clientVO in clientVOList">
                             <td style="word-wrap:break-word;word-break:break-all;">{{clientVO.id}}</td>
-                            <td style="word-wrap:break-word;word-break:break-all;">
-                                {{clientVO.state.clientConfig.serverHost}}
-                            </td>
+                            <td style="word-wrap:break-word;word-break:break-all;">{{clientVO.state.clientConfig.serverHost}}</td>
                             <td>{{clientVO.state.clientConfig.serverPort}}</td>
                             <td>
-                                <span class="form-control-static text-danger"
-                                      ng-if="clientVO.state.clientConfig.clientState === 0">未连接</span>
+                                <span class="form-control-static text-danger" ng-if="clientVO.state.clientConfig.clientState === 0">未连接</span>
                                 <span class="form-control-static" ng-if="clientVO.state.clientConfig.clientState === 1">连接中</span>
-                                <span class="form-control-static text-success"
-                                      ng-if="clientVO.state.clientConfig.clientState === 2">已连接</span>
+                                <span class="form-control-static text-success" ng-if="clientVO.state.clientConfig.clientState === 2">已连接</span>
                             </td>
                             <td>
                                 <button class="btn btn-xs btn-outline-primary" type="button"
-                                        ng-click="modifyClientConfigDialog(clientVO)"
-                                        style="font-size: 12px; height:25px;">编辑配置
-                                </button>
+                                        ng-click="modifyClientConfigDialog(clientVO)" style="font-size: 12px; height:25px;">编辑配置</button>
                             </td>
                         </tr>
                         </tbody>

@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 数据字典信息
@@ -77,6 +79,21 @@ public class SysDictDataController extends BaseController {
             data = new ArrayList<SysDictData>();
         }
         return R.ok(data);
+    }
+
+    /**
+     * 根据字典类型查询字典数据信息
+     *
+     * @param dictType 字典类型
+     */
+    @GetMapping(value = "/type/group/{dictType}")
+    public R<Map<String,List<SysDictData>>> dictTypeGroup(@PathVariable String dictType) {
+        List<SysDictData> data = dictTypeService.selectDictDataByType(dictType);
+        if (ObjectUtil.isNull(data)) {
+            data = new ArrayList<SysDictData>();
+        }
+        Map<String, List<SysDictData>> groupData = data.parallelStream().collect(Collectors.groupingBy(SysDictData::getGroups));
+        return R.ok(groupData);
     }
 
     /**

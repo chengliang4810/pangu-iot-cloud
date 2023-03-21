@@ -21,7 +21,7 @@ import io.seata.metrics.Id;
 /**
  * Constants for meter id in tc
  *
- * @author chengliang4810
+ * @author zhengyangyong
  */
 public interface MeterIdConstants {
     Id COUNTER_ACTIVE = new Id(IdConstants.SEATA_TRANSACTION)
@@ -66,9 +66,9 @@ public interface MeterIdConstants {
         .withTag(IdConstants.STATUS_KEY, IdConstants.STATUS_VALUE_FAILED);
 
     Id SUMMARY_TWO_PHASE_TIMEOUT = new Id(IdConstants.SEATA_TRANSACTION)
-        .withTag(IdConstants.ROLE_KEY, IdConstants.ROLE_VALUE_TC)
-        .withTag(IdConstants.METER_KEY, IdConstants.METER_VALUE_SUMMARY)
-        .withTag(IdConstants.STATUS_KEY, IdConstants.STATUS_VALUE_TWO_PHASE_TIMEOUT);
+         .withTag(IdConstants.ROLE_KEY, IdConstants.ROLE_VALUE_TC)
+         .withTag(IdConstants.METER_KEY, IdConstants.METER_VALUE_SUMMARY)
+         .withTag(IdConstants.STATUS_KEY, IdConstants.STATUS_VALUE_TWO_PHASE_TIMEOUT);
 
     Id SUMMARY_AFTER_ROLLBACKED = new Id(IdConstants.SEATA_TRANSACTION)
         .withTag(IdConstants.ROLE_KEY, IdConstants.ROLE_VALUE_TC)

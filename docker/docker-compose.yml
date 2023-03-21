@@ -8,7 +8,7 @@ services:
       # 时区上海
       TZ: Asia/Shanghai
       # root 密码
-      MYSQL_ROOT_PASSWORD: pangu123
+      MYSQL_ROOT_PASSWORD: ruoyi123
       # 初始化数据库
       MYSQL_DATABASE: ry-cloud
     ports:
@@ -29,7 +29,7 @@ services:
     network_mode: "host"
 
   nacos:
-    image: pangu/pangu-nacos:1.4.0
+    image: ruoyi/pangu-nacos:1.4.0
     container_name: nacos
     ports:
       - "8848:8848"
@@ -74,9 +74,9 @@ services:
       # 时区上海
       TZ: Asia/Shanghai
       # 管理后台用户名
-      MINIO_ACCESS_KEY: pangu
+      MINIO_ACCESS_KEY: ruoyi
       # 管理后台密码，最小8个字符
-      MINIO_SECRET_KEY: pangu123
+      MINIO_SECRET_KEY: ruoyi123
       # https需要指定域名
       #MINIO_SERVER_URL: "https://xxx.com:9000"
       #MINIO_BROWSER_REDIRECT_URL: "https://xxx.com:9001"
@@ -96,7 +96,7 @@ services:
     network_mode: "host"
 
   seata-server:
-    image: pangu/pangu-seata-server:1.4.0
+    image: ruoyi/pangu-seata-server:1.4.0
     container_name: seata-server
     ports:
       - "7091:7091"
@@ -135,7 +135,7 @@ services:
     network_mode: "host"
 
   sentinel:
-    image: pangu/pangu-sentinel-dashboard:1.4.0
+    image: ruoyi/pangu-sentinel-dashboard:1.4.0
     container_name: sentinel
     environment:
       TZ: Asia/Shanghai
@@ -150,7 +150,7 @@ services:
     network_mode: "host"
 
   pangu-monitor:
-    image: pangu/pangu-monitor:1.4.0
+    image: ruoyi/pangu-monitor:1.4.0
     container_name: pangu-monitor
     environment:
       # 时区上海
@@ -166,7 +166,7 @@ services:
     network_mode: "host"
 
   pangu-xxl-job-admin:
-    image: pangu/pangu-xxl-job-admin:1.4.0
+    image: ruoyi/pangu-xxl-job-admin:1.4.0
     container_name: pangu-xxl-job-admin
     environment:
       # 时区上海
@@ -182,7 +182,7 @@ services:
     network_mode: "host"
 
   pangu-gateway:
-    image: pangu/pangu-gateway:1.4.0
+    image: ruoyi/pangu-gateway:1.4.0
     container_name: pangu-gateway
     environment:
       # 时区上海
@@ -198,7 +198,7 @@ services:
     network_mode: "host"
 
   pangu-auth:
-    image: pangu/pangu-auth:1.4.0
+    image: ruoyi/pangu-auth:1.4.0
     container_name: pangu-auth
     environment:
       # 时区上海
@@ -214,7 +214,7 @@ services:
     network_mode: "host"
 
   pangu-system:
-    image: pangu/pangu-system:1.4.0
+    image: ruoyi/pangu-system:1.4.0
     container_name: pangu-system
     environment:
       # 时区上海
@@ -230,7 +230,7 @@ services:
     network_mode: "host"
 
   pangu-gen:
-    image: pangu/pangu-gen:1.4.0
+    image: ruoyi/pangu-gen:1.4.0
     container_name: pangu-gen
     environment:
       # 时区上海
@@ -246,7 +246,7 @@ services:
     network_mode: "host"
 
   pangu-job:
-    image: pangu/pangu-job:1.4.0
+    image: ruoyi/pangu-job:1.4.0
     container_name: pangu-job
     environment:
       # 时区上海
@@ -262,7 +262,7 @@ services:
     network_mode: "host"
 
   pangu-resource:
-    image: pangu/pangu-resource:1.4.0
+    image: ruoyi/pangu-resource:1.4.0
     container_name: pangu-resource
     environment:
       # 时区上海
@@ -278,9 +278,9 @@ services:
     network_mode: "host"
 
 
-  #################################################################################################
-  #################################### 以下为扩展根据需求搭建 #########################################
-  #################################################################################################
+#################################################################################################
+#################################### 以下为扩展根据需求搭建 #########################################
+#################################################################################################
 
   elasticsearch:
     image: elasticsearch:7.17.6
@@ -376,8 +376,8 @@ services:
     build:
       context: ./rabbitmq
     environment:
-      RABBITMQ_DEFAULT_USER: pangu
-      RABBITMQ_DEFAULT_PASS: pangu123
+      RABBITMQ_DEFAULT_USER: ruoyi
+      RABBITMQ_DEFAULT_PASS: ruoyi123
     ports:
       - "15672:15672" # 管理界面端口
       - "5672:5672"   # api 端口
@@ -427,8 +427,8 @@ services:
     environment:
       ZK_HOSTS: 127.0.0.1:2181
       APPLICATION_SECRET: letmein
-      KAFKA_MANAGER_USERNAME: pangu
-      KAFKA_MANAGER_PASSWORD: pangu123
+      KAFKA_MANAGER_USERNAME: ruoyi
+      KAFKA_MANAGER_PASSWORD: ruoyi123
       KM_ARGS: -Dhttp.port=19092
     depends_on:
       - kafka

@@ -24,13 +24,12 @@
       </el-form-item>
     </el-form>
     <el-row>
-      <el-table @row-click="clickRow" ref="table" :data="userList" @selection-change="handleSelectionChange"
-                height="260px">
+      <el-table @row-click="clickRow" ref="table" :data="userList" @selection-change="handleSelectionChange" height="260px">
         <el-table-column type="selection" width="55"></el-table-column>
-        <el-table-column label="用户名称" prop="userName" :show-overflow-tooltip="true"/>
-        <el-table-column label="用户昵称" prop="nickName" :show-overflow-tooltip="true"/>
-        <el-table-column label="邮箱" prop="email" :show-overflow-tooltip="true"/>
-        <el-table-column label="手机" prop="phonenumber" :show-overflow-tooltip="true"/>
+        <el-table-column label="用户名称" prop="userName" :show-overflow-tooltip="true" />
+        <el-table-column label="用户昵称" prop="nickName" :show-overflow-tooltip="true" />
+        <el-table-column label="邮箱" prop="email" :show-overflow-tooltip="true" />
+        <el-table-column label="手机" prop="phonenumber" :show-overflow-tooltip="true" />
         <el-table-column label="状态" align="center" prop="status">
           <template slot-scope="scope">
             <dict-tag :options="dict.type.sys_normal_disable" :value="scope.row.status"/>
@@ -58,8 +57,7 @@
 </template>
 
 <script>
-import {unallocatedUserList, authUserSelectAll} from "@/api/system/role";
-
+import { unallocatedUserList, authUserSelectAll } from "@/api/system/role";
 export default {
   dicts: ['sys_normal_disable'],
   props: {
@@ -127,7 +125,7 @@ export default {
         this.$modal.msgError("请选择要分配的用户");
         return;
       }
-      authUserSelectAll({roleId: roleId, userIds: userIds}).then(res => {
+      authUserSelectAll({ roleId: roleId, userIds: userIds }).then(res => {
         this.$modal.msgSuccess(res.msg);
         if (res.code === 200) {
           this.visible = false;

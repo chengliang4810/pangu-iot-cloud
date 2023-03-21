@@ -98,7 +98,7 @@ public class SysOssServiceImpl implements ISysOssService {
         FileUtils.setAttachmentResponseHeader(response, sysOss.getOriginalName());
         response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE + "; charset=UTF-8");
         OssClient storage = OssFactory.instance();
-        try (InputStream inputStream = storage.getObjectContent(sysOss.getUrl())) {
+        try(InputStream inputStream = storage.getObjectContent(sysOss.getUrl())) {
             int available = inputStream.available();
             IoUtil.copy(inputStream, response.getOutputStream(), available);
             response.setContentLength(available);

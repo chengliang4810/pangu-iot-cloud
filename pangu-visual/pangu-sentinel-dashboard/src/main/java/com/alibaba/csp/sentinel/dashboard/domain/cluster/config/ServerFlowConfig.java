@@ -16,7 +16,7 @@
 package com.alibaba.csp.sentinel.dashboard.domain.cluster.config;
 
 /**
- * @author chengliang4810
+ * @author Eric Zhao
  * @since 1.4.0
  */
 public class ServerFlowConfig {
@@ -25,8 +25,8 @@ public class ServerFlowConfig {
     public static final double DEFAULT_MAX_OCCUPY_RATIO = 1.0d;
 
     public static final int DEFAULT_INTERVAL_MS = 1000;
-    public static final int DEFAULT_SAMPLE_COUNT = 10;
-    public static final double DEFAULT_MAX_ALLOWED_QPS = 30000;
+    public static final int DEFAULT_SAMPLE_COUNT= 10;
+    public static final double DEFAULT_MAX_ALLOWED_QPS= 30000;
 
     private final String namespace;
 

@@ -35,7 +35,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * @author chengliang4810
+ * @author leyou(lihao)
  */
 @RestController
 @RequestMapping("/system")
@@ -166,7 +166,7 @@ public class SystemController {
     @GetMapping("/save.json")
     @AuthAction(PrivilegeType.WRITE_RULE)
     public Result<SystemRuleEntity> apiUpdateIfNotNull(Long id, String app, Double highestSystemLoad,
-                                                       Double highestCpuUsage, Long avgRt, Long maxThread, Double qps) {
+            Double highestCpuUsage, Long avgRt, Long maxThread, Double qps) {
         if (id == null) {
             return Result.ofFail(-1, "id can't be null");
         }

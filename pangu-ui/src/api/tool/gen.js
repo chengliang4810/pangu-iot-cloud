@@ -8,7 +8,6 @@ export function listTable(query) {
     params: query
   })
 }
-
 // 查询db数据库列表
 export function listDbTable(query) {
   return request({
@@ -29,7 +28,7 @@ export function getGenTable(tableId) {
 // 修改代码生成信息
 export function updateGenTable(data) {
   return request({
-    url: '/code/gen',
+    url: '/code/gen/edit',
     method: 'put',
     data: data
   })

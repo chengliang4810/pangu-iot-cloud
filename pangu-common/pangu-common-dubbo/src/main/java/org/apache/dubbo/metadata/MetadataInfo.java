@@ -219,7 +219,6 @@ public class MetadataInfo implements Serializable {
 
     /**
      * Get service info of an interface with specified group, version and protocol
-     *
      * @param protocolServiceKey key is of format '{group}/{interface name}:{version}:{protocol}'
      * @return the specific service info related to protocolServiceKey
      */
@@ -358,7 +357,7 @@ public class MetadataInfo implements Serializable {
             return false;
         }
 
-        MetadataInfo other = (MetadataInfo) obj;
+        MetadataInfo other = (MetadataInfo)obj;
 
         return Objects.equals(app, other.getApp())
             && ((services == null && other.services == null)
@@ -475,8 +474,7 @@ public class MetadataInfo implements Serializable {
 
         private transient URL url;
 
-        public ServiceInfo() {
-        }
+        public ServiceInfo() {}
 
         public ServiceInfo(URL url, List<MetadataParamsFilter> filters) {
             this(url.getServiceInterface(), url.getGroup(), url.getVersion(), url.getProtocol(), url.getPort(), url.getPath(), null);
@@ -607,7 +605,7 @@ public class MetadataInfo implements Serializable {
             if (protocolServiceKey != null) {
                 return protocolServiceKey;
             }
-            protocolServiceKey = new ProtocolServiceKey(name, version, group, protocol);
+            protocolServiceKey = new ProtocolServiceKey(name, version, group,  protocol);
             return protocolServiceKey;
         }
 

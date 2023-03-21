@@ -17,7 +17,6 @@ package io.seata.server.session;
 
 import java.util.Collection;
 import java.util.List;
-
 import io.seata.core.exception.TransactionException;
 import io.seata.core.model.BranchStatus;
 import io.seata.core.model.GlobalStatus;
@@ -26,7 +25,7 @@ import io.seata.core.rpc.Disposable;
 /**
  * The interface Session manager.
  *
- * @author chengliang4810
+ * @author sharajava
  */
 public interface SessionManager extends SessionLifecycleListener, Disposable {
 
@@ -44,12 +43,12 @@ public interface SessionManager extends SessionLifecycleListener, Disposable {
      * @param xid the xid
      * @return the global session
      */
-    GlobalSession findGlobalSession(String xid);
+    GlobalSession findGlobalSession(String xid) ;
 
     /**
      * Find global session global session.
      *
-     * @param xid                the xid
+     * @param xid the xid
      * @param withBranchSessions the withBranchSessions
      * @return the global session
      */
@@ -118,9 +117,9 @@ public interface SessionManager extends SessionLifecycleListener, Disposable {
      * lock and execute
      *
      * @param globalSession the global session
-     * @param lockCallable  the lock Callable
+     * @param lockCallable the lock Callable
      * @return the value
      */
     <T> T lockAndExecute(GlobalSession globalSession, GlobalSession.LockCallable<T> lockCallable)
-        throws TransactionException;
+            throws TransactionException;
 }

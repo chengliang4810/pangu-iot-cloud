@@ -18,7 +18,6 @@ package io.seata.server.console.impl.redis;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import io.seata.common.util.CollectionUtils;
 import io.seata.console.result.PageResult;
 import io.seata.server.console.param.GlobalSessionParam;
@@ -32,7 +31,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.stereotype.Component;
-
 import static io.seata.common.exception.FrameworkErrorCode.ParameterRequired;
 import static io.seata.common.util.StringUtils.isBlank;
 import static io.seata.common.util.StringUtils.isNotBlank;
@@ -41,7 +39,6 @@ import static io.seata.server.storage.SessionConverter.convertToGlobalSessionVo;
 
 /**
  * Global Session Redis ServiceImpl
- *
  * @author: zhongxiang.wang
  * @author: doubleDimple
  */
@@ -59,7 +56,7 @@ public class GlobalSessionRedisServiceImpl implements GlobalSessionService {
         if (param.getTimeStart() != null || param.getTimeEnd() != null) {
             //not support time range query
             LOGGER.debug("not supported according to time range query");
-            return PageResult.failure(ParameterRequired.getErrCode(), "not supported according to time range query");
+            return PageResult.failure(ParameterRequired.getErrCode(),"not supported according to time range query");
         }
         List<GlobalSession> globalSessions = new ArrayList<>();
 
@@ -69,7 +66,7 @@ public class GlobalSessionRedisServiceImpl implements GlobalSessionService {
 
         if (isBlank(param.getXid()) && param.getStatus() == null) {
             total = instance.countByGlobalSessions(GlobalStatus.values());
-            globalSessions = instance.findGlobalSessionByPage(param.getPageNum(), param.getPageSize(), param.isWithBranch());
+            globalSessions = instance.findGlobalSessionByPage(param.getPageNum(), param.getPageSize(),param.isWithBranch());
         } else {
             List<GlobalSession> globalSessionsNew = new ArrayList<>();
             if (isNotBlank(param.getXid())) {
@@ -77,15 +74,15 @@ public class GlobalSessionRedisServiceImpl implements GlobalSessionService {
                 sessionCondition.setXid(param.getXid());
                 sessionCondition.setLazyLoadBranch(!param.isWithBranch());
                 globalSessions = instance.readSession(sessionCondition);
-                total = (long) globalSessions.size();
+                total = (long)globalSessions.size();
             }
 
             if (param.getStatus() != null && GlobalStatus.get(param.getStatus()) != null) {
                 if (CollectionUtils.isNotEmpty(globalSessions)) {
                     globalSessionsNew = globalSessions.stream().filter(globalSession -> globalSession.getStatus().getCode() == (param.getStatus())).collect(Collectors.toList());
-                    total = (long) globalSessionsNew.size();
+                    total = (long)globalSessionsNew.size();
                 } else {
-                    total = instance.countByGlobalSessions(new GlobalStatus[]{GlobalStatus.get(param.getStatus())});
+                    total = instance.countByGlobalSessions(new GlobalStatus[] {GlobalStatus.get(param.getStatus())});
                     globalSessionsNew = instance.readSessionStatusByPage(param);
                 }
             }
@@ -103,9 +100,9 @@ public class GlobalSessionRedisServiceImpl implements GlobalSessionService {
             globalSessions = globalSessionsNew.size() > 0 ? globalSessionsNew : globalSessions;
         }
 
-        convertToGlobalSessionVo(result, globalSessions);
+        convertToGlobalSessionVo(result,globalSessions);
 
-        return PageResult.success(result, total.intValue(), param.getPageNum(), param.getPageSize());
+        return PageResult.success(result,total.intValue(),param.getPageNum(),param.getPageSize());
     }
 
 }

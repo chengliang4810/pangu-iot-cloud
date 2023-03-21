@@ -28,8 +28,7 @@ public class AppInfo {
 
     private Set<MachineInfo> machines = ConcurrentHashMap.newKeySet();
 
-    public AppInfo() {
-    }
+    public AppInfo() {}
 
     public AppInfo(String app) {
         this.app = app;

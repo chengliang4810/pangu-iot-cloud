@@ -20,7 +20,7 @@ import io.seata.core.model.GlobalStatus;
 /**
  * The type Session condition.
  *
- * @author chengliang4810
+ * @author slievrly
  */
 public class SessionCondition {
     private Long transactionId;
@@ -52,7 +52,7 @@ public class SessionCondition {
      */
     public SessionCondition(GlobalStatus status) {
         this.status = status;
-        this.statuses = new GlobalStatus[]{status};
+        this.statuses = new GlobalStatus[] {status};
     }
 
     /**

@@ -70,7 +70,7 @@ public class PageQuery implements Serializable {
 
     /**
      * 构建排序
-     * <p>
+     *
      * 支持的用法如下:
      * {isAsc:"asc",orderByColumn:"id"} order by id asc
      * {isAsc:"asc",orderByColumn:"id,createTime"} order by id asc,create_time asc

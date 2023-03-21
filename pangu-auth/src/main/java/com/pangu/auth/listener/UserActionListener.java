@@ -53,7 +53,7 @@ public class UserActionListener implements SaTokenListener {
             if (ObjectUtil.isNotNull(user.getDeptName())) {
                 userOnline.setDeptName(user.getDeptName());
             }
-            if (tokenConfig.getTimeout() == -1) {
+            if(tokenConfig.getTimeout() == -1) {
                 RedisUtils.setCacheObject(CacheConstants.ONLINE_TOKEN_KEY + tokenValue, userOnline);
             } else {
                 RedisUtils.setCacheObject(CacheConstants.ONLINE_TOKEN_KEY + tokenValue, userOnline, Duration.ofSeconds(tokenConfig.getTimeout()));

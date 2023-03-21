@@ -30,7 +30,7 @@ import static io.seata.core.context.RootContext.MDC_KEY_BRANCH_ID;
 /**
  * The type file lock manager.
  *
- * @author chengliang4810
+ * @author zhangsen
  */
 @LoadLevel(name = "file")
 public class FileLockManager extends AbstractLockManager {

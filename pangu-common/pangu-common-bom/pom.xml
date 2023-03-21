@@ -15,6 +15,14 @@
 
     <dependencyManagement>
         <dependencies>
+
+            <!--TdEngine-->
+            <dependency>
+                <groupId>com.pangu</groupId>
+                <artifactId>pangu-common-tdengine</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
             <!-- 核心模块 -->
             <dependency>
                 <groupId>com.pangu</groupId>
@@ -159,6 +167,30 @@
             <dependency>
                 <groupId>com.pangu</groupId>
                 <artifactId>pangu-common-prometheus</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.pangu</groupId>
+                <artifactId>pangu-common-emqx</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.pangu</groupId>
+                <artifactId>pangu-common-zabbix</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.pangu</groupId>
+                <artifactId>pangu-common-zabbix-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.pangu</groupId>
+                <artifactId>pangu-common-sdk</artifactId>
                 <version>${project.version}</version>
             </dependency>
         </dependencies>

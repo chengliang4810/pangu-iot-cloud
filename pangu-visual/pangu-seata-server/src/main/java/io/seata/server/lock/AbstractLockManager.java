@@ -18,7 +18,6 @@ package io.seata.server.lock;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
 import io.seata.common.XID;
 import io.seata.common.util.CollectionUtils;
 import io.seata.common.util.StringUtils;
@@ -33,7 +32,7 @@ import org.slf4j.LoggerFactory;
 /**
  * The type Abstract lock manager.
  *
- * @author chengliang4810
+ * @author zhangsen
  */
 public abstract class AbstractLockManager implements LockManager {
 
@@ -156,7 +155,7 @@ public abstract class AbstractLockManager implements LockManager {
      * @return the list
      */
     protected List<RowLock> collectRowLocks(String lockKey, String resourceId, String xid, Long transactionId,
-                                            Long branchID) {
+        Long branchID) {
         List<RowLock> locks = new ArrayList<>();
 
         String[] tableGroupedLockKeys = lockKey.split(";");
@@ -189,7 +188,7 @@ public abstract class AbstractLockManager implements LockManager {
         }
         return locks;
     }
-
+    
     @Override
     public void updateLockStatus(String xid, LockStatus lockStatus) {
         this.getLocker().updateLockStatus(xid, lockStatus);

@@ -24,12 +24,8 @@
                         </thead>
                         <tbody>
                         <tr ng-repeat="cg in connectionDetailDialogData.serverData.state.connection">
-                            <td style="word-wrap:break-word;word-break:break-all;" class="text-center">
-                                {{cg.namespace}}
-                            </td>
-                            <td style="word-wrap:break-word;word-break:break-all;" class="text-center">
-                                {{cg.connectedCount}}
-                            </td>
+                            <td style="word-wrap:break-word;word-break:break-all;" class="text-center">{{cg.namespace}}</td>
+                            <td style="word-wrap:break-word;word-break:break-all;" class="text-center">{{cg.connectedCount}}</td>
                             <td class="text-center">{{generateConnectionSet(cg.connectionSet)}}</td>
                         </tr>
                         </tbody>

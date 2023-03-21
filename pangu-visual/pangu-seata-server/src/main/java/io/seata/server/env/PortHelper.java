@@ -31,7 +31,7 @@ import org.springframework.util.ResourceUtils;
 import org.yaml.snakeyaml.Yaml;
 
 /**
- * @author chengliang4810
+ * @author wang.liang
  */
 public class PortHelper {
 
@@ -80,7 +80,7 @@ public class PortHelper {
             String portNum = null;
             if (fileName.endsWith("yml")) {
                 Map<String, Object> yamlMap = new Yaml().load(inputStream);
-                Map<String, Object> configMap = MapUtil.getFlattenedMap(yamlMap);
+                Map<String, Object> configMap =  MapUtil.getFlattenedMap(yamlMap);
                 if (CollectionUtils.isNotEmpty(configMap)) {
                     Object serverPort = configMap.get("server.port");
                     if (null != serverPort) {
@@ -107,7 +107,6 @@ public class PortHelper {
         return port;
 
     }
-
     private static File getConfigFromStartup() {
 
         String configLocation = System.getProperty("spring.config.location");

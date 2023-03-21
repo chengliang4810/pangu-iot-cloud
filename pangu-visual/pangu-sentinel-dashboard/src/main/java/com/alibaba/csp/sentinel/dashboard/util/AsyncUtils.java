@@ -25,7 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * @author chengliang4810
+ * @author Eric Zhao
  * @since 1.4.1
  */
 public final class AsyncUtils {
@@ -68,6 +68,5 @@ public final class AsyncUtils {
         return future.isDone() && !future.isCompletedExceptionally() && !future.isCancelled();
     }
 
-    private AsyncUtils() {
-    }
+    private AsyncUtils() {}
 }

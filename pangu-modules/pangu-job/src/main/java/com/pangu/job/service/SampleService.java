@@ -23,7 +23,7 @@ import java.util.concurrent.TimeUnit;
  * 3、执行日志：需要通过 "XxlJobHelper.log" 打印执行日志；
  * 4、任务结果：默认任务结果为 "成功" 状态，不需要主动设置；如有诉求，比如设置任务结果为失败，可以通过 "XxlJobHelper.handleFail/handleSuccess" 自主设置任务结果；
  *
- * @author chengliang4810
+ * @author xuxueli 2019-12-11 21:52:51
  */
 @Slf4j
 @Service

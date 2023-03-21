@@ -17,7 +17,6 @@ package io.seata.server.console.impl.redis;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import io.seata.common.util.CollectionUtils;
 import io.seata.common.util.StringUtils;
 import io.seata.console.result.PageResult;

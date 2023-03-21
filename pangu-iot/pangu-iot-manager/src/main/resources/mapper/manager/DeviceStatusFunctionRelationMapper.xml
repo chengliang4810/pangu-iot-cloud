@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pangu.iot.manager.device.mapper.DeviceStatusFunctionRelationMapper">
+
+    <resultMap type="com.pangu.iot.manager.device.domain.DeviceStatusFunctionRelation" id="DeviceStatusFunctionRelationResult">
+    <result property="id" column="id"/>
+    <result property="ruleId" column="rule_id"/>
+    <result property="relationId" column="relation_id"/>
+    <result property="zbxId" column="zbx_id"/>
+    <result property="zbxIdRecovery" column="zbx_id_recovery"/>
+    </resultMap>
+
+
+</mapper>

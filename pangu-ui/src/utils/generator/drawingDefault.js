@@ -9,7 +9,7 @@ export default [
     placeholder: '请输入手机号',
     defaultValue: '',
     span: 24,
-    style: {width: '100%'},
+    style: { width: '100%' },
     clearable: true,
     prepend: '',
     append: '',

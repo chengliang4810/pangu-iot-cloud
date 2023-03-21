@@ -18,7 +18,7 @@ package com.alibaba.csp.sentinel.dashboard.domain.cluster.state;
 import com.alibaba.csp.sentinel.dashboard.domain.cluster.ClusterClientInfoVO;
 
 /**
- * @author chengliang4810
+ * @author Eric Zhao
  * @since 1.4.0
  */
 public class ClusterClientStateVO {

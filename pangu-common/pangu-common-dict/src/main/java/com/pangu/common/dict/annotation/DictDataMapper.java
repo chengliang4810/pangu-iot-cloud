@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
 /**
  * 字典数据映射注解
  *
- * @author chengliang4810
+ * @author itino
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.FIELD, ElementType.METHOD})

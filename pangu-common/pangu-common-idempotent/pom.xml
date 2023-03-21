@@ -15,7 +15,7 @@
         pangu-common-idempotent 幂等功能
     </description>
 
-    <dependencies>
+	<dependencies>
 
         <!-- SpringBoot core -->
         <dependency>

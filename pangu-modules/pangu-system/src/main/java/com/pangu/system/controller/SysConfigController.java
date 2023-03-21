@@ -9,7 +9,7 @@ import com.pangu.common.log.annotation.Log;
 import com.pangu.common.log.enums.BusinessType;
 import com.pangu.common.mybatis.core.page.PageQuery;
 import com.pangu.common.mybatis.core.page.TableDataInfo;
-import com.pangu.system.domain.SysConfig;
+import com.pangu.system.api.domain.SysConfig;
 import com.pangu.system.service.ISysConfigService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;

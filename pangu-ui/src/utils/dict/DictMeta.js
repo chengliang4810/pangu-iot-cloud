@@ -1,4 +1,4 @@
-import {mergeRecursive} from "@/utils/pangu";
+import { mergeRecursive } from "@/utils/ruoyi";
 import DictOptions from './DictOptions'
 
 /**
@@ -25,7 +25,7 @@ export default class DictMeta {
  * @param {Object} options
  * @returns {DictMeta}
  */
-DictMeta.parse = function (options) {
+DictMeta.parse= function(options) {
   let opts = null
   if (typeof options === 'string') {
     opts = DictOptions.metas[options] || {}

@@ -9,39 +9,35 @@ body {
 }
 
 .example {
-    padding: .625rem 1.825rem .625rem 2.5rem;
-    border: 1px #ccc dashed;
-    position: relative;
-    margin: 0 0 .625rem 0;
-    background-color: #ffffff;
+  padding: .625rem 1.825rem .625rem 2.5rem;
+  border: 1px #ccc dashed;
+  position: relative;
+  margin: 0 0 .625rem 0;
+  background-color: #ffffff;
 }
 
 dl dt,
 dl dd {
-    line-height: 1.25rem;
+  line-height: 1.25rem;
 }
-
 dl dt {
-    font-style: normal;
-    font-weight: 700;
+  font-style: normal;
+  font-weight: 700;
 }
-
 dl dd {
-    margin-left: .9375rem;
+  margin-left: .9375rem;
 }
-
 dl.horizontal dt {
-    float: left;
-    width: 10rem;
-    overflow: hidden;
-    clear: left;
-    text-align: right;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+  float: left;
+  width: 10rem;
+  overflow: hidden;
+  clear: left;
+  text-align: right;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
-
 dl.horizontal dd {
-    margin-left: 11.25rem;
+  margin-left: 11.25rem;
 }
 
 #wrapper {
@@ -54,7 +50,7 @@ dl.horizontal dd {
     background-color: #fff;
 }
 
-@media (min-width: 768px) {
+@media(min-width:768px) {
     #page-wrapper {
         position: inherit;
         margin: 0 0 0 250px;
@@ -125,12 +121,12 @@ dl.horizontal dd {
     padding-right: 0;
     padding-left: 0;
     background-color: #71b1d1;
-    color: #ffffff;
-    position: relative;
-    width: 100%;
-    padding: 0;
-    margin: 0;
-    list-style: none inside none;
+	color: #ffffff;
+	position: relative;
+	width: 100%;
+	padding: 0;
+	margin: 0;
+	list-style: none inside none;
 }
 
 .sidebar .sidebar-search {
@@ -142,12 +138,12 @@ dl.horizontal dd {
 }
 
 .sidebar ul li a.active {
-    background-color: #ffffff;
-    color: #ffffff;
+  background-color: #ffffff;
+  color: #ffffff;
 }
 
-.sidebar a {
-    color: #fff;
+.sidebar a{
+	color: #fff;
 }
 
 .sidebar .arrow {
@@ -158,13 +154,13 @@ dl.horizontal dd {
     content: "\f104";
 }
 
-.sidebar .active > a > .fa.arrow:before {
+.sidebar .active>a>.fa.arrow:before {
     content: "\f107";
 }
 
 .sidebar .nav-second-level li,
 .sidebar .nav-third-level li {
-    border-bottom: 0 !important;
+    border-bottom: 0!important;
 }
 
 .sidebar .nav-second-level li a {
@@ -175,7 +171,7 @@ dl.horizontal dd {
     padding-left: 52px;
 }
 
-@media (min-width: 768px) {
+@media(min-width:768px) {
     .sidebar {
         z-index: 1;
         position: absolute;
@@ -302,7 +298,7 @@ table.dataTable thead .sorting:after {
     content: "\f0dc";
     float: right;
     font-family: fontawesome;
-    color: rgba(50, 50, 50, .5);
+    color: rgba(50,50,50,.5);
 }
 
 .btn-circle {
@@ -337,7 +333,7 @@ table.dataTable thead .sorting:after {
     padding-top: 10px;
     padding-bottom: 10px;
     border: 1px solid #ddd;
-    background-color: #eee !important;
+    background-color: #eee!important;
 }
 
 .show-grid {

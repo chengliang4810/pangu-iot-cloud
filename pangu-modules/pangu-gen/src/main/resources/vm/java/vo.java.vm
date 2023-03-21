@@ -1,15 +1,15 @@
 package ${packageName}.domain.vo;
 
-    #foreach ($import in $importList)
-    import ${import};
-    #end
+#foreach ($import in $importList)
+import ${import};
+#end
 import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import com.alibaba.excel.annotation.ExcelProperty;
 import com.pangu.common.excel.annotation.ExcelDictFormat;
 import com.pangu.common.excel.convert.ExcelDictConvert;
 import lombok.Data;
-
 import java.util.Date;
+
 
 
 /**
@@ -20,33 +20,33 @@ import java.util.Date;
  */
 @Data
 @ExcelIgnoreUnannotated
-public class ${ClassName}Vo {
+public class ${ClassName}VO {
 
     private static final long serialVersionUID = 1L;
 
-    #foreach ($column in $columns)
-        #if($column.isList)
-            /**
-             * $column.columnComment
-             */
-            #set($parentheseIndex=$column.columnComment.indexOf("（"))
-            #if($parentheseIndex != -1)
-                #set($comment=$column.columnComment.substring(0, $parentheseIndex))
-            #else
-                #set($comment=$column.columnComment)
-            #end
-            #if(${column.dictType} && ${column.dictType} != '')
-            @ExcelProperty(value = "${comment}" , converter = ExcelDictConvert.class)
-            @ExcelDictFormat(dictType = "${column.dictType}")
-            #elseif($parentheseIndex != -1)
-            @ExcelProperty(value = "${comment}" , converter = ExcelDictConvert.class)
-            @ExcelDictFormat(readConverterExp = "$column.readConverterExp()")
-            #else
-            @ExcelProperty(value = "${comment}")
-            #end
-        private $column.javaType $column.javaField;
+#foreach ($column in $columns)
+#if($column.isList)
+    /**
+     * $column.columnComment
+     */
+#set($parentheseIndex=$column.columnComment.indexOf("（"))
+#if($parentheseIndex != -1)
+#set($comment=$column.columnComment.substring(0, $parentheseIndex))
+#else
+#set($comment=$column.columnComment)
+#end
+#if(${column.dictType} && ${column.dictType} != '')
+    @ExcelProperty(value = "${comment}", converter = ExcelDictConvert.class)
+    @ExcelDictFormat(dictType = "${column.dictType}")
+#elseif($parentheseIndex != -1)
+    @ExcelProperty(value = "${comment}", converter = ExcelDictConvert.class)
+    @ExcelDictFormat(readConverterExp = "$column.readConverterExp()")
+#else
+    @ExcelProperty(value = "${comment}")
+#end
+    private $column.javaType $column.javaField;
 
-        #end
-    #end
+#end
+#end
 
 }

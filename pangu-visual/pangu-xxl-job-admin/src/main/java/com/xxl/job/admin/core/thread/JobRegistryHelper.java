@@ -16,7 +16,7 @@ import java.util.concurrent.*;
 /**
  * job registry instance
  *
- * @author chengliang4810
+ * @author xuxueli 2016-10-02 19:10:24
  */
 public class JobRegistryHelper {
     private static Logger logger = LoggerFactory.getLogger(JobRegistryHelper.class);

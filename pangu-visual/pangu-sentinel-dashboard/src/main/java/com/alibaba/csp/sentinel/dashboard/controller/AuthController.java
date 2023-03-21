@@ -31,7 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * @author chengliang4810
+ * @author cdfive
  * @since 1.6.0
  */
 @RestController
@@ -65,7 +65,7 @@ public class AuthController {
          * so user can input any username or password(both are not blank) to login in that case.
          */
         if (StringUtils.isNotBlank(authUsername) && !authUsername.equals(username)
-            || StringUtils.isNotBlank(authPassword) && !authPassword.equals(password)) {
+                || StringUtils.isNotBlank(authPassword) && !authPassword.equals(password)) {
             LOGGER.error("Login failed: Invalid username or password, username=" + username);
             return Result.ofFail(-1, "Invalid username or password");
         }

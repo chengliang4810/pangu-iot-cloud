@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import javax.sql.DataSource;
-
 import io.seata.common.exception.DataAccessException;
 import io.seata.common.exception.StoreException;
 import io.seata.common.util.CollectionUtils;
@@ -51,7 +50,7 @@ import static io.seata.core.exception.TransactionExceptionCode.LockKeyConflictFa
 /**
  * The type Data base lock store.
  *
- * @author chengliang4810
+ * @author zhangsen
  */
 public class LockStoreDataBaseDAO implements LockStore {
 
@@ -165,7 +164,7 @@ public class LockStoreDataBaseDAO implements LockStore {
                 // If the lock has been exists in db, remove it from the lockDOs
                 if (CollectionUtils.isNotEmpty(dbExistedRowKeys)) {
                     unrepeatedLockDOs = lockDOs.stream().filter(lockDO -> !dbExistedRowKeys.contains(lockDO.getRowKey()))
-                        .collect(Collectors.toList());
+                            .collect(Collectors.toList());
                 }
                 if (CollectionUtils.isEmpty(unrepeatedLockDOs)) {
                     conn.rollback();
@@ -303,7 +302,7 @@ public class LockStoreDataBaseDAO implements LockStore {
         String updateStatusLockByGlobalSql =
             LockStoreSqlFactory.getLogStoreSql(dbType).getBatchUpdateStatusLockByGlobalSql(lockTable);
         try (Connection conn = lockStoreDataSource.getConnection();
-             PreparedStatement ps = conn.prepareStatement(updateStatusLockByGlobalSql)) {
+            PreparedStatement ps = conn.prepareStatement(updateStatusLockByGlobalSql)) {
             conn.setAutoCommit(true);
             ps.setInt(1, lockStatus.getCode());
             ps.setString(2, xid);

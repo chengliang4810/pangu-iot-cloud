@@ -107,7 +107,7 @@ public class RedisConfiguration extends CachingConfigurerSupport {
      *   # 集群配置
      *   clusterServersConfig:
      *     # 客户端名称
-     *     clientName: ${pangu.name}
+     *     clientName: ${ruoyi.name}
      *     # master最小空闲连接数
      *     masterConnectionMinimumIdleSize: 32
      *     # master连接池大小

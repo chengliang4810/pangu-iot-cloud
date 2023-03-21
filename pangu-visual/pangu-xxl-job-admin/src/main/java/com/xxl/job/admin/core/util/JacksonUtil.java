@@ -16,7 +16,7 @@ import java.io.IOException;
  * 1、obj need private and set/get；
  * 2、do not support inner class；
  *
- * @author chengliang4810
+ * @author xuxueli 2015-9-25 18:02:56
  */
 public class JacksonUtil {
     private static Logger logger = LoggerFactory.getLogger(JacksonUtil.class);

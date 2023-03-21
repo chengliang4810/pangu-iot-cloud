@@ -29,12 +29,12 @@ import java.util.Map;
 /**
  * Server state controller.
  *
- * @author chengliang4810
+ * @author xingxuechao on:2019/2/27 11:17 AM
  */
 @RestController
 @RequestMapping("/v1/console/server")
 public class ServerStateController {
-
+    
     /**
      * Get server state of current server.
      *
@@ -44,12 +44,12 @@ public class ServerStateController {
     public ResponseEntity<Map<String, String>> serverState() {
         Map<String, String> serverState = new HashMap<>(4);
         serverState.put("standalone_mode",
-            EnvUtil.getStandaloneMode() ? EnvUtil.STANDALONE_MODE_ALONE : EnvUtil.STANDALONE_MODE_CLUSTER);
-
+                EnvUtil.getStandaloneMode() ? EnvUtil.STANDALONE_MODE_ALONE : EnvUtil.STANDALONE_MODE_CLUSTER);
+        
         serverState.put("function_mode", EnvUtil.getFunctionMode());
         serverState.put("version", VersionUtils.version);
-
+        
         return ResponseEntity.ok().body(serverState);
     }
-
+    
 }

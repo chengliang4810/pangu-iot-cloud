@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pangu.iot.manager.alarm.mapper.ProblemMapper">
+
+    <resultMap type="com.pangu.iot.manager.alarm.domain.Problem" id="ProblemResult">
+    <result property="eventId" column="event_id"/>
+    <result property="objectId" column="object_id"/>
+    <result property="name" column="name"/>
+    <result property="acknowledged" column="acknowledged"/>
+    <result property="clock" column="clock"/>
+    <result property="rClock" column="r_clock"/>
+    <result property="deviceId" column="device_id"/>
+    </resultMap>
+
+
+</mapper>

@@ -14,7 +14,7 @@ import java.io.File;
 /**
  * 邮件发送案例
  *
- * @author chengliang4810
+ * @author Michelle.Chung
  */
 @Validated
 @RequiredArgsConstructor
@@ -25,9 +25,9 @@ public class MailController {
     /**
      * 发送邮件
      *
-     * @param to      接收人
+     * @param to 接收人
      * @param subject 标题
-     * @param text    内容
+     * @param text 内容
      */
     @GetMapping("/sendSimpleMessage")
     public R<Void> sendSimpleMessage(String to, String subject, String text) {
@@ -38,9 +38,9 @@ public class MailController {
     /**
      * 发送邮件（带附件）
      *
-     * @param to       接收人
-     * @param subject  标题
-     * @param text     内容
+     * @param to 接收人
+     * @param subject 标题
+     * @param text 内容
      * @param filePath 附件路径
      */
     @GetMapping("/sendMessageWithAttachment")

@@ -20,14 +20,12 @@ import io.seata.console.result.PageResult;
 
 /**
  * Branch session service
- *
- * @author chengliang4810
+ * @author wangzhongxiang
  */
 public interface BranchSessionService {
 
     /**
      * Query branch session by xid
-     *
      * @param xid the xid
      * @return the BranchSessionVO list
      */

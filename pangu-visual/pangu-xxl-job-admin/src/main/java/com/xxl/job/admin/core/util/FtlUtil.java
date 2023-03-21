@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 /**
  * ftl util
  *
- * @author chengliang4810
+ * @author xuxueli 2018-01-17 20:37:48
  */
 public class FtlUtil {
     private static Logger logger = LoggerFactory.getLogger(FtlUtil.class);

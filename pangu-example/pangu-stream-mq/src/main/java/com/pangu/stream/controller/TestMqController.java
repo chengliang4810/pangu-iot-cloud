@@ -26,7 +26,7 @@ public class TestMqController {
     /**
      * 发送消息Rabbitmq
      *
-     * @param msg   消息内容
+     * @param msg 消息内容
      * @param delay 延时时间
      */
     @GetMapping("/sendRabbitmq")

@@ -44,8 +44,8 @@ import static java.util.Objects.isNull;
 /**
  * Global Lock File ServiceImpl
  *
- * @author chengliang4810
- * @author chengliang4810
+ * @author zhongxiang.wang
+ * @author miaoxueyu
  */
 @Component
 @org.springframework.context.annotation.Configuration
@@ -60,13 +60,13 @@ public class GlobalLockFileServiceImpl implements GlobalLockService {
 
         final AtomicInteger total = new AtomicInteger();
         List<RowLock> result = allSessions
-            .parallelStream()
-            .filter(obtainGlobalSessionPredicate(param))
-            .flatMap(globalSession -> globalSession.getBranchSessions().stream())
-            .filter(obtainBranchSessionPredicate(param))
-            .flatMap(branchSession -> filterAndMap(param, branchSession))
-            .peek(globalSession -> total.incrementAndGet())
-            .collect(Collectors.toList());
+                .parallelStream()
+                .filter(obtainGlobalSessionPredicate(param))
+                .flatMap(globalSession -> globalSession.getBranchSessions().stream())
+                .filter(obtainBranchSessionPredicate(param))
+                .flatMap(branchSession -> filterAndMap(param, branchSession))
+                .peek(globalSession -> total.incrementAndGet())
+                .collect(Collectors.toList());
 
         return PageResult.build(convert(result), param.getPageNum(), param.getPageSize());
 
@@ -75,7 +75,7 @@ public class GlobalLockFileServiceImpl implements GlobalLockService {
     /**
      * filter with tableName and generate RowLock
      *
-     * @param param         the query param
+     * @param param the query param
      * @param branchSession the branch session
      * @return the RowLock list
      */
@@ -129,13 +129,13 @@ public class GlobalLockFileServiceImpl implements GlobalLockService {
         return branchSession -> {
             // transactionId
             return (isBlank(param.getTransactionId()) ||
-                String.valueOf(branchSession.getTransactionId()).contains(param.getTransactionId()))
+                    String.valueOf(branchSession.getTransactionId()).contains(param.getTransactionId()))
 
-                &&
-                // branch id
-                (isBlank(param.getBranchId()) ||
-                    String.valueOf(branchSession.getBranchId()).contains(param.getBranchId()))
-                ;
+                    &&
+                    // branch id
+                    (isBlank(param.getBranchId()) ||
+                            String.valueOf(branchSession.getBranchId()).contains(param.getBranchId()))
+                    ;
         };
     }
 
@@ -152,18 +152,18 @@ public class GlobalLockFileServiceImpl implements GlobalLockService {
             // first, there must be withBranchSession
             return CollectionUtils.isNotEmpty(globalSession.getBranchSessions())
 
-                &&
-                // The second is other conditions
-                // xid
-                (isBlank(param.getXid()) || globalSession.getXid().contains(param.getXid()))
+                    &&
+                    // The second is other conditions
+                    // xid
+                    (isBlank(param.getXid()) || globalSession.getXid().contains(param.getXid()))
 
-                &&
-                // timeStart
-                (isNull(param.getTimeStart()) || param.getTimeStart() <= globalSession.getBeginTime())
+                    &&
+                    // timeStart
+                    (isNull(param.getTimeStart()) || param.getTimeStart() <= globalSession.getBeginTime())
 
-                &&
-                // timeEnd
-                (isNull(param.getTimeEnd()) || param.getTimeEnd() >= globalSession.getBeginTime());
+                    &&
+                    // timeEnd
+                    (isNull(param.getTimeEnd()) || param.getTimeEnd() >= globalSession.getBeginTime());
         };
     }
 

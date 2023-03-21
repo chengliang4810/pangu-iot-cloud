@@ -18,7 +18,6 @@ package io.seata.server.transaction.at;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.seata.common.exception.StoreException;
 import io.seata.common.util.StringUtils;
@@ -38,12 +37,12 @@ import static io.seata.core.exception.TransactionExceptionCode.LockKeyConflict;
 /**
  * The type at core.
  *
- * @author chengliang4810
+ * @author ph3636
  */
 public class ATCore extends AbstractCore {
-
+    
     private ObjectMapper objectMapper;
-
+    
     public ATCore(RemotingServer remotingServer) {
         super(remotingServer);
     }
@@ -66,12 +65,12 @@ public class ATCore extends AbstractCore {
             try {
                 Map<String, Object> data = objectMapper.readValue(applicationData, HashMap.class);
                 Object clientAutoCommit = data.get(AUTO_COMMIT);
-                if (clientAutoCommit != null && !(boolean) clientAutoCommit) {
-                    autoCommit = (boolean) clientAutoCommit;
+                if (clientAutoCommit != null && !(boolean)clientAutoCommit) {
+                    autoCommit = (boolean)clientAutoCommit;
                 }
                 Object clientSkipCheckLock = data.get(SKIP_CHECK_LOCK);
                 if (clientSkipCheckLock instanceof Boolean) {
-                    skipCheckLock = (boolean) clientSkipCheckLock;
+                    skipCheckLock = (boolean)clientSkipCheckLock;
                 }
             } catch (IOException e) {
                 LOGGER.error("failed to get application data: {}", e.getMessage(), e);
@@ -85,7 +84,7 @@ public class ATCore extends AbstractCore {
             }
         } catch (StoreException e) {
             if (e.getCause() instanceof BranchTransactionException) {
-                throw new BranchTransactionException(((BranchTransactionException) e.getCause()).getCode(),
+                throw new BranchTransactionException(((BranchTransactionException)e.getCause()).getCode(),
                     String.format("Global lock acquire failed xid = %s branchId = %s", globalSession.getXid(),
                         branchSession.getBranchId()));
             }
@@ -100,7 +99,7 @@ public class ATCore extends AbstractCore {
 
     @Override
     public boolean lockQuery(BranchType branchType, String resourceId, String xid, String lockKeys)
-        throws TransactionException {
+            throws TransactionException {
         return lockManager.isLockable(xid, resourceId, lockKeys);
     }
 

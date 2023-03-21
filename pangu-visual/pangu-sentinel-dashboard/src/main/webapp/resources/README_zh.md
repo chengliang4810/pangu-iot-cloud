@@ -8,8 +8,7 @@
 ## 编码规范
 
 - HTML/CSS 遵循 [Bootstrap 编码规范](https://codeguide.bootcss.com/)
-- JavaScript 遵循 [Airbnb JavaScript Style Guide](https://github.com/airbnb/javascript/tree/es5-deprecated/es5) 以及最新的
-  ES 6 标准
+- JavaScript 遵循 [Airbnb JavaScript Style Guide](https://github.com/airbnb/javascript/tree/es5-deprecated/es5) 以及最新的 ES 6 标准
 
 ## 安装依赖
 

@@ -33,7 +33,7 @@ public class SmsController {
     /**
      * 发送短信Aliyun
      *
-     * @param phones     电话号
+     * @param phones 电话号
      * @param templateId 模板ID
      */
     @GetMapping("/sendAliyun")
@@ -54,7 +54,7 @@ public class SmsController {
     /**
      * 发送短信Tencent
      *
-     * @param phones     电话号
+     * @param phones 电话号
      * @param templateId 模板ID
      */
     @GetMapping("/sendTencent")

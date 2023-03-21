@@ -11,7 +11,6 @@
     <modules>
         <module>pangu-iot-manager</module>
         <module>pangu-iot-data</module>
-        <module>pangu-iot-ruleEngine</module>
     </modules>
 
     <artifactId>pangu-iot</artifactId>
@@ -22,29 +21,6 @@
     </description>
 
     <dependencies>
-        <!-- 自定义负载均衡(多团队开发使用) -->
-        <!--        <dependency>-->
-        <!--            <groupId>com.pangu</groupId>-->
-        <!--            <artifactId>pangu-common-loadbalancer</artifactId>-->
-        <!--        </dependency>-->
-
-        <!-- ELK 日志收集 -->
-        <!--        <dependency>-->
-        <!--            <groupId>com.pangu</groupId>-->
-        <!--            <artifactId>pangu-common-logstash</artifactId>-->
-        <!--        </dependency>-->
-
-        <!-- skywalking 日志收集 -->
-        <!--        <dependency>-->
-        <!--            <groupId>com.pangu</groupId>-->
-        <!--            <artifactId>pangu-common-skylog</artifactId>-->
-        <!--        </dependency>-->
-
-        <!-- prometheus 监控 -->
-        <!--        <dependency>-->
-        <!--            <groupId>com.pangu</groupId>-->
-        <!--            <artifactId>pangu-common-prometheus</artifactId>-->
-        <!--        </dependency>-->
 
     </dependencies>
 

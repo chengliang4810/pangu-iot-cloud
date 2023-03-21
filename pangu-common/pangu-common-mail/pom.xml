@@ -15,7 +15,7 @@
         pangu-common-mail 邮件模块
     </description>
 
-    <dependencies>
+	<dependencies>
 
         <dependency>
             <groupId>com.pangu</groupId>

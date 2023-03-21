@@ -2,7 +2,7 @@
  * Authority rule service.
  */
 angular.module('sentinelDashboardApp').service('AuthorityRuleService', ['$http', function ($http) {
-    this.queryMachineRules = function (app, ip, port) {
+    this.queryMachineRules = function(app, ip, port) {
         var param = {
             app: app,
             ip: ip,
@@ -15,7 +15,7 @@ angular.module('sentinelDashboardApp').service('AuthorityRuleService', ['$http',
         });
     };
 
-    this.addNewRule = function (rule) {
+    this.addNewRule = function(rule) {
         return $http({
             url: '/authority/rule',
             data: rule,

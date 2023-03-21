@@ -143,7 +143,7 @@ public class SysDictTypeServiceImpl implements ISysDictTypeService {
         List<SysDictData> dictDataList = dictDataMapper.selectList(
             new LambdaQueryWrapper<SysDictData>().eq(SysDictData::getStatus, UserConstants.DICT_NORMAL));
         Map<String, List<SysDictData>> dictDataMap = StreamUtils.groupByKey(dictDataList, SysDictData::getDictType);
-        dictDataMap.forEach((k, v) -> {
+        dictDataMap.forEach((k,v) -> {
             List<SysDictData> dictList = StreamUtils.sorted(v, Comparator.comparing(SysDictData::getDictSort));
             CacheUtils.put(CacheNames.SYS_DICT, k, dictList);
         });

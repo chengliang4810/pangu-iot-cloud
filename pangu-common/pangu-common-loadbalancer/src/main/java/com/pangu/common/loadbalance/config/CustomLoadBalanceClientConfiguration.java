@@ -13,7 +13,7 @@ import org.springframework.core.env.Environment;
 /**
  * 自定义负载均衡客户端配置
  *
- * @author chengliang4810
+ * @author LionLi
  */
 @SuppressWarnings("all")
 @Configuration(proxyBeanMethods = false)

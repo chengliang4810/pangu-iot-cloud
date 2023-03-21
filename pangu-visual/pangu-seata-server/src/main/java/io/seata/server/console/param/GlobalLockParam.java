@@ -103,12 +103,12 @@ public class GlobalLockParam extends BaseParam implements Serializable {
     @Override
     public String toString() {
         return "GlobalLockParam{" +
-            "xid='" + xid + '\'' +
-            ", tableName='" + tableName + '\'' +
-            ", transactionId='" + transactionId + '\'' +
-            ", branchId='" + branchId + '\'' +
-            ", pk='" + pk + '\'' +
-            ", resourceId='" + resourceId + '\'' +
-            '}';
+                "xid='" + xid + '\'' +
+                ", tableName='" + tableName + '\'' +
+                ", transactionId='" + transactionId + '\'' +
+                ", branchId='" + branchId + '\'' +
+                ", pk='" + pk + '\'' +
+                ", resourceId='" + resourceId + '\'' +
+                '}';
     }
 }

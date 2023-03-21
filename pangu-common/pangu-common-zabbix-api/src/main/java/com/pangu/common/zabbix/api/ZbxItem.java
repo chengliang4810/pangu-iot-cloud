@@ -1,0 +1,120 @@
+package com.pangu.common.zabbix.api;
+
+import com.dtflys.forest.annotation.BaseRequest;
+import com.dtflys.forest.annotation.Post;
+import com.pangu.common.zabbix.annotation.JsonPath;
+import com.pangu.common.zabbix.annotation.ParamName;
+import com.pangu.common.zabbix.entity.ZbxProcessingStep;
+import com.pangu.common.zabbix.inteceptor.JsonBodyBuildInterceptor;
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * @author nantian created at 2021/8/4 18:07
+ */
+
+@BaseRequest(
+        baseURL = "http://${zbxServerIp}:${zbxServerPort}${zbxApiUrl}",
+        interceptor = JsonBodyBuildInterceptor.class
+)
+public interface ZbxItem {
+
+
+    /**
+     * 创建 Zabbix Trapper ITEM
+     *
+     * @param itemName           名称
+     * @param itemKey            唯一Key
+     * @param hostId             主机ID
+     * @param valueType          值类型 0 和 3 数字
+     * @param units              单位
+     * @param processingStepList 预处理步骤
+     * @param valuemapid         值映射ID
+     * @param tagMap             标签
+     * @return String
+     */
+    @Post
+    @JsonPath("/item/item.trapper.create")
+    String createTrapperItem(@ParamName("itemName") String itemName,
+                             @ParamName("itemKey") String itemKey,
+                             @ParamName("hostId") String hostId,
+                             @ParamName("source") String source,
+                             @ParamName("delay") String delay,
+                             @ParamName("masterItemid") String masterItemid,
+                             @ParamName("valueType") String valueType,
+                             @ParamName("units") String units,
+                             @ParamName("processList") List<ZbxProcessingStep> processingStepList,
+                             @ParamName("valuemapid") String valuemapid,
+                             @ParamName("tagMap") Map<String, String> tagMap,
+                             @ParamName("interfaceid") String interfaceid);
+
+    /**
+     * 修改 Zabbix Trapper ITEM
+     *
+     * @param itemid             ID
+     * @param itemName           名称
+     * @param itemKey            唯一Key
+     * @param hostId             主机ID
+     * @param valueType          值类型 0 和 3 数字
+     * @param units              单位
+     * @param processingStepList 预处理步骤
+     * @param valuemapid         值映射ID
+     * @param tagMap             标签
+     * @return String
+     */
+    @Post
+    @JsonPath("/item/item.trapper.update")
+    String updateTrapperItem(@ParamName("itemid") String itemid,
+                             @ParamName("itemName") String itemName,
+                             @ParamName("itemKey") String itemKey,
+                             @ParamName("hostId") String hostId,
+                             @ParamName("source") String source,
+                             @ParamName("delay") String delay,
+                             @ParamName("masterItemid") String masterItemid,
+                             @ParamName("valueType") String valueType,
+                             @ParamName("units") String units,
+                             @ParamName("processList") List<ZbxProcessingStep> processingStepList,
+                             @ParamName("valuemapid") String valuemapid,
+                             @ParamName("tagMap") Map<String, String> tagMap,
+                             @ParamName("interfaceid") String interfaceid);
+
+    /**
+     * 删称 Zabbix Trapper ITEM
+     *
+     * @param itemIds ID
+     */
+    @Post
+    @JsonPath("/item/item.trapper.delete")
+    String deleteTrapperItem(@ParamName("itemIds") List<String> itemIds);
+
+    /**
+     * 根据itemid 获取 ITEM 基本信息
+     *
+     * @param itemId itemid
+     * @return String
+     */
+    @Post
+    @JsonPath("/item/item.get")
+    String getItemInfo(@ParamName("itemId") String itemId, @ParamName("hostid") String hostid);
+
+    /**
+     * 根据item key 获取 ITEM 信息
+     *
+     * @param key key
+     * @return String
+     */
+    @Post
+    @JsonPath("/item/item.get")
+    String getItemList(@ParamName("key") String key, @ParamName("hostid") String hostid);
+
+    /**
+     * 根据item name 获取 ITEM 信息
+     *
+     * @param name name
+     * @return String
+     */
+    @Post
+    @JsonPath("/item/item.name.get")
+    String getItemListByName(@ParamName("name") String name);
+}

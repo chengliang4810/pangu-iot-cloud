@@ -51,7 +51,7 @@ import static io.seata.core.exception.TransactionExceptionCode.FailedToSendBranc
 /**
  * The type abstract core.
  *
- * @author chengliang4810
+ * @author ph3636
  */
 public abstract class AbstractCore implements Core {
 
@@ -78,7 +78,7 @@ public abstract class AbstractCore implements Core {
             globalSessionStatusCheck(globalSession);
             globalSession.addSessionLifecycleListener(SessionHolder.getRootSessionManager());
             BranchSession branchSession = SessionHelper.newBranchByGlobal(globalSession, branchType, resourceId,
-                applicationData, lockKeys, clientId);
+                    applicationData, lockKeys, clientId);
             MDC.put(RootContext.MDC_KEY_BRANCH_ID, String.valueOf(branchSession.getBranchId()));
             branchSessionLock(globalSession, branchSession);
             try {
@@ -86,12 +86,12 @@ public abstract class AbstractCore implements Core {
             } catch (RuntimeException ex) {
                 branchSessionUnlock(branchSession);
                 throw new BranchTransactionException(FailedToAddBranch, String
-                    .format("Failed to store branch xid = %s branchId = %s", globalSession.getXid(),
-                        branchSession.getBranchId()), ex);
+                        .format("Failed to store branch xid = %s branchId = %s", globalSession.getXid(),
+                                branchSession.getBranchId()), ex);
             }
             if (LOGGER.isInfoEnabled()) {
                 LOGGER.info("Register branch successfully, xid = {}, branchId = {}, resourceId = {} ,lockKeys = {}",
-                    globalSession.getXid(), branchSession.getBranchId(), resourceId, lockKeys);
+                        globalSession.getXid(), branchSession.getBranchId(), resourceId, lockKeys);
             }
             return branchSession.getBranchId();
         });
@@ -105,8 +105,8 @@ public abstract class AbstractCore implements Core {
         }
         if (globalSession.getStatus() != GlobalStatus.Begin) {
             throw new GlobalTransactionException(GlobalTransactionStatusInvalid, String
-                .format("Could not register branch into global session xid = %s status = %s while expecting %s",
-                    globalSession.getXid(), globalSession.getStatus(), GlobalStatus.Begin));
+                    .format("Could not register branch into global session xid = %s status = %s while expecting %s",
+                            globalSession.getXid(), globalSession.getStatus(), GlobalStatus.Begin));
         }
     }
 
@@ -119,11 +119,11 @@ public abstract class AbstractCore implements Core {
     }
 
     private GlobalSession assertGlobalSessionNotNull(String xid, boolean withBranchSessions)
-        throws TransactionException {
+            throws TransactionException {
         GlobalSession globalSession = SessionHolder.findGlobalSession(xid, withBranchSessions);
         if (globalSession == null) {
             throw new GlobalTransactionException(TransactionExceptionCode.GlobalTransactionNotExist,
-                String.format("Could not found global transaction xid = %s, may be has finished.", xid));
+                    String.format("Could not found global transaction xid = %s, may be has finished.", xid));
         }
         return globalSession;
     }
@@ -135,7 +135,7 @@ public abstract class AbstractCore implements Core {
         BranchSession branchSession = globalSession.getBranch(branchId);
         if (branchSession == null) {
             throw new BranchTransactionException(BranchTransactionNotExist,
-                String.format("Could not found branch session xid = %s branchId = %s", xid, branchId));
+                    String.format("Could not found branch session xid = %s branchId = %s", xid, branchId));
         }
         branchSession.setApplicationData(applicationData);
         globalSession.addSessionLifecycleListener(SessionHolder.getRootSessionManager());
@@ -149,7 +149,7 @@ public abstract class AbstractCore implements Core {
 
     @Override
     public boolean lockQuery(BranchType branchType, String resourceId, String xid, String lockKeys)
-        throws TransactionException {
+            throws TransactionException {
         return true;
     }
 
@@ -165,15 +165,15 @@ public abstract class AbstractCore implements Core {
             return branchCommitSend(request, globalSession, branchSession);
         } catch (IOException | TimeoutException e) {
             throw new BranchTransactionException(FailedToSendBranchCommitRequest,
-                String.format("Send branch commit failed, xid = %s branchId = %s", branchSession.getXid(),
-                    branchSession.getBranchId()), e);
+                    String.format("Send branch commit failed, xid = %s branchId = %s", branchSession.getXid(),
+                            branchSession.getBranchId()), e);
         }
     }
 
     protected BranchStatus branchCommitSend(BranchCommitRequest request, GlobalSession globalSession,
                                             BranchSession branchSession) throws IOException, TimeoutException {
         BranchCommitResponse response = (BranchCommitResponse) remotingServer.sendSyncRequest(
-            branchSession.getResourceId(), branchSession.getClientId(), request);
+                branchSession.getResourceId(), branchSession.getClientId(), request);
         return response.getBranchStatus();
     }
 
@@ -189,21 +189,21 @@ public abstract class AbstractCore implements Core {
             return branchRollbackSend(request, globalSession, branchSession);
         } catch (IOException | TimeoutException e) {
             throw new BranchTransactionException(FailedToSendBranchRollbackRequest,
-                String.format("Send branch rollback failed, xid = %s branchId = %s",
-                    branchSession.getXid(), branchSession.getBranchId()), e);
+                    String.format("Send branch rollback failed, xid = %s branchId = %s",
+                            branchSession.getXid(), branchSession.getBranchId()), e);
         }
     }
 
     protected BranchStatus branchRollbackSend(BranchRollbackRequest request, GlobalSession globalSession,
                                               BranchSession branchSession) throws IOException, TimeoutException {
         BranchRollbackResponse response = (BranchRollbackResponse) remotingServer.sendSyncRequest(
-            branchSession.getResourceId(), branchSession.getClientId(), request);
+                branchSession.getResourceId(), branchSession.getClientId(), request);
         return response.getBranchStatus();
     }
 
     @Override
     public String begin(String applicationId, String transactionServiceGroup, String name, int timeout)
-        throws TransactionException {
+            throws TransactionException {
         return null;
     }
 
