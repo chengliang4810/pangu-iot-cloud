@@ -1,22 +1,18 @@
 package com.pangu.common.zabbix.api;
 
-import com.dtflys.forest.annotation.BaseRequest;
 import com.dtflys.forest.annotation.Post;
 import com.pangu.common.zabbix.annotation.JsonPath;
 import com.pangu.common.zabbix.annotation.ParamName;
-import com.pangu.common.zabbix.inteceptor.JsonBodyBuildInterceptor;
 
 import java.util.List;
 
 /**
- * @author nantian created at 2021/8/3 14:50
+ * zbx历史数据
+ *
+ * @author chengliang
+ * @date 2023/03/22
  */
-
-@BaseRequest(
-        baseURL = "http://${zbxServerIp}:${zbxServerPort}${zbxApiUrl}",
-        interceptor = JsonBodyBuildInterceptor.class
-)
-public interface ZbxHistoryGet {
+public interface ZbxHistoryGet extends BaseApi {
 
     @Post
     @JsonPath("/history/history.get")

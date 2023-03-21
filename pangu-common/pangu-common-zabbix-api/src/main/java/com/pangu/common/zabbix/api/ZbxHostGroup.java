@@ -1,22 +1,18 @@
 package com.pangu.common.zabbix.api;
 
-import com.dtflys.forest.annotation.BaseRequest;
 import com.dtflys.forest.annotation.Post;
 import com.pangu.common.zabbix.annotation.JsonPath;
 import com.pangu.common.zabbix.annotation.ParamName;
-import com.pangu.common.zabbix.inteceptor.JsonBodyBuildInterceptor;
 
 import java.util.List;
 
 /**
- * @author nantian created at 2021/8/3 16:02
+ * zbx主机组
+ *
+ * @author chengliang
+ * @date 2023/03/22
  */
-
-@BaseRequest(
-        baseURL = "http://${zbxServerIp}:${zbxServerPort}${zbxApiUrl}",
-        interceptor = JsonBodyBuildInterceptor.class
-)
-public interface ZbxHostGroup {
+public interface ZbxHostGroup extends BaseApi {
 
 
     /**
@@ -25,7 +21,7 @@ public interface ZbxHostGroup {
      * @param userAuth api token
      * @return String
      */
-    @Post(headers = "authTag: noAuth")
+    @Post()
     @JsonPath("/hostgroup/hostgroup.global.get")
     String getGlobalHostGroup(@ParamName("userAuth") String userAuth);
 
@@ -36,7 +32,7 @@ public interface ZbxHostGroup {
      * @param userAuth userToken
      * @return String
      */
-    @Post(headers = "authTag: noAuth")
+    @Post()
     @JsonPath("/hostgroup/hostgroup.init.create")
     String createGlobalHostGroup(@ParamName("userAuth") String userAuth);
 

@@ -10,7 +10,6 @@
 
     <modules>
         <module>pangu-monitor</module>
-        <module>pangu-xxl-job-admin</module>
         <module>pangu-sentinel-dashboard</module>
         <module>pangu-seata-server</module>
         <module>pangu-nacos</module>

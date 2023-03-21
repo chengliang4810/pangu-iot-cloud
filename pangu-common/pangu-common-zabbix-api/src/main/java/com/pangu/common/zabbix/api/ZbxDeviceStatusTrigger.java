@@ -1,21 +1,16 @@
 package com.pangu.common.zabbix.api;
 
-import com.dtflys.forest.annotation.BaseRequest;
 import com.dtflys.forest.annotation.Post;
 import com.pangu.common.zabbix.annotation.JsonPath;
 import com.pangu.common.zabbix.annotation.ParamName;
-import com.pangu.common.zabbix.inteceptor.JsonBodyBuildInterceptor;
 
 /**
- * @author nantian created at 2021/8/10 16:32
- * <p>
  * 设备离线 在线触发器，判断设备 在线，离线 状态
+ *
+ * @author chengliang
+ * @date 2023/03/22
  */
-@BaseRequest(
-        baseURL = "http://${zbxServerIp}:${zbxServerPort}${zbxApiUrl}",
-        interceptor = JsonBodyBuildInterceptor.class
-)
-public interface ZbxDeviceStatusTrigger {
+public interface ZbxDeviceStatusTrigger extends BaseApi {
 
 
     /**

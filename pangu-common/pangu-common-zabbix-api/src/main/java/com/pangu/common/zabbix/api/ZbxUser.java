@@ -1,24 +1,20 @@
 package com.pangu.common.zabbix.api;
 
-import com.dtflys.forest.annotation.BaseRequest;
 import com.dtflys.forest.annotation.Post;
 import com.pangu.common.zabbix.annotation.JsonPath;
 import com.pangu.common.zabbix.annotation.ParamName;
-import com.pangu.common.zabbix.inteceptor.JsonBodyBuildInterceptor;
 
 import java.util.List;
 
 /**
- * @author nantian created at 2021/8/2 13:09
+ * zbx用户
  * <p>
  * ZABBIX User 接口
+ *
+ * @author chengliang
+ * @date 2023/03/22
  */
-
-@BaseRequest(
-        baseURL = "http://${zbxServerIp}:${zbxServerPort}${zbxApiUrl}",
-        interceptor = JsonBodyBuildInterceptor.class
-)
-public interface ZbxUser {
+public interface ZbxUser extends BaseApi{
 
     /**
      * 用户登录

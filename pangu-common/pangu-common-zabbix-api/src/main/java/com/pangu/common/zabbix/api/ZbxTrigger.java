@@ -1,19 +1,19 @@
 package com.pangu.common.zabbix.api;
 
 
-import com.dtflys.forest.annotation.BaseRequest;
 import com.dtflys.forest.annotation.Post;
 import com.pangu.common.zabbix.annotation.JsonPath;
 import com.pangu.common.zabbix.annotation.ParamName;
-import com.pangu.common.zabbix.inteceptor.JsonBodyBuildInterceptor;
 
 import java.util.Map;
 
-@BaseRequest(
-        baseURL = "http://${zbxServerIp}:${zbxServerPort}${zbxApiUrl}",
-        interceptor = JsonBodyBuildInterceptor.class
-)
-public interface ZbxTrigger {
+/**
+ * zbx触发
+ *
+ * @author chengliang
+ * @date 2023/03/22
+ */
+public interface ZbxTrigger extends BaseApi {
 
     /**
      * 创建告警触发器
