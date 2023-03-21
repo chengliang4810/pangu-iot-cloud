@@ -8,7 +8,7 @@ RUN mkdir -p /pangu/iot/manager/logs \
 
 WORKDIR /pangu/iot/manager
 
-ENV SERVER_PORT=9201
+ENV SERVER_PORT=7201
 
 EXPOSE ${SERVER_PORT}
 

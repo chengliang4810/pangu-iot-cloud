@@ -369,7 +369,6 @@
         <module>pangu-common</module>
         <module>pangu-iot</module>
         <module>pangu-iot-driver</module>
-        <module>pangu-example</module>
     </modules>
     <packaging>pom</packaging>
 

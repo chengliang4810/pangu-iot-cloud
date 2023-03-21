@@ -2,21 +2,21 @@ FROM anapsix/alpine-java:8_server-jre_unlimited
 
 MAINTAINER chengliang4810
 
-RUN mkdir -p /pangu/iot/manager/logs \
-    /pangu/iot/manager/temp \
+RUN mkdir -p /pangu/iot/data/logs \
+    /pangu/iot/data/temp \
     /pangu/skywalking/agent
 
-WORKDIR /pangu/iot/manager
+WORKDIR /pangu/iot/data
 
-ENV SERVER_PORT=9201
+ENV SERVER_PORT=7202
 
 EXPOSE ${SERVER_PORT}
 
-ADD ./target/pangu-iot-manager.jar ./app.jar
+ADD ./target/pangu-iot-data.jar ./app.jar
 
 ENTRYPOINT ["java", \
             "-Djava.security.egd=file:/dev/./urandom", \
             "-Dserver.port=${SERVER_PORT}", \
-#            "-Dskywalking.agent.service_name=pangu-iot/manager", \
+#            "-Dskywalking.agent.service_name=pangu-iot/data", \
 #            "-javaagent:/pangu/skywalking/agent/skywalking-agent.jar", \
             "-jar", "app.jar"]

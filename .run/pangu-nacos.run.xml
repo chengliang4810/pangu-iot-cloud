@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="pangu-nacos" type="docker-deploy" factoryName="dockerfile" server-name="Docker">
+  <configuration default="false" name="pangu-nacos" type="docker-deploy" factoryName="dockerfile" server-name="IotDocker">
     <deployment type="dockerfile">
       <settings>
         <option name="imageTag" value="pangu/pangu-nacos:1.0.0" />
