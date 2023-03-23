@@ -5,6 +5,5 @@
         "output": "extend",
         "templateids":${templateid}
         },
-    "auth": "${userAuth}",
     "id": 1
 }

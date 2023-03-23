@@ -5,6 +5,5 @@
         "hostid":"${hostid}",
         "status":"${status}"
     },
-    "auth": "${userAuth}",
     "id": 1
 }

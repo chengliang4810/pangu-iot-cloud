@@ -6,6 +6,5 @@
         "expression": "${expression}",
         "priority" : ${ruleLevel}
     },
-    "auth": "${userAuth}",
     "id": 1
 }

@@ -23,7 +23,7 @@ public interface ZbxUser extends BaseApi{
      * @param password 密码
      * @return 登录返回的状态信息
      */
-    @Post(headers = "authTag: noAuth")
+    @Post
     @JsonPath("/user/userLogin")
     String userLogin(@ParamName("username") String username,
                      @ParamName("password") String password);

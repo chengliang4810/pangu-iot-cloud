@@ -15,6 +15,5 @@
         ],
         "usrgrpid": "${userGroupId}"
     },
-    "auth": "${userAuth}",
     "id": 1
 }

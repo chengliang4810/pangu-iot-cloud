@@ -14,6 +14,5 @@
         }
         </#if>
     },
-    "auth": "${userAuth}",
     "id": 1
 }

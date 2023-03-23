@@ -6,6 +6,5 @@
         "selectMappings": "extend",
         "valuemapids": ${valuemapids}
     },
-    "auth": "${userAuth}",
     "id": 1
 }

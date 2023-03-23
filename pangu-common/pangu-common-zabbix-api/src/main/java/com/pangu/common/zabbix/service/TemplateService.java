@@ -30,7 +30,7 @@ public class TemplateService {
      */
     public String zbxTemplateCreate(String hostGroupId, String templateName) {
         // 全局分组
-        log.info("create template {} , default group id {}", templateName, hostGroupId);
+        log.debug("create template {} , default group id {}", templateName, hostGroupId);
         String result = zbxTemplate.templateCreate(templateName, hostGroupId);
         return JsonUtils.parseObject(result, TemplateIds.class).getTemplateids()[0];
     }

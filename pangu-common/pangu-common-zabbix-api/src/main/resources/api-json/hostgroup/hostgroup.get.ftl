@@ -5,6 +5,5 @@
         "output": "extend",
         "groupids": ${groupids}
     },
-    "auth": "${userAuth}",
     "id": 1
 }

@@ -5,6 +5,5 @@
         "eventids": "${eventId}",
         "action": ${action}
     },
-    "auth": "${userAuth}",
     "id": 1
 }

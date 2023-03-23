@@ -4,6 +4,5 @@
     "params": {
         "name": "__global__"
     },
-    "auth": "${userAuth}",
     "id": 1
 }

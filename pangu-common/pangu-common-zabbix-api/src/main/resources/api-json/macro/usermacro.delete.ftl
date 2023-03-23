@@ -6,6 +6,5 @@
             "${id}"<#if id_has_next>,</#if>
         </#list>
     ],
-    "auth": "${userAuth}",
     "id": 1
 }

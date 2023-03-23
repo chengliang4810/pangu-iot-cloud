@@ -92,10 +92,9 @@ public class ProblemConsumerService implements ReceiveProblemService {
      */
     private void deviceOffline(ProblemMessage problemMessage) {
         ZbxProblem zbxProblem = problemMessage.getData();
-        // 如果超过3秒则不执行设备离线函数
+        // 如果超过3秒则不执行设备离线函数，防止设备离线后立即上线，导致设备离线函数执行
         LocalDateTime problemTime = TimeUtil.toLocalDateTime(zbxProblem.getClock());
         if (TimeUtil.getSecondBetween(problemTime, LocalDateTime.now()) > 3) {
-            log.debug("设备离线超时：{}", zbxProblem);
             problemMessage.ack();
             return;
         }

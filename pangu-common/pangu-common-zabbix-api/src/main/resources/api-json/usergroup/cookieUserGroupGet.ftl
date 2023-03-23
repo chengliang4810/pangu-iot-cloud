@@ -8,6 +8,5 @@
             "name":"cookie"
         }
     },
-    "auth": "${userAuth}",
     "id": 1
 }

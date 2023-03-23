@@ -5,6 +5,5 @@
         "host": "${name}",
         "status": "5"
     },
-    "auth": "${userAuth}",
     "id": 1
 }

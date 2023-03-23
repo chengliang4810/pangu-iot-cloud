@@ -5,6 +5,5 @@
         "output": "extend",
         "usrgrpids": ${usrgrpids}
     },
-    "auth": "${userAuth}",
     "id": 1
 }

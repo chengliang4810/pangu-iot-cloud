@@ -29,6 +29,5 @@
             "error"
         ]
     },
-    "auth": "${userAuth}",
     "id": 1
 }

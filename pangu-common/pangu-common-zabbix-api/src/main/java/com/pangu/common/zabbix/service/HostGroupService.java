@@ -1,16 +1,13 @@
 package com.pangu.common.zabbix.service;
 
-import cn.hutool.core.util.StrUtil;
 import com.dtflys.forest.config.ForestConfiguration;
 import com.pangu.common.core.utils.JsonUtils;
 import com.pangu.common.zabbix.api.ZbxHostGroup;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.Map;
 
@@ -29,31 +26,7 @@ public class HostGroupService {
 
     private final ForestConfiguration configuration;
 
-    @Autowired(required = false)
-    private HostGroupCallback hostGroupCallback;
-
     private static String zbxApiToken;
-
-    /**
-     * 初始化Zabbix主机组
-     */
-    @PostConstruct
-    private void initHostGroup() {
-        log.debug("初始化Zabbix主机组 {}", configuration);
-        zbxApiToken = configuration.getVariableValue("zbxApiToken").toString();
-        // 获取全局主机分组
-        String groupId = getGlobalHostGroup();
-        if (StrUtil.isBlank(groupId)){
-            // 创建全局主机组
-            groupId = createGlobalHostGroup();
-        }
-
-        //
-        if (hostGroupCallback != null){
-            hostGroupCallback.initAfter(groupId);
-        }
-
-    }
 
     /**
      * 创建默认全局主机组
@@ -86,7 +59,7 @@ public class HostGroupService {
      * @param hostGroupName 主机组名称
      * @return zbxId {@link String}
      */
-    public String createHostGroup(String hostGroupName){
+    public String createHostGroup(String hostGroupName) {
         String response = zbxHostGroup.hostGroupCreate(hostGroupName);
         return JsonUtils.parseObject(response, ZbxResponseIds.class).getGroupids()[0];
     }

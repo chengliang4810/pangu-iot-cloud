@@ -4,6 +4,5 @@
     "params": {
         "hostids": ${hostid}
     },
-    "auth": "${userAuth}",
     "id": 1
 }

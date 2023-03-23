@@ -24,6 +24,5 @@
             "execute_on": 1
         }
     ],
-    "auth": "${userAuth}",
     "id": 1
 }

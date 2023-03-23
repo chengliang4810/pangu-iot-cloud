@@ -4,6 +4,5 @@
     "params": [
         "${valueMapId}"
     ],
-    "auth": "${userAuth}",
     "id": 1
 }

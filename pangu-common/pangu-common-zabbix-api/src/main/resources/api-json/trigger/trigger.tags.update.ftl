@@ -12,6 +12,5 @@
             </#list>
         ]
     },
-    "auth": "${userAuth}",
     "id": 1
 }

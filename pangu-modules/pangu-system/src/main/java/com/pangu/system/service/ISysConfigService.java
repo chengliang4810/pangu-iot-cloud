@@ -85,5 +85,5 @@ public interface ISysConfigService {
      */
     String checkConfigKeyUnique(SysConfig config);
 
-    Boolean updateConfigValueByKey(String key, String value);
+    String updateConfigValueByKey(String key, String value);
 }

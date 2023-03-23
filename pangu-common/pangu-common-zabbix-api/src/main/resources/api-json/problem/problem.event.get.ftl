@@ -21,6 +21,5 @@
         },
         "sortorder": "DESC"
     },
-    "auth": "${userAuth}",
     "id": 1
 }

@@ -16,6 +16,5 @@
         "selectValueMaps":"extend",
         "selectInterface":"extend"
     },
-    "auth": "${userAuth}",
     "id": 1
 }

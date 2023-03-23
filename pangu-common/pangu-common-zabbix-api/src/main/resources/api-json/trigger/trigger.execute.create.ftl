@@ -9,6 +9,5 @@
         "recovery_mode":2,
         "type":1
     },
-    "auth": "${userAuth}",
     "id": 1
 }

@@ -7,6 +7,5 @@
             "name":"Guest role"
         }
     },
-    "auth": "${userAuth}",
     "id": 1
 }

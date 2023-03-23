@@ -9,6 +9,5 @@
             "id": "${hostGroupId}"
         }
     },
-    "auth": "${userAuth}",
     "id": 1
 }

@@ -20,6 +20,5 @@
             "interfaceid"
         ]
     },
-    "auth": "${userAuth}",
     "id": 1
 }

@@ -21,6 +21,5 @@
         }
         <#-- nodata(/Zabbix server/system.cpu.util[,nice],20s)=0 -->
     ],
-    "auth": "${userAuth}",
     "id": 1
 }

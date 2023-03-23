@@ -24,6 +24,5 @@
         "sortorder": "DESC",
         "limit": ${hisNum}
     },
-    "auth": "${userAuth}",
     "id": 1
 }

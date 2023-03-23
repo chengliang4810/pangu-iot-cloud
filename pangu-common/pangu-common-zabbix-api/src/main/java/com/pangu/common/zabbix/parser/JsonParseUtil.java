@@ -1,6 +1,6 @@
 package com.pangu.common.zabbix.parser;
 
-import freemarker.cache.NullCacheStorage;
+import freemarker.cache.SoftCacheStorage;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -9,9 +9,10 @@ import java.io.StringWriter;
 import java.util.Map;
 
 /**
- * Created by nantian on 2021-03-13 0:17
+ * json解析
  *
- * @version 1.0
+ * @author chengliang
+ * @date 2023/03/22
  */
 public class JsonParseUtil {
 
@@ -21,7 +22,7 @@ public class JsonParseUtil {
         configuration = new Configuration(Configuration.DEFAULT_INCOMPATIBLE_IMPROVEMENTS);
         configuration.setDefaultEncoding("utf-8");
         configuration.setClassForTemplateLoading(JsonParseUtil.class, "/api-json");
-        configuration.setCacheStorage(new NullCacheStorage());
+        configuration.setCacheStorage(new SoftCacheStorage());
         configuration.setTemplateUpdateDelayMilliseconds(1000);
         try {
             configuration.setSetting("number_format", "computer");

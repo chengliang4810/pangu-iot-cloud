@@ -6,6 +6,5 @@
         "selectInterface": "extend",
         "proxyids": ${proxyids}
     },
-    "auth": "${userAuth}",
     "id": 1
 }

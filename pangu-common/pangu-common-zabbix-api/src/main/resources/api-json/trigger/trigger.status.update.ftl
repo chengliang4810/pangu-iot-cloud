@@ -5,6 +5,5 @@
         "triggerid": "${triggerid}",
         "status": ${status}
     },
-    "auth": "${userAuth}",
     "id": 1
 }

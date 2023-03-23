@@ -9,6 +9,5 @@
             "name": "${name}"
         }
     },
-    "auth": "${userAuth}",
     "id": 1
 }

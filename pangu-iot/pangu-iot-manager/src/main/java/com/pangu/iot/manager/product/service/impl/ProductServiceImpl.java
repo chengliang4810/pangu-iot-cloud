@@ -117,6 +117,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         tdEngineService.initSuperTable(SUPER_TABLE_PREFIX + productId);
         // 创建zabbix模板
         String hostGroupId = configService.getConfigByKey(GLOBAL_HOST_GROUP_KEY);
+
         String zbxId = templateService.zbxTemplateCreate(hostGroupId, productId.toString());
 
         // Bean转换，设置ID与zabbix模板ID

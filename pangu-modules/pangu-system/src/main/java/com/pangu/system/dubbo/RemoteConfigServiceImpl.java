@@ -28,9 +28,13 @@ public class RemoteConfigServiceImpl implements RemoteConfigService {
 
     @Override
     public Boolean editValue(String key, String value) {
-        // 防止修改其他字段信息
-        // SysConfig sysConfig = new SysConfig().setConfigId(config.getConfigId()).setConfigKey(config.getConfigKey()).setConfigValue(config.getConfigValue());
-        return configService.updateConfigValueByKey(key, value);
+        try {
+            configService.updateConfigValueByKey(key, value);
+            return true;
+        } catch (Exception e) {
+            log.error("editValue error: {}", e.getMessage());
+            return false;
+        }
     }
 
 }

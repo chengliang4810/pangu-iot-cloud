@@ -7,6 +7,5 @@
             "name":"Super admin role"
         }
     },
-    "auth": "${userAuth}",
     "id": 1
 }

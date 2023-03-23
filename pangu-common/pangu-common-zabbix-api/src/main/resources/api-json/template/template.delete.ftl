@@ -4,6 +4,5 @@
     "params": [
         "${templateid}"
     ],
-    "auth": "${userAuth}",
     "id": 1
 }

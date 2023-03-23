@@ -4,9 +4,8 @@
     "params": {
         "host": "${templateName}",
             "groups": {
-                "groupid": ${groupId}
+                "groupid": 1
             }
         },
-    "auth": "${userAuth}",
     "id": 1
 }

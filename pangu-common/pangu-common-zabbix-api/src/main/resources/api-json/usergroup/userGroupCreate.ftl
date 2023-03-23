@@ -5,6 +5,5 @@
         "name": "${userGroupName}",
         "gui_access": 3
     },
-    "auth": "${userAuth}",
     "id": 1
 }
