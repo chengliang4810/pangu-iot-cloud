@@ -36,7 +36,6 @@ public class ProductBO extends BaseEntity {
     /**
      * 产品编号
      */
-    @NotBlank(message = "产品编号不能为空", groups = { AddGroup.class, EditGroup.class })
     private String code;
 
     /**

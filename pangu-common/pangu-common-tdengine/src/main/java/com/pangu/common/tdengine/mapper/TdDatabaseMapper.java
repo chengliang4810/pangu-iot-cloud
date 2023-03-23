@@ -43,7 +43,7 @@ public interface TdDatabaseMapper {
      * @param key       关键
      * @param valueType 值类型
      */
-    @Insert("ALTER STABLE ${database}.${table} ADD COLUMN ${key} ${valueType}")
+    @Insert("ALTER STABLE ${database}.${table} ADD COLUMN #{key} ${valueType}")
     void createSuperTableField(@Param("database") String database, @Param("table") String table, @Param("key") String key, @Param("valueType") String valueType);
 
     /**
@@ -53,7 +53,7 @@ public interface TdDatabaseMapper {
      * @param table    表格
      * @param key      关键
      */
-    @Delete("ALTER STABLE ${database}.${table} DROP COLUMN ${key}")
+    @Delete("ALTER STABLE ${database}.${table} DROP COLUMN #{key}")
     void deleteSuperTableField(@Param("database") String database, @Param("table") String table, @Param("key") String key);
 
     /**

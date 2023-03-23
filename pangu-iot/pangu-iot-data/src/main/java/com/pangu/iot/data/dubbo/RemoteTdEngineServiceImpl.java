@@ -2,6 +2,7 @@ package com.pangu.iot.data.dubbo;
 
 import cn.hutool.core.collection.ListUtil;
 import com.pangu.common.core.constant.IotConstants;
+import com.pangu.common.core.exception.ServiceException;
 import com.pangu.common.tdengine.model.TdColumn;
 import com.pangu.data.api.RemoteTdEngineService;
 import com.pangu.data.api.model.TdColumnDTO;
@@ -76,7 +77,11 @@ public class RemoteTdEngineServiceImpl implements RemoteTdEngineService {
      */
     @Override
     public void createSuperTableField(String table, String key, String valueType) {
-        tdEngineService.createSuperTableField(table, key, valueType);
+        try {
+            tdEngineService.createSuperTableField(table, key, valueType);
+        } catch (Exception e) {
+            throw new ServiceException("新增字段失败: " +  e.getMessage());
+        }
     }
 
     /**

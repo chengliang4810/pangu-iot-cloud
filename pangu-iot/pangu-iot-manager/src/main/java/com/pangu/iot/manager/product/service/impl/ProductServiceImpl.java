@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.pangu.common.core.utils.Assert;
 import com.pangu.common.core.utils.StringUtils;
 import com.pangu.common.mybatis.core.page.PageQuery;
 import com.pangu.common.mybatis.core.page.TableDataInfo;
@@ -106,18 +107,21 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
      */
     @Override
     public Boolean insertByBo(ProductBO bo) {
+        String configValue = configService.getConfigByKey(GLOBAL_TEMPLATE_GROUP_KEY);
+        Assert.notBlank(configValue, "全局模板组配置不存在,请联系管理员");
+
         //未指定产品编码，则生成
         if(StrUtil.isBlank(bo.getCode())){
             bo.setCode(IdUtil.nanoId());
         }
-
         // 生成主键
         Long productId = IdUtil.getSnowflake().nextId();
+
         // 初始化超级表
         tdEngineService.initSuperTable(SUPER_TABLE_PREFIX + productId);
-        // 创建zabbix主机组
-        String zbxId = templateService.zbxTemplateCreate(GLOBAL_TEMPLATE_GROUP_KEY, productId.toString());
 
+        // 创建zabbix主机组
+        String zbxId = templateService.zbxTemplateCreate(configValue, productId.toString());
         // Bean转换，设置ID与zabbix模板ID
         Product add = productConvert.toEntity(bo);
         add.setId(productId);
