@@ -18,13 +18,13 @@ public interface ZbxTemplate extends BaseApi {
      * 创建模板
      *
      * @param templateName 模板名称
-     * @param groupId      模板分组ID
+     * @param templateGroupId  模板组ID
      * @return String
      */
     @Post
     @JsonPath("/template/template.create")
     String templateCreate(@ParamName("templateName") String templateName,
-                          @ParamName("groupId") String groupId);
+                          @ParamName("groupId") String templateGroupId);
 
 
     /**

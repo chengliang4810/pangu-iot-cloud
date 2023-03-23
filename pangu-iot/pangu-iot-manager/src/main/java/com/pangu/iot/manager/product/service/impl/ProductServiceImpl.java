@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static com.pangu.common.core.constant.ConfigKeyConstants.GLOBAL_HOST_GROUP_KEY;
+import static com.pangu.common.core.constant.ConfigKeyConstants.GLOBAL_TEMPLATE_GROUP_KEY;
 import static com.pangu.common.core.constant.IotConstants.SUPER_TABLE_PREFIX;
 
 /**
@@ -115,10 +115,8 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         Long productId = IdUtil.getSnowflake().nextId();
         // 初始化超级表
         tdEngineService.initSuperTable(SUPER_TABLE_PREFIX + productId);
-        // 创建zabbix模板
-        String hostGroupId = configService.getConfigByKey(GLOBAL_HOST_GROUP_KEY);
-
-        String zbxId = templateService.zbxTemplateCreate(hostGroupId, productId.toString());
+        // 创建zabbix主机组
+        String zbxId = templateService.zbxTemplateCreate(GLOBAL_TEMPLATE_GROUP_KEY, productId.toString());
 
         // Bean转换，设置ID与zabbix模板ID
         Product add = productConvert.toEntity(bo);

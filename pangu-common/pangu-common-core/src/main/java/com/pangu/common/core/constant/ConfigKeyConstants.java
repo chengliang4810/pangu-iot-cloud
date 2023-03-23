@@ -17,4 +17,9 @@ public interface ConfigKeyConstants {
      */
     public static final String GLOBAL_HOST_GROUP_KEY = "iot.global.host.group.id";
 
+    /**
+     * IOT模板分组KEY
+     */
+    public static final String GLOBAL_TEMPLATE_GROUP_KEY = "iot.global.template.group.id";
+
 }
