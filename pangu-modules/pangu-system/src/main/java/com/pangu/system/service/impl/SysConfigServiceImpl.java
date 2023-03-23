@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.pangu.common.core.constant.CacheNames;
 import com.pangu.common.core.constant.UserConstants;
 import com.pangu.common.core.exception.ServiceException;
+import com.pangu.common.core.utils.Assert;
 import com.pangu.common.core.utils.StringUtils;
 import com.pangu.common.mybatis.core.page.PageQuery;
 import com.pangu.common.mybatis.core.page.TableDataInfo;
@@ -134,12 +135,15 @@ public class SysConfigServiceImpl implements ISysConfigService {
 
     @Override
     @CachePut(cacheNames = CacheNames.SYS_CONFIG, key = "#key")
-    public Boolean updateConfigValueByKey(String key, String value) {
-        if (StringUtils.isBlank(key)) {
-            return false;
+    public String updateConfigValueByKey(String key, String value) {
+        Assert.notBlank(key, "参数key不能为空");
+
+        int update = baseMapper.update(new SysConfig().setConfigValue(value), new LambdaQueryWrapper<SysConfig>()
+            .eq(SysConfig::getConfigKey, key));
+        if (update > 0) {
+            return value;
         }
-        return baseMapper.update(new SysConfig().setConfigValue(value), new LambdaQueryWrapper<SysConfig>()
-                .eq(SysConfig::getConfigKey, key)) > 0;
+        throw new ServiceException("操作失败");
     }
 
     /**
