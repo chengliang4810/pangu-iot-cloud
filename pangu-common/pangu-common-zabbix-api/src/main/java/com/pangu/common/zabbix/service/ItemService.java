@@ -34,7 +34,7 @@ public class ItemService {
     public String createTrapperItem(TrapperItemDTO trapperItemDTO) {
         log.debug("创建监控项:{}", JSONUtil.toJsonStr(trapperItemDTO));
         System.out.println("创建监控项:" + JSONUtil.toJsonStr(trapperItemDTO));
-        String response = zbxItem.createTrapperItem(trapperItemDTO.getItemName(), trapperItemDTO.getKey(), trapperItemDTO.getHostId(), trapperItemDTO.getSource(), "2s", trapperItemDTO.getDependencyItemZbxId(), trapperItemDTO.getValueType(), trapperItemDTO.getUnits(), null, trapperItemDTO.getValueMapId(), trapperItemDTO.getTags(), null);
+        String response = zbxItem.createTrapperItem(trapperItemDTO.getItemName(), trapperItemDTO.getKey(), trapperItemDTO.getHostId(), trapperItemDTO.getSource(), "0", trapperItemDTO.getDependencyItemZbxId(), trapperItemDTO.getValueType(), trapperItemDTO.getUnits(), null, trapperItemDTO.getValueMapId(), trapperItemDTO.getTags(), null);
         return JsonUtils.parseObject(response, TemplateIds.class).getItemids()[0];
     }
 
@@ -51,7 +51,7 @@ public class ItemService {
                 , trapperItemDTO.getKey()
                 , trapperItemDTO.getHostId()
                 , trapperItemDTO.getSource()
-                , "2s"
+                , "0"
                 , trapperItemDTO.getDependencyItemZbxId()
                 , trapperItemDTO.getValueType()
                 , trapperItemDTO.getUnits()

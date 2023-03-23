@@ -13,7 +13,7 @@
         <#if delay??>
         "delay":"${delay}",
         </#if>
-        "history":"30d",
+        "history":"7d",
         <#if source == '18'>
             "master_itemid":${masterItemid},
         </#if>
