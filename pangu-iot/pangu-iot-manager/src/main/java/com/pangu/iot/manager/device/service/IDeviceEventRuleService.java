@@ -34,4 +34,12 @@ public interface IDeviceEventRuleService {
      * @return {@link Boolean}
      */
     Boolean updateDeviceEventRuleByBo(DeviceEventRuleBO bo);
+
+    /**
+     * 按产品id删除
+     *
+     * @param productId 产品id
+     * @return {@link Boolean}
+     */
+    Boolean deleteByProductId(Long productId);
 }

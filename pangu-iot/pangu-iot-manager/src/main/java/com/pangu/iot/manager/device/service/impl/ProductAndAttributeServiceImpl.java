@@ -21,6 +21,7 @@ import com.pangu.iot.manager.product.domain.Product;
 import com.pangu.iot.manager.product.domain.ProductEventExpression;
 import com.pangu.iot.manager.product.service.IProductEventExpressionService;
 import com.pangu.iot.manager.product.service.IProductService;
+import com.pangu.iot.manager.product.service.IProductServiceService;
 import com.pangu.manager.api.domain.Device;
 import com.pangu.manager.api.domain.DeviceAttribute;
 import lombok.RequiredArgsConstructor;
@@ -55,11 +56,13 @@ public class ProductAndAttributeServiceImpl implements IProductAndAttributeServi
     private final TemplateService templateService;
     private final RemoteTdEngineService tdEngineService;
     private final IDeviceGroupService deviceGroupService;
+    private final IProductServiceService productServiceService;
     private final DeviceAttributeConvert deviceAttributeConvert;
     private final IDeviceAttributeService deviceAttributeService;
     private final IDeviceGroupRelationService deviceGroupRelationService;
     private final IDeviceStatusFunctionService deviceStatusFunctionService;
     private final IProductEventExpressionService productEventExpressionService;
+    private final IDeviceEventRuleService deviceEventRuleService;
 
     /**
      * 删除设备 根据 ids
@@ -299,6 +302,13 @@ public class ProductAndAttributeServiceImpl implements IProductAndAttributeServi
 
             // 删除产品关联的属性，事件等
             deviceAttributeService.deleteByProductId(productId);
+
+            // 删除产品关联的功能
+            productServiceService.deleteByProductId(productId);
+
+            // 删除产品关联的告警
+            deviceEventRuleService.deleteByProductId(productId);
+
         });
         return productService.deleteWithValidByIds(ids, false);
     }

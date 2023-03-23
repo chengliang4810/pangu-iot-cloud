@@ -50,6 +50,25 @@ public class DeviceEventRuleServiceImpl implements IDeviceEventRuleService {
     private final IProductEventExpressionService productEventExpressionService;
 
     /**
+     * 按产品id删除
+     *
+     * @param productId 产品id
+     * @return {@link Boolean}
+     */
+    @Override
+    public Boolean deleteByProductId(Long productId) {
+        List<ProductEventRelation> productEventRelations = productEventRelationService.list(Wrappers.lambdaQuery(ProductEventRelation.class).eq(ProductEventRelation::getRelationId, productId));
+        if (CollectionUtil.isNotEmpty(productEventRelations)) {
+            List<Long> eventIds = productEventRelations.parallelStream().map(ProductEventRelation::getEventRuleId).collect(Collectors.toList());
+            productEventService.removeByIds(eventIds);
+            productEventServiceService.remove(Wrappers.lambdaQuery(ProductEventService.class).in(ProductEventService::getEventRuleId, eventIds));
+            productEventRelationService.remove(Wrappers.lambdaQuery(ProductEventRelation.class).in(ProductEventRelation::getEventRuleId, eventIds));
+            productEventExpressionService.remove(Wrappers.lambdaQuery(ProductEventExpression.class).in(ProductEventExpression::getRuleId, eventIds));
+        }
+        return true;
+    }
+
+    /**
      * 更新设备告警事件
      *
      * @param deviceEventRule 薄

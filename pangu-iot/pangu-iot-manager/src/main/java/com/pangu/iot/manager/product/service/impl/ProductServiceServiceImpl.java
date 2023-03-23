@@ -263,4 +263,23 @@ public class ProductServiceServiceImpl extends ServiceImpl<ProductServiceMapper,
         return baseMapper.selectList(Wrappers.lambdaQuery(ProductService.class).in(ProductService::getId, ids));
     }
 
+    /**
+     * 按产品id删除
+     *
+     * @param productId 产品id
+     * @return {@link Boolean}
+     */
+    @Override
+    @Transactional
+    public Boolean deleteByProductId(Long productId) {
+        List<ProductServiceRelation> serviceRelations = serviceRelationService.list(Wrappers.<ProductServiceRelation>lambdaQuery().eq(ProductServiceRelation::getRelationId, productId));
+        if (CollectionUtil.isEmpty(serviceRelations)){
+            return true;
+        }
+        serviceRelationService.remove(Wrappers.<ProductServiceRelation>lambdaQuery().eq(ProductServiceRelation::getRelationId, productId));
+        List<Long> ids = serviceRelations.stream().map(ProductServiceRelation::getServiceId).collect(Collectors.toList());
+        return baseMapper.deleteBatchIds(ids) > 0;
+    }
+
+
 }

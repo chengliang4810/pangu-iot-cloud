@@ -57,4 +57,12 @@ public interface IProductServiceService extends IService<ProductService> {
      * @return {@link Map}<{@link Long}, {@link Map}<{@link Long}, {@link ProductService}>>
      */
     Map<Long, Map<Long, ProductService>> getProfileServiceMap(Set<Long> deviceIds);
+
+    /**
+     * 按产品id删除
+     *
+     * @param productId 产品id
+     * @return {@link Boolean}
+     */
+    Boolean deleteByProductId(Long productId);
 }
