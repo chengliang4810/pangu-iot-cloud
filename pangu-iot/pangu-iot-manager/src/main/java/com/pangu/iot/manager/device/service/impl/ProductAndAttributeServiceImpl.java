@@ -309,6 +309,9 @@ public class ProductAndAttributeServiceImpl implements IProductAndAttributeServi
             // 删除产品关联的告警
             deviceEventRuleService.deleteByProductId(productId);
 
+            // 删除产品关联的上下线事件
+            deviceStatusFunctionService.deleteByProductId(productId);
+
         });
         return productService.deleteWithValidByIds(ids, false);
     }

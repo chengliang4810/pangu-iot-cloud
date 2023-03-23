@@ -10,15 +10,18 @@ import com.pangu.common.core.utils.StringUtils;
 import com.pangu.common.mybatis.core.page.PageQuery;
 import com.pangu.common.mybatis.core.page.TableDataInfo;
 import com.pangu.iot.manager.device.convert.DeviceStatusFunctionConvert;
-import com.pangu.manager.api.domain.DeviceAttribute;
 import com.pangu.iot.manager.device.domain.DeviceStatusFunction;
+import com.pangu.iot.manager.device.domain.DeviceStatusFunctionRelation;
 import com.pangu.iot.manager.device.domain.bo.DeviceStatusFunctionBO;
 import com.pangu.iot.manager.device.domain.vo.DeviceStatusFunctionVO;
 import com.pangu.iot.manager.device.mapper.DeviceStatusFunctionMapper;
 import com.pangu.iot.manager.device.service.IDeviceAttributeService;
+import com.pangu.iot.manager.device.service.IDeviceStatusFunctionRelationService;
 import com.pangu.iot.manager.device.service.IDeviceStatusFunctionService;
+import com.pangu.manager.api.domain.DeviceAttribute;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.List;
@@ -35,8 +38,9 @@ import java.util.Map;
 public class DeviceStatusFunctionServiceImpl extends ServiceImpl<DeviceStatusFunctionMapper, DeviceStatusFunction> implements IDeviceStatusFunctionService {
 
     private final DeviceStatusFunctionMapper baseMapper;
-    private final DeviceStatusFunctionConvert deviceStatusFunctionConvert;
     private final IDeviceAttributeService deviceAttributeService;
+    private final DeviceStatusFunctionConvert deviceStatusFunctionConvert;
+    private final IDeviceStatusFunctionRelationService deviceStatusFunctionRelationService;
 
     /**
      * 查询设备上下线规则
@@ -148,5 +152,20 @@ public class DeviceStatusFunctionServiceImpl extends ServiceImpl<DeviceStatusFun
         return statusFunctionVO;
     }
 
-
+    /**
+     * 按产品id删除
+     *
+     * @param productId 产品id
+     * @return {@link Boolean}
+     */
+    @Override
+    @Transactional
+    public Boolean deleteByProductId(Long productId) {
+        DeviceStatusFunctionRelation statusFunctionRelationServiceOne = deviceStatusFunctionRelationService.getOne(Wrappers.<DeviceStatusFunctionRelation>lambdaQuery().eq(DeviceStatusFunctionRelation::getRelationId, productId).last("limit 1"));
+        if (ObjectUtil.isNull(statusFunctionRelationServiceOne)) {
+            return true;
+        }
+        deviceStatusFunctionRelationService.remove(Wrappers.<DeviceStatusFunctionRelation>lambdaQuery().eq(DeviceStatusFunctionRelation::getRelationId, productId));
+        return baseMapper.deleteById(statusFunctionRelationServiceOne.getRuleId()) > 0;
+    }
 }

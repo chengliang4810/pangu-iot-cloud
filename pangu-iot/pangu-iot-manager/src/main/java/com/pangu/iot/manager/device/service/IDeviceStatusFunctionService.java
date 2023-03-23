@@ -57,4 +57,5 @@ public interface IDeviceStatusFunctionService extends IService<DeviceStatusFunct
     DeviceStatusFunctionVO queryRelationId(Long id);
 
 
+    Boolean deleteByProductId(Long productId);
 }

@@ -80,7 +80,7 @@ public class RemoteTdEngineServiceImpl implements RemoteTdEngineService {
         try {
             tdEngineService.createSuperTableField(table, key, valueType);
         } catch (Exception e) {
-            throw new ServiceException("新增字段失败: " +  e.getMessage());
+            throw new ServiceException("新增字段 "+key+" 失败");
         }
     }
 
