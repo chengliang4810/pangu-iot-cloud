@@ -208,7 +208,7 @@ public class DeviceAttributeServiceImpl extends ServiceImpl<DeviceAttributeMappe
      */
     @Override
     public Boolean deleteByProductId(Long productId) {
-        if (ObjectUtil.isNotNull(productId)){
+        if (ObjectUtil.isNull(productId)){
             return false;
         }
         return baseMapper.delete(Wrappers.lambdaQuery(DeviceAttribute.class).eq(DeviceAttribute::getProductId, productId)) > 0;
