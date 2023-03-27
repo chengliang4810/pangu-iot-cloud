@@ -39,7 +39,6 @@ import com.pangu.iot.manager.device.service.IDeviceService;
 import com.pangu.iot.manager.device.service.IGatewayDeviceBindService;
 import com.pangu.iot.manager.device.service.IServiceExecuteRecordService;
 import com.pangu.iot.manager.product.domain.ProductEventService;
-import com.pangu.iot.manager.product.domain.ProductServiceParam;
 import com.pangu.iot.manager.product.service.IProductEventServiceService;
 import com.pangu.iot.manager.product.service.IProductServiceService;
 import com.pangu.manager.api.domain.Device;
@@ -75,7 +74,6 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> impleme
     private final DeviceConvert deviceConvert;
     private final IGatewayDeviceBindService gatewayDeviceBindService;
     private final IProductServiceService productServiceService;
-    private final IProductServiceParamService productServiceParamService;
     private final IProductEventServiceService productEventServiceService;
     private final IDeviceGroupRelationService deviceGroupRelationService;
     private final IServiceExecuteRecordService serviceExecuteRecordService;
@@ -292,16 +290,6 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> impleme
         // 获取对应功能ID
         ProductEventService service = productEventServiceService.getOne(Wrappers.<ProductEventService>lambdaQuery().eq(ProductEventService::getEventRuleId, eventId));
         Long serviceId = service.getServiceId();
-
-        // 构建参数
-        List<ProductServiceParam> paramList = productServiceParamService.list(Wrappers.<ProductServiceParam>lambdaQuery().eq(ProductServiceParam::getServiceId, serviceId));
-//        List<ServiceExecuteBO.ServiceParam> serviceParams = new ArrayList<>();
-//        paramList.forEach(param -> {
-//            ServiceExecuteBO.ServiceParam serviceParam = new ServiceExecuteBO.ServiceParam();
-//            serviceParam.setKey(param.getKey());
-//            serviceParam.setValue(param.getValue());
-//            serviceParams.add(serviceParam);
-//        });
 
         // 执行
  //       executeService(deviceId, serviceId, serviceParams, executeType);
