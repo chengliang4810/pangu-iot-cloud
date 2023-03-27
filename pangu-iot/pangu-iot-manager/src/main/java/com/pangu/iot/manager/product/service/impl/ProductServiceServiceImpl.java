@@ -156,7 +156,7 @@ public class ProductServiceServiceImpl extends ServiceImpl<ProductServiceMapper,
     public Boolean insertByBo(ProductServiceBO bo) {
 
         // 功能名称是否存在
-        boolean exist = baseMapper.selectCount(Wrappers.<ProductService>lambdaQuery().eq(ProductService::getName, bo.getName())) > 0;
+        boolean exist = serviceRelationService.count(Wrappers.<ProductServiceRelation>lambdaQuery().in(ProductServiceRelation::getRelationId, bo.getProdId(), bo.getRelationId())) > 0;
         Assert.isFalse(exist, "功能已存在");
 
         // 数据入库

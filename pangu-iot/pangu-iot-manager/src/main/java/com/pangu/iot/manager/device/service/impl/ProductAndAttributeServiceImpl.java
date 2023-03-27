@@ -123,7 +123,7 @@ public class ProductAndAttributeServiceImpl implements IProductAndAttributeServi
 
         // 产品是否存在
         Product product = productService.getById(bo.getProductId());
-        Assert.notNull(product, "");
+        Assert.notNull(product, "产品不存在");
         // 生成设备主键
         Long id = IdUtil.getSnowflake().nextId();
 

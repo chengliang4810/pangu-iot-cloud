@@ -68,7 +68,6 @@ public class DeviceAttributeServiceImpl extends ServiceImpl<DeviceAttributeMappe
     }
 
     @Override
-
     public TableDataInfo<DeviceAttributeVO> queryLatestDataList(LastDataAttributeBO bo, PageQuery pageQuery) {
         // 查询设备信息
         Long deviceId = bo.getDeviceId();
