@@ -28,6 +28,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * 告警消费服务
+ * 告警从Data模块发送过来，Data模块通过MQTT协议发送到EMQX，EMQX再通过MQTT协议发送到Manager模块
+ * @author chengliang
+ * @date 2023/03/27
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor
