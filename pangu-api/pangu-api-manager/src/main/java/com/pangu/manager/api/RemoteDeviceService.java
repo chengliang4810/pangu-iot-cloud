@@ -1,5 +1,7 @@
 package com.pangu.manager.api;
 
+import com.pangu.manager.api.domain.Device;
+
 /**
  * 设备相关服务
  *
@@ -23,5 +25,14 @@ public interface RemoteDeviceService {
      * @param deviceCode 设备代码
      */
     Long getDeviceIdByCode(String deviceCode);
+
+
+    /**
+     * 通过id获取设备
+     *
+     * @param deviceId 设备id
+     * @return {@link Device}
+     */
+    Device getDeviceById(String deviceId);
 
 }

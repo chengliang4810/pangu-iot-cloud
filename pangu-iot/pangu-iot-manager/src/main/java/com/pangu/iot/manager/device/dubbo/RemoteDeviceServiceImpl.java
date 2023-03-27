@@ -29,6 +29,22 @@ public class RemoteDeviceServiceImpl implements RemoteDeviceService {
     private final IDeviceService deviceService;
 
     /**
+     * 通过id获取设备
+     *
+     * @param deviceId 设备id
+     * @return {@link Device}
+     */
+    @Override
+    public Device getDeviceById(String deviceId) {
+        try {
+            return deviceService.getById(deviceId);
+        } catch (Exception e){
+            log.error("getDeviceById error {}", e.getMessage());
+            return null;
+        }
+    }
+
+    /**
      * 更新设备最后上线时间
      *
      * @param deviceCode 设备代码
@@ -52,7 +68,7 @@ public class RemoteDeviceServiceImpl implements RemoteDeviceService {
         try {
             return deviceService.queryDeviceIdByCode(deviceCode);
         } catch (Exception e){
-            log.error("getDeviceIdByCode error {}", e);
+            log.error("getDeviceIdByCode error {}", e.getMessage());
             return null;
         }
     }
