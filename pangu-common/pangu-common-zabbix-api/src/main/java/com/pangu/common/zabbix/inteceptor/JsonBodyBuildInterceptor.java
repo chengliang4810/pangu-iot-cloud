@@ -10,7 +10,7 @@ import com.pangu.common.core.exception.ServiceException;
 import com.pangu.common.zabbix.annotation.JsonPath;
 import com.pangu.common.zabbix.annotation.ParamName;
 import com.pangu.common.zabbix.entity.ZbxResponseData;
-import com.pangu.common.zabbix.parser.JsonParseUtil;
+import com.pangu.common.zabbix.util.JsonParseUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

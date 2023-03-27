@@ -1,4 +1,4 @@
-package com.pangu.common.zabbix.parser;
+package com.pangu.common.zabbix.util;
 
 import freemarker.cache.SoftCacheStorage;
 import freemarker.template.Configuration;
