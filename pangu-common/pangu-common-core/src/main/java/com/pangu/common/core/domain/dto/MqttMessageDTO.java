@@ -89,8 +89,11 @@ public class MqttMessageDTO {
      * @param offline  离线
      * @param deviceId 设备id
      */
-    public MqttMessageDTO(MqttMessageType offline, String deviceId) {
+    public MqttMessageDTO(MqttMessageType offline, String deviceId, String deviceName) {
         this.type = offline;
         this.deviceId = deviceId;
+        this.eventName = offline.getDesc();
+        this.value = deviceName;
     }
+
 }

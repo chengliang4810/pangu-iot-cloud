@@ -16,10 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static com.pangu.common.core.constant.IotConstants.DEVICE_STATUS_CACHE_PREFIX;
 
@@ -39,10 +36,19 @@ public class DeviceStatusServiceImpl implements DeviceStatusService  {
      */
     @Override
     public void online(String deviceId, Integer clock) {
+
+        Integer value = RedisUtils.getCacheObject(DEVICE_STATUS_CACHE_PREFIX + deviceId);
         RedisUtils.setCacheObject(DEVICE_STATUS_CACHE_PREFIX + deviceId, clock, Duration.ofSeconds(60));
+        if (ObjectUtil.isNotNull(value)){
+            // 如果设备已经上线，不再重复上线
+            return;
+        }
         // 发送设备上线消息到emqx
-        MqttMessageDTO mqttMessageDTO = new MqttMessageDTO(MqttMessageType.ONLINE, deviceId);
-        EmqxUtil.getClient().publish( "iot/device/" + deviceId + "/status/" + MqttMessageType.ONLINE.getCode(), JsonUtils.toJsonString(mqttMessageDTO));
+        Optional.of(deviceService.getDeviceById(deviceId)).ifPresent(device -> {
+            // 构建上线消息
+            MqttMessageDTO mqttMessageDTO = new MqttMessageDTO(MqttMessageType.ONLINE, deviceId, device.getName());
+            EmqxUtil.getClient().publish( "iot/device/" + deviceId + "/status/" + MqttMessageType.ONLINE.getCode(), JsonUtils.toJsonString(mqttMessageDTO));
+        });
     }
 
     /**
@@ -64,9 +70,12 @@ public class DeviceStatusServiceImpl implements DeviceStatusService  {
             deviceService.updateDeviceLastOnlineTime(deviceId, clock);
             // 更新设备最后上线时间
             RedisUtils.deleteObject(DEVICE_STATUS_CACHE_PREFIX + deviceId);
-            // 构建离线消息
-            MqttMessageDTO mqttMessageDTO = new MqttMessageDTO(MqttMessageType.OFFLINE, deviceId);
-            EmqxUtil.getClient().publish( "iot/device/" + deviceId + "/status/" + MqttMessageType.OFFLINE.getCode(), JsonUtils.toJsonString(mqttMessageDTO));
+
+            Optional.of(deviceService.getDeviceById(deviceId)).ifPresent(device -> {
+                // 构建离线消息
+                MqttMessageDTO mqttMessageDTO = new MqttMessageDTO(MqttMessageType.OFFLINE, deviceId, device.getName());
+                EmqxUtil.getClient().publish( "iot/device/" + deviceId + "/status/" + MqttMessageType.OFFLINE.getCode(), JsonUtils.toJsonString(mqttMessageDTO));
+            });
         }
     }
 
@@ -90,7 +99,7 @@ public class DeviceStatusServiceImpl implements DeviceStatusService  {
     @Override
     public Map<Long, Integer> getOnlineStatus(Set<Long> deviceId) {
         if (ObjectUtil.isEmpty(deviceId)){
-            return Collections.EMPTY_MAP;
+            return new HashMap<>(0);
         }
         Map<Long, Integer> resultMap = new HashMap<>(deviceId.size());
         deviceId.forEach(id -> {
