@@ -15,7 +15,7 @@ import com.pangu.common.core.domain.dto.AttributeInfo;
 import com.pangu.common.core.utils.Assert;
 import com.pangu.common.core.utils.JsonUtils;
 import com.pangu.common.core.utils.StringUtils;
-import com.pangu.common.emqx.doamin.EmqxClient;
+import com.pangu.common.emqx.utils.EmqxUtil;
 import com.pangu.common.mybatis.core.page.PageQuery;
 import com.pangu.common.mybatis.core.page.TableDataInfo;
 import com.pangu.common.redis.utils.RedisUtils;
@@ -70,7 +70,6 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> impleme
     private final RemoteDeviceStatusService deviceStatusService;
 
     private final DeviceMapper baseMapper;
-    private final EmqxClient emqxClient;
     private final DeviceConvert deviceConvert;
     private final IGatewayDeviceBindService gatewayDeviceBindService;
     private final IProductServiceService productServiceService;
@@ -324,7 +323,7 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> impleme
             deviceFunction.setUuid(snowflakeNextId);
             deviceFunction.setValue(new AttributeInfo(value, productService.getDataType().name()));
             String topic = "iot/device/" + deviceId + "/function/" + productService.getMark() + "/exec";
-            emqxClient.publish(topic, JsonUtils.toJsonString(deviceFunction), 2);
+            EmqxUtil.getClient().publish(topic, JsonUtils.toJsonString(deviceFunction), 2);
             log.info("下发命令成功，topic：{}，命令：{}", topic, JsonUtils.toJsonString(deviceFunction));
 
             if (productService.getAsync() == 0){

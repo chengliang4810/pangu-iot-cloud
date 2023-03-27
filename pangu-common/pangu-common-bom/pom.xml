@@ -178,12 +178,6 @@
 
             <dependency>
                 <groupId>com.pangu</groupId>
-                <artifactId>pangu-common-zabbix</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.pangu</groupId>
                 <artifactId>pangu-common-zabbix-api</artifactId>
                 <version>${project.version}</version>
             </dependency>

@@ -1,12 +1,14 @@
 package com.pangu.manager.api.domain.dto;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Data
+@NoArgsConstructor
 @Accessors(chain = true)
 public class AlarmDTO implements Serializable {
 
@@ -42,5 +44,14 @@ public class AlarmDTO implements Serializable {
      */
     private Long deviceId;
 
+
+    public AlarmDTO(Long eventRuleId, Integer severity, Long deviceId, long eventId, long acknowledged, LocalDateTime clock) {
+        this.objectId = eventRuleId;
+        this.severity = severity;
+        this.deviceId = deviceId;
+        this.eventId = eventId;
+        this.acknowledged = acknowledged;
+        this.clock = clock;
+    }
 
 }

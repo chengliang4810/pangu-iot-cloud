@@ -23,9 +23,7 @@ import static com.pangu.common.core.constant.IotConstants.TD_DB_NAME;
 @RequiredArgsConstructor
 public class TdEngineServiceImpl implements TdEngineService {
 
-
     private final TdDatabaseMapper databaseMapper;
-
 
     /**
      * 删除表
@@ -38,8 +36,6 @@ public class TdEngineServiceImpl implements TdEngineService {
         List<String> resultList = tableNameList.stream().map(tableName -> IotConstants.DEVICE_TABLE_NAME_PREFIX + tableName).collect(Collectors.toList());
         databaseMapper.dropTable(resultList);
     }
-
-
 
     /**
      * 选择最后一个数据

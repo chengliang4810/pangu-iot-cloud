@@ -89,7 +89,7 @@
 
         <dependency>
             <groupId>com.pangu</groupId>
-            <artifactId>pangu-common-zabbix</artifactId>
+            <artifactId>pangu-common-zabbix-api</artifactId>
         </dependency>
 
         <dependency>

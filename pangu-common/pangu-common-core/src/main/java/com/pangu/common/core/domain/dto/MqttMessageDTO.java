@@ -82,4 +82,15 @@ public class MqttMessageDTO {
         this.level = level;
         this.eventName = eventName;
     }
+
+    /**
+     * mqtt消息dto
+     *
+     * @param offline  离线
+     * @param deviceId 设备id
+     */
+    public MqttMessageDTO(MqttMessageType offline, String deviceId) {
+        this.type = offline;
+        this.deviceId = deviceId;
+    }
 }

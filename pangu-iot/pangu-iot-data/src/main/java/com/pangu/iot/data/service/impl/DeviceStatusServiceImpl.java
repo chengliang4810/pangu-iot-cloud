@@ -1,6 +1,10 @@
 package com.pangu.iot.data.service.impl;
 
 import cn.hutool.core.util.ObjectUtil;
+import com.pangu.common.core.domain.dto.MqttMessageDTO;
+import com.pangu.common.core.enums.MqttMessageType;
+import com.pangu.common.core.utils.JsonUtils;
+import com.pangu.common.emqx.utils.EmqxUtil;
 import com.pangu.common.redis.utils.RedisUtils;
 import com.pangu.common.zabbix.util.TimeUtil;
 import com.pangu.iot.data.service.DeviceStatusService;
@@ -36,6 +40,9 @@ public class DeviceStatusServiceImpl implements DeviceStatusService  {
     @Override
     public void online(String deviceId, Integer clock) {
         RedisUtils.setCacheObject(DEVICE_STATUS_CACHE_PREFIX + deviceId, clock, Duration.ofSeconds(60));
+        // 发送设备上线消息到emqx
+        MqttMessageDTO mqttMessageDTO = new MqttMessageDTO(MqttMessageType.ONLINE, deviceId);
+        EmqxUtil.getClient().publish( "iot/device/" + deviceId + "/status/" + MqttMessageType.ONLINE.getCode(), JsonUtils.toJsonString(mqttMessageDTO));
     }
 
     /**
@@ -45,6 +52,9 @@ public class DeviceStatusServiceImpl implements DeviceStatusService  {
      */
     @Override
     public void offline(String deviceId) {
+        // 获取设备最后上线时间, 如果不存在说明设备已经离线。
+        // 如果存在，说明设备离线，更新设备最后上线时间
+        // 还有一个原因是因为zabbix 离线的告警会多次重复，所以需要判断设备是否已经离线
         Integer clock = RedisUtils.getCacheObject(DEVICE_STATUS_CACHE_PREFIX + deviceId);
         if (ObjectUtil.isNotNull(clock)){
             // 将clock 转换为时间
@@ -54,6 +64,9 @@ public class DeviceStatusServiceImpl implements DeviceStatusService  {
             deviceService.updateDeviceLastOnlineTime(deviceId, clock);
             // 更新设备最后上线时间
             RedisUtils.deleteObject(DEVICE_STATUS_CACHE_PREFIX + deviceId);
+            // 构建离线消息
+            MqttMessageDTO mqttMessageDTO = new MqttMessageDTO(MqttMessageType.OFFLINE, deviceId);
+            EmqxUtil.getClient().publish( "iot/device/" + deviceId + "/status/" + MqttMessageType.OFFLINE.getCode(), JsonUtils.toJsonString(mqttMessageDTO));
         }
     }
 

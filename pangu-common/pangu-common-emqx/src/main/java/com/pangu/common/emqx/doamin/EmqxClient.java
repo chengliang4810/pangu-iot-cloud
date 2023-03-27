@@ -1,5 +1,6 @@
 package com.pangu.common.emqx.doamin;
 
+import cn.hutool.core.util.StrUtil;
 import com.pangu.common.core.exception.ServiceException;
 import lombok.Getter;
 import org.eclipse.paho.mqttv5.client.MqttAsyncClient;
@@ -23,6 +24,9 @@ public class EmqxClient implements Serializable {
     }
 
     public void publish(String topic, String payload, int qos) {
+        if (StrUtil.isBlank(payload)){
+            payload = "";
+        }
         this.publish(topic, payload.getBytes(), qos);
     }
 
