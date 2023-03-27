@@ -14,17 +14,15 @@ import com.pangu.common.mybatis.core.page.TableDataInfo;
 import com.pangu.iot.manager.device.mapper.DeviceMapper;
 import com.pangu.iot.manager.product.convert.ProductServiceConvert;
 import com.pangu.iot.manager.product.domain.ProductEventService;
-import com.pangu.manager.api.domain.ProductService;
-import com.pangu.iot.manager.product.domain.ProductServiceParam;
 import com.pangu.iot.manager.product.domain.ProductServiceRelation;
 import com.pangu.iot.manager.product.domain.bo.ProductServiceBO;
 import com.pangu.iot.manager.product.domain.vo.ProductServiceVO;
 import com.pangu.iot.manager.product.mapper.ProductServiceMapper;
 import com.pangu.iot.manager.product.service.IProductEventServiceService;
-import com.pangu.iot.manager.product.service.IProductServiceParamService;
 import com.pangu.iot.manager.product.service.IProductServiceRelationService;
 import com.pangu.iot.manager.product.service.IProductServiceService;
 import com.pangu.manager.api.domain.Device;
+import com.pangu.manager.api.domain.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,7 +43,6 @@ public class ProductServiceServiceImpl extends ServiceImpl<ProductServiceMapper,
 
     private final DeviceMapper deviceMapper;
     private final ProductServiceMapper baseMapper;
-    private final IProductServiceParamService serviceParamService;
     private final ProductServiceConvert productServiceConvert;
     private final IProductServiceRelationService serviceRelationService;
     private final IProductEventServiceService productEventServiceService;
@@ -228,8 +225,6 @@ public class ProductServiceServiceImpl extends ServiceImpl<ProductServiceMapper,
         long count = productEventServiceService.count(Wrappers.<ProductEventService>lambdaQuery().in(ProductEventService::getServiceId, ids));
         Assert.isTrue(count == 0, "该功能已被告警规则引用，无法删除");
         boolean flag = baseMapper.deleteBatchIds(ids) > 0;
-        // 删除产品功能参数
-        serviceParamService.remove(Wrappers.<ProductServiceParam>lambdaQuery().in(ProductServiceParam::getServiceId, ids));
         // 删除产品与功能关系
         serviceRelationService.remove(Wrappers.<ProductServiceRelation>lambdaQuery().in(ProductServiceRelation::getServiceId, ids));
         return flag;

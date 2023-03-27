@@ -41,7 +41,6 @@ import com.pangu.iot.manager.device.service.IServiceExecuteRecordService;
 import com.pangu.iot.manager.product.domain.ProductEventService;
 import com.pangu.iot.manager.product.domain.ProductServiceParam;
 import com.pangu.iot.manager.product.service.IProductEventServiceService;
-import com.pangu.iot.manager.product.service.IProductServiceParamService;
 import com.pangu.iot.manager.product.service.IProductServiceService;
 import com.pangu.manager.api.domain.Device;
 import com.pangu.manager.api.domain.ProductService;
