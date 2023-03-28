@@ -1,6 +1,7 @@
 package com.pangu.common.zabbix.service;
 
 import com.google.gson.Gson;
+import com.pangu.common.core.exception.ServiceException;
 import com.pangu.common.core.utils.Assert;
 import com.pangu.common.zabbix.api.ZbxSenderService;
 import com.pangu.common.zabbix.model.DeviceValue;
@@ -44,8 +45,8 @@ public class SenderDataService {
             return senderService.sendData(gson.toJson(zabbixTrapper));
         } catch (IOException e) {
             log.error("send data to zabbix error: {}", e.getMessage());
+            throw new ServiceException("send data to zabbix error: " + e.getMessage());
         }
-        return null;
     }
 
     /**

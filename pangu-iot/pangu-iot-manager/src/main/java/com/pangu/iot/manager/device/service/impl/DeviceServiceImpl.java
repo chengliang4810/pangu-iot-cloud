@@ -12,6 +12,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.pangu.common.core.domain.dto.AttributeInfo;
+import com.pangu.common.core.exception.ServiceException;
 import com.pangu.common.core.utils.Assert;
 import com.pangu.common.core.utils.JsonUtils;
 import com.pangu.common.core.utils.StringUtils;
@@ -363,6 +364,9 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> impleme
 
         log.info("执行功能耗时：{}ms", System.currentTimeMillis() - startTime);
 
+        if (productService.getAsync() == 0 && !executeStatus){
+            throw new ServiceException("功能执行超时/失败");
+        }
 
     }
 

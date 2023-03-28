@@ -25,7 +25,7 @@ import static com.pangu.common.core.constant.IotConstants.DEVICE_STATUS_CACHE_PR
 @RequiredArgsConstructor
 public class DeviceStatusServiceImpl implements DeviceStatusService  {
 
-    @DubboReference
+    @DubboReference(check = false)
     private final RemoteDeviceService deviceService;
 
     /**

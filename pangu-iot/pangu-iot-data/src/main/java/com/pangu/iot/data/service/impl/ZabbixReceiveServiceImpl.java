@@ -56,16 +56,16 @@ public class ZabbixReceiveServiceImpl implements ZabbixReceiveService {
         String productId = tagMap.get(IotConstants.PRODUCT_ID_TAG_NAME);
         String attributeKey = tagMap.get(IotConstants.ATTRIBUTE_KEY_TAG_NAME);
         // 获取当前设备状态
-        boolean status = this.deviceStatusService.getOnlineStatus(hostname);
+        boolean status = deviceStatusService.getOnlineStatus(hostname);
 
         Map<String, Object> value = new LinkedHashMap<>(3);
         value.put(IotConstants.TABLE_STATUS_FIELD, status ? 1 : 0);
         value.put(attributeKey, zabbixItem.getValue());
         value.put(IotConstants.TABLE_PRIMARY_FIELD, TimeUtil.toTimestamp(zabbixItem.getClock(), zabbixItem.getNs()));
-        this.tdEngineService.insertData(IotConstants.DEVICE_TABLE_NAME_PREFIX + hostname, SUPER_TABLE_PREFIX + productId, value);
+        tdEngineService.insertData(IotConstants.DEVICE_TABLE_NAME_PREFIX + hostname, SUPER_TABLE_PREFIX + productId, value);
         // 发送到EMQX
         MqttMessageDTO mqttMessageDTO = new MqttMessageDTO(hostname, zabbixItem.getName(), zabbixItem.getValue(), zabbixItem.getClock());
-        this.emqxClient.publish("iot/device/" + hostname + "/attribute/" + zabbixItem.getName(), JsonUtils.toJsonStringBytes(mqttMessageDTO));
+        emqxClient.publish("iot/device/" + hostname + "/attribute/" + zabbixItem.getName(), JsonUtils.toJsonStringBytes(mqttMessageDTO));
 
     }
 
@@ -82,21 +82,23 @@ public class ZabbixReceiveServiceImpl implements ZabbixReceiveService {
 
         // 获取Tags
         Map<String, String> tagMap = itemTags.stream().collect(Collectors.toMap(TagsDTO::getTag, TagsDTO::getValue));
-        String deviceId = this.getDeviceId(zabbixEvent.getHosts());
+        String deviceId = getDeviceId(zabbixEvent.getHosts());
         // 过滤Zabbix server不处理
         if ("Zabbix server".equals(deviceId)) {
             return;
         }
         if (tagMap.containsKey(IotConstants.DEVICE_STATUS_OFFLINE_TAG)) {
             // 设备离线
-            this.deviceStatusService.offline(deviceId);
+            deviceStatusService.offline(deviceId);
+            log.debug("设备离线：{}", zabbixEvent);
         } else if (tagMap.containsKey(IotConstants.DEVICE_STATUS_ONLINE_TAG)) {
             // 设备上线
+            deviceStatusService.online(deviceId, zabbixEvent.getClock());
             log.debug("设备上线：{}", zabbixEvent);
-            this.deviceStatusService.online(deviceId, zabbixEvent.getClock());
         } else if (tagMap.containsKey(IotConstants.ALARM_TAG_NAME)) {
             // 设备告警，发送到管理平台
-            this.emqxClient.publish("server/device/" + deviceId + "/problem/" + zabbixEvent.getSeverity(), JsonUtils.toJsonString(zabbixEvent), 2);
+            emqxClient.publish("server/device/" + deviceId + "/problem/" + zabbixEvent.getSeverity(), JsonUtils.toJsonString(zabbixEvent), 2);
+            log.debug("设备告警：{}", zabbixEvent);
         } else {
             log.warn("未知事件：{}", zabbixEvent);
         }
