@@ -6,7 +6,7 @@ server:
 spring:
   application:
     # 应用名称
-    name: pangu-iot-test-driver
+    name: pangu-iot-modbus-tcp-driver
   profiles:
     # 环境配置
     active: @profiles.active@
