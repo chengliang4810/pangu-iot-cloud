@@ -1,4 +1,4 @@
-FROM anapsix/alpine-java:8_server-jre_unlimited
+FROM java:8u111-jre-alpine
 
 MAINTAINER chengliang4810
 
