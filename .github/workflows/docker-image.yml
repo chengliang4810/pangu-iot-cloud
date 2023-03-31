@@ -34,22 +34,20 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
+      - name: Get version from package.json
+        id: version
+        run: echo "::set-output name=version::$(mvn help:evaluate -Dexpression=project.artifactId -q -DforceStdout))"
+
       - name: Build and push Docker image
         uses: docker/build-push-action@v2
         with:
           context: .
-          file: ./Dockerfile
+          file: ./pangu-auth/Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/pangu-cloud:latest
+          tags: ${{ secrets.DOCKER_USERNAME }}/pangu-auth:${{ steps.version.outputs.version }},${{ secrets.DOCKER_USERNAME }}/pangu-auth:latest
           build-args: |
             ARTIFACT_ID=$(mvn help:evaluate -Dexpression=project.artifactId -q -DforceStdout)
             VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
             echo "ARTIFACT_ID=${ARTIFACT_ID}"
             echo "VERSION=${VERSION}"
             echo "BUILD_NUMBER=${{ github.run_number }}"
-          labels: |
-            org.opencontainers.image.title=my-image
-            org.opencontainers.image.description="My Docker image"
-            org.opencontainers.image.created=${{ github.event.head_commit.timestamp }}
-            org.opencontainers.image.version=${VERSION}
-            org.opencontainers.image.revision=${{ github.sha }}
