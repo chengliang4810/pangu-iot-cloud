@@ -25,10 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -82,7 +79,10 @@ public class DriverSdkServiceImpl implements IDriverSdkService {
         // 查询网关设备绑定的子设备 点位信息在子设备上
         List<GatewayDeviceBind> gatewayDeviceBindList = gatewayDeviceBindService.list(Wrappers.lambdaQuery(GatewayDeviceBind.class).in(GatewayDeviceBind::getGatewayDeviceId, gatewayDeviceIds));
         Set<Long> childDeviceIds = gatewayDeviceBindList.stream().map(GatewayDeviceBind::getDeviceId).collect(Collectors.toSet());
-        List<Device> deviceList = deviceService.list(Wrappers.lambdaQuery(Device.class).in(Device::getId, childDeviceIds));
+
+        List<Device> deviceList = CollectionUtil.isEmpty(childDeviceIds)
+            ? Collections.emptyList()
+            : deviceService.list(Wrappers.lambdaQuery(Device.class).in(Device::getId, childDeviceIds));
 
         if (CollectionUtil.isEmpty(deviceList)) {
             log.error("Device does not exist, driverId: {}", driver.getId());
