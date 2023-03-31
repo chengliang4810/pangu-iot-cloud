@@ -40,7 +40,7 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/pangu-cloud:latest
+          tags: ${{ secrets.DOCKER_USERNAME }}/pangu-cloud:latest
           build-args: |
             ARTIFACT_ID=$(mvn help:evaluate -Dexpression=project.artifactId -q -DforceStdout)
             VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
