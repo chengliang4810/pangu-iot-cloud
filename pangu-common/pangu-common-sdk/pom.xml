@@ -85,16 +85,9 @@
         </dependency>
 
         <dependency>
-            <groupId>org.apache.camel.springboot</groupId>
-            <artifactId>camel-rabbitmq-starter</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>com.pangu</groupId>
             <artifactId>pangu-common-emqx</artifactId>
         </dependency>
-
-
 
     </dependencies>
 </project>

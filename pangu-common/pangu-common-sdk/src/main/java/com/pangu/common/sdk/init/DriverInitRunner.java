@@ -13,7 +13,8 @@ import javax.annotation.Resource;
 /**
  * Driver SDK Initial
  *
- * @author pnoker
+ * @author chengliang
+ * @date 2023/03/29
  */
 @Component
 @ComponentScan(basePackages = {
@@ -22,22 +23,11 @@ import javax.annotation.Resource;
 @EnableConfigurationProperties({DriverProperty.class})
 public class DriverInitRunner implements ApplicationRunner {
 
-//    @Resource
-//    private DriverCustomService driverCustomService;
     @Resource
     private DriverMetadataService driverMetadataService;
-//    @Resource
-//    private DriverScheduleService driverScheduleService;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-         // Initialize driver configuration
          driverMetadataService.initial();
-
-        // Initialize custom driver service
-        // driverCustomService.initial();
-
-        // Initialize driver schedule service
-        // driverScheduleService.initial();
     }
 }
