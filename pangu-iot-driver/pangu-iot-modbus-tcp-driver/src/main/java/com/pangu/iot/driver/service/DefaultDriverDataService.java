@@ -48,11 +48,15 @@ public class DefaultDriverDataService extends DriverDataService {
         log.debug("Driver Info: {}", JsonUtils.toJsonString(driverInfo));
         Map<String, String> attributesMap = new ConcurrentHashMap<>(attributes.size());
 
-        for (DeviceAttribute attribute : attributes) {
-            Map<String, AttributeInfo> pointInfo = driverContext.getPointInfoByDeviceIdAndPointId(device.getId(), attribute.getId());
-            ModbusMaster master = getMaster(device.getId().toString(), driverInfo);
-            String value =  readValue(master, pointInfo, attribute.getValueType());
-            attributesMap.put(attribute.getKey(), value);
+        try {
+            for (DeviceAttribute attribute : attributes) {
+                Map<String, AttributeInfo> pointInfo = driverContext.getPointInfoByDeviceIdAndPointId(device.getId(), attribute.getId());
+                ModbusMaster master = getMaster(device.getId().toString(), driverInfo);
+                String value =  readValue(master, pointInfo, attribute.getValueType());
+                attributesMap.put(attribute.getKey(), value);
+            }
+        } catch (Exception e) {
+            log.error("Read Device attribute Error: {}", e.getMessage());
         }
 
         return new DeviceValue(device.getCode(), attributesMap);
