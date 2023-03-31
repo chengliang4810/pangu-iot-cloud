@@ -42,7 +42,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: ./pangu-auth/
-          file: Dockerfile
+          file: ./pangu-auth/Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/pangu-auth:${{ steps.version.outputs.version }},${{ secrets.DOCKER_USERNAME }}/pangu-auth:latest
           build-args: |
