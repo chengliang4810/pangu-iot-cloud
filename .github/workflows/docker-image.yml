@@ -2,7 +2,7 @@ name: Maven Build and Docker Push
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
   build-and-push:
