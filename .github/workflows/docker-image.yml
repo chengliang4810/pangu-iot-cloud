@@ -36,7 +36,7 @@ jobs:
 
       - name: Get version from package.json
         id: version
-        run: echo "::set-output name=version::$(mvn help:evaluate -Dexpression=project.artifactId -q -DforceStdout))"
+        run: echo "::set-output name=version::$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)"
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v2
