@@ -26,6 +26,7 @@ public class InitTdEngine implements ApplicationRunner {
     public void run(ApplicationArguments args) throws Exception {
         // 创建tdengine数据库
         databaseMapper.createDB(TD_DB_NAME);
+        log.info("初始化tdengine数据库成功");
     }
 
 }
