@@ -2,6 +2,8 @@ package com.pangu.system.api;
 
 import com.pangu.system.api.model.ApiTokenDTO;
 
+import java.util.List;
+
 /**
  * ApiToken服务
  *
@@ -11,11 +13,10 @@ import com.pangu.system.api.model.ApiTokenDTO;
 public interface RemoteTokenService {
 
     /**
-     * 通过token查询 token信息
+     * 得到令牌信息列表
      *
-     * @param token token信息
-     * @return 结果
+     * @return {@link List}<{@link ApiTokenDTO}>
      */
-    ApiTokenDTO getTokenInfo(String token);
+    List<ApiTokenDTO> getTokenInfoList();
 
 }

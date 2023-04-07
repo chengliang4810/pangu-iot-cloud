@@ -1,6 +1,7 @@
 package com.pangu.common.satoken.utils;
 
 import cn.dev33.satoken.context.SaHolder;
+import cn.dev33.satoken.stp.SaLoginModel;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.ObjectUtil;
@@ -9,6 +10,7 @@ import com.pangu.common.core.enums.DeviceType;
 import com.pangu.common.core.enums.UserType;
 import com.pangu.common.core.exception.UtilException;
 import com.pangu.common.core.utils.StringUtils;
+import com.pangu.system.api.model.ApiTokenDTO;
 import com.pangu.system.api.model.LoginUser;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -39,6 +41,23 @@ public class LoginHelper {
     public static void login(LoginUser loginUser) {
         SaHolder.getStorage().set(LOGIN_USER_KEY, loginUser);
         StpUtil.login(loginUser.getLoginId());
+        setLoginUser(loginUser);
+    }
+
+    /**
+     * 登录通过api令牌
+     *
+     * @param apiTokenDTO api牌dto
+     */
+    public static void loginByApiToken(ApiTokenDTO apiTokenDTO) {
+        LoginUser loginUser = new LoginUser();
+        loginUser.setUserId(apiTokenDTO.getId());
+        loginUser.setToken(apiTokenDTO.getToken());
+        loginUser.setUsername(apiTokenDTO.getName());
+        loginUser.setUserType(UserType.THIRD_PARTY.getUserType());
+
+        SaHolder.getStorage().set(LOGIN_USER_KEY, loginUser);
+        StpUtil.login(loginUser.getLoginId(), new SaLoginModel().setTimeout(-1).setToken(apiTokenDTO.getToken()).setDevice(DeviceType.THIRD_PARTY.getDevice()));
         setLoginUser(loginUser);
     }
 
@@ -126,5 +145,6 @@ public class LoginHelper {
     public static boolean isAdmin() {
         return isAdmin(getUserId());
     }
+
 
 }

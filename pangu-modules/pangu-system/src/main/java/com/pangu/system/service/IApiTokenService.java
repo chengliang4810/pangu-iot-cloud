@@ -52,4 +52,5 @@ public interface IApiTokenService extends IService<ApiToken> {
     Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid);
 
     String resetToken(Long id);
+
 }

@@ -25,14 +25,14 @@ import java.util.List;
  *
  * @author chengliang4810
  */
-@RequiredArgsConstructor
 @Service
 @DubboService
+@RequiredArgsConstructor
 public class RemoteUserServiceImpl implements RemoteUserService {
 
     private final ISysUserService userService;
-    private final ISysPermissionService permissionService;
     private final ISysConfigService configService;
+    private final ISysPermissionService permissionService;
 
     @Override
     public LoginUser getUserInfo(String username) throws UserException {

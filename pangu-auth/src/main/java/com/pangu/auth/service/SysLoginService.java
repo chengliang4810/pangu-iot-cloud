@@ -19,16 +19,20 @@ import com.pangu.common.core.utils.StringUtils;
 import com.pangu.common.redis.utils.RedisUtils;
 import com.pangu.common.satoken.utils.LoginHelper;
 import com.pangu.system.api.RemoteLogService;
+import com.pangu.system.api.RemoteTokenService;
 import com.pangu.system.api.RemoteUserService;
 import com.pangu.system.api.domain.SysLogininfor;
 import com.pangu.system.api.domain.SysUser;
+import com.pangu.system.api.model.ApiTokenDTO;
 import com.pangu.system.api.model.LoginUser;
 import com.pangu.system.api.model.XcxLoginUser;
 import org.apache.dubbo.config.annotation.DubboReference;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import java.time.Duration;
+import java.util.List;
 import java.util.function.Supplier;
 
 /**
@@ -39,13 +43,27 @@ import java.util.function.Supplier;
 @Service
 public class SysLoginService {
 
+    @Resource
     @DubboReference
     private RemoteLogService remoteLogService;
+    @Resource
     @DubboReference
     private RemoteUserService remoteUserService;
-
-    @Autowired
+    @Resource
+    @DubboReference
+    private RemoteTokenService remoteTokenService;
+    @Resource
     private UserPasswordProperties userPasswordProperties;
+
+    /**
+     * 注册所有第三方平台Token
+     */
+    @PostConstruct
+    public void registerAllApiToken() {
+        List<ApiTokenDTO> apiTokenDTOList = remoteTokenService.getTokenInfoList();
+        // 获取登录token
+        apiTokenDTOList.forEach(LoginHelper::loginByApiToken);
+    }
 
     /**
      * 登录

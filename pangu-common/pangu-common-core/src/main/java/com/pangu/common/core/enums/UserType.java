@@ -22,7 +22,11 @@ public enum UserType {
     /**
      * app端
      */
-    APP_USER("app_user");
+    APP_USER("app_user"),
+    /**
+     * 第三方平台
+     */
+    THIRD_PARTY("third_party");
 
     private final String userType;
 

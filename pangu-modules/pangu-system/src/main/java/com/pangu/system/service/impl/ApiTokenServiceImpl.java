@@ -29,8 +29,8 @@ import java.util.Map;
  * @author chengliang4810
  * @date 2023-03-14
  */
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
 public class ApiTokenServiceImpl extends ServiceImpl<ApiTokenMapper, ApiToken> implements IApiTokenService {
 
     private final ApiTokenMapper baseMapper;

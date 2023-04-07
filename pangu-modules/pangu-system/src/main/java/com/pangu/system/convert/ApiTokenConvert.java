@@ -85,4 +85,5 @@ public interface ApiTokenConvert extends CommonConvert {
 
     ApiTokenDTO toDTO(ApiToken apiToken);
 
+    List<ApiTokenDTO> toDtoList(List<ApiToken> apiTokenList);
 }

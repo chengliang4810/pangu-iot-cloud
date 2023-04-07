@@ -1,6 +1,5 @@
 package com.pangu.system.dubbo;
 
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.pangu.system.api.RemoteTokenService;
 import com.pangu.system.api.model.ApiTokenDTO;
 import com.pangu.system.convert.ApiTokenConvert;
@@ -9,6 +8,8 @@ import com.pangu.system.service.IApiTokenService;
 import lombok.RequiredArgsConstructor;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * 操作日志记录
@@ -24,16 +25,14 @@ public class RemoteTokenServiceImpl implements RemoteTokenService {
     private final ApiTokenConvert apiTokenConvert;
 
     /**
-     * 通过token查询 token信息
+     * 得到令牌信息列表
      *
-     * @param token token信息
-     * @return 结果
+     * @return {@link List}<{@link ApiTokenDTO}>
      */
     @Override
-    public ApiTokenDTO getTokenInfo(String token) {
-        ApiToken apiToken = tokenService.getOne(Wrappers.lambdaQuery(ApiToken.class).eq(ApiToken::getToken, token).last("limit 1"));
-        return apiTokenConvert.toDTO(apiToken);
+    public List<ApiTokenDTO> getTokenInfoList() {
+        List<ApiToken> apiTokenList = tokenService.list();
+        return apiTokenConvert.toDtoList(apiTokenList);
     }
-
 
 }
