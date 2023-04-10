@@ -37,6 +37,7 @@ public class UserActionListener implements SaTokenListener {
      */
     @Override
     public void doLogin(String loginType, Object loginId, String tokenValue, SaLoginModel loginModel) {
+        System.out.println(loginId);
         UserType userType = UserType.getUserType(loginId.toString());
         if (userType == UserType.SYS_USER) {
             UserAgent userAgent = UserAgentUtil.parse(ServletUtils.getRequest().getHeader("User-Agent"));
@@ -63,6 +64,7 @@ public class UserActionListener implements SaTokenListener {
             // app端 自行根据业务编写
         } else if (userType == UserType.THIRD_PARTY) {
             // 第三方平台
+            System.out.println("第三方平台333333");
         }
     }
 

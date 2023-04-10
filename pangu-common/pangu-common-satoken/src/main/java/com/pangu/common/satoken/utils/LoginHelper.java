@@ -6,11 +6,11 @@ import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.pangu.common.core.constant.UserConstants;
+import com.pangu.common.core.domain.dto.ApiTokenDTO;
 import com.pangu.common.core.enums.DeviceType;
 import com.pangu.common.core.enums.UserType;
 import com.pangu.common.core.exception.UtilException;
 import com.pangu.common.core.utils.StringUtils;
-import com.pangu.common.core.domain.dto.ApiTokenDTO;
 import com.pangu.system.api.model.LoginUser;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -42,6 +42,7 @@ public class LoginHelper {
      */
     public static void login(LoginUser loginUser) {
         SaHolder.getStorage().set(LOGIN_USER_KEY, loginUser);
+        System.out.println(33333);
         StpUtil.login(loginUser.getLoginId());
         setLoginUser(loginUser);
     }
