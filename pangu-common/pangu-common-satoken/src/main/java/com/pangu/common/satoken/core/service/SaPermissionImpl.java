@@ -21,6 +21,7 @@ public class SaPermissionImpl implements StpInterface {
     @Override
     public List<String> getPermissionList(Object loginId, String loginType) {
         LoginUser loginUser = LoginHelper.getLoginUser();
+        System.out.println(loginUser + "=====================");
         UserType userType = UserType.getUserType(loginUser.getUserType());
         if (userType == UserType.SYS_USER) {
             return new ArrayList<>(loginUser.getMenuPermission());

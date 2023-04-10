@@ -14,8 +14,8 @@ import org.springframework.stereotype.Component;
  * @author chengliang4810
  */
 @Slf4j
-@RequiredArgsConstructor
 @Component
+@RequiredArgsConstructor
 public class SystemApplicationRunner implements ApplicationRunner {
 
     private final ISysConfigService configService;

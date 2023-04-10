@@ -1,3 +1,1 @@
-com.pangu.common.satoken.core.dao.PlusSaTokenDao
-com.pangu.common.satoken.core.service.SaPermissionImpl
 com.pangu.common.satoken.config.SaTokenConfiguration

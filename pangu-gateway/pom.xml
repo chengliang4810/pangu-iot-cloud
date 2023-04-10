@@ -27,6 +27,12 @@
             <artifactId>spring-cloud-starter-loadbalancer</artifactId>
         </dependency>
 
+        <!-- SpringCloud Loadbalancer -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-loadbalancer</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>com.github.ben-manes.caffeine</groupId>
             <artifactId>caffeine</artifactId>
@@ -61,12 +67,6 @@
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
 
-        <!-- SpringCloud Loadbalancer -->
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-loadbalancer</artifactId>
-        </dependency>
-
         <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-captcha</artifactId>
@@ -95,6 +95,7 @@
             </exclusions>
         </dependency>
 
+
         <dependency>
             <groupId>com.pangu</groupId>
             <artifactId>pangu-common-satoken</artifactId>
@@ -104,11 +105,6 @@
         <dependency>
             <groupId>com.pangu</groupId>
             <artifactId>pangu-common-redis</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.pangu</groupId>
-            <artifactId>pangu-api-system</artifactId>
         </dependency>
 
         <!-- 自定义负载均衡(多团队开发使用) -->

@@ -1,7 +1,7 @@
 package com.pangu.system.convert;
 
 import com.pangu.common.core.convert.CommonConvert;
-import com.pangu.system.api.model.ApiTokenDTO;
+import com.pangu.common.core.domain.dto.ApiTokenDTO;
 import com.pangu.system.domain.ApiToken;
 import com.pangu.system.domain.bo.ApiTokenBO;
 import com.pangu.system.domain.vo.ApiTokenVO;

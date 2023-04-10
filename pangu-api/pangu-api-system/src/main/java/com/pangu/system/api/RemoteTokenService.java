@@ -1,6 +1,6 @@
 package com.pangu.system.api;
 
-import com.pangu.system.api.model.ApiTokenDTO;
+import com.pangu.common.core.domain.dto.ApiTokenDTO;
 
 import java.util.List;
 
@@ -18,5 +18,14 @@ public interface RemoteTokenService {
      * @return {@link List}<{@link ApiTokenDTO}>
      */
     List<ApiTokenDTO> getTokenInfoList();
+
+
+    /**
+     * 得到令牌信息牌
+     *
+     * @param token 令牌
+     * @return {@link ApiTokenDTO}
+     */
+    ApiTokenDTO getTokenInfoByToken(String token);
 
 }

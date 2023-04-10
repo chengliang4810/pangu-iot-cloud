@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: pangu-seata-server
+    name: ruoyi-seata-server
   profiles:
     # 环境配置
     active: @profiles.active@

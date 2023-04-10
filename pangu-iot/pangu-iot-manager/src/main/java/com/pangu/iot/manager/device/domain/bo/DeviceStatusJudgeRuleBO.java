@@ -1,9 +1,9 @@
 package com.pangu.iot.manager.device.domain.bo;
 
 import com.pangu.common.core.validate.AddGroup;
+import com.pangu.common.core.validate.EditGroup;
+import com.pangu.common.core.validate.RemoveGroup;
 import lombok.Data;
-import net.dreamlu.mica.core.validation.DeleteGroup;
-import net.dreamlu.mica.core.validation.UpdateGroup;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -30,7 +30,7 @@ public class DeviceStatusJudgeRuleBO {
      * 规则id
      * 自动生成，trigger name
      */
-    @NotNull(groups = {UpdateGroup.class, DeleteGroup.class})
+    @NotNull(groups = {EditGroup.class, RemoveGroup.class})
     private Long ruleId;
 
     private String ruleName;

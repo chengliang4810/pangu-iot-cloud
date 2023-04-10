@@ -10,10 +10,11 @@ import com.pangu.common.core.enums.DeviceType;
 import com.pangu.common.core.enums.UserType;
 import com.pangu.common.core.exception.UtilException;
 import com.pangu.common.core.utils.StringUtils;
-import com.pangu.system.api.model.ApiTokenDTO;
+import com.pangu.common.core.domain.dto.ApiTokenDTO;
 import com.pangu.system.api.model.LoginUser;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 登录鉴权助手
@@ -27,6 +28,7 @@ import lombok.NoArgsConstructor;
  *
  * @author chengliang4810
  */
+@Slf4j
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class LoginHelper {
 
@@ -50,6 +52,7 @@ public class LoginHelper {
      * @param apiTokenDTO api牌dto
      */
     public static void loginByApiToken(ApiTokenDTO apiTokenDTO) {
+        System.out.println("loginByApiToken： " + apiTokenDTO);
         LoginUser loginUser = new LoginUser();
         loginUser.setUserId(apiTokenDTO.getId());
         loginUser.setToken(apiTokenDTO.getToken());
@@ -57,8 +60,17 @@ public class LoginHelper {
         loginUser.setUserType(UserType.THIRD_PARTY.getUserType());
 
         SaHolder.getStorage().set(LOGIN_USER_KEY, loginUser);
-        StpUtil.login(loginUser.getLoginId(), new SaLoginModel().setTimeout(-1).setToken(apiTokenDTO.getToken()).setDevice(DeviceType.THIRD_PARTY.getDevice()));
+        System.out.println(33333);
+        try {
+            StpUtil.login(loginUser.getLoginId(), new SaLoginModel().setTimeout(-1).setToken(apiTokenDTO.getToken()).setDevice(DeviceType.THIRD_PARTY.getDevice()));
+            System.out.println(22222222);
+        } catch (Exception e) {
+            System.out.println(444444);
+            e.printStackTrace();
+        }
+        System.out.println(11111);
         setLoginUser(loginUser);
+        System.out.println("loginByApiToken222： " + loginUser);
     }
 
     /**
