@@ -17,12 +17,11 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.Set;
 
 /**
  * 角色表 sys_role
  *
- * @author chengliang4810
+ * @author Lion Li
  */
 
 @Data
@@ -114,12 +113,6 @@ public class SysRole extends BaseEntity {
      */
     @TableField(exist = false)
     private Long[] deptIds;
-
-    /**
-     * 角色菜单权限
-     */
-    @TableField(exist = false)
-    private Set<String> permissions;
 
     public SysRole(Long roleId) {
         this.roleId = roleId;

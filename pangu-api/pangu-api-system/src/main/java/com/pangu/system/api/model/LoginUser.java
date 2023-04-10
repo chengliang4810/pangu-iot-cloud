@@ -12,7 +12,7 @@ import java.util.Set;
 /**
  * 用户信息
  *
- * @author chengliang4810
+ * @author pangu
  */
 @Data
 @NoArgsConstructor

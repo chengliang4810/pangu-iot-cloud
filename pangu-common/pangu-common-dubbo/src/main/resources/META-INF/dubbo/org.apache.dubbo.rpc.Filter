@@ -1,1 +1,1 @@
-dubboRequestFilter=com.pangu.common.dubbo.filter.DubboRequestFilter
+dubboRequestFilter=com.pangu.common.filter.com.pangu.common.dubbo.DubboRequestFilter

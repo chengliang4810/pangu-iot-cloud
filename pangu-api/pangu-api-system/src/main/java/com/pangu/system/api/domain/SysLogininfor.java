@@ -18,7 +18,7 @@ import java.util.Map;
 /**
  * 系统访问记录表 sys_logininfor
  *
- * @author chengliang4810
+ * @author Lion Li
  */
 
 @Data

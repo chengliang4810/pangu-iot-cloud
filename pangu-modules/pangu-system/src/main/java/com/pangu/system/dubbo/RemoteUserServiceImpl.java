@@ -34,6 +34,17 @@ public class RemoteUserServiceImpl implements RemoteUserService {
     private final ISysConfigService configService;
     private final ISysPermissionService permissionService;
 
+    /**
+     * 通过userId查询用户账户
+     *
+     * @param userId 用户id
+     * @return 结果
+     */
+    @Override
+    public String selectUserNameById(Long userId) {
+        return null;
+    }
+
     @Override
     public LoginUser getUserInfo(String username) throws UserException {
         SysUser sysUser = userService.selectUserByUserName(username);

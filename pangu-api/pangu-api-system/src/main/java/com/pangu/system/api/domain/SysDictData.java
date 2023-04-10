@@ -2,7 +2,6 @@ package com.pangu.system.api.domain;
 
 import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import com.alibaba.excel.annotation.ExcelProperty;
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.pangu.common.core.constant.UserConstants;
@@ -19,7 +18,7 @@ import javax.validation.constraints.Size;
 /**
  * 字典数据表 sys_dict_data
  *
- * @author chengliang4810
+ * @author Lion Li
  */
 
 @Data
@@ -92,9 +91,8 @@ public class SysDictData extends BaseEntity {
     private String status;
 
     /**
-     * 分组字段
+     * 组
      */
-    @TableField("`groups`")
     private String groups;
 
     /**

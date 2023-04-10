@@ -6,7 +6,7 @@ import com.pangu.system.api.domain.SysOperLog;
 /**
  * 日志服务
  *
- * @author chengliang4810
+ * @author Lion Li
  */
 public interface RemoteLogService {
 

@@ -30,4 +30,8 @@ public interface ISysOssService {
 
     Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid);
 
+    String selectUrlByIds(String ossIds);
+
+    Boolean insertByBo(SysOssBo bo);
+
 }

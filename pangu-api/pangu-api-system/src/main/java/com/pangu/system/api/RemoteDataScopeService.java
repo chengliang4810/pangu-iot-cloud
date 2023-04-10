@@ -3,7 +3,7 @@ package com.pangu.system.api;
 /**
  * 数据权限服务
  *
- * @author chengliang4810
+ * @author Lion Li
  */
 public interface RemoteDataScopeService {
 

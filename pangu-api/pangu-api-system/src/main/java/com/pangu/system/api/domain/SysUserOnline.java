@@ -8,7 +8,7 @@ import java.io.Serializable;
 /**
  * 当前在线会话
  *
- * @author chengliang4810
+ * @author Lion Li
  */
 
 @Data

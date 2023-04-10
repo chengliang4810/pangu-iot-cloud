@@ -1,5 +1,7 @@
 package com.pangu.resource.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.convert.Convert;
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -47,6 +49,28 @@ import java.util.stream.Collectors;
 public class SysOssServiceImpl implements ISysOssService {
 
     private final SysOssMapper baseMapper;
+
+    @Override
+    public String selectUrlByIds(String ossIds) {
+        List<String> list = new ArrayList<>();
+        for (Long id : StringUtils.splitTo(ossIds, Convert::toLong)) {
+            SysOssVo vo = SpringUtils.getAopProxy(this).getById(id);
+            if (ObjectUtil.isNotNull(vo)) {
+                list.add(this.matchingUrl(vo).getUrl());
+            }
+        }
+        return String.join(StringUtils.SEPARATOR, list);
+    }
+
+    @Override
+    public Boolean insertByBo(SysOssBo bo) {
+        SysOss oss = BeanUtil.toBean(bo, SysOss.class);
+        boolean flag = baseMapper.insert(oss) > 0;
+        if (flag) {
+            bo.setOssId(oss.getOssId());
+        }
+        return flag;
+    }
 
     @Override
     public TableDataInfo<SysOssVo> queryPageList(SysOssBo bo, PageQuery pageQuery) {

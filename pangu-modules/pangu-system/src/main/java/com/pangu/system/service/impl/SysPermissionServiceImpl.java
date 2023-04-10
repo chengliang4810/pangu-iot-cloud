@@ -1,7 +1,6 @@
 package com.pangu.system.service.impl;
 
 import com.pangu.common.satoken.utils.LoginHelper;
-import com.pangu.system.api.domain.SysRole;
 import com.pangu.system.api.domain.SysUser;
 import com.pangu.system.service.ISysMenuService;
 import com.pangu.system.service.ISysPermissionService;
@@ -10,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -56,17 +54,7 @@ public class SysPermissionServiceImpl implements ISysPermissionService {
         if (LoginHelper.isAdmin(user.getUserId())) {
             perms.add("*:*:*");
         } else {
-            List<SysRole> roles = user.getRoles();
-            if (!roles.isEmpty() && roles.size() > 1) {
-                // 多角色设置permissions属性，以便数据权限匹配权限
-                for (SysRole role : roles) {
-                    Set<String> rolePerms = menuService.selectMenuPermsByRoleId(role.getRoleId());
-                    role.setPermissions(rolePerms);
-                    perms.addAll(rolePerms);
-                }
-            } else {
-                perms.addAll(menuService.selectMenuPermsByUserId(user.getUserId()));
-            }
+            perms.addAll(menuService.selectMenuPermsByUserId(user.getUserId()));
         }
         return perms;
     }
