@@ -42,7 +42,6 @@ public class LoginHelper {
      */
     public static void login(LoginUser loginUser) {
         SaHolder.getStorage().set(LOGIN_USER_KEY, loginUser);
-        System.out.println(33333);
         StpUtil.login(loginUser.getLoginId());
         setLoginUser(loginUser);
     }
@@ -53,7 +52,6 @@ public class LoginHelper {
      * @param apiTokenDTO api牌dto
      */
     public static void loginByApiToken(ApiTokenDTO apiTokenDTO) {
-        System.out.println("loginByApiToken： " + apiTokenDTO);
         LoginUser loginUser = new LoginUser();
         loginUser.setUserId(apiTokenDTO.getId());
         loginUser.setToken(apiTokenDTO.getToken());
@@ -61,17 +59,8 @@ public class LoginHelper {
         loginUser.setUserType(UserType.THIRD_PARTY.getUserType());
 
         SaHolder.getStorage().set(LOGIN_USER_KEY, loginUser);
-        System.out.println(33333);
-        try {
-            StpUtil.login(loginUser.getLoginId(), new SaLoginModel().setTimeout(-1).setToken(apiTokenDTO.getToken()).setDevice(DeviceType.THIRD_PARTY.getDevice()));
-            System.out.println(22222222);
-        } catch (Exception e) {
-            System.out.println(444444);
-            e.printStackTrace();
-        }
-        System.out.println(11111);
+        StpUtil.login(loginUser.getLoginId(), new SaLoginModel().setToken(apiTokenDTO.getToken()).setDevice(DeviceType.THIRD_PARTY.getDevice()));
         setLoginUser(loginUser);
-        System.out.println("loginByApiToken222： " + loginUser);
     }
 
     /**

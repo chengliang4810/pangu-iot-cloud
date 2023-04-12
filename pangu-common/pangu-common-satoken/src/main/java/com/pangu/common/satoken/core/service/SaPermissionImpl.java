@@ -6,6 +6,7 @@ import com.pangu.common.satoken.utils.LoginHelper;
 import com.pangu.system.api.model.LoginUser;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -21,12 +22,14 @@ public class SaPermissionImpl implements StpInterface {
     @Override
     public List<String> getPermissionList(Object loginId, String loginType) {
         LoginUser loginUser = LoginHelper.getLoginUser();
-        System.out.println(loginUser + "=====================");
         UserType userType = UserType.getUserType(loginUser.getUserType());
         if (userType == UserType.SYS_USER) {
             return new ArrayList<>(loginUser.getMenuPermission());
         } else if (userType == UserType.APP_USER) {
             // 其他端 自行根据业务编写
+        } else if (userType == UserType.THIRD_PARTY) {
+            // 其他端 自行根据业务编写
+            return Collections.singletonList("*:*:*");
         }
         return new ArrayList<>();
     }
@@ -42,6 +45,9 @@ public class SaPermissionImpl implements StpInterface {
             return new ArrayList<>(loginUser.getRolePermission());
         } else if (userType == UserType.APP_USER) {
             // 其他端 自行根据业务编写
+        } else if (userType == UserType.THIRD_PARTY) {
+            // 第三方平台 自行根据业务编写
+            return Collections.singletonList("admin");
         }
         return new ArrayList<>();
     }

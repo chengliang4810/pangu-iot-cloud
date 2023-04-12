@@ -37,7 +37,6 @@ public class UserActionListener implements SaTokenListener {
      */
     @Override
     public void doLogin(String loginType, Object loginId, String tokenValue, SaLoginModel loginModel) {
-        System.out.println(loginId);
         UserType userType = UserType.getUserType(loginId.toString());
         if (userType == UserType.SYS_USER) {
             UserAgent userAgent = UserAgentUtil.parse(ServletUtils.getRequest().getHeader("User-Agent"));
@@ -64,7 +63,26 @@ public class UserActionListener implements SaTokenListener {
             // app端 自行根据业务编写
         } else if (userType == UserType.THIRD_PARTY) {
             // 第三方平台
-            System.out.println("第三方平台333333");
+            UserAgent userAgent = UserAgentUtil.parse(ServletUtils.getRequest().getHeader("User-Agent"));
+            String ip = ServletUtils.getClientIP();
+            LoginUser user = LoginHelper.getLoginUser();
+            SysUserOnline userOnline = new SysUserOnline();
+            userOnline.setIpaddr(ip);
+            userOnline.setLoginLocation(AddressUtils.getRealAddressByIP(ip));
+            userOnline.setBrowser(userAgent.getBrowser().getName());
+            userOnline.setOs(userAgent.getOs().getName());
+            userOnline.setLoginTime(System.currentTimeMillis());
+            userOnline.setTokenId(tokenValue);
+            userOnline.setUserName(user.getUsername());
+            if (ObjectUtil.isNotNull(user.getDeptName())) {
+                userOnline.setDeptName(user.getDeptName());
+            }
+            if(tokenConfig.getTimeout() == -1) {
+                RedisUtils.setCacheObject(CacheConstants.ONLINE_TOKEN_KEY + tokenValue, userOnline);
+            } else {
+                RedisUtils.setCacheObject(CacheConstants.ONLINE_TOKEN_KEY + tokenValue, userOnline, Duration.ofSeconds(tokenConfig.getTimeout()));
+            }
+            log.info("user doLogin, useId:{}, token:{}", loginId, tokenValue);
         }
     }
 

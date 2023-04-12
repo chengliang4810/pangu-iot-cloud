@@ -8,11 +8,9 @@ import com.pangu.auth.form.RegisterBody;
 import com.pangu.auth.properties.UserPasswordProperties;
 import com.pangu.common.core.constant.CacheConstants;
 import com.pangu.common.core.constant.Constants;
-import com.pangu.common.core.domain.dto.ApiTokenDTO;
 import com.pangu.common.core.enums.DeviceType;
 import com.pangu.common.core.enums.LoginType;
 import com.pangu.common.core.enums.UserType;
-import com.pangu.common.core.exception.ServiceException;
 import com.pangu.common.core.exception.user.CaptchaExpireException;
 import com.pangu.common.core.exception.user.UserException;
 import com.pangu.common.core.utils.MessageUtils;
@@ -21,7 +19,6 @@ import com.pangu.common.core.utils.StringUtils;
 import com.pangu.common.redis.utils.RedisUtils;
 import com.pangu.common.satoken.utils.LoginHelper;
 import com.pangu.system.api.RemoteLogService;
-import com.pangu.system.api.RemoteTokenService;
 import com.pangu.system.api.RemoteUserService;
 import com.pangu.system.api.domain.SysLogininfor;
 import com.pangu.system.api.domain.SysUser;
@@ -32,7 +29,6 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.time.Duration;
-import java.util.List;
 import java.util.function.Supplier;
 
 /**
@@ -49,41 +45,9 @@ public class SysLoginService {
     @Resource
     @DubboReference
     private RemoteUserService remoteUserService;
-    @Resource
-    @DubboReference
-    private RemoteTokenService remoteTokenService;
+
     @Resource
     private UserPasswordProperties userPasswordProperties;
-
-    /**
-     * 注册所有第三方平台Token
-     */
-    public void registerAllApiToken() {
-        List<ApiTokenDTO> apiTokenDTOList = remoteTokenService.getTokenInfoList();
-        System.out.println("apiTokenDTOList = " + apiTokenDTOList);
-        // 获取登录token
-        apiTokenDTOList.forEach(LoginHelper::loginByApiToken);
-    }
-
-    /**
-     * 检查ApiToken是否存在， 存在则登录该令牌
-     *
-     * @param token 令牌
-     */
-    public void checkAndLoginByApiToken(String token) throws ServiceException {
-        ApiTokenDTO apiTokenDTO = remoteTokenService.getTokenInfoByToken(token);
-        if (ObjectUtil.isNull(apiTokenDTO)) {
-            throw new ServiceException("令牌不存在");
-        }
-        if (!apiTokenDTO.getStatus()) {
-            throw new ServiceException("令牌已禁用");
-        }
-        if (apiTokenDTO.getExpirationTime() != null && System.currentTimeMillis() - apiTokenDTO.getExpirationTime().getTime() <= 0) {
-            throw new ServiceException("令牌已过期");
-        }
-        // 登录该token
-        LoginHelper.loginByApiToken(apiTokenDTO);
-    }
 
     /**
      * 登录

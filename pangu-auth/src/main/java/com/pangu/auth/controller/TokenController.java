@@ -4,6 +4,8 @@ import com.alibaba.nacos.api.common.Constants;
 import com.pangu.auth.form.LoginBody;
 import com.pangu.auth.form.RegisterBody;
 import com.pangu.auth.form.SmsLoginBody;
+import com.pangu.auth.form.TokenLoginBody;
+import com.pangu.auth.service.SysApiTokenService;
 import com.pangu.auth.service.SysLoginService;
 import com.pangu.common.core.domain.R;
 import lombok.RequiredArgsConstructor;
@@ -23,11 +25,18 @@ import java.util.Map;
  * @author chengliang4810
  */
 @Validated
-@RequiredArgsConstructor
 @RestController
+@RequiredArgsConstructor
 public class TokenController {
 
     private final SysLoginService sysLoginService;
+    private final SysApiTokenService sysApiTokenService;
+
+    @PostMapping("/token/login")
+    public R<Void> tokenLogin(@RequestBody TokenLoginBody loginBody) {
+        sysApiTokenService.registerApiToken(loginBody.getToken());
+        return R.ok();
+    }
 
     /**
      * 登录方法
