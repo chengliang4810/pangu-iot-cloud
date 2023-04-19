@@ -99,7 +99,14 @@ public class DeviceAttributeServiceImpl extends ServiceImpl<DeviceAttributeMappe
         Device device = deviceService.getById(deviceId);
         Assert.notNull(device, "设备不存在");
         List<DeviceAttributeVO> deviceAttributeVOList = baseMapper.queryVOListByDeviceId(device.getProductId(), deviceId);
-        deviceAttributeVOList.forEach(deviceAttributeVO -> deviceAttributeVO.setInherit(0 == deviceAttributeVO.getDeviceId()));
+
+        // 获取最新属性值并绑定
+        Map<String, Object> lastRowData = tdEngineService.todayLastRowData(String.valueOf(device.getId()));
+        deviceAttributeVOList.forEach(deviceAttributeVO -> {
+            deviceAttributeVO.setValue(lastRowData.get(deviceAttributeVO.getKey()));
+            deviceAttributeVO.setClock(MapUtil.getStr(lastRowData, IotConstants.TABLE_PRIMARY_FIELD));
+            deviceAttributeVO.setInherit(0 == deviceAttributeVO.getDeviceId());
+        });
         return deviceAttributeVOList;
     }
 

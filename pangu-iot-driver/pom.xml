@@ -11,6 +11,7 @@
     <modules>
         <module>pangu-iot-test-driver</module>
         <module>pangu-iot-modbus-tcp-driver</module>
+        <module>pangu-iot-driver-jemetech</module>
     </modules>
 
     <artifactId>pangu-iot-driver</artifactId>

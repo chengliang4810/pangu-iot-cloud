@@ -153,8 +153,13 @@ public class ProductServiceServiceImpl extends ServiceImpl<ProductServiceMapper,
     public Boolean insertByBo(ProductServiceBO bo) {
 
         // 功能名称是否存在
-        boolean exist = serviceRelationService.count(Wrappers.<ProductServiceRelation>lambdaQuery().in(ProductServiceRelation::getRelationId, bo.getProdId(), bo.getRelationId())) > 0;
-        Assert.isFalse(exist, "功能已存在");
+        List<ProductServiceRelation> productServiceRelations = serviceRelationService.list(Wrappers.<ProductServiceRelation>lambdaQuery().in(ProductServiceRelation::getRelationId, bo.getProdId(), bo.getRelationId()));
+        List<Long> serviceIds = productServiceRelations.stream().map(ProductServiceRelation::getServiceId).collect(Collectors.toList());
+
+        if (CollectionUtil.isNotEmpty(serviceIds)) {
+            List<ProductService> productServiceList = baseMapper.selectList(Wrappers.<ProductService>lambdaQuery().in(ProductService::getId, serviceIds).eq(ProductService::getMark, bo.getMark()));
+            Assert.isFalse(CollectionUtil.isNotEmpty(productServiceList), "功能已存在");
+        }
 
         // 数据入库
         ProductService add = productServiceConvert.toEntity(bo);

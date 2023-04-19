@@ -73,12 +73,21 @@ public class DriverSdkServiceImpl implements IDriverSdkService {
 
         // 查询驱动所对应的网关设备 驱动信息在网关设备上
         List<Long> productIds = productService.listByDriverId(driver.getId());
-        List<Device> gatewayDeviceList = deviceService.list(Wrappers.lambdaQuery(Device.class).in(Device::getProductId, productIds));
-        Set<Long> gatewayDeviceIds = gatewayDeviceList.stream().map(Device::getId).collect(Collectors.toSet());
+        List<Device> gatewayDeviceList = null;
+        Set<Long> gatewayDeviceIds = null;
+        if (CollectionUtil.isNotEmpty(productIds)) {
+            gatewayDeviceList = deviceService.list(Wrappers.lambdaQuery(Device.class).in(Device::getProductId, productIds));
+            gatewayDeviceIds = gatewayDeviceList.stream().map(Device::getId).collect(Collectors.toSet());
+        }
+
+        List<GatewayDeviceBind> gatewayDeviceBindList = null;
+        Set<Long> childDeviceIds = null;
 
         // 查询网关设备绑定的子设备 点位信息在子设备上
-        List<GatewayDeviceBind> gatewayDeviceBindList = gatewayDeviceBindService.list(Wrappers.lambdaQuery(GatewayDeviceBind.class).in(GatewayDeviceBind::getGatewayDeviceId, gatewayDeviceIds));
-        Set<Long> childDeviceIds = gatewayDeviceBindList.stream().map(GatewayDeviceBind::getDeviceId).collect(Collectors.toSet());
+        if (CollectionUtil.isNotEmpty(gatewayDeviceIds)) {
+            gatewayDeviceBindList = gatewayDeviceBindService.list(Wrappers.lambdaQuery(GatewayDeviceBind.class).in(GatewayDeviceBind::getGatewayDeviceId, gatewayDeviceIds));
+            childDeviceIds = gatewayDeviceBindList.stream().map(GatewayDeviceBind::getDeviceId).collect(Collectors.toSet());
+        }
 
         List<Device> deviceList = CollectionUtil.isEmpty(childDeviceIds)
             ? Collections.emptyList()
