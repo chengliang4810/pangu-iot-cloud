@@ -2,7 +2,7 @@
   <configuration default="false" name="pangu-iot-manager" type="docker-deploy" factoryName="dockerfile" server-name="IotDocker">
     <deployment type="dockerfile">
       <settings>
-        <option name="imageTag" value="pangu/pangu-iot-manager:1.0.0" />
+        <option name="imageTag" value="pangu/pangu-iot-manager" />
         <option name="containerName" value="pangu-iot-manager" />
         <option name="commandLineOptions" value="-m 1024M --memory-swap 2048M --restart=always -d --network  host" />
         <option name="sourceFilePath" value="pangu-iot/pangu-iot-manager/Dockerfile" />
