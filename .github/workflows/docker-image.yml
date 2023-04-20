@@ -84,4 +84,12 @@ jobs:
           context: ./pangu-iot-driver/pangu-iot-modbus-tcp-driver/
           file: ./pangu-iot-driver/pangu-iot-modbus-tcp-driver/Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/pangu-driver-modbus-tcp:${{ steps.version.outputs.version }},${{ secrets.DOCKER_USERNAME }}/pangu-modbus-tcp:latest
+          tags: ${{ secrets.DOCKER_USERNAME }}/pangu-driver-modbus-tcp:${{ steps.version.outputs.version }},${{ secrets.DOCKER_USERNAME }}/pangu-driver-modbus-tcp:latest
+
+      - name: Pangu-IOT-Driver-Jemetech Build and push Docker image
+        uses: docker/build-push-action@v2
+        with:
+          context: ./pangu-iot-driver/pangu-iot-driver-jemetech/
+          file: ./pangu-iot-driver/pangu-iot-driver-jemetech/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/pangu-driver-jemetech:${{ steps.version.outputs.version }},${{ secrets.DOCKER_USERNAME }}/pangu-driver-jemetech:latest

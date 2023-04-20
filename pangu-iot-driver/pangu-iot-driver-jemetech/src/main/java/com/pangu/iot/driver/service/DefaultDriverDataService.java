@@ -1,6 +1,7 @@
 package com.pangu.iot.driver.service;
 
 import cn.hutool.core.convert.Convert;
+import cn.hutool.core.thread.ThreadUtil;
 import com.pangu.common.core.domain.dto.AttributeInfo;
 import com.pangu.common.core.exception.ServiceException;
 import com.pangu.common.sdk.service.DriverDataService;
@@ -61,12 +62,6 @@ public class DefaultDriverDataService extends DriverDataService {
     @SneakyThrows
     public String read(Device device, DeviceAttribute attribute, Map<String, AttributeInfo> driverInfo, Map<String, AttributeInfo> pointInfo) {
 
-//        DeviceValue deviceValue = new DeviceValue();
-//        deviceValue.setDeviceId("1623590722222985216");
-//        deviceValue.setAttributes(Collections.singletonMap("temp", String.valueOf(RandomUtil.randomInt(1, 100))));
-//        deviceValue.setClock(System.currentTimeMillis() / 1000);
-
-
         // 访问服务器
         connect(attribute(driverInfo, "host"), attribute(driverInfo, "port"));
 
@@ -89,7 +84,7 @@ public class DefaultDriverDataService extends DriverDataService {
         // 获取配置的传感器ID
         Integer sensorId = attribute(pointInfo, "sensorId");
         // 读取指定传感器ID数据
-        Float floatValue = getSensorData(dataString, sensorId);
+        Float floatValue = getSensorData(driverInfo,dataString, sensorId);
         log.debug("floatValue: {}", floatValue);
         if (floatValue == null) {
             // 设备故障，无法读取数据
@@ -146,16 +141,25 @@ public class DefaultDriverDataService extends DriverDataService {
     }
 
 
-    private Float getSensorData(String dataString, Integer sensorId) {
+    private Float getSensorData(Map<String, AttributeInfo> driverInfo, String dataString, Integer sensorId) {
         // 获取传感器数量
         int number = Integer.parseInt(dataString.substring(2, 4) + dataString.substring(0, 2), 16);
         log.debug("传感器数量: {}", number);
+        if (number == 0) {
+            closeRes();
+            ThreadUtil.sleep(500);
+            log.warn("传感器数量为0，重新连接");
+            connect(attribute(driverInfo, "host"), attribute(driverInfo, "port"));
+        }
+        System.out.println("传感器ID start");
         for (int i = 0; i < number; i++) {
             // 获取传感器数据起始位置
             int startIndex = 40 * i + 4;
             Integer id = Integer.parseInt(dataString.substring(startIndex + 6, startIndex + 8) + dataString.substring(startIndex + 4, startIndex + 6), 16);
-            log.debug("序号 {} ,传感器id: {}", i + 1, id);
+            // log.debug("序号 {} ,传感器id: {}", i + 1, id);
+            System.out.println(id + ",");
         }
+        System.out.println("传感器ID END");
         for (int i = 0; i < number; i++) {
             // 获取传感器数据起始位置
             int startIndex = 40 * i + 4;
