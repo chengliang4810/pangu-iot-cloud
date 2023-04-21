@@ -151,15 +151,6 @@ public class DefaultDriverDataService extends DriverDataService {
             log.warn("传感器数量为0，重新连接");
             connect(attribute(driverInfo, "host"), attribute(driverInfo, "port"));
         }
-        System.out.println("传感器ID start");
-        for (int i = 0; i < number; i++) {
-            // 获取传感器数据起始位置
-            int startIndex = 40 * i + 4;
-            Integer id = Integer.parseInt(dataString.substring(startIndex + 6, startIndex + 8) + dataString.substring(startIndex + 4, startIndex + 6), 16);
-            // log.debug("序号 {} ,传感器id: {}", i + 1, id);
-            System.out.println(id + ",");
-        }
-        System.out.println("传感器ID END");
         for (int i = 0; i < number; i++) {
             // 获取传感器数据起始位置
             int startIndex = 40 * i + 4;
