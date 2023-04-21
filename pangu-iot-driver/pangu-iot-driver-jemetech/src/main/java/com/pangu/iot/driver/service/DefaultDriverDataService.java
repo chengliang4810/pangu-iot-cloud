@@ -36,7 +36,7 @@ public class DefaultDriverDataService extends DriverDataService {
     /**
      * 套接字
      */
-    private final Socket socket = new Socket();
+    private Socket socket;
 
     /**
      * 输入流
@@ -94,6 +94,9 @@ public class DefaultDriverDataService extends DriverDataService {
         return decimalFormat.format(floatValue);
     }
 
+    /**
+     * 关闭res
+     */
     private void closeRes() {
         if (inputStream != null) {
             try {
@@ -102,14 +105,26 @@ public class DefaultDriverDataService extends DriverDataService {
                 log.error("关闭输入流失败", e);
             }
         }
-        try {
-            socket.close();
-        } catch (IOException e) {
-            log.error("关闭Socket", e);
+        if (socket != null) {
+            try {
+                socket.close();
+                socket = null;
+            } catch (IOException e) {
+                log.error("关闭Socket", e);
+            }
         }
     }
 
+    /**
+     * 连接
+     *
+     * @param host 主机
+     * @param port 港口
+     */
     private void connect(String host, int port) {
+        if (socket == null) {
+            socket = new Socket();
+        }
         if (socket.isConnected()) {
             return;
         }
