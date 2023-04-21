@@ -5,10 +5,12 @@ import com.pangu.common.core.validate.EditGroup;
 import com.pangu.common.core.web.domain.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.hibernate.validator.constraints.Length;
 import org.springframework.lang.Nullable;
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 /**
@@ -37,8 +39,9 @@ public class DeviceBO extends BaseEntity {
      * 设备编号
      */
     @Nullable
-    @Length(max = 60, message = "设备ID长度不符合规范", groups = { AddGroup.class })
-    @Pattern(regexp = "^[a-zA-Z0-9_]+$", message = "设备ID只能包含英文、数字、下划线", groups = { AddGroup.class })
+    @NotBlank
+    @Size(min = 5, max = 60, groups = { AddGroup.class }, message = "设备ID长度不符合规范")
+    @Pattern(regexp = "^\\w*$", message = "设备ID只能包含英文、数字、下划线", groups = { AddGroup.class })
     private String code;
 
     /**
