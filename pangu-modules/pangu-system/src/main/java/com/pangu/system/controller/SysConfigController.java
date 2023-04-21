@@ -16,7 +16,9 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 参数配置 信息操作处理
@@ -30,6 +32,21 @@ import java.util.List;
 public class SysConfigController extends BaseController {
 
     private final ISysConfigService configService;
+
+    /**
+     * mqtt 配置信息接口
+     */
+    @GetMapping("/mqtt")
+    public R<Map<String, Object>> mqtt() {
+        String address = configService.selectConfigByKey("sys.iot.emqx.address");
+        String user = configService.selectConfigByKey("sys.iot.emqx.user");
+        String password = configService.selectConfigByKey("sys.iot.emqx.password");
+        Map<String, Object> result = new HashMap<>(3);
+        result.put("address", address);
+        result.put("user", user);
+        result.put("password", password);
+        return R.ok(result);
+    }
 
     /**
      * 获取参数配置列表
