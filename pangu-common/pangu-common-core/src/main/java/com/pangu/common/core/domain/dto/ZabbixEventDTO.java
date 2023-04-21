@@ -1,10 +1,12 @@
 package com.pangu.common.core.domain.dto;
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.List;
 
 @Data
@@ -57,5 +59,12 @@ public class ZabbixEventDTO implements Serializable {
      */
     @JsonProperty("tags")
     private List<TagsDTO> tags;
+
+    public List<TagsDTO> getTags() {
+        if (CollectionUtil.isNotEmpty(tags)){
+            return tags;
+        }
+        return Collections.emptyList();
+    }
 
 }
