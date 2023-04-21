@@ -67,4 +67,11 @@ public class ZabbixEventDTO implements Serializable {
         return Collections.emptyList();
     }
 
+    public List<String> getGroups() {
+        if (CollectionUtil.isNotEmpty(tags)){
+            return groups;
+        }
+        return Collections.emptyList();
+    }
+
 }

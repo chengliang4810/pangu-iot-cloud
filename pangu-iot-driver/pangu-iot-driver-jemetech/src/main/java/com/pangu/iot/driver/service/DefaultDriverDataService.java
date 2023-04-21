@@ -163,7 +163,6 @@ public class DefaultDriverDataService extends DriverDataService {
         if (number == 0) {
             closeRes();
             ThreadUtil.sleep(500);
-            log.warn("传感器数量为0，重新连接");
             connect(attribute(driverInfo, "host"), attribute(driverInfo, "port"));
         }
         for (int i = 0; i < number; i++) {
@@ -171,7 +170,6 @@ public class DefaultDriverDataService extends DriverDataService {
             int startIndex = 40 * i + 4;
             // 传感器id
             Integer id = Integer.parseInt(dataString.substring(startIndex + 6, startIndex + 8) + dataString.substring(startIndex + 4, startIndex + 6), 16);
-            log.info("序号 {} ,传感器id: {}", i + 1, id);
             if (!Objects.equals(sensorId, id)) {
                 continue;
             }

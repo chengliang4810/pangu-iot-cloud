@@ -84,7 +84,7 @@ public class ZabbixReceiveServiceImpl implements ZabbixReceiveService {
         Map<String, String> tagMap = itemTags.stream().collect(Collectors.toMap(TagsDTO::getTag, TagsDTO::getValue));
         String deviceId = getDeviceId(zabbixEvent.getHosts());
         // 过滤Zabbix server不处理
-        if ("Zabbix server".equals(deviceId)) {
+        if (zabbixEvent.getGroups().contains("Zabbix servers")) {
             return;
         }
         if (tagMap.containsKey(IotConstants.DEVICE_STATUS_OFFLINE_TAG)) {
