@@ -155,10 +155,14 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> impleme
     public TableDataInfo<DeviceListVO> queryPageList(DeviceBO bo, PageQuery pageQuery) {
         QueryWrapper<Device> lqw = buildWrapper(bo);
         Page<DeviceListVO> result = baseMapper.selectVoPageList(pageQuery.build(), lqw);
+        log.debug("查询设备列表结果：{}", result.getRecords());
         // 查询设备状态
         buildDeviceStatus(result.getRecords());
+        log.debug("查询设备列表结果：{}", result.getRecords());
 
-        return TableDataInfo.build(result);
+        TableDataInfo<DeviceListVO> build = TableDataInfo.build(result);
+        log.debug("查询设备列表结果：{}", build);
+        return build;
     }
 
     /**
