@@ -30,6 +30,7 @@ public class ZabbixReceiveController {
         try {
             // 使用换行分割字符串 TODO: 2021/3/31 ndjson 格式。 后续需要优化为Map或List的格式
             StrUtil.split(body, StrUtil.C_LF).forEach(json ->{
+                log.debug("接收到zabbix数据: {}", json);
                 ZabbixItemDTO zabbixItemDTO = JsonUtils.parseObject(json, ZabbixItemDTO.class);
                 zabbixReceiveService.receiveItemData(zabbixItemDTO);
             });

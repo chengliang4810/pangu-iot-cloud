@@ -21,7 +21,7 @@ public class ZabbixItemDTO implements Serializable {
     private String name;
 
     @JsonProperty("value")
-    private String value;
+    private Object value;
 
     @JsonProperty("type")
     private Integer type;
