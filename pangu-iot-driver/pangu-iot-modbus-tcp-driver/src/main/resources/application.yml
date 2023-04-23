@@ -45,7 +45,7 @@ driver:
   description: @project.description@
   # 周期时间
   schedule:
-    read: '10s'
+    read: '2s'
     heartbeat: '10s'
   driver-attribute:
     - displayName: 主机
