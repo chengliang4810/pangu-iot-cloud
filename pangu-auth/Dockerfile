@@ -2,6 +2,10 @@ FROM anapsix/alpine-java:8_server-jre_unlimited
 
 MAINTAINER chengliang4810
 
+# 设定时区
+ENV TZ=Asia/Shanghai
+
+
 RUN mkdir -p /pangu/auth/logs  \
     /pangu/auth/temp  \
     /pangu/skywalking/agent

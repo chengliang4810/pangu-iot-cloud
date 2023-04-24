@@ -2,6 +2,10 @@ FROM java:8u111-jre-alpine
 
 MAINTAINER chengliang4810
 
+# 设定时区
+ENV TZ=Asia/Shanghai
+
+
 RUN mkdir -p /pangu/iot/driver/modbus-tcp/logs \
     /pangu/iot/driver/modbus-tcp/temp \
     /pangu/skywalking/agent

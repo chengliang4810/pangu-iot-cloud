@@ -2,6 +2,9 @@ FROM java:8u111-jre-alpine
 
 MAINTAINER chengliang4810
 
+# 设定时区
+ENV TZ=Asia/Shanghai
+
 RUN mkdir -p /pangu/system/logs \
     /pangu/system/temp \
     /pangu/skywalking/agent
