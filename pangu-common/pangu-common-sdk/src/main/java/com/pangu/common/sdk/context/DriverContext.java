@@ -11,6 +11,7 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -56,9 +57,8 @@ public class DriverContext {
     public Map<Long, Map<String, AttributeInfo>> getPointInfoByDeviceId(Long deviceId) {
         Map<Long, Map<String, AttributeInfo>> tmpMap = this.driverMetadata.getPointInfoMap().get(deviceId);
         if (MapUtil.isEmpty(tmpMap)) {
-            log.info("this.driverMetadata.getPointInfoMap() : {}", this.driverMetadata.getPointInfoMap());
-            //todo 提示信息需要统一替换
-            throw new ServiceException("Device(" + deviceId + ") does not exist");
+            log.warn("Device({}) does not exist", deviceId);
+            return Collections.emptyMap();
         }
         return tmpMap;
     }
@@ -73,7 +73,8 @@ public class DriverContext {
     public Map<String, AttributeInfo> getPointInfoByDeviceIdAndPointId(Long deviceId, Long pointId) {
         Map<String, AttributeInfo> tmpMap = getPointInfoByDeviceId(deviceId).get(pointId);
         if (null == tmpMap || tmpMap.size() < 1) {
-            throw new ServiceException("Point(" + pointId + ") info does not exist");
+            log.warn("Point( {} ) info does not exist", pointId);
+            return Collections.emptyMap();
         }
         return tmpMap;
     }
@@ -87,7 +88,8 @@ public class DriverContext {
     public Device getDeviceByDeviceId(String deviceId) {
         Device device = this.driverMetadata.getDeviceMap().get(deviceId);
         if (null == device) {
-            throw new ServiceException("Device(" + deviceId + ") does not exist");
+            log.warn("Device({}) does not exist", deviceId);
+            throw new ServiceException("Device does not exist");
         }
         return device;
     }
