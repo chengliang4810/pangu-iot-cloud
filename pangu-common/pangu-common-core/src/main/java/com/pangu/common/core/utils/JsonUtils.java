@@ -3,6 +3,7 @@ package com.pangu.common.core.utils;
 import cn.hutool.core.lang.Dict;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -11,9 +12,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.springframework.lang.NonNull;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -153,5 +156,28 @@ public class JsonUtils {
         String jsonString = JsonUtils.toJsonString(object, true);
         assert jsonString != null;
         return jsonString.getBytes();
+    }
+
+    /**
+     * 解析ndjson
+     * 因jackson无法解析科学计数法，所以使用hutool的json工具
+     * @param text  文本
+     * @param clazz clazz
+     * @return {@link List}<{@link T}>
+     */
+    @NonNull
+    public static <T> List<T> parseNdjson(String text,Class<T> clazz) {
+        if (StringUtils.isBlank(text)) {
+            return Collections.emptyList();
+        }
+        List<String> stringList = StrUtil.split(text, StrUtil.C_LF);
+        List<T> resultList = new ArrayList<>(stringList.size());
+        stringList.forEach(json -> {
+            if (StringUtils.isBlank(json)){
+                return;
+            }
+            resultList.add(JSONUtil.toBean(json, clazz));
+        });
+        return resultList;
     }
 }

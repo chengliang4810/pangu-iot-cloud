@@ -2,10 +2,10 @@ package com.pangu.iot.data.controller;
 
 import com.pangu.common.core.domain.dto.ZabbixEventDTO;
 import com.pangu.common.core.domain.dto.ZabbixItemDTO;
+import com.pangu.common.core.utils.JsonUtils;
 import com.pangu.iot.data.service.ZabbixReceiveService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,30 +24,26 @@ public class ZabbixReceiveController {
     /**
      * 接收数据
      *
-     * @param zabbixItemList
+     * @param body 身体
      */
-    @PostMapping(value = "/item",  consumes = MediaType.APPLICATION_NDJSON_VALUE)
-    public void receiveData(@RequestBody List<ZabbixItemDTO> zabbixItemList) {
-        try {
-            zabbixItemList.forEach(zabbixReceiveService::receiveItemData);
-        } catch (Exception e) {
-            log.warn("接收zabbix数据失败", e);
-        }
+    @PostMapping("/item")
+    public void receiveData(@RequestBody String body) {
+        log.info("接收到的item数据: {}", body);
+        List<ZabbixItemDTO> zabbixItemList = JsonUtils.parseNdjson(body, ZabbixItemDTO.class);
+        zabbixItemList.forEach(zabbixReceiveService::receiveItemData);
     }
 
     /**
      * 接收事件
      * 接收zabbix发送的数据
      *
-     * @param zabbixEventList
+     * @param body 身体
      */
-    @PostMapping(value = "/event",  consumes = MediaType.APPLICATION_NDJSON_VALUE)
-    public void receiveEvent(@RequestBody List<ZabbixEventDTO> zabbixEventList) {
-        try {
-            zabbixEventList.forEach(zabbixReceiveService::receiveEventData);
-        } catch (Exception e) {
-            log.warn("接收zabbix事件失败", e);
-        }
+    @PostMapping("/event")
+    public void receiveEvent(@RequestBody String body) {
+        log.info("接收到的event数据: {}", body);
+        List<ZabbixEventDTO> zabbixItemList = JsonUtils.parseNdjson(body, ZabbixEventDTO.class);
+        zabbixItemList.forEach(zabbixReceiveService::receiveEventData);
     }
 
 }
