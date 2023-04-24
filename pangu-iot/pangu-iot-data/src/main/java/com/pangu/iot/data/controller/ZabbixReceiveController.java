@@ -4,7 +4,6 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.pangu.common.core.domain.dto.ZabbixEventDTO;
 import com.pangu.common.core.domain.dto.ZabbixItemDTO;
-import com.pangu.common.core.utils.JsonUtils;
 import com.pangu.iot.data.service.ZabbixReceiveService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +31,9 @@ public class ZabbixReceiveController {
             // 使用换行分割字符串 TODO: 2021/3/31 ndjson 格式。 后续需要优化为Map或List的格式
             StrUtil.split(body, StrUtil.C_LF).forEach(json ->{
                 log.debug("接收到zabbix数据: {}", json);
+                if (StrUtil.isBlank(json)) {
+                    return;
+                }
                 ZabbixItemDTO zabbixItemDTO = JSONUtil.toBean(json, ZabbixItemDTO.class);
                 zabbixReceiveService.receiveItemData(zabbixItemDTO);
             });
@@ -51,7 +53,10 @@ public class ZabbixReceiveController {
         try {
             // 使用换行分割字符串
             StrUtil.split(body, StrUtil.C_LF).forEach(json ->{
-                ZabbixEventDTO zabbixEventDTO = JsonUtils.parseObject(json, ZabbixEventDTO.class);
+                if (StrUtil.isBlank(json)) {
+                    return;
+                }
+                ZabbixEventDTO zabbixEventDTO = JSONUtil.toBean(json, ZabbixEventDTO.class);
                 zabbixReceiveService.receiveEventData(zabbixEventDTO);
             });
         } catch (Exception e) {
