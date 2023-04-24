@@ -46,7 +46,7 @@ public class ZabbixReceiveServiceImpl implements ZabbixReceiveService {
             return;
         }
 
-        log.debug("接收到ZBX数据：{}", zabbixItem);
+        log.info("接收到ZBX数据：{}", zabbixItem);
         Map<String, String> tagMap = zabbixItem.getTags().stream().collect(Collectors.toMap(TagsDTO::getTag, TagsDTO::getValue));
         if (!tagMap.containsKey(IotConstants.PRODUCT_ID_TAG_NAME)) {
             log.warn("未知产品：{}", zabbixItem);
@@ -78,6 +78,8 @@ public class ZabbixReceiveServiceImpl implements ZabbixReceiveService {
         if (ObjectUtil.isNull(zabbixEvent)) {
             return;
         }
+
+        log.info("接收到ZBX事件：{}", zabbixEvent);
         List<TagsDTO> itemTags = zabbixEvent.getTags();
 
         // 获取Tags

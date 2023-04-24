@@ -1,5 +1,6 @@
 package com.pangu.iot.driver.service;
 
+import cn.hutool.core.util.NumberUtil;
 import com.pangu.common.core.domain.dto.AttributeInfo;
 import com.pangu.common.core.enums.IotDataType;
 import com.pangu.common.core.utils.JsonUtils;
@@ -127,11 +128,11 @@ public class DefaultDriverDataService extends DriverDataService {
             case 3:
                 BaseLocator<Number> holdingLocator = BaseLocator.holdingRegister(slaveId, offset, getValueType(type));
                 Number holdingValue = modbusMaster.getValue(holdingLocator);
-                return String.valueOf(holdingValue);
+                return String.valueOf(NumberUtil.round(String.valueOf(holdingValue), 4));
             case 4:
                 BaseLocator<Number> inputRegister = BaseLocator.inputRegister(slaveId, offset, getValueType(type));
                 Number inputRegisterValue = modbusMaster.getValue(inputRegister);
-                return String.valueOf(inputRegisterValue);
+                return String.valueOf(NumberUtil.round(String.valueOf(inputRegisterValue), 4));
             default:
                 return "0";
         }
