@@ -64,7 +64,7 @@ public class ZabbixReceiveServiceImpl implements ZabbixReceiveService {
         value.put(IotConstants.TABLE_PRIMARY_FIELD, TimeUtil.toTimestamp(zabbixItem.getClock(), zabbixItem.getNs()));
         tdEngineService.insertData(IotConstants.DEVICE_TABLE_NAME_PREFIX + hostname, SUPER_TABLE_PREFIX + productId, value);
         // 发送到EMQX
-        MqttMessageDTO mqttMessageDTO = new MqttMessageDTO(hostname, zabbixItem.getName(), zabbixItem.getValue().toString(), zabbixItem.getClock());
+        MqttMessageDTO mqttMessageDTO = new MqttMessageDTO(hostname, zabbixItem.getName(), zabbixItem.getValue(), zabbixItem.getClock());
         emqxClient.publish("iot/device/" + hostname + "/attribute/" + zabbixItem.getName(), JsonUtils.toJsonStringBytes(mqttMessageDTO));
 
     }

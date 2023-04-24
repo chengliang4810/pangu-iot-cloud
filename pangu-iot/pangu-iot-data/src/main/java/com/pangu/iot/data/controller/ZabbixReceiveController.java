@@ -1,6 +1,7 @@
 package com.pangu.iot.data.controller;
 
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONUtil;
 import com.pangu.common.core.domain.dto.ZabbixEventDTO;
 import com.pangu.common.core.domain.dto.ZabbixItemDTO;
 import com.pangu.common.core.utils.JsonUtils;
@@ -31,7 +32,7 @@ public class ZabbixReceiveController {
             // 使用换行分割字符串 TODO: 2021/3/31 ndjson 格式。 后续需要优化为Map或List的格式
             StrUtil.split(body, StrUtil.C_LF).forEach(json ->{
                 log.debug("接收到zabbix数据: {}", json);
-                ZabbixItemDTO zabbixItemDTO = JsonUtils.parseObject(json, ZabbixItemDTO.class);
+                ZabbixItemDTO zabbixItemDTO = JSONUtil.toBean(json, ZabbixItemDTO.class);
                 zabbixReceiveService.receiveItemData(zabbixItemDTO);
             });
         } catch (Exception e) {
