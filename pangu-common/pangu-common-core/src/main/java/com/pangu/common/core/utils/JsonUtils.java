@@ -176,7 +176,7 @@ public class JsonUtils {
             if (StringUtils.isBlank(json)){
                 return;
             }
-            resultList.add(JSONUtil.toBean(json, clazz));
+            resultList.add(JsonUtils.parseObject(json, clazz));
         });
         return resultList;
     }

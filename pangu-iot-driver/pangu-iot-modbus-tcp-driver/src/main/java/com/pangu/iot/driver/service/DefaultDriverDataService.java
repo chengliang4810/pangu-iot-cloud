@@ -1,6 +1,5 @@
 package com.pangu.iot.driver.service;
 
-import cn.hutool.core.util.NumberUtil;
 import com.pangu.common.core.domain.dto.AttributeInfo;
 import com.pangu.common.core.enums.IotDataType;
 import com.pangu.common.core.utils.JsonUtils;
@@ -22,6 +21,8 @@ import com.serotonin.modbus4j.msg.WriteCoilResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,15 +50,16 @@ public class DefaultDriverDataService extends DriverDataService {
         log.debug("Driver Info: {}", JsonUtils.toJsonString(driverInfo));
         Map<String, String> attributesMap = new ConcurrentHashMap<>(attributes.size());
 
-        try {
-            for (DeviceAttribute attribute : attributes) {
-                Map<String, AttributeInfo> pointInfo = driverContext.getPointInfoByDeviceIdAndPointId(device.getId(), attribute.getId());
+        for (DeviceAttribute attribute : attributes) {
+            Map<String, AttributeInfo> pointInfo = driverContext.getPointInfoByDeviceIdAndPointId(device.getId(), attribute.getId());
+            attribute.getValueType();
+            try {
                 ModbusMaster master = getMaster(device.getId().toString(), driverInfo);
-                String value =  readValue(master, pointInfo, attribute.getValueType());
+                String value = readValue(master, pointInfo, attribute.getValueType());
                 attributesMap.put(attribute.getKey(), value);
+            } catch (Exception e) {
+                log.error("Read Device attribute Error: {}", e.getMessage());
             }
-        } catch (Exception e) {
-            log.error("Read Device attribute Error: {}", e.getMessage());
         }
 
         return new DeviceValue(device.getCode(), attributesMap);
@@ -72,7 +74,7 @@ public class DefaultDriverDataService extends DriverDataService {
     public Boolean control(DeviceFunction deviceFunction) throws Exception {
         // 驱动信息
         Map<String, AttributeInfo> driverInfo = driverContext.getDriverInfoByDeviceId(deviceFunction.getDeviceId());
-        Map<String, AttributeInfo> pointInfo =  driverContext.getPointInfoByDeviceIdAndPointId(deviceFunction.getDeviceId(), deviceFunction.getServiceId());
+        Map<String, AttributeInfo> pointInfo = driverContext.getPointInfoByDeviceIdAndPointId(deviceFunction.getDeviceId(), deviceFunction.getServiceId());
         ModbusMaster modbusMaster = getMaster(deviceFunction.getDeviceId().toString(), driverInfo);
         return writeValue(modbusMaster, pointInfo, deviceFunction.getValue().getType(), deviceFunction.getValue().getValue());
     }
@@ -101,7 +103,6 @@ public class DefaultDriverDataService extends DriverDataService {
     }
 
 
-
     /**
      * 获取 Value
      *
@@ -128,11 +129,11 @@ public class DefaultDriverDataService extends DriverDataService {
             case 3:
                 BaseLocator<Number> holdingLocator = BaseLocator.holdingRegister(slaveId, offset, getValueType(type));
                 Number holdingValue = modbusMaster.getValue(holdingLocator);
-                return String.valueOf(NumberUtil.round(String.valueOf(holdingValue), 4));
+                return numberToBigDecimal(holdingValue).toString();
             case 4:
                 BaseLocator<Number> inputRegister = BaseLocator.inputRegister(slaveId, offset, getValueType(type));
                 Number inputRegisterValue = modbusMaster.getValue(inputRegister);
-                return String.valueOf(NumberUtil.round(String.valueOf(inputRegisterValue), 4));
+                return numberToBigDecimal(inputRegisterValue).toString();
             default:
                 return "0";
         }
@@ -150,7 +151,7 @@ public class DefaultDriverDataService extends DriverDataService {
      * @throws ErrorResponseException   ErrorResponseException
      */
     public boolean writeValue(ModbusMaster modbusMaster, Map<String, AttributeInfo> pointInfo, String type, Object value) throws ModbusTransportException, ErrorResponseException {
-        int slaveId =  attribute(pointInfo, "slaveId");
+        int slaveId = attribute(pointInfo, "slaveId");
         int functionCode = attribute(pointInfo, "functionCode");
         int offset = attribute(pointInfo, "offset");
         switch (functionCode) {
@@ -184,6 +185,26 @@ public class DefaultDriverDataService extends DriverDataService {
             default:
                 return DataType.TWO_BYTE_INT_SIGNED;
         }
+    }
+
+    // 将 Number 转换为 BigDecimal
+    public static BigDecimal numberToBigDecimal(Number number) {
+        if (number == null) {
+            return null;
+        }
+        if (number instanceof BigDecimal) {
+            return (BigDecimal) number;
+        }
+        if (number instanceof BigInteger) {
+            return new BigDecimal((BigInteger) number);
+        }
+        if (number instanceof Integer || number instanceof Long || number instanceof Short || number instanceof Byte) {
+            return new BigDecimal(number.longValue());
+        }
+        if (number instanceof Float || number instanceof Double) {
+            return new BigDecimal(number.toString());
+        }
+        throw new IllegalArgumentException("Cannot convert " + number.getClass().getName() + " to BigDecimal");
     }
 
     /**
