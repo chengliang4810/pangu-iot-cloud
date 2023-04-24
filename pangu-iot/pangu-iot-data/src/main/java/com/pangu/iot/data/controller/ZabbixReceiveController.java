@@ -1,16 +1,17 @@
 package com.pangu.iot.data.controller;
 
-import cn.hutool.core.util.StrUtil;
-import cn.hutool.json.JSONUtil;
 import com.pangu.common.core.domain.dto.ZabbixEventDTO;
 import com.pangu.common.core.domain.dto.ZabbixItemDTO;
 import com.pangu.iot.data.service.ZabbixReceiveService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -23,20 +24,12 @@ public class ZabbixReceiveController {
     /**
      * 接收数据
      *
-     * @param body 身体
+     * @param zabbixItemList
      */
-    @PostMapping("/item")
-    public void receiveData(@RequestBody String body) {
+    @PostMapping(value = "/item",  consumes = MediaType.APPLICATION_NDJSON_VALUE)
+    public void receiveData(@RequestBody List<ZabbixItemDTO> zabbixItemList) {
         try {
-            // 使用换行分割字符串 TODO: 2021/3/31 ndjson 格式。 后续需要优化为Map或List的格式
-            StrUtil.split(body, StrUtil.C_LF).forEach(json ->{
-                log.debug("接收到zabbix数据: {}", json);
-                if (StrUtil.isBlank(json)) {
-                    return;
-                }
-                ZabbixItemDTO zabbixItemDTO = JSONUtil.toBean(json, ZabbixItemDTO.class);
-                zabbixReceiveService.receiveItemData(zabbixItemDTO);
-            });
+            zabbixItemList.forEach(zabbixReceiveService::receiveItemData);
         } catch (Exception e) {
             log.warn("接收zabbix数据失败", e);
         }
@@ -46,19 +39,12 @@ public class ZabbixReceiveController {
      * 接收事件
      * 接收zabbix发送的数据
      *
-     * @param body 身体
+     * @param zabbixEventList
      */
-    @PostMapping("/event")
-    public void receiveEvent(@RequestBody String body) {
+    @PostMapping(value = "/event",  consumes = MediaType.APPLICATION_NDJSON_VALUE)
+    public void receiveEvent(@RequestBody List<ZabbixEventDTO> zabbixEventList) {
         try {
-            // 使用换行分割字符串
-            StrUtil.split(body, StrUtil.C_LF).forEach(json ->{
-                if (StrUtil.isBlank(json)) {
-                    return;
-                }
-                ZabbixEventDTO zabbixEventDTO = JSONUtil.toBean(json, ZabbixEventDTO.class);
-                zabbixReceiveService.receiveEventData(zabbixEventDTO);
-            });
+            zabbixEventList.forEach(zabbixReceiveService::receiveEventData);
         } catch (Exception e) {
             log.warn("接收zabbix事件失败", e);
         }
