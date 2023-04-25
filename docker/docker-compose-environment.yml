@@ -1,0 +1,136 @@
+version: '3'
+
+services:
+
+  mysql:
+    image: mysql:8.0.31
+    container_name: mysql
+    environment:
+      # 时区上海
+      TZ: Asia/Shanghai
+      # root 密码
+      MYSQL_ROOT_PASSWORD: 123456
+      # 初始化数据库
+      MYSQL_DATABASE: pangu-cloud
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mysql:/docker-entrypoint-initdb.d/
+    command:
+      # 将mysql8.0默认密码策略 修改为 原先 策略 (mysql8.0对其默认策略做了更改 会导致密码无法匹配)
+      --default-authentication-plugin=mysql_native_password
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_general_ci
+      --explicit_defaults_for_timestamp=true
+      --lower_case_table_names=1
+    privileged: true
+
+  nacos:
+    image: nacos/nacos-server:v2.2.0
+    container_name: nacos
+    restart: always
+    networks:
+      - pangu-network
+    ports:
+      - "8848:8848"
+      - "9848:9848"
+      - "9849:9849"
+    environment:
+      TZ: Asia/Shanghai
+      JAVA_OPTS: "-Xms256m -Xmx512m"
+      SPRING_DATASOURCE_PLATFORM: mysql
+      MYSQL_SERVICE_HOST: mysql
+      MYSQL_SERVICE_PORT: 3306
+      MYSQL_SERVICE_DB_NAME: nacos-config
+      MYSQL_SERVICE_USER: root
+      MYSQL_SERVICE_PASSWORD: 123456
+      MYSQL_DATABASE_NUM: 1
+      MYSQL_SERVICE_DB_PARAM: characterEncoding=utf8\&connectTimeout=5000\&socketTimeout=5000\&autoReconnect=true\&allowPublicKeyRetrieval=true\&serverTimezone=UTC
+      MODE: standalone
+    privileged: true
+
+  redis:
+    image: redis
+    container_name: redis
+    networks:
+      - pangu-network
+    ports:
+      - "6379:6379"
+    environment:
+      # 时区上海
+      TZ: Asia/Shanghai
+    privileged: true
+
+  emqx:
+    image: emqx/emqx
+    container_name: emqx
+    networks:
+      - pangu-network
+    ports:
+      - "1883:1883"
+      - "8083:8083"
+      - "8084:8084"
+      - "8883:8883"
+      - "18083:18083"
+    environment:
+      # 时区上海
+      TZ: Asia/Shanghai
+    privileged: true
+
+  tdengine:
+    image: tdengine/tdengine
+    container_name: tdengine
+    networks:
+      - pangu-network
+    ports:
+      - "6030:6030"
+      - "6041:6041"
+      - "6043-6049:6043-6049"
+      - "6043-6049:6043-6049/udp"
+    environment:
+      # 时区上海
+      TZ: Asia/Shanghai
+    privileged: true
+
+  zabbix-server:
+    image: zabbix/zabbix-server-mysql:6.4-alpine-latest
+    container_name: zabbix-server
+    networks:
+      - pangu-network
+    ports:
+      - "10051:10051"
+    environment:
+      # 时区上海
+      TZ: Asia/Shanghai
+      ZBX_STARTCONNECTORS: 10
+      DB_SERVER_HOST: mysql
+      MYSQL_USER: root
+      MYSQL_PASSWORD: 123456
+    privileged: true
+
+  zabbix-web:
+    image: zabbix/zabbix-web-nginx-mysql:6.4-alpine-latest
+    container_name: zabbix-web
+    networks:
+      - pangu-network
+    ports:
+      - "8088::8080"
+    environment:
+      # 时区上海
+      TZ: Asia/Shanghai
+      PHP_TZ: "Asia/Shanghai"
+      ZBX_SERVER_HOST: zabbix-server
+      DB_SERVER_HOST: mysql
+      MYSQL_USER: root
+      MYSQL_PASSWORD: 123456
+    privileged: true
+
+
+networks:
+  pangu-network:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.28.0.0/16
+          gateway: 172.28.0.1

@@ -1,215 +1,121 @@
 version: '3'
 
 services:
-  mysql:
-    image: mysql:latest
-    container_name: pangu-mysql
-    restart: always
-    environment:
-      # 时区上海
-      TZ: Asia/Shanghai
-      # root 密码
-      MYSQL_ROOT_PASSWORD: 123456
-      # 初始化数据库
-      MYSQL_DATABASE: pangu-cloud, nacos
-    ports:
-      - "3307:3306"
-    logging:
-      driver: json-file
-      options:
-        max-size: '1024m'
-        max-file: '2'
-    networks:
-      - pangu-network
-
-  tdengine:
-    image: tdengine/tdengine:3.0.3.0
-    container_name: pangu-tdengine
-    ports:
-      - "6030:6030"
-      - "6041:6041"
-      - "6043-6049:6043-6049"
-      - "6043-6049:6043-6049/udp"
-    network_mode: "host"
-
-  nacos:
-    image: nacos/nacos-server:v2.1.0
-    container_name: pangu-nacos
-    environment:
-      # 支持主机名可以使用hostname,否则使用ip，默认ip
-      - PREFER_HOST_MODE=ip
-      # 单机模式
-      - MODE=standalone
-      # 数据源平台 支持mysql或不保存empty
-      - SPRING_DATASOURCE_PLATFORM=mysql
-      # mysql配置，!!!attention必须是mysql所在主机IP
-      - MYSQL_SERVICE_HOST=pangu-mysql
-      - MYSQL_SERVICE_PORT=3306
-      - MYSQL_SERVICE_USER=root
-      - MYSQL_SERVICE_PASSWORD=123456
-      - MYSQL_SERVICE_DB_NAME=nacos
-      - JAVA_OPTS="-Xms256m -Xmx512m"
-      - TZ=Asia/Shanghai
-    ports:
-      - "8848:8848"
-      - "9848:9848"
-      - "9849:9849"
-    restart: always
-    network_mode: "host"
-
-  redis:
-    image: redis:6.2.7
-    container_name: pangu-redis
-    ports:
-      - "6379:6379"
-    environment:
-      # 时区上海
-      TZ: Asia/Shanghai
-    command: "redis-server /redis/config/redis.conf"
-    privileged: true
-    network_mode: "host"
-
-  nginx-web:
-    image: nginx:1.22.1
-    container_name: pangu-nginx
-    environment:
-      # 时区上海
-      TZ: Asia/Shanghai
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      # 证书映射
-      - /docker/nginx/cert:/etc/nginx/cert
-      # 配置文件映射
-      - /docker/nginx/conf/nginx.conf:/etc/nginx/nginx.conf
-      # 页面目录
-      - /docker/nginx/html:/usr/share/nginx/html
-      # 日志目录
-      - /docker/nginx/log:/var/log/nginx
-    privileged: true
-    network_mode: "host"
 
   pangu-gateway:
-    image: pangu/pangu-gateway:1.4.0
+    image: chengliang4810/pangu-gateway
     container_name: pangu-gateway
+    restart: always
+    networks:
+      - pangu-network
     environment:
       # 时区上海
       TZ: Asia/Shanghai
+      SPRING.PROFILES.ACTIVE: dev
+      SPRING.CLOUD.NACOS.SERVER-ADDR: nacos:8848
     ports:
       - "8080:8080"
-    volumes:
-      # 配置文件
-      - /docker/pangu-gateway/logs/:/pangu/gateway/logs
     privileged: true
-    network_mode: "host"
 
   pangu-auth:
-    image: pangu/pangu-auth:1.4.0
+    image: chengliang4810/pangu-auth
     container_name: pangu-auth
+    restart: always
+    networks:
+      - pangu-network
     environment:
       # 时区上海
       TZ: Asia/Shanghai
+      SPRING.PROFILES.ACTIVE: dev
+      SPRING.CLOUD.NACOS.SERVER-ADDR: nacos:8848
     ports:
       - "9210:9210"
-    volumes:
-      # 配置文件
-      - /docker/pangu-auth/logs/:/pangu/auth/logs
     privileged: true
-    network_mode: "host"
 
   pangu-system:
-    image: pangu/pangu-system:1.4.0
+    image: chengliang4810/pangu-system
     container_name: pangu-system
+    restart: always
+    networks:
+      - pangu-network
     environment:
       # 时区上海
       TZ: Asia/Shanghai
+      SPRING.PROFILES.ACTIVE: dev
+      SPRING.CLOUD.NACOS.SERVER-ADDR: nacos:8848
     ports:
       - "9201:9201"
-    volumes:
-      # 配置文件
-      - /docker/pangu-system/logs/:/pangu/system/logs
     privileged: true
-    network_mode: "host"
 
-  rabbitmq:
-    image: rabbitmq:3.10.6
-    container_name: pangu-rabbitmq
-    build:
-      context: ./rabbitmq
+  pangu-manager:
+    image: chengliang4810/pangu-manager
+    container_name: pangu-manager
+    restart: always
+    networks:
+      - pangu-network
     environment:
-      RABBITMQ_DEFAULT_USER: guest
-      RABBITMQ_DEFAULT_PASS: guest
+      # 时区上海
+      TZ: Asia/Shanghai
+      SPRING.PROFILES.ACTIVE: dev
+      SPRING.CLOUD.NACOS.SERVER-ADDR: nacos:8848
     ports:
-      - "15672:15672" # 管理界面端口
-      - "5672:5672"   # api 端口
-    volumes:
-      - /docker/rabbitmq/log:/var/log/rabbitmq
-      - /docker/rabbitmq/data:/var/lib/rabbitmq
-    network_mode: "host"
+      - "7201:7201"
+    privileged: true
 
-  emqx:
-    image: emqx/emqx:5.0.20
-    container_name: pangu-emqx
-    ports:
-      - "1883:1883"
-      - "8083:8083"
-      - "8084:8084"
-      - "8883:8883"
-      - "18083:18083"
-    network_mode: "host"
-
-  zabbix-server:
-    image: zabbix/zabbix-server-mysql:centos-latest
-    container_name: pangu-zabbix-server
+  pangu-data:
+    image: chengliang4810/pangu-data
+    container_name: pangu-data
+    restart: always
+    networks:
+      - pangu-network
     environment:
-      DB_SERVER_HOST: pangu-mysql
-      MYSQL_DATABASE: zabbix
-      MYSQL_USER: root
-      MYSQL_PASSWORD: 123456
+      # 时区上海
+      TZ: Asia/Shanghai
+      SPRING.PROFILES.ACTIVE: dev
+      SPRING.CLOUD.NACOS.SERVER-ADDR: nacos:8848
     ports:
-      - "10051:10051"
-    depends_on:
-      - "pangu-mysql"
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - /etc/timezone:/etc/timezone:ro
-      - "zabbix:/temp"
-    network_mode: "host"
+      - "7202:7202"
+    privileged: true
 
-  zabbix-web:
-    image: zabbix/zabbix-web-nginx-mysql:latest
-    container_name: pangu-zabbix-web
+  pangu-driver-modbus-tcp:
+    image: chengliang4810/pangu-driver-modbus-tcp
+    container_name: pangu-driver-modbus-tcp
+    restart: always
+    networks:
+      - pangu-network
     environment:
-      DB_SERVER_HOST: pangu-mysql
-      MYSQL_DATABASE: zabbix
-      MYSQL_USER: root
-      MYSQL_PASSWORD: 123456
-      PHP_TZ: Asia/Shanghai
-      ZBX_SERVER_HOST: zabbix-server
-    ports:
-      - 8088:8080
-    depends_on:
-      - mysql-server
-      - zabbix-server
-    network_mode: "host"
+      # 时区上海
+      TZ: Asia/Shanghai
+      SPRING.PROFILES.ACTIVE: dev
+      SPRING.CLOUD.NACOS.SERVER-ADDR: nacos:8848
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "2g"
+    privileged: true
 
-  logstash:
-    image: logstash:7.17.6
-    container_name: pangu-logstash
-    ports:
-      - "4560:4560"
-    volumes:
-      - /docker/elk/logstash/pipeline/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
-      - /docker/elk/logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml
-      - "zabbix:/temp"
-    depends_on:
-      - elasticsearch
-    network_mode: "host"
+  pangu-driver-jemetech:
+    image: chengliang4810/pangu-driver-jemetech
+    container_name: pangu-driver-jemetech
+    restart: always
+    networks:
+      - pangu-network
+    environment:
+      # 时区上海
+      TZ: Asia/Shanghai
+      SPRING.PROFILES.ACTIVE: dev
+      SPRING.CLOUD.NACOS.SERVER-ADDR: nacos:8848
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "2g"
+    privileged: true
 
 networks:
   pangu-network:
     driver: bridge
-
-volumes:
-  zabbix:
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.28.0.0/16
+          gateway: 172.28.0.1
