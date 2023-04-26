@@ -13,7 +13,11 @@ public class DefaultDriverDataService extends RouteBuilder {
     @Override
     public void configure() throws Exception {
         from("netty:udp://0.0.0.0:" + port)
-                .log("receive data from zabbix: ${body}");
+            .process(exchange -> {
+                Object body = exchange.getMessage().getBody();
+                System.out.println(body);
+            })
+            .log("receive data from zabbix: ${body}");
     }
 
 
