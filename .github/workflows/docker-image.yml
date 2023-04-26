@@ -49,6 +49,7 @@ jobs:
 
       - name: Push Docker images to Docker Hub
         run: |
+
               docker push ${{ secrets.DOCKER_USERNAME }}/pangu-gateway:latest
               docker push ${{ secrets.DOCKER_USERNAME }}/pangu-gateway:${{ steps.version.outputs.version }}
               docker push ${{ secrets.DOCKER_USERNAME }}/pangu-auth:latest
