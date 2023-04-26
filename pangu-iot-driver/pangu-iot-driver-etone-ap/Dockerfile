@@ -12,14 +12,17 @@ RUN mkdir -p /pangu/iot/driver/etone/logs \
 WORKDIR /pangu/iot/driver/etone
 
 ENV UDP_PORT=6271
+ENV SERVER_PORT=7777
 
-EXPOSE ${UDP_PORT}
+EXPOSE ${UDP_PORT}/udp
+EXPOSE ${SERVER_PORT}
 
 ADD ./target/pangu-iot-driver-etone-ap.jar ./app.jar
 
 ENTRYPOINT ["java", \
             "-Djava.security.egd=file:/dev/./urandom", \
             "-Dudp.port=${UDP_PORT}", \
+            "-Dudp.port=${SERVER_PORT}", \
 #            "-Dskywalking.agent.service_name=pangu-iot/manager", \
 #            "-javaagent:/pangu/skywalking/agent/skywalking-agent.jar", \
             "-jar", "app.jar"]
