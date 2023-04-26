@@ -37,8 +37,8 @@ jobs:
 
             - name: Build with Maven And Build Docker Images
               run: |
-                  docker build --target build -t ${{ secrets.DOCKER_USERNAME }}/${{ matrix.image }}:build -f ${matrix.image}/Dockerfile .
-                  docker build --target deploy -t ${{ secrets.DOCKER_USERNAME }}/${{ matrix.image }}:latest -t ${{ secrets.DOCKER_USERNAME }}/${{ matrix.image }}:${{ steps.version.outputs.version }} -f ${matrix.image}/Dockerfile .
+                  docker build --target build -t ${{ secrets.DOCKER_USERNAME }}/${{ matrix.image }}:build -f ${{ matrix.image }}/Dockerfile .
+                  docker build --target deploy -t ${{ secrets.DOCKER_USERNAME }}/${{ matrix.image }}:latest -t ${{ secrets.DOCKER_USERNAME }}/${{ matrix.image }}:${{ steps.version.outputs.version }} -f ${{ matrix.image }}/Dockerfile .
 
             - name: Login to Docker Hub
               uses: docker/login-action@v1
