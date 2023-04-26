@@ -48,24 +48,20 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Push Docker images to Docker Hub
-        uses: docker/build-push-action@v4.0.0
-        with:
-         context: .
-         push: true
-         tags: |
-              ${{ secrets.DOCKER_USERNAME }}/pangu-gateway:latest
-              ${{ secrets.DOCKER_USERNAME }}/pangu-gateway:${{ steps.version.outputs.version }}
-              ${{ secrets.DOCKER_USERNAME }}/pangu-auth:latest
-              ${{ secrets.DOCKER_USERNAME }}/pangu-auth:${{ steps.version.outputs.version }}
-              ${{ secrets.DOCKER_USERNAME }}/pangu-system:latest
-              ${{ secrets.DOCKER_USERNAME }}/pangu-system:${{ steps.version.outputs.version }}
-              ${{ secrets.DOCKER_USERNAME }}/pangu-manager:latest
-              ${{ secrets.DOCKER_USERNAME }}/pangu-manager:${{ steps.version.outputs.version }}
-              ${{ secrets.DOCKER_USERNAME }}/pangu-data:latest
-              ${{ secrets.DOCKER_USERNAME }}/pangu-data:${{ steps.version.outputs.version }}
-              ${{ secrets.DOCKER_USERNAME }}/pangu-driver-modbus-tcp:latest
-              ${{ secrets.DOCKER_USERNAME }}/pangu-driver-modbus-tcp:${{ steps.version.outputs.version }}
-              ${{ secrets.DOCKER_USERNAME }}/pangu-driver-jemetech:latest
-              ${{ secrets.DOCKER_USERNAME }}/pangu-driver-jemetech:${{ steps.version.outputs.version }}
-              ${{ secrets.DOCKER_USERNAME }}/pangu-driver-etone-ap:latest
-              ${{ secrets.DOCKER_USERNAME }}/pangu-driver-etone-ap:${{ steps.version.outputs.version }}
+        run: |
+              docker push ${{ secrets.DOCKER_USERNAME }}/pangu-gateway:latest
+              docker push ${{ secrets.DOCKER_USERNAME }}/pangu-gateway:${{ steps.version.outputs.version }}
+              docker push ${{ secrets.DOCKER_USERNAME }}/pangu-auth:latest
+              docker push ${{ secrets.DOCKER_USERNAME }}/pangu-auth:${{ steps.version.outputs.version }}
+              docker push ${{ secrets.DOCKER_USERNAME }}/pangu-system:latest
+              docker push ${{ secrets.DOCKER_USERNAME }}/pangu-system:${{ steps.version.outputs.version }}
+              docker push ${{ secrets.DOCKER_USERNAME }}/pangu-manager:latest
+              docker push ${{ secrets.DOCKER_USERNAME }}/pangu-manager:${{ steps.version.outputs.version }}
+              docker push ${{ secrets.DOCKER_USERNAME }}/pangu-data:latest
+              docker push ${{ secrets.DOCKER_USERNAME }}/pangu-data:${{ steps.version.outputs.version }}
+              docker push ${{ secrets.DOCKER_USERNAME }}/pangu-driver-modbus-tcp:latest
+              docker push ${{ secrets.DOCKER_USERNAME }}/pangu-driver-modbus-tcp:${{ steps.version.outputs.version }}
+              docker push ${{ secrets.DOCKER_USERNAME }}/pangu-driver-jemetech:latest
+              docker push ${{ secrets.DOCKER_USERNAME }}/pangu-driver-jemetech:${{ steps.version.outputs.version }}
+              docker push ${{ secrets.DOCKER_USERNAME }}/pangu-driver-etone-ap:latest
+              docker push ${{ secrets.DOCKER_USERNAME }}/pangu-driver-etone-ap:${{ steps.version.outputs.version }}
