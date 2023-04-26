@@ -25,8 +25,21 @@ jobs:
           java-version: '8'
           distribution: 'adopt'
 
+      - name: Get version from pom.xml
+        id: version
+        run: echo "::set-output name=version::$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)"
+
       - name: Build with Maven
-        run: mvn clean install -DskipTests
+        run: |
+          mvn clean install -DskipTests
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/pangu-gateway:latest           -t ${{ secrets.DOCKER_USERNAME }}/pangu-gateway:${{ steps.version.outputs.version }}             -f pangu-gateway/Dockerfile ./pangu-gateway/
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/pangu-auth:latest              -t ${{ secrets.DOCKER_USERNAME }}/pangu-auth:${{ steps.version.outputs.version }}                -f pangu-auth/Dockerfile ./pangu-auth/
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/pangu-system:latest            -t ${{ secrets.DOCKER_USERNAME }}/pangu-system:${{ steps.version.outputs.version }}              -f pangu-modules/pangu-system//Dockerfile ./pangu-modules/pangu-system/
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/pangu-manager:latest           -t ${{ secrets.DOCKER_USERNAME }}/pangu-manager:${{ steps.version.outputs.version }}             -f pangu-iot/pangu-iot-manager/Dockerfile ./pangu-iot/pangu-iot-manager/
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/pangu-data:latest              -t ${{ secrets.DOCKER_USERNAME }}/pangu-data:${{ steps.version.outputs.version }}                -f pangu-iot/pangu-iot-data/Dockerfile ./pangu-iot/pangu-iot-data/
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/pangu-driver-modbus-tcp:latest -t ${{ secrets.DOCKER_USERNAME }}/pangu-driver-modbus-tcp:${{ steps.version.outputs.version }}   -f pangu-iot-driver/pangu-iot-modbus-tcp-driver/Dockerfile ./pangu-iot-driver/pangu-iot-modbus-tcp-driver/
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/pangu-driver-jemetech:latest   -t ${{ secrets.DOCKER_USERNAME }}/pangu-driver-jemetech:${{ steps.version.outputs.version }}     -f pangu-iot-driver/pangu-iot-driver-jemetech/Dockerfile ./pangu-iot-driver/pangu-iot-driver-jemetech/
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/pangu-driver-etone-ap:latest   -t ${{ secrets.DOCKER_USERNAME }}/pangu-driver-etone-ap:${{ steps.version.outputs.version }}     -f pangu-iot-driver/pangu-iot-driver-etone-ap/Dockerfile ./pangu-iot-driver/pangu-iot-driver-etone-ap/
 
       - name: Login to Docker Hub
         uses: docker/login-action@v1
@@ -34,77 +47,13 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Get version from package.json
-        id: version
-        run: echo "::set-output name=version::$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)"
-
-      - name: Pangu-Auth Build and push Docker image
-        uses: docker/build-push-action@v2
-        with:
-          context: ./pangu-auth/
-          file: ./pangu-auth/Dockerfile
-          push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/pangu-auth:${{ steps.version.outputs.version }},${{ secrets.DOCKER_USERNAME }}/pangu-auth:latest
-
-      - name: Pangu-Gateway Build and push Docker image
-        uses: docker/build-push-action@v2
-        with:
-          context: ./pangu-gateway/
-          file: ./pangu-gateway/Dockerfile
-          push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/pangu-gateway:${{ steps.version.outputs.version }},${{ secrets.DOCKER_USERNAME }}/pangu-gateway:latest
-
-      - name: Pangu-System Build and push Docker image
-        uses: docker/build-push-action@v2
-        with:
-          context: ./pangu-modules/pangu-system/
-          file: ./pangu-modules/pangu-system/Dockerfile
-          push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/pangu-system:${{ steps.version.outputs.version }},${{ secrets.DOCKER_USERNAME }}/pangu-system:latest
-
-      - name: Pangu-IOT-Manager Build and push Docker image
-        uses: docker/build-push-action@v2
-        with:
-          context: ./pangu-iot/pangu-iot-manager/
-          file: ./pangu-iot/pangu-iot-manager/Dockerfile
-          push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/pangu-manager:${{ steps.version.outputs.version }},${{ secrets.DOCKER_USERNAME }}/pangu-manager:latest
-
-      - name: Pangu-IOT-Data Build and push Docker image
-        uses: docker/build-push-action@v2
-        with:
-          context: ./pangu-iot/pangu-iot-data/
-          file: ./pangu-iot/pangu-iot-data/Dockerfile
-          push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/pangu-data:${{ steps.version.outputs.version }},${{ secrets.DOCKER_USERNAME }}/pangu-data:latest
-
-      -   name: Login to Docker Hub
-          uses: docker/login-action@v1
-          with:
-              username: ${{ secrets.DOCKER_USERNAME }}
-              password: ${{ secrets.DOCKER_PASSWORD }}
-
-      - name: Pangu-IOT-Driver-Modbus-tcp Build and push Docker image
-        uses: docker/build-push-action@v2
-        with:
-          context: ./pangu-iot-driver/pangu-iot-modbus-tcp-driver/
-          file: ./pangu-iot-driver/pangu-iot-modbus-tcp-driver/Dockerfile
-          push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/pangu-driver-modbus-tcp:${{ steps.version.outputs.version }},${{ secrets.DOCKER_USERNAME }}/pangu-driver-modbus-tcp:latest
-
-      - name: Pangu-IOT-Driver-Jemetech Build and push Docker image
-        uses: docker/build-push-action@v2
-        with:
-          context: ./pangu-iot-driver/pangu-iot-driver-jemetech/
-          file: ./pangu-iot-driver/pangu-iot-driver-jemetech/Dockerfile
-          push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/pangu-driver-jemetech:${{ steps.version.outputs.version }},${{ secrets.DOCKER_USERNAME }}/pangu-driver-jemetech:latest
-
-
-      - name: Pangu-IOT-Driver-Etone-AP Build and push Docker image
-        uses: docker/build-push-action@v2
-        with:
-          context: ./pangu-iot-driver/pangu-iot-driver-etone-ap/
-          file: ./pangu-iot-driver/pangu-iot-driver-etone-ap/Dockerfile
-          push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/pangu-driver-etone-ap:${{ steps.version.outputs.version }},${{ secrets.DOCKER_USERNAME }}/pangu-driver-etone-ap:latest
+      - name: Push Docker images to Docker Hub
+        run: |
+              docker push ${{ secrets.DOCKER_USERNAME }}/pangu-gateway ${{ secrets.DOCKER_USERNAME }}/pangu-gateway:${{ steps.version.outputs.version }}
+              docker push ${{ secrets.DOCKER_USERNAME }}/pangu-auth ${{ secrets.DOCKER_USERNAME }}/pangu-auth:${{ steps.version.outputs.version }}
+              docker push ${{ secrets.DOCKER_USERNAME }}/pangu-system ${{ secrets.DOCKER_USERNAME }}/pangu-system:${{ steps.version.outputs.version }}
+              docker push ${{ secrets.DOCKER_USERNAME }}/pangu-manager ${{ secrets.DOCKER_USERNAME }}/pangu-manager:${{ steps.version.outputs.version }}
+              docker push ${{ secrets.DOCKER_USERNAME }}/pangu-data ${{ secrets.DOCKER_USERNAME }}/pangu-data:${{ steps.version.outputs.version }}
+              docker push ${{ secrets.DOCKER_USERNAME }}/pangu-driver-modbus-tcp ${{ secrets.DOCKER_USERNAME }}/pangu-driver-modbus-tcp:${{ steps.version.outputs.version }}
+              docker push ${{ secrets.DOCKER_USERNAME }}/pangu-driver-jemetech ${{ secrets.DOCKER_USERNAME }}/pangu-driver-jemetech:${{ steps.version.outputs.version }}
+              docker push ${{ secrets.DOCKER_USERNAME }}/pangu-driver-etone-ap ${{ secrets.DOCKER_USERNAME }}/pangu-driver-etone-ap:${{ steps.version.outputs.version }}
