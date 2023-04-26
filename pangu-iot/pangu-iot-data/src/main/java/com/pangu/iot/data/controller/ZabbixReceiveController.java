@@ -42,7 +42,7 @@ public class ZabbixReceiveController {
      */
     @PostMapping("/event")
     public void receiveEvent(@RequestBody String body) {
-        log.debug("接收到ZBX事件：{}", body);
+        log.debug("接收到ZBX事件 body：{}", body);
         List<ZabbixEventDTO> zabbixItemList = JsonUtils.parseNdjson(body, ZabbixEventDTO.class);
         zabbixItemList.forEach(zabbixReceiveService::receiveEventData);
     }

@@ -12,6 +12,7 @@ import com.pangu.common.zabbix.model.DeviceFunction;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.paho.mqttv5.common.MqttMessage;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -20,8 +21,9 @@ import org.springframework.stereotype.Service;
 @Topic(topic = "iot/device/+/function/+/exec", qos = 2, patten = Pattern.SHARE, group = "${spring.application.name}Group")
 public class FunctionExecConsumer extends MqttConsumer<DeviceFunction> {
 
+    @Autowired(required = false)
+    private DriverDataService driverDataService;
     private final DriverContext driverContext;
-    private final DriverDataService driverDataService;
     private final DriverService driverService;
 
 
@@ -33,9 +35,16 @@ public class FunctionExecConsumer extends MqttConsumer<DeviceFunction> {
      */
     @Override
     protected void messageHandler(String topic, DeviceFunction deviceFunction) {
+
+        if (driverDataService == null) {
+            log.error("未实现DriverDataService接口");
+            return;
+        }
+
         log.debug("topic: {}, deviceFunction: {}", topic, JsonUtils.toJsonString(deviceFunction));
         // 设备是否属于该驱动， 属于则调用执行功能方法
         if (driverContext.getDriverMetadata().getDeviceMap().containsKey(deviceFunction.getDeviceId())) {
+
             // 捕捉异常，记录日志
             DeviceExecuteResult deviceExecuteResult = new DeviceExecuteResult().setDeviceId(deviceFunction.getDeviceId()).setSuccess(false).setIdentifier(deviceFunction.getIdentifier()).setUuid(deviceFunction.getUuid());
             try {

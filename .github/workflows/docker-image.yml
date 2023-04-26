@@ -93,3 +93,11 @@ jobs:
           file: ./pangu-iot-driver/pangu-iot-driver-jemetech/Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/pangu-driver-jemetech:${{ steps.version.outputs.version }},${{ secrets.DOCKER_USERNAME }}/pangu-driver-jemetech:latest
+
+      - name: Pangu-IOT-Driver-Etone-AP Build and push Docker image
+        uses: docker/build-push-action@v2
+        with:
+          context: ./pangu-iot-driver/pangu-iot-driver-etone-ap/
+          file: ./pangu-iot-driver/pangu-iot-driver-etone-ap/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/pangu-driver-etone-ap:${{ steps.version.outputs.version }},${{ secrets.DOCKER_USERNAME }}/pangu-driver-etone-ap:latest

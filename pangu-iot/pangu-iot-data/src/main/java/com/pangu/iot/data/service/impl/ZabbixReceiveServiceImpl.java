@@ -79,7 +79,6 @@ public class ZabbixReceiveServiceImpl implements ZabbixReceiveService {
             return;
         }
 
-        log.info("接收到ZBX事件：{}", zabbixEvent);
         List<TagsDTO> itemTags = zabbixEvent.getTags();
 
         // 获取Tags
@@ -102,7 +101,7 @@ public class ZabbixReceiveServiceImpl implements ZabbixReceiveService {
             emqxClient.publish("server/device/" + deviceId + "/problem/" + zabbixEvent.getSeverity(), JsonUtils.toJsonString(zabbixEvent), 2);
             log.debug("设备告警：{}", zabbixEvent);
         } else {
-            log.warn("未知事件：{}", zabbixEvent);
+            // log.warn("未知事件：{}", zabbixEvent);
         }
     }
 
