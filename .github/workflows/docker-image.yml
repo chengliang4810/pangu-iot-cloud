@@ -53,11 +53,19 @@ jobs:
          context: .
          push: true
          tags: |
-              ${{ secrets.DOCKER_USERNAME }}/pangu-gateway ${{ secrets.DOCKER_USERNAME }}/pangu-gateway:${{ steps.version.outputs.version }}
-              ${{ secrets.DOCKER_USERNAME }}/pangu-auth    ${{ secrets.DOCKER_USERNAME }}/pangu-auth:${{ steps.version.outputs.version }}
-              ${{ secrets.DOCKER_USERNAME }}/pangu-system  ${{ secrets.DOCKER_USERNAME }}/pangu-system:${{ steps.version.outputs.version }}
-              ${{ secrets.DOCKER_USERNAME }}/pangu-manager ${{ secrets.DOCKER_USERNAME }}/pangu-manager:${{ steps.version.outputs.version }}
-              ${{ secrets.DOCKER_USERNAME }}/pangu-data    ${{ secrets.DOCKER_USERNAME }}/pangu-data:${{ steps.version.outputs.version }}
-              ${{ secrets.DOCKER_USERNAME }}/pangu-driver-modbus-tcp ${{ secrets.DOCKER_USERNAME }}/pangu-driver-modbus-tcp:${{ steps.version.outputs.version }}
-              ${{ secrets.DOCKER_USERNAME }}/pangu-driver-jemetech ${{ secrets.DOCKER_USERNAME }}/pangu-driver-jemetech:${{ steps.version.outputs.version }}
-              ${{ secrets.DOCKER_USERNAME }}/pangu-driver-etone-ap ${{ secrets.DOCKER_USERNAME }}/pangu-driver-etone-ap:${{ steps.version.outputs.version }}
+              ${{ secrets.DOCKER_USERNAME }}/pangu-gateway:latest
+              ${{ secrets.DOCKER_USERNAME }}/pangu-gateway:${{ steps.version.outputs.version }}
+              ${{ secrets.DOCKER_USERNAME }}/pangu-auth:latest
+              ${{ secrets.DOCKER_USERNAME }}/pangu-auth:${{ steps.version.outputs.version }}
+              ${{ secrets.DOCKER_USERNAME }}/pangu-system:latest
+              ${{ secrets.DOCKER_USERNAME }}/pangu-system:${{ steps.version.outputs.version }}
+              ${{ secrets.DOCKER_USERNAME }}/pangu-manager:latest
+              ${{ secrets.DOCKER_USERNAME }}/pangu-manager:${{ steps.version.outputs.version }}
+              ${{ secrets.DOCKER_USERNAME }}/pangu-data:latest
+              ${{ secrets.DOCKER_USERNAME }}/pangu-data:${{ steps.version.outputs.version }}
+              ${{ secrets.DOCKER_USERNAME }}/pangu-driver-modbus-tcp:latest
+              ${{ secrets.DOCKER_USERNAME }}/pangu-driver-modbus-tcp:${{ steps.version.outputs.version }}
+              ${{ secrets.DOCKER_USERNAME }}/pangu-driver-jemetech:latest
+              ${{ secrets.DOCKER_USERNAME }}/pangu-driver-jemetech:${{ steps.version.outputs.version }}
+              ${{ secrets.DOCKER_USERNAME }}/pangu-driver-etone-ap:latest
+              ${{ secrets.DOCKER_USERNAME }}/pangu-driver-etone-ap:${{ steps.version.outputs.version }}
