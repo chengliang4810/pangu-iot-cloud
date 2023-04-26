@@ -29,7 +29,7 @@ jobs:
         id: version
         run: echo "::set-output name=version::$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)"
 
-      - name: Build with Maven
+      - name: Build with Maven And Build Docker Images
         run: |
           mvn clean install -DskipTests
           docker build -t ${{ secrets.DOCKER_USERNAME }}/pangu-gateway:latest           -t ${{ secrets.DOCKER_USERNAME }}/pangu-gateway:${{ steps.version.outputs.version }}             -f pangu-gateway/Dockerfile ./pangu-gateway/
@@ -48,12 +48,16 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Push Docker images to Docker Hub
-        run: |
-              docker push ${{ secrets.DOCKER_USERNAME }}/pangu-gateway ${{ secrets.DOCKER_USERNAME }}/pangu-gateway:${{ steps.version.outputs.version }}
-              docker push ${{ secrets.DOCKER_USERNAME }}/pangu-auth ${{ secrets.DOCKER_USERNAME }}/pangu-auth:${{ steps.version.outputs.version }}
-              docker push ${{ secrets.DOCKER_USERNAME }}/pangu-system ${{ secrets.DOCKER_USERNAME }}/pangu-system:${{ steps.version.outputs.version }}
-              docker push ${{ secrets.DOCKER_USERNAME }}/pangu-manager ${{ secrets.DOCKER_USERNAME }}/pangu-manager:${{ steps.version.outputs.version }}
-              docker push ${{ secrets.DOCKER_USERNAME }}/pangu-data ${{ secrets.DOCKER_USERNAME }}/pangu-data:${{ steps.version.outputs.version }}
-              docker push ${{ secrets.DOCKER_USERNAME }}/pangu-driver-modbus-tcp ${{ secrets.DOCKER_USERNAME }}/pangu-driver-modbus-tcp:${{ steps.version.outputs.version }}
-              docker push ${{ secrets.DOCKER_USERNAME }}/pangu-driver-jemetech ${{ secrets.DOCKER_USERNAME }}/pangu-driver-jemetech:${{ steps.version.outputs.version }}
-              docker push ${{ secrets.DOCKER_USERNAME }}/pangu-driver-etone-ap ${{ secrets.DOCKER_USERNAME }}/pangu-driver-etone-ap:${{ steps.version.outputs.version }}
+        uses: docker/build-push-action@v4.0.0
+        with:
+         context: .
+         push: true
+         tags: |
+              ${{ secrets.DOCKER_USERNAME }}/pangu-gateway ${{ secrets.DOCKER_USERNAME }}/pangu-gateway:${{ steps.version.outputs.version }}
+              ${{ secrets.DOCKER_USERNAME }}/pangu-auth    ${{ secrets.DOCKER_USERNAME }}/pangu-auth:${{ steps.version.outputs.version }}
+              ${{ secrets.DOCKER_USERNAME }}/pangu-system  ${{ secrets.DOCKER_USERNAME }}/pangu-system:${{ steps.version.outputs.version }}
+              ${{ secrets.DOCKER_USERNAME }}/pangu-manager ${{ secrets.DOCKER_USERNAME }}/pangu-manager:${{ steps.version.outputs.version }}
+              ${{ secrets.DOCKER_USERNAME }}/pangu-data    ${{ secrets.DOCKER_USERNAME }}/pangu-data:${{ steps.version.outputs.version }}
+              ${{ secrets.DOCKER_USERNAME }}/pangu-driver-modbus-tcp ${{ secrets.DOCKER_USERNAME }}/pangu-driver-modbus-tcp:${{ steps.version.outputs.version }}
+              ${{ secrets.DOCKER_USERNAME }}/pangu-driver-jemetech ${{ secrets.DOCKER_USERNAME }}/pangu-driver-jemetech:${{ steps.version.outputs.version }}
+              ${{ secrets.DOCKER_USERNAME }}/pangu-driver-etone-ap ${{ secrets.DOCKER_USERNAME }}/pangu-driver-etone-ap:${{ steps.version.outputs.version }}
