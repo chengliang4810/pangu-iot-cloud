@@ -5,7 +5,6 @@
         "itemid": "${itemid}",
         "name": "${itemName}",
         "key_": "${itemKey}",
-        "hostid": "${hostId}",
         <#if interfaceid??>
             "interfaceid": "${interfaceid}",
         </#if>

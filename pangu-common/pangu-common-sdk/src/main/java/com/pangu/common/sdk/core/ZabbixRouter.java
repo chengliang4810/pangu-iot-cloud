@@ -15,6 +15,7 @@ import com.pangu.manager.api.domain.DeviceAttribute;
 import com.pangu.manager.api.domain.dto.DriverStatus;
 import com.pangu.manager.api.enums.OnlineStatus;
 import org.apache.camel.builder.RouteBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
 import javax.annotation.Resource;
@@ -25,7 +26,7 @@ import java.util.Map;
 public class ZabbixRouter extends RouteBuilder {
 
 
-    @Resource
+    @Autowired(required = false)
     private DriverDataService driverDataService;
     @Resource
     private DriverContext driverContext;
@@ -49,8 +50,6 @@ public class ZabbixRouter extends RouteBuilder {
         String primaryKey = driverProperty.getName() + "_" + AddressUtils.localHost() + "_" + port;
         String mqttUri = "paho-mqtt5:" + StrUtil.format(IotConstants.Topic.Driver.DRIVER_TOPIC_HEARTBEAT_URI_TPL, applicationName, emqProperties.getBroker(), emqClientId, emqProperties.getPassword(), emqProperties.getUserName());
 
-        driverDataService.setDriverContext(driverContext);
-
         // 发送驱动心跳
         from("timer://DriverHeartbeatTimer?period=" + driverProperty.getSchedule().getHeartbeat() + "&delay=5s")
                 .process(exchange -> {
@@ -58,6 +57,13 @@ public class ZabbixRouter extends RouteBuilder {
                 })
                 .to(mqttUri);
 
+        // 如果未提供数据服务, 则不读取设备数据
+        if (null == driverDataService) {
+            log.warn("未提供数据服务, 不读取设备数据");
+            return;
+        }
+
+        driverDataService.setDriverContext(driverContext);
         // 读取设备数据
         from("timer://ReadDeviceValueTimer?period=" + driverProperty.getSchedule().getRead())
                 .process(exchange -> {
@@ -74,7 +80,6 @@ public class ZabbixRouter extends RouteBuilder {
                         }
                     } catch (Exception e) {
                         log.error("读取设备数据异常: {}", e.getMessage());
-                        log.debug("读取设备数据异常: ", e);
                     }
                     // 发送设备数据
                     if (CollectionUtil.isNotEmpty(deviceValues)) {
