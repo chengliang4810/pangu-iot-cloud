@@ -152,9 +152,10 @@ public class DefaultDriverDataService extends DriverDataService {
         int slaveId = attribute(pointInfo, "slaveId");
         int functionCode = attribute(pointInfo, "functionCode");
         int offset = attribute(pointInfo, "offset");
+        log.info("write value: {} , type: {}", value, type);
         switch (functionCode) {
             case 1:
-                boolean coilValue = value(type, value);
+                boolean coilValue = value("boolean", value);
                 WriteCoilRequest coilRequest = new WriteCoilRequest(slaveId, offset, coilValue);
                 WriteCoilResponse coilResponse = (WriteCoilResponse) modbusMaster.send(coilRequest);
                 return !coilResponse.isException();

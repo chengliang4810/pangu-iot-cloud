@@ -122,7 +122,7 @@ public class DefaultDriverDataService extends DriverDataService {
      * @param port 港口
      */
     private void connect(String host, int port) {
-        if (socket == null || socket.isClosed()) {
+        if (socket == null || socket.isClosed() || inputStream == null) {
             socket = new Socket();
         }
         if (socket.isConnected()) {
@@ -132,10 +132,10 @@ public class DefaultDriverDataService extends DriverDataService {
         try {
             socket.connect(mSocketAddress, 10000);// 设置连接超时时间为10秒
             inputStream = socket.getInputStream();
+            log.debug("连接成功 host: {}, port: {}", host, port);
         } catch (IOException e) {
             log.error("连接失败: {}", e.getLocalizedMessage());
         }
-        log.debug("连接成功 host: {}, port: {}", host, port);
     }
 
     /**
