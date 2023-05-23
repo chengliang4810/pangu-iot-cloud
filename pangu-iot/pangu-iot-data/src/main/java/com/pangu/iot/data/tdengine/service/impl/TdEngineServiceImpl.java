@@ -53,8 +53,10 @@ public class TdEngineServiceImpl implements TdEngineService {
         // 处理Key 删除last_row()
         Map<String, Object> result = MapUtil.newHashMap(lastRowData.size());
         lastRowData.forEach((key, value) -> {
-            String newKey = key.substring(9, key.length() - 1);
-            result.put(newKey, value);
+            if (key.contains("last_row(")){
+                key = key.substring(9, key.length() - 1);
+            }
+            result.put(key, value);
         });
         return result;
     }

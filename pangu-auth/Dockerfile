@@ -3,8 +3,7 @@ FROM anapsix/alpine-java:8_server-jre_unlimited
 MAINTAINER chengliang4810
 
 # 设定时区
-ENV TZ=Asia/Shanghai
-
+RUN apk add -U tzdata && cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && apk del tzdata
 
 RUN mkdir -p /pangu/auth/logs  \
     /pangu/auth/temp  \

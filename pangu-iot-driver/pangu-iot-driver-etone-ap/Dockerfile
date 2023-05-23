@@ -22,7 +22,7 @@ ADD ./target/pangu-iot-driver-etone-ap.jar ./app.jar
 ENTRYPOINT ["java", \
             "-Djava.security.egd=file:/dev/./urandom", \
             "-Dudp.port=${UDP_PORT}", \
-            "-Dudp.port=${SERVER_PORT}", \
+            "-Dserver.port=${SERVER_PORT}", \
 #            "-Dskywalking.agent.service_name=pangu-iot/manager", \
 #            "-javaagent:/pangu/skywalking/agent/skywalking-agent.jar", \
             "-jar", "app.jar"]
