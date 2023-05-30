@@ -143,7 +143,7 @@ public class TdEngineServiceImpl implements TdEngineService {
         Assert.notNull(table, "id is null");
         Assert.notBlank(key, "key is blank");
         Assert.notBlank(valueType, "valueType is blank");
-        String type = "NCHAR(50)";
+        String type = "NCHAR(200)";
         switch (valueType){
             case "0":
                 type = "float";

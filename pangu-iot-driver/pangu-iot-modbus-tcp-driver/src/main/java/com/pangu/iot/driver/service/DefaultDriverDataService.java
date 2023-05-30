@@ -137,6 +137,22 @@ public class DefaultDriverDataService extends DriverDataService {
         }
     }
 
+
+    public static void main(String[] args) throws ModbusInitException, ModbusTransportException, ErrorResponseException {
+
+        IpParameters params = new IpParameters();
+        params.setHost("172.21.136.33");
+        params.setPort(502);
+        ModbusMaster modbusMaster = modbusFactory.createTcpMaster(params, true);
+        modbusMaster.init();
+        BaseLocator<Number> locator = BaseLocator.holdingRegister(1, 3094, DataType.TWO_BYTE_INT_SIGNED);
+        modbusMaster.setValue(locator, 0);
+//
+//        WriteCoilRequest coilRequest = new WriteCoilRequest(1, 3094, true);
+//        WriteCoilResponse coilResponse = (WriteCoilResponse) modbusMaster.send(coilRequest);
+//        System.out.println(!coilResponse.isException());
+    }
+
     /**
      * 写 Value
      *
@@ -160,8 +176,8 @@ public class DefaultDriverDataService extends DriverDataService {
                 WriteCoilResponse coilResponse = (WriteCoilResponse) modbusMaster.send(coilRequest);
                 return !coilResponse.isException();
             case 3:
-                BaseLocator<Number> locator = BaseLocator.holdingRegister(slaveId, offset, getDataType(type));
-                Object obj = value(type, value);
+                BaseLocator<Number> locator = BaseLocator.holdingRegister(slaveId, offset, DataType.TWO_BYTE_INT_SIGNED);
+                Object obj = value("int", value);
                 modbusMaster.setValue(locator, obj);
                 return true;
             default:

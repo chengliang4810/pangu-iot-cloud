@@ -1,6 +1,8 @@
 package com.pangu.common.sdk.core;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.pangu.common.core.constant.IotConstants;
 import com.pangu.common.core.utils.JsonUtils;
@@ -52,10 +54,10 @@ public class ZabbixRouter extends RouteBuilder {
 
         // 发送驱动心跳
         from("timer://DriverHeartbeatTimer?period=" + driverProperty.getSchedule().getHeartbeat() + "&delay=5s")
-                .process(exchange -> {
-                    exchange.getMessage().setBody(JsonUtils.toJsonString(new DriverStatus(primaryKey, OnlineStatus.ONLINE)));
-                })
-                .to(mqttUri);
+            .process(exchange -> {
+                exchange.getMessage().setBody(JsonUtils.toJsonString(new DriverStatus(primaryKey, OnlineStatus.ONLINE)));
+            })
+            .to(mqttUri);
 
         // 如果未提供数据服务, 则不读取设备数据
         if (null == driverDataService) {
@@ -66,27 +68,29 @@ public class ZabbixRouter extends RouteBuilder {
         driverDataService.setDriverContext(driverContext);
         // 读取设备数据
         from("timer://ReadDeviceValueTimer?period=" + driverProperty.getSchedule().getRead())
-                .process(exchange -> {
-                    // 子设备集合
-                    Map<Long, Device> deviceMap = driverContext.getDriverMetadata().getDeviceMap();
-                    List<DeviceValue> deviceValues = new ArrayList<>();
+            .process(exchange -> {
+                // 子设备集合
+                Map<Long, Device> deviceMap = driverContext.getDriverMetadata().getDeviceMap();
+                List<DeviceValue> deviceValues = new ArrayList<>();
 
+                // 读取设备数据,
+                for (Device device : deviceMap.values()) {
+                    List<DeviceAttribute> deviceAttributes = new ArrayList<>(driverContext.getDriverMetadata().getProfileAttributeMap().get(device.getId()).values());
                     try {
-                        // 读取设备数据
-                        for (Device device : deviceMap.values()) {
-                            List<DeviceAttribute> deviceAttributes = new ArrayList<>(driverContext.getDriverMetadata().getProfileAttributeMap().get(device.getId()).values());
-                            DeviceValue deviceValue = driverDataService.read(device, deviceAttributes);
+                        // 捕获异常, 防止一个设备读取失败导致其他设备数据无法读取
+                        DeviceValue deviceValue = driverDataService.read(device, deviceAttributes);
+                        if (ObjectUtil.isNotNull(deviceValue) && CollUtil.isNotEmpty(deviceValue.getAttributes())) {
                             deviceValues.add(deviceValue);
                         }
                     } catch (Exception e) {
                         log.error("读取设备数据异常: {}", e.getMessage());
                     }
-                    // 发送设备数据
-                    if (CollectionUtil.isNotEmpty(deviceValues)) {
-                        exchange.getIn().setBody(deviceValues);
-                    }
-                })
-                .to("zabbix");
+                }
+                // 发送设备数据
+                exchange.getIn().setBody(deviceValues);
+            })
+            .filter(exchange -> CollectionUtil.isNotEmpty(exchange.getMessage().getBody(List.class)))
+            .to("zabbix");
 
     }
 
