@@ -13,6 +13,8 @@
         <module>pangu-iot-modbus-tcp-driver</module>
         <module>pangu-iot-driver-jemetech</module>
         <module>pangu-iot-driver-etone-ap</module>
+        <module>pangu-iot-driver-audio-gxh</module>
+        <module>pangu-iot-driver-hikvision-door</module>
     </modules>
 
     <artifactId>pangu-iot-driver</artifactId>

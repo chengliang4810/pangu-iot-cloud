@@ -31,10 +31,10 @@ spring:
       - optional:nacos:mq.yml
       - optional:nacos:${spring.application.name}.yml
 
-logging:
-  level:
-    com.pangu.common.*: debug
-    com.pangu.iot.*: debug
+#logging:
+##  level:
+##    com.pangu.common.*: debug
+##    com.pangu.iot.*: debug
 
 driver:
   # 默认采用应用名称，唯一驱动标识，根据该名称自动实现创建或更新配置。 当项目名称修改时，需保留原名称，否则会创建新的驱动导致原有驱动配置丢失。

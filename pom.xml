@@ -78,8 +78,8 @@
         <profile>
             <id>prod</id>
             <properties>
-                <profiles.active>prod</profiles.active>
-                <nacos.server>127.0.0.1:8848</nacos.server>
+                <profiles.active>dev</profiles.active>
+                <nacos.server>172.21.131.14:8848</nacos.server>
                 <nacos.discovery.group>DEFAULT_GROUP</nacos.discovery.group>
                 <nacos.config.group>DEFAULT_GROUP</nacos.config.group>
                 <logstash.address>127.0.0.1:4560</logstash.address>

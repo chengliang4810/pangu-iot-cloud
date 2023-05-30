@@ -5,11 +5,14 @@ import com.pangu.common.core.domain.R;
 import com.pangu.common.core.validate.AddGroup;
 import com.pangu.common.core.validate.EditGroup;
 import com.pangu.common.core.web.controller.BaseController;
+import com.pangu.common.emqx.doamin.EmqxClient;
+import com.pangu.common.emqx.utils.EmqxUtil;
 import com.pangu.common.excel.utils.ExcelUtil;
 import com.pangu.common.log.annotation.Log;
 import com.pangu.common.log.enums.BusinessType;
 import com.pangu.common.mybatis.core.page.PageQuery;
 import com.pangu.common.mybatis.core.page.TableDataInfo;
+import com.pangu.iot.manager.driver.domain.Driver;
 import com.pangu.iot.manager.driver.domain.bo.DriverBO;
 import com.pangu.iot.manager.driver.domain.vo.DriverConfigVO;
 import com.pangu.iot.manager.driver.domain.vo.DriverVO;
@@ -39,6 +42,13 @@ public class DriverController extends BaseController {
 
     private final IDriverService driverService;
 
+    @GetMapping("/metadata/update/{driverId}")
+    public R<Void> metadataUpdate(@PathVariable Long driverId) {
+        Driver driver = driverService.getById(driverId);
+        EmqxClient client = EmqxUtil.getClient();
+        client.publish("iot/driver/"+driver.getName()+"/metadata/sync", "update".getBytes(), 2, true);
+        return R.ok();
+    }
 
     /**
      * 通过设备ID查询驱动信息以及对应的驱动属性
