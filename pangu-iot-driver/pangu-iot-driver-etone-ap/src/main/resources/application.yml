@@ -49,6 +49,17 @@ driver:
     # 周期时间
     schedule:
         heartbeat: '10s'
+    driver-attribute:
+      - displayName: 占位参数（无实际意义）
+        name: test
+        type: string
+        value: '-'
+        description: 占位参数（无实际意义）
+        option:
+          type: input\select\checkox\switch\time...
+          required: true
+          data-type: static/url
+          data: jsonString
     point-attribute:
         - displayName: mac地址
           name: macAddress
