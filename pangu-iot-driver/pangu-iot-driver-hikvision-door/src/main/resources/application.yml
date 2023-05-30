@@ -1,0 +1,101 @@
+# Tomcat
+server:
+  port: 7706
+
+# Spring
+spring:
+  application:
+    # 应用名称
+    name: pangu-iot-driver-hikvision-door
+  profiles:
+    # 环境配置
+    active: @profiles.active@
+
+logging:
+  level:
+    com.pangu.common.*: debug
+    com.pangu.iot.*: debug
+
+--- # nacos 配置
+spring:
+  cloud:
+    nacos:
+      # nacos 服务地址
+      server-addr: @nacos.server@
+      discovery:
+        # 注册组
+        group: @nacos.discovery.group@
+        namespace: ${spring.profiles.active}
+      config:
+        # 配置组
+        group: @nacos.config.group@
+        namespace: ${spring.profiles.active}
+  config:
+    import:
+      - optional:nacos:application-common.yml
+      - optional:nacos:mq.yml
+      - optional:nacos:${spring.application.name}.yml
+
+driver:
+  # 默认采用应用名称，唯一驱动标识，根据该名称自动实现创建或更新配置。 当项目名称修改时，需保留原名称，否则会创建新的驱动导致原有驱动配置丢失。
+  name: ${spring.application.name}
+  # 驱动显示名称
+  display-name: 门禁驱动
+  project: @project.artifactId@
+  description: @project.description@
+  # 周期时间
+  schedule:
+    read: '2s'
+    heartbeat: '10s'
+  driver-attribute:
+    - displayName: 主机
+      name: host
+      type: string
+      value: 172.21.133.59
+      description: http 主机地址
+      option:
+        type: input\select\checkox\switch\time...
+        required: true
+        data-type: static/url
+        data: jsonString
+    - displayName: 端口
+      name: port
+      type: short
+      value: 8000
+      description: 端口号
+      option:
+        type: input\select\checkox\switch\time...
+        required: true
+        data-type: static/url
+        data: jsonString
+    - displayName: 用户名
+      name: username
+      type: string
+      value: admin
+      description: Opc Da UserName
+      option:
+        type: input\select\checkox\switch\time...
+        required: true
+        data-type: static/url
+        data: jsonString
+    - displayName: 密码
+      name: password
+      type: string
+      value: as888888
+      description: Passward
+      option:
+        type: input\select\checkox\switch\time...
+        required: true
+        data-type: static/url
+        data: jsonString
+  point-attribute:
+    - displayName: 门号
+      name: number
+      type: int
+      value: 1
+      description: 门禁主机对应门号 门禁现场一拖二
+      option:
+        type: input\select\checkox\switch\time...
+        required: true
+        data-type: static/url
+        data: jsonString
