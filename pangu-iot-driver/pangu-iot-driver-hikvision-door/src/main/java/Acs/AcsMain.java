@@ -72,11 +72,11 @@ public class AcsMain {
 
 
         /**登录*/
-        Login("10.17.35.41", "admin", "abcd1234", (short) 8000);
+        Login("172.21.131.10", "admin", "abcd1234", (short) 8000);
 
 
         /**远程控门*/
-        DoorManage.ControlGateway(lUserID, 1, 0);
+        // DoorManage.ControlGateway(lUserID, 1, 0);
 
         /**启动报警布防*/
         Alarm.SetAlarm(lUserID);
