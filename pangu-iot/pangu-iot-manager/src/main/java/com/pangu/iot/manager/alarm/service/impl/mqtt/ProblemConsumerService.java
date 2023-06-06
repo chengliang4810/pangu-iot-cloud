@@ -81,6 +81,7 @@ public class ProblemConsumerService extends MqttConsumer<ZabbixEventDTO> {
 
             // 发送到EMQX
             MqttMessageDTO mqttMessageDTO = new MqttMessageDTO(MqttMessageType.ALARM, deviceId, zabbixEvent.getSeverity(), productEvent.getName());
+            mqttMessageDTO.setEventId(zabbixEvent.getEventId());
             EmqxUtil.getClient().publish("iot/device/" + deviceId + "/problem/" + zabbixEvent.getSeverity(), JsonUtils.toJsonString(mqttMessageDTO));
             if (tagMap.containsKey(IotConstants.EXECUTE_TAG_NAME)) {
                 // 调用设备执行

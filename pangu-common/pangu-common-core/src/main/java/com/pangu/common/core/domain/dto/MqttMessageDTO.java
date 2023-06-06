@@ -16,6 +16,8 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class MqttMessageDTO {
 
+    private Integer eventId;
+
     /**
      * 消息类型
      */

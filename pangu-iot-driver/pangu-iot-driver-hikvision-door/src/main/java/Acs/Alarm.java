@@ -28,6 +28,7 @@ public final class Alarm {
             m_strAlarmInfo.byLevel = 1;  //布防等级
             m_strAlarmInfo.byAlarmInfoType = 1;   // 智能交通报警信息上传类型：0- 老报警信息（NET_DVR_PLATE_RESULT），1- 新报警信息(NET_ITS_PLATE_RESULT)
             m_strAlarmInfo.byDeployType = 0;   //布防类型 0：客户端布防 1：实时布防
+
             m_strAlarmInfo.write();
             lAlarmHandle = AcsMain.hCNetSDK.NET_DVR_SetupAlarmChan_V41(lUserID, m_strAlarmInfo);
             System.out.println("lAlarmHandle: " + lAlarmHandle);
@@ -48,7 +49,7 @@ public final class Alarm {
     public static void StartListen() {
 
         //这里NET_DVR_StartListen_V30接口中的ip和端口需要和配置的ip和端口对应
-        AcsMain.lListenHandle = AcsMain.hCNetSDK.NET_DVR_StartListen_V30("10.17.36.13", (short) 7201, fMSFCallBack_V31, null);
+        AcsMain.lListenHandle = AcsMain.hCNetSDK.NET_DVR_StartListen_V30("172.21.131.10", (short) 7201, fMSFCallBack_V31, null);
         if (AcsMain.lListenHandle == -1) {
             System.out.println("监听失败" + AcsMain.hCNetSDK.NET_DVR_GetLastError());
         } else {
