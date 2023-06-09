@@ -85,6 +85,14 @@ public class MqttMessageDTO {
         this.eventName = eventName;
     }
 
+    public MqttMessageDTO(MqttMessageType type, Integer eventId, String deviceId, Integer level, String eventName) {
+        this.type = type;
+        this.eventId = eventId;
+        this.deviceId = deviceId;
+        this.level = level;
+        this.eventName = eventName;
+    }
+
     /**
      * mqtt消息dto
      *
