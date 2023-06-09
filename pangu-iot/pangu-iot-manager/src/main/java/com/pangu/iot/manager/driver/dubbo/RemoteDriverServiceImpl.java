@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
  */
 @Slf4j
 @Service
-@DubboService
+@DubboService(timeout = 30000)
 @RequiredArgsConstructor
 public class RemoteDriverServiceImpl implements RemoteDriverService {
 

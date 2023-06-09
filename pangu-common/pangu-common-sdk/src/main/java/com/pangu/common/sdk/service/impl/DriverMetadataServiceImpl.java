@@ -31,7 +31,7 @@ public class DriverMetadataServiceImpl implements DriverMetadataService {
     private int port;
     @Value("${spring.application.name}")
     private String serviceName;
-    @DubboReference
+    @DubboReference(timeout = 30000)
     private final RemoteDriverService remoteDriverService;
 
     private final DriverContext driverContext;
