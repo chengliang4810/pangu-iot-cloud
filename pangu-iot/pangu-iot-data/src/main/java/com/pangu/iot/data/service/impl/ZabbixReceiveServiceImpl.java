@@ -46,7 +46,7 @@ public class ZabbixReceiveServiceImpl implements ZabbixReceiveService {
             return;
         }
 
-        log.info("接收到ZBX数据：{}", zabbixItem);
+        log.debug("接收到ZBX数据：{}", zabbixItem);
         Map<String, String> tagMap = zabbixItem.getTags().stream().collect(Collectors.toMap(TagsDTO::getTag, TagsDTO::getValue));
         if (!tagMap.containsKey(IotConstants.PRODUCT_ID_TAG_NAME)) {
             log.warn("未知产品：{}", zabbixItem);
@@ -97,8 +97,10 @@ public class ZabbixReceiveServiceImpl implements ZabbixReceiveService {
             deviceStatusService.online(deviceId, zabbixEvent.getClock());
             log.debug("设备上线：{}", zabbixEvent);
         } else if (tagMap.containsKey(IotConstants.ALARM_TAG_NAME)) {
+            String jsonString = JsonUtils.toJsonString(zabbixEvent);
+            log.info("设备告警：{}", jsonString);
             // 设备告警，发送到管理平台
-            emqxClient.publish("server/device/" + deviceId + "/problem/" + zabbixEvent.getSeverity(), JsonUtils.toJsonString(zabbixEvent), 2);
+            emqxClient.publish("server/device/" + deviceId + "/problem/" + zabbixEvent.getSeverity(), jsonString, 2);
             log.debug("设备告警：{}", zabbixEvent);
         } else {
             // log.warn("未知事件：{}", zabbixEvent);
