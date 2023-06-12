@@ -144,7 +144,7 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> impleme
      * 查询设备
      */
     @Override
-    public DeviceDetailVO queryById(Long id){
+    public DeviceDetailVO queryById(Long id) {
         return baseMapper.detailById(id);
     }
 
@@ -252,7 +252,7 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> impleme
     /**
      * 保存前的数据校验
      */
-    private void validEntityBeforeSave(Device entity){
+    private void validEntityBeforeSave(Device entity) {
         //TODO 做一些数据校验,如唯一约束
     }
 
@@ -261,7 +261,7 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> impleme
      */
     @Override
     public Integer deleteWithValidByIds(Collection<Long> ids, Boolean isValid) {
-        if(isValid){
+        if (isValid) {
             //TODO 做一些业务上的校验,判断是否需要校验
         }
         return baseMapper.deleteBatchIds(ids);
@@ -292,59 +292,107 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> impleme
         Long serviceId = service.getServiceId();
 
         // 执行
- //       executeService(deviceId, serviceId, serviceParams, executeType);
+        //       executeService(deviceId, serviceId, serviceParams, executeType);
     }
 
     @Override
     public void executeService(ServiceExecuteBO serviceExecute) {
-        Long deviceId = serviceExecute.getDeviceId();
-        Long serviceId = serviceExecute.getServiceId();
-        Object value = serviceExecute.getValue();
         long startTime = System.currentTimeMillis();
-        boolean executeStatus = true;
-        // 查询设备信息
-        Device device = getById(deviceId);
-        if (ObjectUtil.isNull(device)){
-            executeStatus = false;
-        }
+        Long deviceId = serviceExecute.getDeviceId();
+        Object value = serviceExecute.getValue();
+        Long serviceId = serviceExecute.getServiceId();
+
+        // 查询功能信息
         ProductService productService = productServiceService.getById(serviceId);
         if (null == productService) {
-            executeStatus = false;
+            log.warn("功能不存在，功能ID：{}", serviceId);
+            throw new ServiceException("物联网功能不存在");
         }
 
-        Map<String, String> paramStr = Collections.singletonMap(productService.getMark(), JsonUtils.toJsonString(value));
+        // 查询设备信息
+        Device device = getById(deviceId);
+        if (ObjectUtil.isNull(device)) {
+            log.warn("设备不存在，设备ID：{}", deviceId);
+            throw new ServiceException("物联网设备不存在");
+        }
 
+        log.info("执行功能，设备：{}，功能：{}，参数：{}", deviceId, serviceId, value);
+
+        // 功能执行流水号
         long snowflakeNextId = IdUtil.getSnowflakeNextId();
-        //下发命令 执行
-        if (executeStatus){
-            DeviceFunction deviceFunction = new DeviceFunction();
-            deviceFunction.setDeviceId(deviceId);
-            deviceFunction.setServiceId(serviceId);
-            deviceFunction.setIdentifier(productService.getMark());
-            deviceFunction.setUuid(snowflakeNextId);
-            deviceFunction.setValue(new AttributeInfo(value, productService.getDataType().name()));
-            String topic = "iot/device/" + deviceId + "/function/" + productService.getMark() + "/exec";
-            EmqxUtil.getClient().publish(topic, JsonUtils.toJsonString(deviceFunction), 2);
-            log.info("下发命令成功，topic：{}，命令：{}", topic, JsonUtils.toJsonString(deviceFunction));
 
-            if (productService.getAsync() == 0){
-                // 执行结果
-                String result = RedisUtils.getCacheObject("iot:device:" + deviceId + ":function:" + productService.getMark() + ":" + deviceFunction.getUuid());
-                for (int i = 0; i < 30; i++) {
-                    if (StrUtil.isNotBlank(result)) {
-                        break;
-                    }
-                    ThreadUtil.sleep(100);
-                    result = RedisUtils.getCacheObject("iot:device:" + deviceId + ":function:" + productService.getMark() + ":" + deviceFunction.getUuid());
-                }
+        // 发送功能执行消息
+        DeviceFunction deviceFunction = sendDeviceFunctionMsg(deviceId, productService.getId(), value, productService, snowflakeNextId);
 
-                executeStatus = StrUtil.isNotBlank(result) && "success".equals(result);
-                RedisUtils.deleteObject("iot:device:" + deviceId + ":function:" + productService.getMark() + ":" + deviceFunction.getUuid());
+        // 检查设备执行结果
+        boolean executeStatus = checkDeviceExecuteResult(productService, deviceFunction);
 
-            } else {
-                executeStatus = false;
-            }
+        //记录服务日志
+        Map<String, String> paramStr = Collections.singletonMap(productService.getMark(), JsonUtils.toJsonString(value));
+        serviceExecuteRecord(deviceId, productService, paramStr, executeStatus, snowflakeNextId);
+
+        log.info("执行功能耗时：{}ms", System.currentTimeMillis() - startTime);
+
+        if (productService.getAsync() == 0 && !executeStatus) {
+            throw new ServiceException("功能执行超时/失败");
         }
+
+    }
+
+    /**
+     * 检查设备执行结果
+     *
+     * @param productService 产品服务
+     * @param deviceFunction 设备功能
+     * @return boolean
+     */
+    private boolean checkDeviceExecuteResult(ProductService productService, DeviceFunction deviceFunction){
+        if (productService.getAsync() == 0) {
+            Long deviceId = deviceFunction.getDeviceId();
+            // 执行结果
+            String result = RedisUtils.getCacheObject("iot:device:" + deviceId + ":function:" + productService.getMark() + ":" + deviceFunction.getUuid());
+            for (int i = 0; i < 30; i++) {
+                if (StrUtil.isNotBlank(result)) {
+                    break;
+                }
+                ThreadUtil.sleep(100);
+                result = RedisUtils.getCacheObject("iot:device:" + deviceId + ":function:" + productService.getMark() + ":" + deviceFunction.getUuid());
+            }
+            RedisUtils.deleteObject("iot:device:" + deviceId + ":function:" + productService.getMark() + ":" + deviceFunction.getUuid());
+            return StrUtil.isNotBlank(result) && "success".equals(result);
+        }
+        return true;
+    }
+
+    /**
+     * 发送设备功能消息
+     *
+     */
+    private DeviceFunction sendDeviceFunctionMsg(Long deviceId, Long serviceId, Object value, ProductService productService, long snowflakeNextId){
+        //下发命令 执行
+        DeviceFunction deviceFunction = new DeviceFunction();
+        deviceFunction.setDeviceId(deviceId);
+        deviceFunction.setServiceId(serviceId);
+        deviceFunction.setIdentifier(productService.getMark());
+        deviceFunction.setUuid(snowflakeNextId);
+        deviceFunction.setValue(new AttributeInfo(value, productService.getDataType().name()));
+        String topic = "iot/device/" + deviceId + "/function/" + productService.getMark() + "/exec";
+        EmqxUtil.getClient().publish(topic, JsonUtils.toJsonString(deviceFunction), 2);
+        log.info("下发命令成功，topic：{}，命令：{}", topic, JsonUtils.toJsonString(deviceFunction));
+        return deviceFunction;
+    }
+
+
+    /**
+     * 服务执行记录
+     *
+     * @param deviceId        设备id
+     * @param productService  产品服务
+     * @param paramStr        param str
+     * @param executeStatus   执行状态
+     * @param snowflakeNextId id
+     */
+    private void serviceExecuteRecord(Long deviceId, ProductService productService, Map<String, String> paramStr, boolean executeStatus, long snowflakeNextId){
 
         //记录服务日志
         ServiceExecuteRecord serviceExecuteRecord = new ServiceExecuteRecord();
@@ -353,21 +401,13 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> impleme
             serviceExecuteRecord.setParam(JsonUtils.toJsonString(paramStr));
         }
 
-        ProductService service = productServiceService.getById(serviceId);
         serviceExecuteRecord.setId(snowflakeNextId);
-        serviceExecuteRecord.setServiceName(service.getName());
+        serviceExecuteRecord.setServiceName(productService.getName());
         serviceExecuteRecord.setCreateTime(new Date());
         serviceExecuteRecord.setExecuteType(1);
         serviceExecuteRecord.setExecuteUser(getLoginUsername());
         serviceExecuteRecord.setExecuteStatus(executeStatus);
         serviceExecuteRecordService.save(serviceExecuteRecord);
-
-        log.info("执行功能耗时：{}ms", System.currentTimeMillis() - startTime);
-
-        if (productService.getAsync() == 0 && !executeStatus){
-            throw new ServiceException("功能执行超时/失败");
-        }
-
     }
 
     /**
@@ -382,8 +422,6 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> impleme
         }
         return loginUser.getUsername();
     }
-
-
 
 
 }
