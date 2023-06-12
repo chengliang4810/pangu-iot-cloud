@@ -70,7 +70,7 @@ public class CreateAndUpdateMetaObjectHandler implements MetaObjectHandler {
         try {
             loginUser = LoginHelper.getLoginUser();
         } catch (Exception e) {
-            log.warn("自动注入警告 => 用户未登录");
+            log.debug("自动注入警告 => 用户未登录");
             return null;
         }
         return loginUser.getUsername();
