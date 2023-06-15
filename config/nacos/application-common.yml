@@ -93,6 +93,17 @@ spring:
       timeout: 10s
       ssl: false
 
+# emqx 配置
+mqtt:
+  config:
+    broker: tcp://127.0.0.1:1883
+    userName: admin
+    password: P@ssw0rd
+    cleanSession: false
+    reconnect: true
+    timeout: 1000
+    keepAlive: 60
+
 # redisson 配置
 redisson:
   # redis key前缀
@@ -222,7 +233,7 @@ springdoc:
 # seata配置
 seata:
   # 是否启用
-  enabled: true
+  enabled: false
   # Seata 应用编号，默认为应用名
   application-id: ${spring.application.name}
   # Seata 事务组编号，用于 TC 集群名
@@ -231,7 +242,7 @@ seata:
 # 多租户配置
 tenant:
   # 是否开启
-  enable: true
+  enable: false
   # 排除表
   excludes:
     - sys_menu

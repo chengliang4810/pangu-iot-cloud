@@ -1,0 +1,13 @@
+spring:
+  datasource:
+    dynamic:
+      # 设置默认的数据源或者数据源组,默认值即为 master
+      primary: master
+      datasource:
+        # 主库数据源
+        master:
+          type: ${spring.datasource.type}
+          driver-class-name: com.taosdata.jdbc.rs.RestfulDriver
+          url: ${datasource.iot-data.url}
+          username: ${datasource.iot-data.username}
+          password: ${datasource.iot-data.password}

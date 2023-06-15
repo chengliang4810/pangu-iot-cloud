@@ -7,234 +7,321 @@ SET FOREIGN_KEY_CHECKS = 0;
 
 USE `ry-config`;
 
-/******************************************/
-/*   表名称 = config_info   */
-/******************************************/
-CREATE TABLE `config_info` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `data_id` varchar(255) NOT NULL COMMENT 'data_id',
-  `group_id` varchar(255) DEFAULT NULL,
-  `content` longtext NOT NULL COMMENT 'content',
-  `md5` varchar(32) DEFAULT NULL COMMENT 'md5',
-  `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
-  `src_user` text COMMENT 'source user',
-  `src_ip` varchar(50) DEFAULT NULL COMMENT 'source ip',
-  `app_name` varchar(128) DEFAULT NULL,
-  `tenant_id` varchar(128) DEFAULT '' COMMENT '租户字段',
-  `c_desc` varchar(256) DEFAULT NULL,
-  `c_use` varchar(64) DEFAULT NULL,
-  `effect` varchar(64) DEFAULT NULL,
-  `type` varchar(64) DEFAULT NULL,
-  `c_schema` text,
-  `encrypted_data_key` text COMMENT '秘钥',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_configinfo_datagrouptenant` (`data_id`,`group_id`,`tenant_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='config_info';
+-- ----------------------------
+-- Table structure for config_info
+-- ----------------------------
+DROP TABLE IF EXISTS `config_info`;
+CREATE TABLE `config_info`  (
+                                `id` bigint NOT NULL AUTO_INCREMENT COMMENT 'id',
+                                `data_id` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL COMMENT 'data_id',
+                                `group_id` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NULL DEFAULT NULL,
+                                `content` longtext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL COMMENT 'content',
+                                `md5` varchar(32) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NULL DEFAULT NULL COMMENT 'md5',
+                                `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                                `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
+                                `src_user` text CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NULL COMMENT 'source user',
+                                `src_ip` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NULL DEFAULT NULL COMMENT 'source ip',
+                                `app_name` varchar(128) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NULL DEFAULT NULL,
+                                `tenant_id` varchar(128) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NULL DEFAULT '' COMMENT '租户字段',
+                                `c_desc` varchar(256) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NULL DEFAULT NULL,
+                                `c_use` varchar(64) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NULL DEFAULT NULL,
+                                `effect` varchar(64) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NULL DEFAULT NULL,
+                                `type` varchar(64) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NULL DEFAULT NULL,
+                                `c_schema` text CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NULL,
+                                `encrypted_data_key` text CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NULL COMMENT '秘钥',
+                                PRIMARY KEY (`id`) USING BTREE,
+                                UNIQUE INDEX `uk_configinfo_datagrouptenant`(`data_id` ASC, `group_id` ASC, `tenant_id` ASC) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 135 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_bin COMMENT = 'config_info' ROW_FORMAT = Dynamic;
 
-insert into config_info(id, data_id, group_id, content, md5, gmt_create, gmt_modified, src_user, src_ip, app_name, tenant_id, c_desc, c_use, effect, type, c_schema, encrypted_data_key) values
-(1, 'application-common.yml', 'DEFAULT_GROUP', '# 将项目路径：config/下对应文件中内容复制到此处', '2944a25cb97926efcaa43b3ad7a64cf0', '2022-01-09 15:18:55', '2022-01-09 15:18:55', NULL, '0:0:0:0:0:0:0:1', '', 'dev', '通用配置基础配置', NULL, NULL, 'yaml', NULL, ''),
-(2, 'datasource.yml', 'DEFAULT_GROUP', '# 将项目路径：config/下对应文件中内容复制到此处', '2944a25cb97926efcaa43b3ad7a64cf0', '2022-01-09 15:19:07', '2022-01-09 15:19:07', NULL, '0:0:0:0:0:0:0:1', '', 'dev', '数据源配置', NULL, NULL, 'yaml', NULL, ''),
-(3, 'ruoyi-gateway.yml', 'DEFAULT_GROUP', '# 将项目路径：config/下对应文件中内容复制到此处', '2944a25cb97926efcaa43b3ad7a64cf0', '2022-01-09 15:19:43', '2022-01-09 15:22:42', NULL, '0:0:0:0:0:0:0:1', '', 'dev', '网关模块', NULL, NULL, 'yaml', NULL, ''),
-(4, 'ruoyi-auth.yml', 'DEFAULT_GROUP', '# 将项目路径：config/下对应文件中内容复制到此处', '2944a25cb97926efcaa43b3ad7a64cf0', '2022-01-09 15:19:43', '2022-01-09 15:22:29', NULL, '0:0:0:0:0:0:0:1', '', 'dev', '认证中心', NULL, NULL, 'yaml', NULL, ''),
-(5, 'ruoyi-monitor.yml', 'DEFAULT_GROUP', '# 将项目路径：config/下对应文件中内容复制到此处', '2944a25cb97926efcaa43b3ad7a64cf0', '2022-01-09 15:20:18', '2022-01-09 15:22:15', NULL, '0:0:0:0:0:0:0:1', '', 'dev', '监控中心', NULL, NULL, 'yaml', NULL, ''),
-(6, 'ruoyi-system.yml', 'DEFAULT_GROUP', '# 将项目路径：config/下对应文件中内容复制到此处', '2944a25cb97926efcaa43b3ad7a64cf0', '2022-01-09 15:20:18', '2022-01-09 15:22:03', NULL, '0:0:0:0:0:0:0:1', '', 'dev', '系统模块', NULL, NULL, 'yaml', NULL, ''),
-(7, 'ruoyi-gen.yml', 'DEFAULT_GROUP', '# 将项目路径：config/下对应文件中内容复制到此处', '2944a25cb97926efcaa43b3ad7a64cf0', '2022-01-09 15:20:18', '2022-01-09 15:21:51', NULL, '0:0:0:0:0:0:0:1', '', 'dev', '代码生成', NULL, NULL, 'yaml', NULL, ''),
-(8, 'ruoyi-job.yml', 'DEFAULT_GROUP', '# 将项目路径：config/下对应文件中内容复制到此处', '2944a25cb97926efcaa43b3ad7a64cf0', '2022-01-09 15:20:18', '2022-01-09 15:21:36', NULL, '0:0:0:0:0:0:0:1', '', 'dev', '定时任务', NULL, NULL, 'yaml', NULL, ''),
-(9, 'ruoyi-resource.yml', 'DEFAULT_GROUP', '# 将项目路径：config/下对应文件中内容复制到此处', '2944a25cb97926efcaa43b3ad7a64cf0', '2022-01-09 15:20:35', '2022-01-09 15:21:21', NULL, '0:0:0:0:0:0:0:1', '', 'dev', '文件服务', NULL, NULL, 'yaml', NULL, ''),
-(10, 'sentinel-ruoyi-gateway.json', 'DEFAULT_GROUP', '# 将项目路径：config/下对应文件中内容复制到此处', '2944a25cb97926efcaa43b3ad7a64cf0', '2022-01-09 15:21:02', '2022-01-09 15:21:02', NULL, '0:0:0:0:0:0:0:1', '', 'dev', '限流策略', NULL, NULL, 'json', NULL, ''),
-(11, 'ruoyi-xxl-job-admin.yml', 'DEFAULT_GROUP', '# 将项目路径：config/下对应文件中内容复制到此处', '2944a25cb97926efcaa43b3ad7a64cf0', '2022-01-09 15:21:02', '2022-01-09 15:21:02', NULL, '0:0:0:0:0:0:0:1', '', 'dev', '定时任务控制台', NULL, NULL, 'yaml', NULL, ''),
-(12, 'seata-server.properties', 'DEFAULT_GROUP', '# 将项目路径：config/下对应文件中内容复制到此处', '2944a25cb97926efcaa43b3ad7a64cf0', '2022-01-09 15:21:02', '2022-01-09 15:21:02', NULL, '0:0:0:0:0:0:0:1', '', 'dev', 'seata配置文件', NULL, NULL, 'properties', NULL, ''),
-(13, 'ruoyi-sentinel-dashboard.yml', 'DEFAULT_GROUP', '# 将项目路径：config/下对应文件中内容复制到此处', '2944a25cb97926efcaa43b3ad7a64cf0', '2022-01-09 15:21:02', '2022-01-09 15:21:02', NULL, '0:0:0:0:0:0:0:1', '', 'dev', 'sentinel控制台配置文件', NULL, NULL, 'yaml', NULL, ''),
+-- ----------------------------
+-- Records of config_info
+-- ----------------------------
+INSERT INTO `config_info` VALUES (1, 'application-common.yml', 'DEFAULT_GROUP', 'server:\n  # undertow 配置\n  undertow:\n    # HTTP post内容的最大大小。当值为-1时，默认值为大小是无限的\n    max-http-post-size: -1\n    # 以下的配置会影响buffer,这些buffer会用于服务器连接的IO操作,有点类似netty的池化内存管理\n    # 每块buffer的空间大小,越小的空间被利用越充分\n    buffer-size: 512\n    # 是否分配的直接内存\n    direct-buffers: true\n    threads:\n      # 设置IO线程数, 它主要执行非阻塞的任务,它们会负责多个连接, 默认设置每个CPU核心一个线程\n      io: 8\n      # 阻塞任务线程池, 当执行类似servlet请求阻塞操作, undertow会从这个线程池中取得线程,它的值设置取决于系统的负载\n      worker: 256\n\ndubbo:\n  application:\n    # 关闭qos端口避免单机多生产者端口冲突 如需使用自行开启\n    qos-enable: false\n  protocol:\n    # 如需使用 Triple 3.0 新协议 可查看官方文档\n    # 使用 dubbo 协议通信\n    name: dubbo\n    # dubbo 协议端口(-1表示自增端口,从20880开始)\n    port: -1\n    # 指定dubbo协议注册ip\n    # host: 192.168.0.100\n  # 消费者相关配置\n  consumer:\n    # 超时时间\n    timeout: 3000\n  scan:\n    # 接口实现类扫描\n    base-packages: org.dromara.**.dubbo\n  # 自定义配置\n  custom:\n    # 全局请求log\n    request-log: true\n    # info 基础信息 param 参数信息 full 全部\n    log-level: info\n\nspring:\n  # 资源信息\n  messages:\n    # 国际化资源文件路径\n    basename: i18n/messages\n  servlet:\n    multipart:\n      # 整个请求大小限制\n      max-request-size: 20MB\n      # 上传单个文件大小限制\n      max-file-size: 10MB\n  mvc:\n    format:\n      date-time: yyyy-MM-dd HH:mm:ss\n  #jackson配置\n  jackson:\n    # 日期格式化\n    date-format: yyyy-MM-dd HH:mm:ss\n    serialization:\n      # 格式化输出\n      INDENT_OUTPUT: false\n      # 忽略无法转换的对象\n      fail_on_empty_beans: false\n    deserialization:\n      # 允许对象忽略json中不存在的属性\n      fail_on_unknown_properties: false\n  cloud:\n    # sentinel 配置\n    sentinel:\n      # sentinel 开关\n      enabled: true\n      # 取消控制台懒加载\n      eager: true\n      transport:\n        # dashboard控制台服务名 用于服务发现\n        # 如无此配置将默认使用下方 dashboard 配置直接注册\n        server-name: ruoyi-sentinel-dashboard\n        # 客户端指定注册的ip 用于多网卡ip不稳点使用\n        # client-ip:\n        # 控制台地址 从1.3.0开始使用 server-name 注册\n        # dashboard: localhost:8718\n\n  # redis通用配置 子服务可以自行配置进行覆盖\n  data:\n    redis:\n      host: localhost\n      port: 6379\n      # 密码(如没有密码请注释掉)\n      # password:\n      database: 0\n      timeout: 10s\n      ssl: false\n\n# emqx 配置\nmqtt:\n  config:\n    broker: tcp://localhost:1883\n    userName: admin\n    password: P@ssw0rd\n    cleanSession: false\n    reconnect: true\n    timeout: 1000\n    keepAlive: 60\n\n# redisson 配置\nredisson:\n  # redis key前缀\n  keyPrefix:\n  # 线程池数量\n  threads: 4\n  # Netty线程池数量\n  nettyThreads: 8\n  # 单节点配置\n  singleServerConfig:\n    # 客户端名称\n    clientName: ${spring.application.name}\n    # 最小空闲连接数\n    connectionMinimumIdleSize: 8\n    # 连接池大小\n    connectionPoolSize: 32\n    # 连接空闲超时，单位：毫秒\n    idleConnectionTimeout: 10000\n    # 命令等待超时，单位：毫秒\n    timeout: 3000\n    # 发布和订阅连接池大小\n    subscriptionConnectionPoolSize: 50\n\n# 分布式锁 lock4j 全局配置\nlock4j:\n  # 获取分布式锁超时时间，默认为 3000 毫秒\n  acquire-timeout: 3000\n  # 分布式锁的超时时间，默认为 30 秒\n  expire: 30000\n\n# 暴露监控端点\nmanagement:\n  endpoints:\n    web:\n      exposure:\n        include: \'*\'\n  endpoint:\n    health:\n      show-details: ALWAYS\n    logfile:\n      external-file: ./logs/${spring.application.name}/console.log\n\n# 日志配置\nlogging:\n  level:\n    org.springframework: warn\n    org.apache.dubbo: warn\n    com.alibaba.nacos: warn\n  config: classpath:logback-plus.xml\n\n# Sa-Token配置\nsa-token:\n  # token名称 (同时也是cookie名称)\n  token-name: Authorization\n  # token固定超时 设为七天 (必定过期) 单位: 秒\n  timeout: 604800\n  # token活跃超时时间 30分钟(指定时间无操作则过期) 单位: 秒\n  activity-timeout: 1800\n  # 开启内网服务调用鉴权(不允许越过gateway访问内网服务 保障服务安全)\n  check-same-token: true\n  # 是否允许同一账号并发登录 (为true时允许一起登录, 为false时新登录挤掉旧登录)\n  is-concurrent: true\n  # 在多人登录同一账号时，是否共用一个token (为true时所有登录共用一个token, 为false时每次登录新建一个token)\n  is-share: false\n  # jwt秘钥\n  jwt-secret-key: abcdefghijklmnopqrstuvwxyz\n\n# MyBatisPlus配置\n# https://baomidou.com/config/\nmybatis-plus:\n  # 不支持多包, 如有需要可在注解配置 或 提升扫包等级\n  # 例如 com.**.**.mapper\n  mapperPackage: org.dromara.**.mapper\n  # 对应的 XML 文件位置\n  mapperLocations: classpath*:mapper/**/*Mapper.xml\n  # 实体扫描，多个package用逗号或者分号分隔\n  typeAliasesPackage: org.dromara.**.domain\n  global-config:\n    dbConfig:\n      # 主键类型\n      # AUTO 自增 NONE 空 INPUT 用户输入 ASSIGN_ID 雪花 ASSIGN_UUID 唯一 UUID\n      # 如需改为自增 需要将数据库表全部设置为自增\n      idType: ASSIGN_ID\n\n# 数据加密\nmybatis-encryptor:\n  # 是否开启加密\n  enable: false\n  # 默认加密算法\n  algorithm: BASE64\n  # 编码方式 BASE64/HEX。默认BASE64\n  encode: BASE64\n  # 安全秘钥 对称算法的秘钥 如：AES，SM4\n  password:\n  # 公私钥 非对称算法的公私钥 如：SM2，RSA\n  publicKey:\n  privateKey:\n\n# 接口文档配置\nspringdoc:\n  api-docs:\n    # 是否开启接口文档\n    enabled: true\n  swagger-ui:\n    # 持久化认证数据\n    persistAuthorization: true\n  info:\n    # 标题\n    title: \'标题：RuoYi-Cloud-Plus微服务权限管理系统_接口文档\'\n    # 描述\n    description: \'描述：微服务权限管理系统, 具体包括XXX,XXX模块...\'\n    # 版本\n    version: \'版本号：系统版本...\'\n    # 作者信息\n    contact:\n      name: Lion Li\n      email: crazylionli@163.com\n      url: https://gitee.com/dromara/RuoYi-Cloud-Plus\n  components:\n    # 鉴权方式配置\n    security-schemes:\n      apiKey:\n        type: APIKEY\n        in: HEADER\n        name: ${sa-token.token-name}\n\n# seata配置\nseata:\n  # 是否启用\n  enabled: false\n  # Seata 应用编号，默认为应用名\n  application-id: ${spring.application.name}\n  # Seata 事务组编号，用于 TC 集群名\n  tx-service-group: ${spring.application.name}-group\n\n# 多租户配置\ntenant:\n  # 是否开启\n  enable: false\n  # 排除表\n  excludes:\n    - sys_menu\n    - sys_tenant\n    - sys_tenant_package\n    - sys_role_dept\n    - sys_role_menu\n    - sys_user_post\n    - sys_user_role\n', 'f32c4f048aaa27421212fdfcc68a3c60', '2022-01-09 15:18:55', '2023-06-15 09:35:53', 'nacos', '10.0.0.123', '', 'dev', '通用配置基础配置', '', '', 'yaml', '', '');
+INSERT INTO `config_info` VALUES (2, 'datasource.yml', 'DEFAULT_GROUP', 'datasource:\n  system-master:\n    # jdbc 所有参数配置参考 https://lionli.blog.csdn.net/article/details/122018562\n    # rewriteBatchedStatements=true 批处理优化 大幅提升批量插入更新删除性能\n    url: jdbc:mysql://localhost:3306/ry-cloud?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8&rewriteBatchedStatements=true\n    username: root\n    password: P@ssw0rd\n  gen:\n    url: jdbc:mysql://localhost:3306/ry-cloud?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8&rewriteBatchedStatements=true\n    username: root\n    password: P@ssw0rd\n  job:\n    url: jdbc:mysql://localhost:3306/ry-job?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8&rewriteBatchedStatements=true\n    username: root\n    password: P@ssw0rd\n  iot-manager:\n    url: jdbc:mysql://localhost:3306/ry-cloud?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8&rewriteBatchedStatements=true\n    username: root\n    password: P@ssw0rd\n  # tdengine 数据库\n  iot-data:\n    url: jdbc:TAOS-RS://localhost:6041/ry_iot?timezone=UTC-8&charset=UTF-8&locale=en_US.UTF-8\n    username: root\n    password: taosdata\n#  system-oracle:\n#    url: jdbc:oracle:thin:@//localhost:1521/XE\n#    username: ROOT\n#    password: password\n#  system-postgres:\n#    url: jdbc:postgresql://localhost:5432/postgres?useUnicode=true&characterEncoding=utf8&useSSL=true&autoReconnect=true&reWriteBatchedInserts=true\n#    username: root\n#    password: password\n\nspring:\n  datasource:\n    type: com.zaxxer.hikari.HikariDataSource\n    # 动态数据源文档 https://www.kancloud.cn/tracy5546/dynamic-datasource/content\n    dynamic:\n      # 性能分析插件(有性能损耗 不建议生产环境使用)\n      p6spy: true\n      # 开启seata代理，开启后默认每个数据源都代理，如果某个不需要代理可单独关闭\n      seata: ${seata.enabled}\n      # 严格模式 匹配不到数据源则报错\n      strict: true\n      hikari:\n        # 最大连接池数量\n        maxPoolSize: 20\n        # 最小空闲线程数量\n        minIdle: 10\n        # 配置获取连接等待超时的时间\n        connectionTimeout: 30000\n        # 校验超时时间\n        validationTimeout: 5000\n        # 空闲连接存活最大时间，默认10分钟\n        idleTimeout: 600000\n        # 此属性控制池中连接的最长生命周期，值0表示无限生命周期，默认30分钟\n        maxLifetime: 1800000\n        # 连接测试query（配置检测连接是否有效）\n        connectionTestQuery: SELECT 1\n        # 多久检查一次连接的活性\n        keepaliveTime: 30000\n', '415244ab51ea87ca2906976a2bbfbf13', '2022-01-09 15:19:07', '2023-06-15 09:29:44', 'nacos', '10.0.0.123', '', 'dev', '数据源配置', '', '', 'yaml', '', '');
+INSERT INTO `config_info` VALUES (3, 'ruoyi-gateway.yml', 'DEFAULT_GROUP', '# 安全配置\nsecurity:\n  # 验证码\n  captcha:\n    # 是否开启验证码\n    enabled: true\n    # 验证码类型 math 数组计算 char 字符验证\n    type: MATH\n    # line 线段干扰 circle 圆圈干扰 shear 扭曲干扰\n    category: CIRCLE\n    # 数字验证码位数\n    numberLength: 1\n    # 字符验证码长度\n    charLength: 4\n  # 防止XSS攻击\n  xss:\n    enabled: true\n    excludeUrls:\n      - /system/notice\n  # 不校验白名单\n  ignore:\n    whites:\n      - /code\n      - /auth/logout\n      - /auth/login\n      - /auth/smsLogin\n      - /auth/xcxLogin\n      - /auth/register\n      - /auth/tenant/list\n      - /resource/sms/code\n      - /*/v3/api-docs\n      - /csrf\n\nspring:\n  cloud:\n    # 网关配置\n    gateway:\n      # 打印请求日志(自定义)\n      requestLog: true\n      discovery:\n        locator:\n          lowerCaseServiceId: true\n          enabled: true\n      routes:\n        # 认证中心\n        - id: ruoyi-auth\n          uri: lb://ruoyi-auth\n          predicates:\n            - Path=/auth/**\n          filters:\n            # 验证码处理\n            - ValidateCodeFilter\n            - StripPrefix=1\n        # 代码生成\n        - id: ruoyi-gen\n          uri: lb://ruoyi-gen\n          predicates:\n            - Path=/tool/**\n          filters:\n            - StripPrefix=1\n        # 系统模块\n        - id: ruoyi-system\n          uri: lb://ruoyi-system\n          predicates:\n            - Path=/system/**,/monitor/**\n          filters:\n            - StripPrefix=1\n        # 资源服务\n        - id: ruoyi-resource\n          uri: lb://ruoyi-resource\n          predicates:\n            - Path=/resource/**\n          filters:\n            - StripPrefix=1\n        # 演示服务\n        - id: ruoyi-demo\n          uri: lb://ruoyi-demo\n          predicates:\n            - Path=/demo/**\n          filters:\n            - StripPrefix=1\n        # MQ演示服务\n        - id: ruoyi-stream-mq\n          uri: lb://ruoyi-stream-mq\n          predicates:\n            - Path=/stream-mq/**\n          filters:\n            - StripPrefix=1\n\n    # sentinel 配置\n    sentinel:\n      filter:\n        enabled: false\n      # nacos配置持久化\n      datasource:\n        ds1:\n          nacos:\n            server-addr: ${spring.cloud.nacos.server-addr}\n            dataId: sentinel-${spring.application.name}.json\n            groupId: ${spring.cloud.nacos.config.group}\n            namespace: ${spring.profiles.active}\n            data-type: json\n            rule-type: gw-flow\n', 'f42b68cffb819eda0f64722897984f2e', '2022-01-09 15:19:43', '2023-06-15 09:30:25', 'nacos', '10.0.0.123', '', 'dev', '网关模块', '', '', 'yaml', '', '');
+INSERT INTO `config_info` VALUES (4, 'ruoyi-auth.yml', 'DEFAULT_GROUP', '# 用户配置\nuser:\n  password:\n    # 密码最大错误次数\n    maxRetryCount: 5\n    # 密码锁定时间（默认10分钟）\n    lockTime: 10\n', '1fd08de287662e81f0ced8808d7b19e6', '2022-01-09 15:19:43', '2023-06-15 09:30:04', 'nacos', '10.0.0.123', '', 'dev', '认证中心', '', '', 'yaml', '', '');
+INSERT INTO `config_info` VALUES (5, 'ruoyi-monitor.yml', 'DEFAULT_GROUP', '# 监控中心配置\nspring:\n  security:\n    user:\n      name: ruoyi\n      password: 123456\n  boot:\n    admin:\n      ui:\n        title: RuoYi-Cloud-Plus服务监控中心\n      discovery:\n        # seata 不具有健康检查的能力 防止报错排除掉\n        ignored-services: ruoyi-seata-server\n', 'ba7fa6a6bfde3dcb3b566fd8864834af', '2022-01-09 15:20:18', '2023-06-15 09:31:17', 'nacos', '10.0.0.123', '', 'dev', '监控中心', '', '', 'yaml', '', '');
+INSERT INTO `config_info` VALUES (6, 'ruoyi-system.yml', 'DEFAULT_GROUP', '# 将项目路径：config/下对应文件中内容复制到此处', '2944a25cb97926efcaa43b3ad7a64cf0', '2022-01-09 15:20:18', '2022-01-09 15:22:03', NULL, '0:0:0:0:0:0:0:1', '', 'dev', '系统模块', NULL, NULL, 'yaml', NULL, '');
+INSERT INTO `config_info` VALUES (7, 'ruoyi-gen.yml', 'DEFAULT_GROUP', 'spring:\n  datasource:\n    dynamic:\n      # 设置默认的数据源或者数据源组,默认值即为 master\n      primary: master\n      datasource:\n        # 主库数据源\n        master:\n          type: ${spring.datasource.type}\n          driver-class-name: com.mysql.cj.jdbc.Driver\n          url: ${datasource.system-master.url}\n          username: ${datasource.system-master.username}\n          password: ${datasource.system-master.password}\n#        oracle:\n#          type: ${spring.datasource.type}\n#          driverClassName: oracle.jdbc.OracleDriver\n#          url: ${datasource.system-oracle.url}\n#          username: ${datasource.system-oracle.username}\n#          password: ${datasource.system-oracle.password}\n#          hikari:\n#            connectionTestQuery: SELECT 1 FROM DUAL\n#        postgres:\n#          type: ${spring.datasource.type}\n#          driverClassName: org.postgresql.Driver\n#          url: ${datasource.system-postgres.url}\n#          username: ${datasource.system-postgres.username}\n#          password: ${datasource.system-postgres.password}\n\n# 代码生成\ngen:\n  # 作者\n  author: LionLi\n  # 默认生成包路径 system 需改成自己的模块名称 如 system monitor tool\n  packageName: org.dromara.system\n  # 自动去除表前缀，默认是false\n  autoRemovePre: false\n  # 表前缀（生成类名不会包含表前缀，多个用逗号分隔）\n  tablePrefix: sys_\n', '29ba54b451b12c7bc8acb4f20940ad5d', '2022-01-09 15:20:18', '2023-06-15 09:30:33', 'nacos', '10.0.0.123', '', 'dev', '代码生成', '', '', 'yaml', '', '');
+INSERT INTO `config_info` VALUES (8, 'ruoyi-job.yml', 'DEFAULT_GROUP', 'spring:\n  datasource:\n    dynamic:\n      # 设置默认的数据源或者数据源组,默认值即为 master\n      primary: master\n      datasource:\n        # 主库数据源\n        master:\n          type: ${spring.datasource.type}\n          driver-class-name: com.mysql.cj.jdbc.Driver\n          url: ${datasource.job.url}\n          username: ${datasource.job.username}\n          password: ${datasource.job.password}\n\nxxl:\n  job:\n    # 执行器开关\n    enabled: true\n    # 调度中心地址：如调度中心集群部署存在多个地址则用逗号分隔。\n    # admin-addresses: http://localhost:9900\n    # 调度中心应用名 通过服务名连接调度中心(启用admin-appname会导致admin-addresses不生效)\n    admin-appname: ruoyi-xxl-job-admin\n    # 执行器通讯TOKEN：非空时启用\n    access-token: xxl-job\n    # 执行器配置\n    executor:\n      # 执行器AppName：执行器心跳注册分组依据；为空则关闭自动注册\n      appname: ${spring.application.name}-executor\n      # 执行器端口号 执行器从19901开始往后写\n      port: 9901\n      # 执行器注册：默认IP:PORT\n      address:\n      # 执行器IP：默认自动获取IP\n      ip:\n      # 执行器运行日志文件存储磁盘路径\n      logpath: ./logs/${spring.application.name}/xxl-job\n      # 执行器日志文件保存天数：大于3生效\n      logretentiondays: 30\n', '74e408b43f0165a135667e42a0130761', '2022-01-09 15:20:18', '2023-06-15 09:31:03', 'nacos', '10.0.0.123', '', 'dev', '定时任务', '', '', 'yaml', '', '');
+INSERT INTO `config_info` VALUES (9, 'ruoyi-resource.yml', 'DEFAULT_GROUP', 'spring:\n  datasource:\n    dynamic:\n      # 设置默认的数据源或者数据源组,默认值即为 master\n      primary: master\n      datasource:\n        # 主库数据源\n        master:\n          type: ${spring.datasource.type}\n          driver-class-name: com.mysql.cj.jdbc.Driver\n          url: ${datasource.system-master.url}\n          username: ${datasource.system-master.username}\n          password: ${datasource.system-master.password}\n#        oracle:\n#          type: ${spring.datasource.type}\n#          driverClassName: oracle.jdbc.OracleDriver\n#          url: ${datasource.system-oracle.url}\n#          username: ${datasource.system-oracle.username}\n#          password: ${datasource.system-oracle.password}\n#          hikari:\n#            connectionTestQuery: SELECT 1 FROM DUAL\n#        postgres:\n#          type: ${spring.datasource.type}\n#          driverClassName: org.postgresql.Driver\n#          url: ${datasource.system-postgres.url}\n#          username: ${datasource.system-postgres.username}\n#          password: ${datasource.system-postgres.password}\n\nmail:\n  enabled: false\n  host: smtp.163.com\n  port: 465\n  # 是否需要用户名密码验证\n  auth: true\n  # 发送方，遵循RFC-822标准\n  from: xxx@163.com\n  # 用户名（注意：如果使用foxmail邮箱，此处user为qq号）\n  user: xxx@163.com\n  # 密码（注意，某些邮箱需要为SMTP服务单独设置密码，详情查看相关帮助）\n  pass: xxxxxxxxxx\n  # 使用 STARTTLS安全连接，STARTTLS是对纯文本通信协议的扩展。\n  starttlsEnable: true\n  # 使用SSL安全连接\n  sslEnable: true\n  # SMTP超时时长，单位毫秒，缺省值不超时\n  timeout: 0\n  # Socket连接超时值，单位毫秒，缺省值不超时\n  connectionTimeout: 0\n\nsms:\n  enabled: false\n  # 阿里云 dysmsapi.aliyuncs.com\n  # 腾讯云 sms.tencentcloudapi.com\n  endpoint: \"dysmsapi.aliyuncs.com\"\n  accessKeyId: xxxxxxx\n  accessKeySecret: xxxxxx\n  signName: 测试\n  # 腾讯专用\n  sdkAppId:\n', '9e92491b10b3dd2827e4038eab73e38d', '2022-01-09 15:20:35', '2023-06-15 09:31:32', 'nacos', '10.0.0.123', '', 'dev', '文件服务', '', '', 'yaml', '', '');
+INSERT INTO `config_info` VALUES (10, 'sentinel-ruoyi-gateway.json', 'DEFAULT_GROUP', '[\n  {\n    \"resource\": \"ruoyi-auth\",\n    \"count\": 500,\n    \"grade\": 1,\n    \"limitApp\": \"default\",\n    \"strategy\": 0,\n    \"controlBehavior\": 0\n  },\n  {\n    \"resource\": \"ruoyi-system\",\n    \"count\": 1000,\n    \"grade\": 1,\n    \"limitApp\": \"default\",\n    \"strategy\": 0,\n    \"controlBehavior\": 0\n  },\n  {\n    \"resource\": \"ruoyi-resource\",\n    \"count\": 500,\n    \"grade\": 1,\n    \"limitApp\": \"default\",\n    \"strategy\": 0,\n    \"controlBehavior\": 0\n  }\n]\n', '2efad3702e99adef46c2ee818b3925e5', '2022-01-09 15:21:02', '2023-06-15 09:31:48', 'nacos', '10.0.0.123', '', 'dev', '限流策略', '', '', 'json', '', '');
+INSERT INTO `config_info` VALUES (11, 'ruoyi-xxl-job-admin.yml', 'DEFAULT_GROUP', '# server 配置\nspring:\n  datasource:\n    type: com.zaxxer.hikari.HikariDataSource\n    driver-class-name: com.mysql.cj.jdbc.Driver\n    url: ${datasource.job.url}\n    username: ${datasource.job.username}\n    password: ${datasource.job.password}\n    hikari:\n      auto-commit: true\n      connection-test-query: SELECT 1\n      connection-timeout: 10000\n      idle-timeout: 30000\n      max-lifetime: 900000\n      maximum-pool-size: 30\n      minimum-idle: 10\n      pool-name: HikariCP\n      validation-timeout: 1000\n  mail:\n    from: xxx@qq.com\n    host: smtp.qq.com\n    username: xxx@qq.com\n    password: xxx\n    port: 25\n    properties:\n      mail:\n        smtp:\n          auth: true\n          socketFactory:\n            class: javax.net.ssl.SSLSocketFactory\n          starttls:\n            enable: true\n            required: true\n\n# mybatis 配置\nmybatis:\n  mapper-locations: classpath:/mybatis-mapper/*Mapper.xml\n\n# Actuator 监控端点的配置项\nmanagement:\n  health:\n    mail:\n      enabled: false\n  endpoints:\n    web:\n      exposure:\n        include: \'*\'\n  endpoint:\n    health:\n      show-details: ALWAYS\n    logfile:\n      external-file: ./logs/${spring.application.name}/console.log\n\n# xxljob系统配置\nxxl:\n  job:\n    # 鉴权token\n    accessToken: xxl-job\n    # 国际化\n    i18n: zh_CN\n    # 日志清理\n    logretentiondays: 30\n    triggerpool:\n      fast:\n        max: 200\n      slow:\n        max: 100\n', '0e2612c76e9c75fb10cb69adf076ae55', '2022-01-09 15:21:02', '2023-06-15 09:32:01', 'nacos', '10.0.0.123', '', 'dev', '定时任务控制台', '', '', 'yaml', '', '');
+INSERT INTO `config_info` VALUES (12, 'seata-server.properties', 'DEFAULT_GROUP', 'service.vgroupMapping.ruoyi-auth-group=default\nservice.vgroupMapping.ruoyi-system-group=default\nservice.vgroupMapping.ruoyi-resource-group=default\nservice.vgroupMapping.ruoyi-gen-group=default\nservice.vgroupMapping.ruoyi-job-group=default\n\nservice.enableDegrade=false\nservice.disableGlobalTransaction=false\n\n#Transaction storage configuration, only for the server. The file, DB, and redis configuration values are optional.\nstore.mode=db\nstore.lock.mode=db\nstore.session.mode=db\n#Used for password encryption\nstore.publicKey=\n\n#These configurations are required if the `store mode` is `db`. If `store.mode,store.lock.mode,store.session.mode` are not equal to `db`, you can remove the configuration block.\nstore.db.datasource=hikari\nstore.db.dbType=mysql\nstore.db.driverClassName=com.mysql.cj.jdbc.Driver\nstore.db.url=jdbc:mysql://127.0.0.1:3306/ry-seata?useUnicode=true&rewriteBatchedStatements=true\nstore.db.user=root\nstore.db.password=root\nstore.db.minConn=5\nstore.db.maxConn=30\nstore.db.globalTable=global_table\nstore.db.branchTable=branch_table\nstore.db.distributedLockTable=distributed_lock\nstore.db.queryLimit=100\nstore.db.lockTable=lock_table\nstore.db.maxWait=5000\n\n# redis æ¨¡å¼ store.mode=redis å¼å¯ (æ§å¶å°æ¥è¯¢åè½æé,ä¸å½±åå®éæ§è¡åè½)\n# store.redis.host=127.0.0.1\n# store.redis.port=6379\n# æå¤§è¿æ¥æ°\n# store.redis.maxConn=10\n# æå°è¿æ¥æ°\n# store.redis.minConn=1\n# store.redis.database=0\n# store.redis.password=\n# store.redis.queryLimit=100\n\n#Transaction rule configuration, only for the server\nserver.recovery.committingRetryPeriod=1000\nserver.recovery.asynCommittingRetryPeriod=1000\nserver.recovery.rollbackingRetryPeriod=1000\nserver.recovery.timeoutRetryPeriod=1000\nserver.maxCommitRetryTimeout=-1\nserver.maxRollbackRetryTimeout=-1\nserver.rollbackRetryTimeoutUnlockEnable=false\nserver.distributedLockExpireTime=10000\nserver.xaerNotaRetryTimeout=60000\nserver.session.branchAsyncQueueSize=5000\nserver.session.enableBranchAsyncRemove=false\n\n#Transaction rule configuration, only for the client\nclient.rm.asyncCommitBufferLimit=10000\nclient.rm.lock.retryInterval=10\nclient.rm.lock.retryTimes=30\nclient.rm.lock.retryPolicyBranchRollbackOnConflict=true\nclient.rm.reportRetryCount=5\nclient.rm.tableMetaCheckEnable=true\nclient.rm.tableMetaCheckerInterval=60000\nclient.rm.sqlParserType=druid\nclient.rm.reportSuccessEnable=false\nclient.rm.sagaBranchRegisterEnable=false\nclient.rm.sagaJsonParser=fastjson\nclient.rm.tccActionInterceptorOrder=-2147482648\nclient.tm.commitRetryCount=5\nclient.tm.rollbackRetryCount=5\nclient.tm.defaultGlobalTransactionTimeout=60000\nclient.tm.degradeCheck=false\nclient.tm.degradeCheckAllowTimes=10\nclient.tm.degradeCheckPeriod=2000\nclient.tm.interceptorOrder=-2147482648\nclient.undo.dataValidation=true\nclient.undo.logSerialization=jackson\nclient.undo.onlyCareUpdateColumns=true\nserver.undo.logSaveDays=7\nserver.undo.logDeletePeriod=86400000\nclient.undo.logTable=undo_log\nclient.undo.compress.enable=true\nclient.undo.compress.type=zip\nclient.undo.compress.threshold=64k\n\n#For TCC transaction mode\ntcc.fence.logTableName=tcc_fence_log\ntcc.fence.cleanPeriod=1h\n\n#Log rule configuration, for client and server\nlog.exceptionRate=100\n\n#Metrics configuration, only for the server\nmetrics.enabled=false\nmetrics.registryType=compact\nmetrics.exporterList=prometheus\nmetrics.exporterPrometheusPort=9898\n\n#For details about configuration items, see https://seata.io/zh-cn/docs/user/configurations.html\n#Transport configuration, for client and server\ntransport.type=TCP\ntransport.server=NIO\ntransport.heartbeat=true\ntransport.enableTmClientBatchSendRequest=false\ntransport.enableRmClientBatchSendRequest=true\ntransport.enableTcServerBatchSendResponse=false\ntransport.rpcRmRequestTimeout=30000\ntransport.rpcTmRequestTimeout=30000\ntransport.rpcTcRequestTimeout=30000\ntransport.threadFactory.bossThreadPrefix=NettyBoss\ntransport.threadFactory.workerThreadPrefix=NettyServerNIOWorker\ntransport.threadFactory.serverExecutorThreadPrefix=NettyServerBizHandler\ntransport.threadFactory.shareBossWorker=false\ntransport.threadFactory.clientSelectorThreadPrefix=NettyClientSelector\ntransport.threadFactory.clientSelectorThreadSize=1\ntransport.threadFactory.clientWorkerThreadPrefix=NettyClientWorkerThread\ntransport.threadFactory.bossThreadSize=1\ntransport.threadFactory.workerThreadSize=default\ntransport.shutdown.wait=3\ntransport.serialization=seata\ntransport.compressor=none\n', '636761fd85afd07ea342db415bd92fbe', '2022-01-09 15:21:02', '2023-06-15 09:32:21', 'nacos', '10.0.0.123', '', 'dev', 'seata配置文件', '', '', 'properties', '', '');
+INSERT INTO `config_info` VALUES (13, 'ruoyi-sentinel-dashboard.yml', 'DEFAULT_GROUP', 'spring:\n  mvc:\n    pathmatch:\n      # 修复 sentinel 控制台未适配 springboot 2.6 新路由方式\n      matching-strategy: ANT_PATH_MATCHER\n\nserver:\n  servlet:\n    encoding:\n      force: true\n      charset: UTF-8\n      enabled: true\n    session:\n      cookie:\n        name: sentinel_dashboard_cookie\n\nlogging:\n  level:\n    org.springframework.web: INFO\n\nauth:\n  enabled: true\n  filter:\n    exclude-urls: /,/auth/login,/auth/logout,/registry/machine,/version,/actuator,/actuator/**\n    exclude-url-suffixes: htm,html,js,css,map,ico,ttf,woff,png\n  username: sentinel\n  password: sentinel\n', '59055747c62f08cd2c38a6016d4b9227', '2022-01-09 15:21:02', '2023-06-15 09:32:38', 'nacos', '10.0.0.123', '', 'dev', 'sentinel控制台配置文件', '', '', 'yaml', '', '');
+INSERT INTO `config_info` VALUES (101, 'application-common.yml', 'DEFAULT_GROUP', '# 将项目路径：config/下对应文件中内容复制到此处', '2944a25cb97926efcaa43b3ad7a64cf0', '2022-01-09 15:23:00', '2022-01-09 15:23:00', NULL, '0:0:0:0:0:0:0:1', '', 'prod', '通用配置基础配置', NULL, NULL, 'yaml', NULL, '');
+INSERT INTO `config_info` VALUES (102, 'datasource.yml', 'DEFAULT_GROUP', '# 将项目路径：config/下对应文件中内容复制到此处', '2944a25cb97926efcaa43b3ad7a64cf0', '2022-01-09 15:23:00', '2022-01-09 15:23:00', NULL, '0:0:0:0:0:0:0:1', '', 'prod', '数据源配置', NULL, NULL, 'yaml', NULL, '');
+INSERT INTO `config_info` VALUES (103, 'ruoyi-gateway.yml', 'DEFAULT_GROUP', '# 将项目路径：config/下对应文件中内容复制到此处', '2944a25cb97926efcaa43b3ad7a64cf0', '2022-01-09 15:23:00', '2022-01-09 15:23:00', NULL, '0:0:0:0:0:0:0:1', '', 'prod', '网关模块', NULL, NULL, 'yaml', NULL, '');
+INSERT INTO `config_info` VALUES (104, 'ruoyi-auth.yml', 'DEFAULT_GROUP', '# 将项目路径：config/下对应文件中内容复制到此处', '2944a25cb97926efcaa43b3ad7a64cf0', '2022-01-09 15:23:00', '2022-01-09 15:23:00', NULL, '0:0:0:0:0:0:0:1', '', 'prod', '认证中心', NULL, NULL, 'yaml', NULL, '');
+INSERT INTO `config_info` VALUES (105, 'ruoyi-monitor.yml', 'DEFAULT_GROUP', '# 将项目路径：config/下对应文件中内容复制到此处', '2944a25cb97926efcaa43b3ad7a64cf0', '2022-01-09 15:23:00', '2022-01-09 15:23:00', NULL, '0:0:0:0:0:0:0:1', '', 'prod', '监控中心', NULL, NULL, 'yaml', NULL, '');
+INSERT INTO `config_info` VALUES (106, 'ruoyi-system.yml', 'DEFAULT_GROUP', '# 将项目路径：config/下对应文件中内容复制到此处', '2944a25cb97926efcaa43b3ad7a64cf0', '2022-01-09 15:23:00', '2022-01-09 15:23:00', NULL, '0:0:0:0:0:0:0:1', '', 'prod', '系统模块', NULL, NULL, 'yaml', NULL, '');
+INSERT INTO `config_info` VALUES (107, 'ruoyi-gen.yml', 'DEFAULT_GROUP', '# 将项目路径：config/下对应文件中内容复制到此处', '2944a25cb97926efcaa43b3ad7a64cf0', '2022-01-09 15:23:00', '2022-01-09 15:23:00', NULL, '0:0:0:0:0:0:0:1', '', 'prod', '代码生成', NULL, NULL, 'yaml', NULL, '');
+INSERT INTO `config_info` VALUES (108, 'ruoyi-job.yml', 'DEFAULT_GROUP', '# 将项目路径：config/下对应文件中内容复制到此处', '2944a25cb97926efcaa43b3ad7a64cf0', '2022-01-09 15:23:00', '2022-01-09 15:23:00', NULL, '0:0:0:0:0:0:0:1', '', 'prod', '定时任务', NULL, NULL, 'yaml', NULL, '');
+INSERT INTO `config_info` VALUES (109, 'ruoyi-resource.yml', 'DEFAULT_GROUP', '# 将项目路径：config/下对应文件中内容复制到此处', '2944a25cb97926efcaa43b3ad7a64cf0', '2022-01-09 15:23:00', '2022-01-09 15:23:00', NULL, '0:0:0:0:0:0:0:1', '', 'prod', '文件服务', NULL, NULL, 'yaml', NULL, '');
+INSERT INTO `config_info` VALUES (110, 'sentinel-ruoyi-gateway.json', 'DEFAULT_GROUP', '# 将项目路径：config/下对应文件中内容复制到此处', '2944a25cb97926efcaa43b3ad7a64cf0', '2022-01-09 15:23:00', '2022-01-09 15:23:00', NULL, '0:0:0:0:0:0:0:1', '', 'prod', '限流策略', NULL, NULL, 'json', NULL, '');
+INSERT INTO `config_info` VALUES (111, 'ruoyi-xxl-job-admin.yml', 'DEFAULT_GROUP', '# 将项目路径：config/下对应文件中内容复制到此处', '2944a25cb97926efcaa43b3ad7a64cf0', '2022-01-09 15:21:02', '2022-01-09 15:21:02', NULL, '0:0:0:0:0:0:0:1', '', 'prod', '定时任务控制台', NULL, NULL, 'yaml', NULL, '');
+INSERT INTO `config_info` VALUES (112, 'seata-server.properties', 'DEFAULT_GROUP', '# 将项目路径：config/下对应文件中内容复制到此处', '2944a25cb97926efcaa43b3ad7a64cf0', '2022-01-09 15:21:02', '2022-01-09 15:21:02', NULL, '0:0:0:0:0:0:0:1', '', 'prod', 'seata配置文件', NULL, NULL, 'properties', NULL, '');
+INSERT INTO `config_info` VALUES (113, 'ruoyi-sentinel-dashboard.yml', 'DEFAULT_GROUP', '# 将项目路径：config/下对应文件中内容复制到此处', '2944a25cb97926efcaa43b3ad7a64cf0', '2022-01-09 15:21:02', '2022-01-09 15:21:02', NULL, '0:0:0:0:0:0:0:1', '', 'prod', 'sentinel控制台配置文件', NULL, NULL, 'yaml', NULL, '');
+INSERT INTO `config_info` VALUES (129, 'ruoyi-manager.yml', 'DEFAULT_GROUP', '# 将项目路径：config/下对应文件中内容复制到此处', '2944a25cb97926efcaa43b3ad7a64cf0', '2023-06-15 09:32:56', '2023-06-15 09:32:56', NULL, '10.0.0.123', '', 'dev', '系统模块', NULL, NULL, 'yaml', NULL, '');
+INSERT INTO `config_info` VALUES (131, 'ruoyi-data.yml', 'DEFAULT_GROUP', '# 将项目路径：config/下对应文件中内容复制到此处', '2944a25cb97926efcaa43b3ad7a64cf0', '2023-06-15 09:33:19', '2023-06-15 09:33:19', NULL, '10.0.0.123', '', 'dev', '系统模块', NULL, NULL, 'yaml', NULL, '');
+INSERT INTO `config_info` VALUES (132, 'ruoyi-rule-engine.yml', 'DEFAULT_GROUP', '# 将项目路径：config/下对应文件中内容复制到此处', '2944a25cb97926efcaa43b3ad7a64cf0', '2023-06-15 09:33:42', '2023-06-15 09:33:42', NULL, '10.0.0.123', '', 'dev', '系统模块', NULL, NULL, 'yaml', NULL, '');
 
-(101, 'application-common.yml', 'DEFAULT_GROUP', '# 将项目路径：config/下对应文件中内容复制到此处', '2944a25cb97926efcaa43b3ad7a64cf0', '2022-01-09 15:23:00', '2022-01-09 15:23:00', NULL, '0:0:0:0:0:0:0:1', '', 'prod', '通用配置基础配置', NULL, NULL, 'yaml', NULL, ''),
-(102, 'datasource.yml', 'DEFAULT_GROUP', '# 将项目路径：config/下对应文件中内容复制到此处', '2944a25cb97926efcaa43b3ad7a64cf0', '2022-01-09 15:23:00', '2022-01-09 15:23:00', NULL, '0:0:0:0:0:0:0:1', '', 'prod', '数据源配置', NULL, NULL, 'yaml', NULL, ''),
-(103, 'ruoyi-gateway.yml', 'DEFAULT_GROUP', '# 将项目路径：config/下对应文件中内容复制到此处', '2944a25cb97926efcaa43b3ad7a64cf0', '2022-01-09 15:23:00', '2022-01-09 15:23:00', NULL, '0:0:0:0:0:0:0:1', '', 'prod', '网关模块', NULL, NULL, 'yaml', NULL, ''),
-(104, 'ruoyi-auth.yml', 'DEFAULT_GROUP', '# 将项目路径：config/下对应文件中内容复制到此处', '2944a25cb97926efcaa43b3ad7a64cf0', '2022-01-09 15:23:00', '2022-01-09 15:23:00', NULL, '0:0:0:0:0:0:0:1', '', 'prod', '认证中心', NULL, NULL, 'yaml', NULL, ''),
-(105, 'ruoyi-monitor.yml', 'DEFAULT_GROUP', '# 将项目路径：config/下对应文件中内容复制到此处', '2944a25cb97926efcaa43b3ad7a64cf0', '2022-01-09 15:23:00', '2022-01-09 15:23:00', NULL, '0:0:0:0:0:0:0:1', '', 'prod', '监控中心', NULL, NULL, 'yaml', NULL, ''),
-(106, 'ruoyi-system.yml', 'DEFAULT_GROUP', '# 将项目路径：config/下对应文件中内容复制到此处', '2944a25cb97926efcaa43b3ad7a64cf0', '2022-01-09 15:23:00', '2022-01-09 15:23:00', NULL, '0:0:0:0:0:0:0:1', '', 'prod', '系统模块', NULL, NULL, 'yaml', NULL, ''),
-(107, 'ruoyi-gen.yml', 'DEFAULT_GROUP', '# 将项目路径：config/下对应文件中内容复制到此处', '2944a25cb97926efcaa43b3ad7a64cf0', '2022-01-09 15:23:00', '2022-01-09 15:23:00', NULL, '0:0:0:0:0:0:0:1', '', 'prod', '代码生成', NULL, NULL, 'yaml', NULL, ''),
-(108, 'ruoyi-job.yml', 'DEFAULT_GROUP', '# 将项目路径：config/下对应文件中内容复制到此处', '2944a25cb97926efcaa43b3ad7a64cf0', '2022-01-09 15:23:00', '2022-01-09 15:23:00', NULL, '0:0:0:0:0:0:0:1', '', 'prod', '定时任务', NULL, NULL, 'yaml', NULL, ''),
-(109, 'ruoyi-resource.yml', 'DEFAULT_GROUP', '# 将项目路径：config/下对应文件中内容复制到此处', '2944a25cb97926efcaa43b3ad7a64cf0', '2022-01-09 15:23:00', '2022-01-09 15:23:00', NULL, '0:0:0:0:0:0:0:1', '', 'prod', '文件服务', NULL, NULL, 'yaml', NULL, ''),
-(110, 'sentinel-ruoyi-gateway.json', 'DEFAULT_GROUP', '# 将项目路径：config/下对应文件中内容复制到此处', '2944a25cb97926efcaa43b3ad7a64cf0', '2022-01-09 15:23:00', '2022-01-09 15:23:00', NULL, '0:0:0:0:0:0:0:1', '', 'prod', '限流策略', NULL, NULL, 'json', NULL, ''),
-(111, 'ruoyi-xxl-job-admin.yml', 'DEFAULT_GROUP', '# 将项目路径：config/下对应文件中内容复制到此处', '2944a25cb97926efcaa43b3ad7a64cf0', '2022-01-09 15:21:02', '2022-01-09 15:21:02', NULL, '0:0:0:0:0:0:0:1', '', 'prod', '定时任务控制台', NULL, NULL, 'yaml', NULL, ''),
-(112, 'seata-server.properties', 'DEFAULT_GROUP', '# 将项目路径：config/下对应文件中内容复制到此处', '2944a25cb97926efcaa43b3ad7a64cf0', '2022-01-09 15:21:02', '2022-01-09 15:21:02', NULL, '0:0:0:0:0:0:0:1', '', 'prod', 'seata配置文件', NULL, NULL, 'properties', NULL, ''),
-(113, 'ruoyi-sentinel-dashboard.yml', 'DEFAULT_GROUP', '# 将项目路径：config/下对应文件中内容复制到此处', '2944a25cb97926efcaa43b3ad7a64cf0', '2022-01-09 15:21:02', '2022-01-09 15:21:02', NULL, '0:0:0:0:0:0:0:1', '', 'prod', 'sentinel控制台配置文件', NULL, NULL, 'yaml', NULL, '');
+-- ----------------------------
+-- Table structure for config_info_aggr
+-- ----------------------------
+DROP TABLE IF EXISTS `config_info_aggr`;
+CREATE TABLE `config_info_aggr`  (
+                                     `id` bigint NOT NULL AUTO_INCREMENT COMMENT 'id',
+                                     `data_id` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL COMMENT 'data_id',
+                                     `group_id` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL COMMENT 'group_id',
+                                     `datum_id` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL COMMENT 'datum_id',
+                                     `content` longtext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL COMMENT '内容',
+                                     `gmt_modified` datetime NOT NULL COMMENT '修改时间',
+                                     `app_name` varchar(128) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NULL DEFAULT NULL,
+                                     `tenant_id` varchar(128) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NULL DEFAULT '' COMMENT '租户字段',
+                                     PRIMARY KEY (`id`) USING BTREE,
+                                     UNIQUE INDEX `uk_configinfoaggr_datagrouptenantdatum`(`data_id` ASC, `group_id` ASC, `tenant_id` ASC, `datum_id` ASC) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_bin COMMENT = '增加租户字段' ROW_FORMAT = Dynamic;
 
-/******************************************/
-/*   表名称 = config_info_aggr   */
-/******************************************/
-CREATE TABLE `config_info_aggr` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `data_id` varchar(255) NOT NULL COMMENT 'data_id',
-  `group_id` varchar(255) NOT NULL COMMENT 'group_id',
-  `datum_id` varchar(255) NOT NULL COMMENT 'datum_id',
-  `content` longtext NOT NULL COMMENT '内容',
-  `gmt_modified` datetime NOT NULL COMMENT '修改时间',
-  `app_name` varchar(128) DEFAULT NULL,
-  `tenant_id` varchar(128) DEFAULT '' COMMENT '租户字段',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_configinfoaggr_datagrouptenantdatum` (`data_id`,`group_id`,`tenant_id`,`datum_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='增加租户字段';
+-- ----------------------------
+-- Records of config_info_aggr
+-- ----------------------------
 
+-- ----------------------------
+-- Table structure for config_info_beta
+-- ----------------------------
+DROP TABLE IF EXISTS `config_info_beta`;
+CREATE TABLE `config_info_beta`  (
+                                     `id` bigint NOT NULL AUTO_INCREMENT COMMENT 'id',
+                                     `data_id` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL COMMENT 'data_id',
+                                     `group_id` varchar(128) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL COMMENT 'group_id',
+                                     `app_name` varchar(128) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NULL DEFAULT NULL COMMENT 'app_name',
+                                     `content` longtext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL COMMENT 'content',
+                                     `beta_ips` varchar(1024) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NULL DEFAULT NULL COMMENT 'betaIps',
+                                     `md5` varchar(32) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NULL DEFAULT NULL COMMENT 'md5',
+                                     `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                                     `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
+                                     `src_user` text CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NULL COMMENT 'source user',
+                                     `src_ip` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NULL DEFAULT NULL COMMENT 'source ip',
+                                     `tenant_id` varchar(128) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NULL DEFAULT '' COMMENT '租户字段',
+                                     `encrypted_data_key` text CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NULL COMMENT '秘钥',
+                                     PRIMARY KEY (`id`) USING BTREE,
+                                     UNIQUE INDEX `uk_configinfobeta_datagrouptenant`(`data_id` ASC, `group_id` ASC, `tenant_id` ASC) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_bin COMMENT = 'config_info_beta' ROW_FORMAT = Dynamic;
 
-/******************************************/
-/*   表名称 = config_info_beta   */
-/******************************************/
-CREATE TABLE `config_info_beta` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `data_id` varchar(255) NOT NULL COMMENT 'data_id',
-  `group_id` varchar(128) NOT NULL COMMENT 'group_id',
-  `app_name` varchar(128) DEFAULT NULL COMMENT 'app_name',
-  `content` longtext NOT NULL COMMENT 'content',
-  `beta_ips` varchar(1024) DEFAULT NULL COMMENT 'betaIps',
-  `md5` varchar(32) DEFAULT NULL COMMENT 'md5',
-  `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
-  `src_user` text COMMENT 'source user',
-  `src_ip` varchar(50) DEFAULT NULL COMMENT 'source ip',
-  `tenant_id` varchar(128) DEFAULT '' COMMENT '租户字段',
-  `encrypted_data_key` text COMMENT '秘钥',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_configinfobeta_datagrouptenant` (`data_id`,`group_id`,`tenant_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='config_info_beta';
+-- ----------------------------
+-- Records of config_info_beta
+-- ----------------------------
 
-/******************************************/
-/*   表名称 = config_info_tag   */
-/******************************************/
-CREATE TABLE `config_info_tag` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `data_id` varchar(255) NOT NULL COMMENT 'data_id',
-  `group_id` varchar(128) NOT NULL COMMENT 'group_id',
-  `tenant_id` varchar(128) DEFAULT '' COMMENT 'tenant_id',
-  `tag_id` varchar(128) NOT NULL COMMENT 'tag_id',
-  `app_name` varchar(128) DEFAULT NULL COMMENT 'app_name',
-  `content` longtext NOT NULL COMMENT 'content',
-  `md5` varchar(32) DEFAULT NULL COMMENT 'md5',
-  `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
-  `src_user` text COMMENT 'source user',
-  `src_ip` varchar(50) DEFAULT NULL COMMENT 'source ip',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_configinfotag_datagrouptenanttag` (`data_id`,`group_id`,`tenant_id`,`tag_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='config_info_tag';
+-- ----------------------------
+-- Table structure for config_info_tag
+-- ----------------------------
+DROP TABLE IF EXISTS `config_info_tag`;
+CREATE TABLE `config_info_tag`  (
+                                    `id` bigint NOT NULL AUTO_INCREMENT COMMENT 'id',
+                                    `data_id` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL COMMENT 'data_id',
+                                    `group_id` varchar(128) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL COMMENT 'group_id',
+                                    `tenant_id` varchar(128) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NULL DEFAULT '' COMMENT 'tenant_id',
+                                    `tag_id` varchar(128) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL COMMENT 'tag_id',
+                                    `app_name` varchar(128) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NULL DEFAULT NULL COMMENT 'app_name',
+                                    `content` longtext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL COMMENT 'content',
+                                    `md5` varchar(32) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NULL DEFAULT NULL COMMENT 'md5',
+                                    `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                                    `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
+                                    `src_user` text CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NULL COMMENT 'source user',
+                                    `src_ip` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NULL DEFAULT NULL COMMENT 'source ip',
+                                    PRIMARY KEY (`id`) USING BTREE,
+                                    UNIQUE INDEX `uk_configinfotag_datagrouptenanttag`(`data_id` ASC, `group_id` ASC, `tenant_id` ASC, `tag_id` ASC) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_bin COMMENT = 'config_info_tag' ROW_FORMAT = Dynamic;
 
-/******************************************/
-/*   表名称 = config_tags_relation   */
-/******************************************/
-CREATE TABLE `config_tags_relation` (
-  `id` bigint(20) NOT NULL COMMENT 'id',
-  `tag_name` varchar(128) NOT NULL COMMENT 'tag_name',
-  `tag_type` varchar(64) DEFAULT NULL COMMENT 'tag_type',
-  `data_id` varchar(255) NOT NULL COMMENT 'data_id',
-  `group_id` varchar(128) NOT NULL COMMENT 'group_id',
-  `tenant_id` varchar(128) DEFAULT '' COMMENT 'tenant_id',
-  `nid` bigint(20) NOT NULL AUTO_INCREMENT,
-  PRIMARY KEY (`nid`),
-  UNIQUE KEY `uk_configtagrelation_configidtag` (`id`,`tag_name`,`tag_type`),
-  KEY `idx_tenant_id` (`tenant_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='config_tag_relation';
+-- ----------------------------
+-- Records of config_info_tag
+-- ----------------------------
 
-/******************************************/
-/*   表名称 = group_capacity   */
-/******************************************/
-CREATE TABLE `group_capacity` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-  `group_id` varchar(128) NOT NULL DEFAULT '' COMMENT 'Group ID，空字符表示整个集群',
-  `quota` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '配额，0表示使用默认值',
-  `usage` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '使用量',
-  `max_size` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '单个配置大小上限，单位为字节，0表示使用默认值',
-  `max_aggr_count` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '聚合子配置最大个数，，0表示使用默认值',
-  `max_aggr_size` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '单个聚合数据的子配置大小上限，单位为字节，0表示使用默认值',
-  `max_history_count` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最大变更历史数量',
-  `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_group_id` (`group_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='集群、各Group容量信息表';
+-- ----------------------------
+-- Table structure for config_tags_relation
+-- ----------------------------
+DROP TABLE IF EXISTS `config_tags_relation`;
+CREATE TABLE `config_tags_relation`  (
+                                         `id` bigint NOT NULL COMMENT 'id',
+                                         `tag_name` varchar(128) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL COMMENT 'tag_name',
+                                         `tag_type` varchar(64) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NULL DEFAULT NULL COMMENT 'tag_type',
+                                         `data_id` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL COMMENT 'data_id',
+                                         `group_id` varchar(128) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL COMMENT 'group_id',
+                                         `tenant_id` varchar(128) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NULL DEFAULT '' COMMENT 'tenant_id',
+                                         `nid` bigint NOT NULL AUTO_INCREMENT,
+                                         PRIMARY KEY (`nid`) USING BTREE,
+                                         UNIQUE INDEX `uk_configtagrelation_configidtag`(`id` ASC, `tag_name` ASC, `tag_type` ASC) USING BTREE,
+                                         INDEX `idx_tenant_id`(`tenant_id` ASC) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_bin COMMENT = 'config_tag_relation' ROW_FORMAT = Dynamic;
 
-/******************************************/
-/*   表名称 = his_config_info   */
-/******************************************/
-CREATE TABLE `his_config_info` (
-  `id` bigint(64) unsigned NOT NULL,
-  `nid` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `data_id` varchar(255) NOT NULL,
-  `group_id` varchar(128) NOT NULL,
-  `app_name` varchar(128) DEFAULT NULL COMMENT 'app_name',
-  `content` longtext NOT NULL,
-  `md5` varchar(32) DEFAULT NULL,
-  `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `src_user` text,
-  `src_ip` varchar(50) DEFAULT NULL,
-  `op_type` char(10) DEFAULT NULL,
-  `tenant_id` varchar(128) DEFAULT '' COMMENT '租户字段',
-  `encrypted_data_key` text COMMENT '秘钥',
-  PRIMARY KEY (`nid`),
-  KEY `idx_gmt_create` (`gmt_create`),
-  KEY `idx_gmt_modified` (`gmt_modified`),
-  KEY `idx_did` (`data_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='多租户改造';
+-- ----------------------------
+-- Records of config_tags_relation
+-- ----------------------------
 
+-- ----------------------------
+-- Table structure for group_capacity
+-- ----------------------------
+DROP TABLE IF EXISTS `group_capacity`;
+CREATE TABLE `group_capacity`  (
+                                   `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+                                   `group_id` varchar(128) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL DEFAULT '' COMMENT 'Group ID，空字符表示整个集群',
+                                   `quota` int UNSIGNED NOT NULL DEFAULT 0 COMMENT '配额，0表示使用默认值',
+                                   `usage` int UNSIGNED NOT NULL DEFAULT 0 COMMENT '使用量',
+                                   `max_size` int UNSIGNED NOT NULL DEFAULT 0 COMMENT '单个配置大小上限，单位为字节，0表示使用默认值',
+                                   `max_aggr_count` int UNSIGNED NOT NULL DEFAULT 0 COMMENT '聚合子配置最大个数，，0表示使用默认值',
+                                   `max_aggr_size` int UNSIGNED NOT NULL DEFAULT 0 COMMENT '单个聚合数据的子配置大小上限，单位为字节，0表示使用默认值',
+                                   `max_history_count` int UNSIGNED NOT NULL DEFAULT 0 COMMENT '最大变更历史数量',
+                                   `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                                   `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
+                                   PRIMARY KEY (`id`) USING BTREE,
+                                   UNIQUE INDEX `uk_group_id`(`group_id` ASC) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_bin COMMENT = '集群、各Group容量信息表' ROW_FORMAT = Dynamic;
 
-/******************************************/
-/*   数据库全名 = nacos_config   */
-/*   表名称 = tenant_capacity   */
-/******************************************/
-CREATE TABLE `tenant_capacity` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-  `tenant_id` varchar(128) NOT NULL DEFAULT '' COMMENT 'Tenant ID',
-  `quota` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '配额，0表示使用默认值',
-  `usage` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '使用量',
-  `max_size` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '单个配置大小上限，单位为字节，0表示使用默认值',
-  `max_aggr_count` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '聚合子配置最大个数',
-  `max_aggr_size` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '单个聚合数据的子配置大小上限，单位为字节，0表示使用默认值',
-  `max_history_count` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最大变更历史数量',
-  `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_tenant_id` (`tenant_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='租户容量信息表';
+-- ----------------------------
+-- Records of group_capacity
+-- ----------------------------
 
+-- ----------------------------
+-- Table structure for his_config_info
+-- ----------------------------
+DROP TABLE IF EXISTS `his_config_info`;
+CREATE TABLE `his_config_info`  (
+                                    `id` bigint UNSIGNED NOT NULL,
+                                    `nid` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+                                    `data_id` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+                                    `group_id` varchar(128) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+                                    `app_name` varchar(128) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NULL DEFAULT NULL COMMENT 'app_name',
+                                    `content` longtext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+                                    `md5` varchar(32) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NULL DEFAULT NULL,
+                                    `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                                    `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                                    `src_user` text CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NULL,
+                                    `src_ip` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NULL DEFAULT NULL,
+                                    `op_type` char(10) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NULL DEFAULT NULL,
+                                    `tenant_id` varchar(128) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NULL DEFAULT '' COMMENT '租户字段',
+                                    `encrypted_data_key` text CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NULL COMMENT '秘钥',
+                                    PRIMARY KEY (`nid`) USING BTREE,
+                                    INDEX `idx_gmt_create`(`gmt_create` ASC) USING BTREE,
+                                    INDEX `idx_gmt_modified`(`gmt_modified` ASC) USING BTREE,
+                                    INDEX `idx_did`(`data_id` ASC) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 21 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_bin COMMENT = '多租户改造' ROW_FORMAT = Dynamic;
 
-CREATE TABLE `tenant_info` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `kp` varchar(128) NOT NULL COMMENT 'kp',
-  `tenant_id` varchar(128) default '' COMMENT 'tenant_id',
-  `tenant_name` varchar(128) default '' COMMENT 'tenant_name',
-  `tenant_desc` varchar(256) DEFAULT NULL COMMENT 'tenant_desc',
-  `create_source` varchar(32) DEFAULT NULL COMMENT 'create_source',
-  `gmt_create` bigint(20) NOT NULL COMMENT '创建时间',
-  `gmt_modified` bigint(20) NOT NULL COMMENT '修改时间',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_tenant_info_kptenantid` (`kp`,`tenant_id`),
-  KEY `idx_tenant_id` (`tenant_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='tenant_info';
+-- ----------------------------
+-- Records of his_config_info
+-- ----------------------------
+INSERT INTO `his_config_info` VALUES (1, 1, 'application-common.yml', 'DEFAULT_GROUP', '', '# 将项目路径：config/下对应文件中内容复制到此处', '2944a25cb97926efcaa43b3ad7a64cf0', '2023-06-15 05:27:42', '2023-06-15 09:27:43', 'nacos', '10.0.0.123', 'U', 'dev', '');
+INSERT INTO `his_config_info` VALUES (2, 2, 'datasource.yml', 'DEFAULT_GROUP', '', '# 将项目路径：config/下对应文件中内容复制到此处', '2944a25cb97926efcaa43b3ad7a64cf0', '2023-06-15 05:29:43', '2023-06-15 09:29:44', 'nacos', '10.0.0.123', 'U', 'dev', '');
+INSERT INTO `his_config_info` VALUES (4, 3, 'ruoyi-auth.yml', 'DEFAULT_GROUP', '', '# 将项目路径：config/下对应文件中内容复制到此处', '2944a25cb97926efcaa43b3ad7a64cf0', '2023-06-15 05:30:03', '2023-06-15 09:30:04', 'nacos', '10.0.0.123', 'U', 'dev', '');
+INSERT INTO `his_config_info` VALUES (3, 4, 'ruoyi-gateway.yml', 'DEFAULT_GROUP', '', '# 将项目路径：config/下对应文件中内容复制到此处', '2944a25cb97926efcaa43b3ad7a64cf0', '2023-06-15 05:30:13', '2023-06-15 09:30:14', 'nacos', '10.0.0.123', 'U', 'dev', '');
+INSERT INTO `his_config_info` VALUES (3, 5, 'ruoyi-gateway.yml', 'DEFAULT_GROUP', '', '# 安全配置\nsecurity:\n  # 验证码\n  captcha:\n    # 是否开启验证码\n    enabled: true\n    # 验证码类型 math 数组计算 char 字符验证\n    type: MATH\n    # line 线段干扰 circle 圆圈干扰 shear 扭曲干扰\n    category: CIRCLE\n    # 数字验证码位数\n    numberLength: 1\n    # 字符验证码长度\n    charLength: 4\n  # 防止XSS攻击\n  xss:\n    enabled: true\n    excludeUrls:\n      - /system/notice\n  # 不校验白名单\n  ignore:\n    whites:\n      - /code\n      - /auth/logout\n      - /auth/login\n      - /auth/smsLogin\n      - /auth/xcxLogin\n      - /auth/register\n      - /auth/tenant/list\n      - /resource/sms/code\n      - /*/v3/api-docs\n      - /csrf\n\nspring:\n  cloud:\n    # 网关配置\n    gateway:\n      # 打印请求日志(自定义)\n      requestLog: true\n      discovery:\n        locator:\n          lowerCaseServiceId: true\n          enabled: true\n      routes:\n        # 认证中心\n        - id: ruoyi-auth\n          uri: lb://ruoyi-auth\n          predicates:\n            - Path=/auth/**\n          filters:\n            # 验证码处理\n            - ValidateCodeFilter\n            - StripPrefix=1\n        # 代码生成\n        - id: ruoyi-gen\n          uri: lb://ruoyi-gen\n          predicates:\n            - Path=/tool/**\n          filters:\n            - StripPrefix=1\n        # 系统模块\n        - id: ruoyi-system\n          uri: lb://ruoyi-system\n          predicates:\n            - Path=/system/**,/monitor/**\n          filters:\n            - StripPrefix=1\n        # 资源服务\n        - id: ruoyi-resource\n          uri: lb://ruoyi-resource\n          predicates:\n            - Path=/resource/**\n          filters:\n            - StripPrefix=1\n        # 演示服务\n        - id: ruoyi-demo\n          uri: lb://ruoyi-demo\n          predicates:\n            - Path=/demo/**\n          filters:\n            - StripPrefix=1\n        # MQ演示服务\n        - id: ruoyi-stream-mq\n          uri: lb://ruoyi-stream-mq\n          predicates:\n            - Path=/stream-mq/**\n          filters:\n            - StripPrefix=1\n\n    # sentinel 配置\n    sentinel:\n      filter:\n        enabled: false\n      # nacos配置持久化\n      datasource:\n        ds1:\n          nacos:\n            server-addr: ${spring.cloud.nacos.server-addr}\n            dataId: sentinel-${spring.application.name}.json\n            groupId: ${spring.cloud.nacos.config.group}\n            namespace: ${spring.profiles.active}\n            data-type: json\n            rule-type: gw-flow\n', 'f42b68cffb819eda0f64722897984f2e', '2023-06-15 05:30:25', '2023-06-15 09:30:25', 'nacos', '10.0.0.123', 'U', 'dev', '');
+INSERT INTO `his_config_info` VALUES (7, 6, 'ruoyi-gen.yml', 'DEFAULT_GROUP', '', '# 将项目路径：config/下对应文件中内容复制到此处', '2944a25cb97926efcaa43b3ad7a64cf0', '2023-06-15 05:30:32', '2023-06-15 09:30:33', 'nacos', '10.0.0.123', 'U', 'dev', '');
+INSERT INTO `his_config_info` VALUES (8, 7, 'ruoyi-job.yml', 'DEFAULT_GROUP', '', '# 将项目路径：config/下对应文件中内容复制到此处', '2944a25cb97926efcaa43b3ad7a64cf0', '2023-06-15 05:30:45', '2023-06-15 09:30:45', 'nacos', '10.0.0.123', 'U', 'dev', '');
+INSERT INTO `his_config_info` VALUES (8, 8, 'ruoyi-job.yml', 'DEFAULT_GROUP', '', 'spring:\n  datasource:\n    dynamic:\n      # 设置默认的数据源或者数据源组,默认值即为 master\n      primary: master\n      datasource:\n        # 主库数据源\n        master:\n          type: ${spring.datasource.type}\n          driver-class-name: com.mysql.cj.jdbc.Driver\n          url: ${datasource.job.url}\n          username: ${datasource.job.username}\n          password: ${datasource.job.password}\n\nxxl:\n  job:\n    # 执行器开关\n    enabled: true\n    # 调度中心地址：如调度中心集群部署存在多个地址则用逗号分隔。\n    # admin-addresses: http://localhost:9900\n    # 调度中心应用名 通过服务名连接调度中心(启用admin-appname会导致admin-addresses不生效)\n    admin-appname: ruoyi-xxl-job-admin\n    # 执行器通讯TOKEN：非空时启用\n    access-token: xxl-job\n    # 执行器配置\n    executor:\n      # 执行器AppName：执行器心跳注册分组依据；为空则关闭自动注册\n      appname: ${spring.application.name}-executor\n      # 执行器端口号 执行器从19901开始往后写\n      port: 9901\n      # 执行器注册：默认IP:PORT\n      address:\n      # 执行器IP：默认自动获取IP\n      ip:\n      # 执行器运行日志文件存储磁盘路径\n      logpath: ./logs/${spring.application.name}/xxl-job\n      # 执行器日志文件保存天数：大于3生效\n      logretentiondays: 30\n', '74e408b43f0165a135667e42a0130761', '2023-06-15 05:30:55', '2023-06-15 09:30:55', 'nacos', '10.0.0.123', 'U', 'dev', '');
+INSERT INTO `his_config_info` VALUES (8, 9, 'ruoyi-job.yml', 'DEFAULT_GROUP', '', 'spring:\n  datasource:\n    dynamic:\n      # 设置默认的数据源或者数据源组,默认值即为 master\n      primary: master\n      datasource:\n        # 主库数据源\n        master:\n          type: ${spring.datasource.type}\n          driver-class-name: com.mysql.cj.jdbc.Driver\n          url: ${datasource.job.url}\n          username: ${datasource.job.username}\n          password: ${datasource.job.password}\n\nxxl:\n  job:\n    # 执行器开关\n    enabled: false\n    # 调度中心地址：如调度中心集群部署存在多个地址则用逗号分隔。\n    # admin-addresses: http://localhost:9900\n    # 调度中心应用名 通过服务名连接调度中心(启用admin-appname会导致admin-addresses不生效)\n    admin-appname: ruoyi-xxl-job-admin\n    # 执行器通讯TOKEN：非空时启用\n    access-token: xxl-job\n    # 执行器配置\n    executor:\n      # 执行器AppName：执行器心跳注册分组依据；为空则关闭自动注册\n      appname: ${spring.application.name}-executor\n      # 执行器端口号 执行器从19901开始往后写\n      port: 9901\n      # 执行器注册：默认IP:PORT\n      address:\n      # 执行器IP：默认自动获取IP\n      ip:\n      # 执行器运行日志文件存储磁盘路径\n      logpath: ./logs/${spring.application.name}/xxl-job\n      # 执行器日志文件保存天数：大于3生效\n      logretentiondays: 30\n', '0672fa69ddf4fff9f850e5994c9aa43a', '2023-06-15 05:31:02', '2023-06-15 09:31:03', 'nacos', '10.0.0.123', 'U', 'dev', '');
+INSERT INTO `his_config_info` VALUES (5, 10, 'ruoyi-monitor.yml', 'DEFAULT_GROUP', '', '# 将项目路径：config/下对应文件中内容复制到此处', '2944a25cb97926efcaa43b3ad7a64cf0', '2023-06-15 05:31:16', '2023-06-15 09:31:17', 'nacos', '10.0.0.123', 'U', 'dev', '');
+INSERT INTO `his_config_info` VALUES (9, 11, 'ruoyi-resource.yml', 'DEFAULT_GROUP', '', '# 将项目路径：config/下对应文件中内容复制到此处', '2944a25cb97926efcaa43b3ad7a64cf0', '2023-06-15 05:31:32', '2023-06-15 09:31:32', 'nacos', '10.0.0.123', 'U', 'dev', '');
+INSERT INTO `his_config_info` VALUES (10, 12, 'sentinel-ruoyi-gateway.json', 'DEFAULT_GROUP', '', '# 将项目路径：config/下对应文件中内容复制到此处', '2944a25cb97926efcaa43b3ad7a64cf0', '2023-06-15 05:31:48', '2023-06-15 09:31:48', 'nacos', '10.0.0.123', 'U', 'dev', '');
+INSERT INTO `his_config_info` VALUES (11, 13, 'ruoyi-xxl-job-admin.yml', 'DEFAULT_GROUP', '', '# 将项目路径：config/下对应文件中内容复制到此处', '2944a25cb97926efcaa43b3ad7a64cf0', '2023-06-15 05:32:01', '2023-06-15 09:32:01', 'nacos', '10.0.0.123', 'U', 'dev', '');
+INSERT INTO `his_config_info` VALUES (12, 14, 'seata-server.properties', 'DEFAULT_GROUP', '', '# 将项目路径：config/下对应文件中内容复制到此处', '2944a25cb97926efcaa43b3ad7a64cf0', '2023-06-15 05:32:21', '2023-06-15 09:32:21', 'nacos', '10.0.0.123', 'U', 'dev', '');
+INSERT INTO `his_config_info` VALUES (13, 15, 'ruoyi-sentinel-dashboard.yml', 'DEFAULT_GROUP', '', '# 将项目路径：config/下对应文件中内容复制到此处', '2944a25cb97926efcaa43b3ad7a64cf0', '2023-06-15 05:32:37', '2023-06-15 09:32:38', 'nacos', '10.0.0.123', 'U', 'dev', '');
+INSERT INTO `his_config_info` VALUES (0, 16, 'ruoyi-manager.yml', 'DEFAULT_GROUP', '', '# 将项目路径：config/下对应文件中内容复制到此处', '2944a25cb97926efcaa43b3ad7a64cf0', '2023-06-15 05:32:55', '2023-06-15 09:32:56', NULL, '10.0.0.123', 'I', 'dev', '');
+INSERT INTO `his_config_info` VALUES (0, 17, 'ruoyi-data.yml', 'DEFAULT_GROUP', '', '# 将项目路径：config/下对应文件中内容复制到此处', '2944a25cb97926efcaa43b3ad7a64cf0', '2023-06-15 05:33:19', '2023-06-15 09:33:19', NULL, '10.0.0.123', 'I', 'dev', '');
+INSERT INTO `his_config_info` VALUES (0, 18, 'ruoyi-rule-engine.yml', 'DEFAULT_GROUP', '', '# 将项目路径：config/下对应文件中内容复制到此处', '2944a25cb97926efcaa43b3ad7a64cf0', '2023-06-15 05:33:42', '2023-06-15 09:33:42', NULL, '10.0.0.123', 'I', 'dev', '');
+INSERT INTO `his_config_info` VALUES (1, 19, 'application-common.yml', 'DEFAULT_GROUP', '', 'server:\n  # undertow 配置\n  undertow:\n    # HTTP post内容的最大大小。当值为-1时，默认值为大小是无限的\n    max-http-post-size: -1\n    # 以下的配置会影响buffer,这些buffer会用于服务器连接的IO操作,有点类似netty的池化内存管理\n    # 每块buffer的空间大小,越小的空间被利用越充分\n    buffer-size: 512\n    # 是否分配的直接内存\n    direct-buffers: true\n    threads:\n      # 设置IO线程数, 它主要执行非阻塞的任务,它们会负责多个连接, 默认设置每个CPU核心一个线程\n      io: 8\n      # 阻塞任务线程池, 当执行类似servlet请求阻塞操作, undertow会从这个线程池中取得线程,它的值设置取决于系统的负载\n      worker: 256\n\ndubbo:\n  application:\n    # 关闭qos端口避免单机多生产者端口冲突 如需使用自行开启\n    qos-enable: false\n  protocol:\n    # 如需使用 Triple 3.0 新协议 可查看官方文档\n    # 使用 dubbo 协议通信\n    name: dubbo\n    # dubbo 协议端口(-1表示自增端口,从20880开始)\n    port: -1\n    # 指定dubbo协议注册ip\n    # host: 192.168.0.100\n  # 消费者相关配置\n  consumer:\n    # 超时时间\n    timeout: 3000\n  scan:\n    # 接口实现类扫描\n    base-packages: org.dromara.**.dubbo\n  # 自定义配置\n  custom:\n    # 全局请求log\n    request-log: true\n    # info 基础信息 param 参数信息 full 全部\n    log-level: info\n\nspring:\n  # 资源信息\n  messages:\n    # 国际化资源文件路径\n    basename: i18n/messages\n  servlet:\n    multipart:\n      # 整个请求大小限制\n      max-request-size: 20MB\n      # 上传单个文件大小限制\n      max-file-size: 10MB\n  mvc:\n    format:\n      date-time: yyyy-MM-dd HH:mm:ss\n  #jackson配置\n  jackson:\n    # 日期格式化\n    date-format: yyyy-MM-dd HH:mm:ss\n    serialization:\n      # 格式化输出\n      INDENT_OUTPUT: false\n      # 忽略无法转换的对象\n      fail_on_empty_beans: false\n    deserialization:\n      # 允许对象忽略json中不存在的属性\n      fail_on_unknown_properties: false\n  cloud:\n    # sentinel 配置\n    sentinel:\n      # sentinel 开关\n      enabled: true\n      # 取消控制台懒加载\n      eager: true\n      transport:\n        # dashboard控制台服务名 用于服务发现\n        # 如无此配置将默认使用下方 dashboard 配置直接注册\n        server-name: ruoyi-sentinel-dashboard\n        # 客户端指定注册的ip 用于多网卡ip不稳点使用\n        # client-ip:\n        # 控制台地址 从1.3.0开始使用 server-name 注册\n        # dashboard: localhost:8718\n\n  # redis通用配置 子服务可以自行配置进行覆盖\n  data:\n    redis:\n      host: localhost\n      port: 6379\n      # 密码(如没有密码请注释掉)\n      # password:\n      database: 0\n      timeout: 10s\n      ssl: false\n\n# redisson 配置\nredisson:\n  # redis key前缀\n  keyPrefix:\n  # 线程池数量\n  threads: 4\n  # Netty线程池数量\n  nettyThreads: 8\n  # 单节点配置\n  singleServerConfig:\n    # 客户端名称\n    clientName: ${spring.application.name}\n    # 最小空闲连接数\n    connectionMinimumIdleSize: 8\n    # 连接池大小\n    connectionPoolSize: 32\n    # 连接空闲超时，单位：毫秒\n    idleConnectionTimeout: 10000\n    # 命令等待超时，单位：毫秒\n    timeout: 3000\n    # 发布和订阅连接池大小\n    subscriptionConnectionPoolSize: 50\n\n# 分布式锁 lock4j 全局配置\nlock4j:\n  # 获取分布式锁超时时间，默认为 3000 毫秒\n  acquire-timeout: 3000\n  # 分布式锁的超时时间，默认为 30 秒\n  expire: 30000\n\n# 暴露监控端点\nmanagement:\n  endpoints:\n    web:\n      exposure:\n        include: \'*\'\n  endpoint:\n    health:\n      show-details: ALWAYS\n    logfile:\n      external-file: ./logs/${spring.application.name}/console.log\n\n# 日志配置\nlogging:\n  level:\n    org.springframework: warn\n    org.apache.dubbo: warn\n    com.alibaba.nacos: warn\n  config: classpath:logback-plus.xml\n\n# Sa-Token配置\nsa-token:\n  # token名称 (同时也是cookie名称)\n  token-name: Authorization\n  # token固定超时 设为七天 (必定过期) 单位: 秒\n  timeout: 604800\n  # token活跃超时时间 30分钟(指定时间无操作则过期) 单位: 秒\n  activity-timeout: 1800\n  # 开启内网服务调用鉴权(不允许越过gateway访问内网服务 保障服务安全)\n  check-same-token: true\n  # 是否允许同一账号并发登录 (为true时允许一起登录, 为false时新登录挤掉旧登录)\n  is-concurrent: true\n  # 在多人登录同一账号时，是否共用一个token (为true时所有登录共用一个token, 为false时每次登录新建一个token)\n  is-share: false\n  # jwt秘钥\n  jwt-secret-key: abcdefghijklmnopqrstuvwxyz\n\n# MyBatisPlus配置\n# https://baomidou.com/config/\nmybatis-plus:\n  # 不支持多包, 如有需要可在注解配置 或 提升扫包等级\n  # 例如 com.**.**.mapper\n  mapperPackage: org.dromara.**.mapper\n  # 对应的 XML 文件位置\n  mapperLocations: classpath*:mapper/**/*Mapper.xml\n  # 实体扫描，多个package用逗号或者分号分隔\n  typeAliasesPackage: org.dromara.**.domain\n  global-config:\n    dbConfig:\n      # 主键类型\n      # AUTO 自增 NONE 空 INPUT 用户输入 ASSIGN_ID 雪花 ASSIGN_UUID 唯一 UUID\n      # 如需改为自增 需要将数据库表全部设置为自增\n      idType: ASSIGN_ID\n\n# 数据加密\nmybatis-encryptor:\n  # 是否开启加密\n  enable: false\n  # 默认加密算法\n  algorithm: BASE64\n  # 编码方式 BASE64/HEX。默认BASE64\n  encode: BASE64\n  # 安全秘钥 对称算法的秘钥 如：AES，SM4\n  password:\n  # 公私钥 非对称算法的公私钥 如：SM2，RSA\n  publicKey:\n  privateKey:\n\n# 接口文档配置\nspringdoc:\n  api-docs:\n    # 是否开启接口文档\n    enabled: true\n  swagger-ui:\n    # 持久化认证数据\n    persistAuthorization: true\n  info:\n    # 标题\n    title: \'标题：RuoYi-Cloud-Plus微服务权限管理系统_接口文档\'\n    # 描述\n    description: \'描述：微服务权限管理系统, 具体包括XXX,XXX模块...\'\n    # 版本\n    version: \'版本号：系统版本...\'\n    # 作者信息\n    contact:\n      name: Lion Li\n      email: crazylionli@163.com\n      url: https://gitee.com/dromara/RuoYi-Cloud-Plus\n  components:\n    # 鉴权方式配置\n    security-schemes:\n      apiKey:\n        type: APIKEY\n        in: HEADER\n        name: ${sa-token.token-name}\n\n# seata配置\nseata:\n  # 是否启用\n  enabled: false\n  # Seata 应用编号，默认为应用名\n  application-id: ${spring.application.name}\n  # Seata 事务组编号，用于 TC 集群名\n  tx-service-group: ${spring.application.name}-group\n\n# 多租户配置\ntenant:\n  # 是否开启\n  enable: false\n  # 排除表\n  excludes:\n    - sys_menu\n    - sys_tenant\n    - sys_tenant_package\n    - sys_role_dept\n    - sys_role_menu\n    - sys_user_post\n    - sys_user_role\n', 'fd7c72e7fd82a94bfa723bfaec7be99e', '2023-06-15 05:35:21', '2023-06-15 09:35:21', 'nacos', '10.0.0.123', 'U', 'dev', '');
+INSERT INTO `his_config_info` VALUES (1, 20, 'application-common.yml', 'DEFAULT_GROUP', '', 'server:\n  # undertow 配置\n  undertow:\n    # HTTP post内容的最大大小。当值为-1时，默认值为大小是无限的\n    max-http-post-size: -1\n    # 以下的配置会影响buffer,这些buffer会用于服务器连接的IO操作,有点类似netty的池化内存管理\n    # 每块buffer的空间大小,越小的空间被利用越充分\n    buffer-size: 512\n    # 是否分配的直接内存\n    direct-buffers: true\n    threads:\n      # 设置IO线程数, 它主要执行非阻塞的任务,它们会负责多个连接, 默认设置每个CPU核心一个线程\n      io: 8\n      # 阻塞任务线程池, 当执行类似servlet请求阻塞操作, undertow会从这个线程池中取得线程,它的值设置取决于系统的负载\n      worker: 256\n\ndubbo:\n  application:\n    # 关闭qos端口避免单机多生产者端口冲突 如需使用自行开启\n    qos-enable: false\n  protocol:\n    # 如需使用 Triple 3.0 新协议 可查看官方文档\n    # 使用 dubbo 协议通信\n    name: dubbo\n    # dubbo 协议端口(-1表示自增端口,从20880开始)\n    port: -1\n    # 指定dubbo协议注册ip\n    # host: 192.168.0.100\n  # 消费者相关配置\n  consumer:\n    # 超时时间\n    timeout: 3000\n  scan:\n    # 接口实现类扫描\n    base-packages: org.dromara.**.dubbo\n  # 自定义配置\n  custom:\n    # 全局请求log\n    request-log: true\n    # info 基础信息 param 参数信息 full 全部\n    log-level: info\n\nspring:\n  # 资源信息\n  messages:\n    # 国际化资源文件路径\n    basename: i18n/messages\n  servlet:\n    multipart:\n      # 整个请求大小限制\n      max-request-size: 20MB\n      # 上传单个文件大小限制\n      max-file-size: 10MB\n  mvc:\n    format:\n      date-time: yyyy-MM-dd HH:mm:ss\n  #jackson配置\n  jackson:\n    # 日期格式化\n    date-format: yyyy-MM-dd HH:mm:ss\n    serialization:\n      # 格式化输出\n      INDENT_OUTPUT: false\n      # 忽略无法转换的对象\n      fail_on_empty_beans: false\n    deserialization:\n      # 允许对象忽略json中不存在的属性\n      fail_on_unknown_properties: false\n  cloud:\n    # sentinel 配置\n    sentinel:\n      # sentinel 开关\n      enabled: true\n      # 取消控制台懒加载\n      eager: true\n      transport:\n        # dashboard控制台服务名 用于服务发现\n        # 如无此配置将默认使用下方 dashboard 配置直接注册\n        server-name: ruoyi-sentinel-dashboard\n        # 客户端指定注册的ip 用于多网卡ip不稳点使用\n        # client-ip:\n        # 控制台地址 从1.3.0开始使用 server-name 注册\n        # dashboard: localhost:8718\n\n  # redis通用配置 子服务可以自行配置进行覆盖\n  data:\n    redis:\n      host: localhost\n      port: 6379\n      # 密码(如没有密码请注释掉)\n      # password:\n      database: 0\n      timeout: 10s\n      ssl: false\n\n# emqx 配置\nmqtt:\n  config:\n    broker: tcp://localhost:1883\n    userName: admin\n    password: P@ssw0rd\n    cleanSession: false\n    reconnect: true\n    timeout: 1000\n    keepAlive: 60\n\n# redisson 配置\nredisson:\n  # redis key前缀\n  keyPrefix:\n  # 线程池数量\n  threads: 4\n  # Netty线程池数量\n  nettyThreads: 8\n  # 单节点配置\n  singleServerConfig:\n    # 客户端名称\n    clientName: ${spring.application.name}\n    # 最小空闲连接数\n    connectionMinimumIdleSize: 8\n    # 连接池大小\n    connectionPoolSize: 32\n    # 连接空闲超时，单位：毫秒\n    idleConnectionTimeout: 10000\n    # 命令等待超时，单位：毫秒\n    timeout: 3000\n    # 发布和订阅连接池大小\n    subscriptionConnectionPoolSize: 50\n\n# 分布式锁 lock4j 全局配置\nlock4j:\n  # 获取分布式锁超时时间，默认为 3000 毫秒\n  acquire-timeout: 3000\n  # 分布式锁的超时时间，默认为 30 秒\n  expire: 30000\n\n# 暴露监控端点\nmanagement:\n  endpoints:\n    web:\n      exposure:\n        include: \'*\'\n  endpoint:\n    health:\n      show-details: ALWAYS\n    logfile:\n      external-file: ./logs/${spring.application.name}/console.log\n\n# 日志配置\nlogging:\n  level:\n    org.springframework: warn\n    org.apache.dubbo: warn\n    com.alibaba.nacos: warn\n  config: classpath:logback-plus.xml\n\n# Sa-Token配置\nsa-token:\n  # token名称 (同时也是cookie名称)\n  token-name: Authorization\n  # token固定超时 设为七天 (必定过期) 单位: 秒\n  timeout: 604800\n  # token活跃超时时间 30分钟(指定时间无操作则过期) 单位: 秒\n  activity-timeout: 1800\n  # 开启内网服务调用鉴权(不允许越过gateway访问内网服务 保障服务安全)\n  check-same-token: true\n  # 是否允许同一账号并发登录 (为true时允许一起登录, 为false时新登录挤掉旧登录)\n  is-concurrent: true\n  # 在多人登录同一账号时，是否共用一个token (为true时所有登录共用一个token, 为false时每次登录新建一个token)\n  is-share: false\n  # jwt秘钥\n  jwt-secret-key: abcdefghijklmnopqrstuvwxyz\n\n# MyBatisPlus配置\n# https://baomidou.com/config/\nmybatis-plus:\n  # 不支持多包, 如有需要可在注解配置 或 提升扫包等级\n  # 例如 com.**.**.mapper\n  mapperPackage: org.dromara.**.mapper\n  # 对应的 XML 文件位置\n  mapperLocations: classpath*:mapper/**/*Mapper.xml\n  # 实体扫描，多个package用逗号或者分号分隔\n  typeAliasesPackage: org.dromara.**.domain\n  global-config:\n    dbConfig:\n      # 主键类型\n      # AUTO 自增 NONE 空 INPUT 用户输入 ASSIGN_ID 雪花 ASSIGN_UUID 唯一 UUID\n      # 如需改为自增 需要将数据库表全部设置为自增\n      idType: ASSIGN_ID\n\n# 数据加密\nmybatis-encryptor:\n  # 是否开启加密\n  enable: false\n  # 默认加密算法\n  algorithm: BASE64\n  # 编码方式 BASE64/HEX。默认BASE64\n  encode: BASE64\n  # 安全秘钥 对称算法的秘钥 如：AES，SM4\n  password:\n  # 公私钥 非对称算法的公私钥 如：SM2，RSA\n  publicKey:\n  privateKey:\n\n# 接口文档配置\nspringdoc:\n  api-docs:\n    # 是否开启接口文档\n    enabled: true\n  swagger-ui:\n    # 持久化认证数据\n    persistAuthorization: true\n  info:\n    # 标题\n    title: \'标题：RuoYi-Cloud-Plus微服务权限管理系统_接口文档\'\n    # 描述\n    description: \'描述：微服务权限管理系统, 具体包括XXX,XXX模块...\'\n    # 版本\n    version: \'版本号：系统版本...\'\n    # 作者信息\n    contact:\n      name: Lion Li\n      email: crazylionli@163.com\n      url: https://gitee.com/dromara/RuoYi-Cloud-Plus\n  components:\n    # 鉴权方式配置\n    security-schemes:\n      apiKey:\n        type: APIKEY\n        in: HEADER\n        name: ${sa-token.token-name}\n\n# seata配置\nseata:\n  # 是否启用\n  enabled: false\n  # Seata 应用编号，默认为应用名\n  application-id: ${spring.application.name}\n  # Seata 事务组编号，用于 TC 集群名\n  tx-service-group: ${spring.application.name}-group\n\n# 多租户配置\ntenant:\n  # 是否开启\n  enable: false\n  # 排除表\n  excludes:\n    - sys_menu\n    - sys_tenant\n    - sys_tenant_package\n    - sys_role_dept\n    - sys_role_menu\n    - sys_user_post\n    - sys_user_role\n', 'f32c4f048aaa27421212fdfcc68a3c60', '2023-06-15 05:35:52', '2023-06-15 09:35:53', 'nacos', '10.0.0.123', 'U', 'dev', '');
 
-insert into tenant_info(id, kp, tenant_id, tenant_name, tenant_desc, create_source, gmt_create, gmt_modified) values
-(1, '1', 'dev', 'dev', '开发环境', NULL, 1641741261189, 1641741261189),
-(2, '1', 'prod', 'prod', '生产环境', NULL, 1641741270448, 1641741287236);
+-- ----------------------------
+-- Table structure for permissions
+-- ----------------------------
+DROP TABLE IF EXISTS `permissions`;
+CREATE TABLE `permissions`  (
+                                `role` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                                `resource` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                                `action` varchar(8) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                                UNIQUE INDEX `uk_role_permission`(`role` ASC, `resource` ASC, `action` ASC) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
-CREATE TABLE `users` (
-	`username` varchar(50) NOT NULL PRIMARY KEY,
-	`password` varchar(500) NOT NULL,
-	`enabled` boolean NOT NULL
-);
+-- ----------------------------
+-- Records of permissions
+-- ----------------------------
 
-CREATE TABLE `roles` (
-	`username` varchar(50) NOT NULL,
-	`role` varchar(50) NOT NULL,
-	UNIQUE INDEX `idx_user_role` (`username` ASC, `role` ASC) USING BTREE
-);
+-- ----------------------------
+-- Table structure for roles
+-- ----------------------------
+DROP TABLE IF EXISTS `roles`;
+CREATE TABLE `roles`  (
+                          `username` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                          `role` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                          UNIQUE INDEX `idx_user_role`(`username` ASC, `role` ASC) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
-CREATE TABLE `permissions` (
-    `role` varchar(50) NOT NULL,
-    `resource` varchar(255) NOT NULL,
-    `action` varchar(8) NOT NULL,
-    UNIQUE INDEX `uk_role_permission` (`role`,`resource`,`action`) USING BTREE
-);
+-- ----------------------------
+-- Records of roles
+-- ----------------------------
+INSERT INTO `roles` VALUES ('nacos', 'ROLE_ADMIN');
 
-INSERT INTO users (username, password, enabled) VALUES ('nacos', '$2a$10$EuWPZHzz32dJN7jexM34MOeYirDdFAZm2kuWj7VEOJhhZkDrxfvUu', TRUE);
+-- ----------------------------
+-- Table structure for tenant_capacity
+-- ----------------------------
+DROP TABLE IF EXISTS `tenant_capacity`;
+CREATE TABLE `tenant_capacity`  (
+                                    `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+                                    `tenant_id` varchar(128) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL DEFAULT '' COMMENT 'Tenant ID',
+                                    `quota` int UNSIGNED NOT NULL DEFAULT 0 COMMENT '配额，0表示使用默认值',
+                                    `usage` int UNSIGNED NOT NULL DEFAULT 0 COMMENT '使用量',
+                                    `max_size` int UNSIGNED NOT NULL DEFAULT 0 COMMENT '单个配置大小上限，单位为字节，0表示使用默认值',
+                                    `max_aggr_count` int UNSIGNED NOT NULL DEFAULT 0 COMMENT '聚合子配置最大个数',
+                                    `max_aggr_size` int UNSIGNED NOT NULL DEFAULT 0 COMMENT '单个聚合数据的子配置大小上限，单位为字节，0表示使用默认值',
+                                    `max_history_count` int UNSIGNED NOT NULL DEFAULT 0 COMMENT '最大变更历史数量',
+                                    `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                                    `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
+                                    PRIMARY KEY (`id`) USING BTREE,
+                                    UNIQUE INDEX `uk_tenant_id`(`tenant_id` ASC) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_bin COMMENT = '租户容量信息表' ROW_FORMAT = Dynamic;
 
-INSERT INTO roles (username, role) VALUES ('nacos', 'ROLE_ADMIN');
+-- ----------------------------
+-- Records of tenant_capacity
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for tenant_info
+-- ----------------------------
+DROP TABLE IF EXISTS `tenant_info`;
+CREATE TABLE `tenant_info`  (
+                                `id` bigint NOT NULL AUTO_INCREMENT COMMENT 'id',
+                                `kp` varchar(128) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL COMMENT 'kp',
+                                `tenant_id` varchar(128) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NULL DEFAULT '' COMMENT 'tenant_id',
+                                `tenant_name` varchar(128) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NULL DEFAULT '' COMMENT 'tenant_name',
+                                `tenant_desc` varchar(256) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NULL DEFAULT NULL COMMENT 'tenant_desc',
+                                `create_source` varchar(32) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NULL DEFAULT NULL COMMENT 'create_source',
+                                `gmt_create` bigint NOT NULL COMMENT '创建时间',
+                                `gmt_modified` bigint NOT NULL COMMENT '修改时间',
+                                PRIMARY KEY (`id`) USING BTREE,
+                                UNIQUE INDEX `uk_tenant_info_kptenantid`(`kp` ASC, `tenant_id` ASC) USING BTREE,
+                                INDEX `idx_tenant_id`(`tenant_id` ASC) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_bin COMMENT = 'tenant_info' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of tenant_info
+-- ----------------------------
+INSERT INTO `tenant_info` VALUES (1, '1', 'dev', 'dev', '开发环境', NULL, 1641741261189, 1641741261189);
+INSERT INTO `tenant_info` VALUES (2, '1', 'prod', 'prod', '生产环境', NULL, 1641741270448, 1641741287236);
+
+-- ----------------------------
+-- Table structure for users
+-- ----------------------------
+DROP TABLE IF EXISTS `users`;
+CREATE TABLE `users`  (
+                          `username` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                          `password` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+                          `enabled` tinyint(1) NOT NULL,
+                          PRIMARY KEY (`username`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of users
+-- ----------------------------
+INSERT INTO `users` VALUES ('nacos', '$2a$10$EuWPZHzz32dJN7jexM34MOeYirDdFAZm2kuWj7VEOJhhZkDrxfvUu', 1);
+
+SET FOREIGN_KEY_CHECKS = 1;
