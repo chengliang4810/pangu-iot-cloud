@@ -1,9 +1,8 @@
 import axios from 'axios'
-import { Loading, Message } from 'element-ui'
-import { saveAs } from 'file-saver'
-import { getToken } from '@/utils/auth'
+import {Loading, Message} from 'element-ui'
+import {saveAs} from 'file-saver'
+import {blobValidate, getToken} from '@/utils/ruoyi'
 import errorCode from '@/utils/errorCode'
-import { blobValidate } from "@/utils/pangu";
 
 const baseURL = process.env.VUE_APP_BASE_API
 let downloadLoadingInstance;

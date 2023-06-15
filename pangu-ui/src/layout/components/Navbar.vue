@@ -47,15 +47,15 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import {mapGetters} from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
 import TopNav from '@/components/TopNav'
 import Hamburger from '@/components/Hamburger'
 import Screenfull from '@/components/Screenfull'
 import SizeSelect from '@/components/SizeSelect'
 import Search from '@/components/HeaderSearch'
-import PanGuGit from '@/components/PanGu/Git'
-import PanGuDoc from '@/components/PanGu/Doc'
+import PanGuGit from '@/components/RuoYi/Git'
+import PanGuDoc from '@/components/RuoYi/Doc'
 
 export default {
   components: {
