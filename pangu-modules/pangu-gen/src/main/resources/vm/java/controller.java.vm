@@ -34,8 +34,8 @@ import javax.servlet.http.HttpServletResponse;
  * @date ${datetime}
  */
 @Validated
-@RequiredArgsConstructor
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/${businessName}")
 public class ${ClassName}Controller extends BaseController {
 

@@ -11,8 +11,7 @@ import com.pangu.common.core.annotation.Excel;
  * @author ${author}
  * @date ${datetime}
  */
-public class ${subClassName} extends BaseEntity
-{
+public class ${subClassName} extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
 #foreach ($column in $subTable.columns)
