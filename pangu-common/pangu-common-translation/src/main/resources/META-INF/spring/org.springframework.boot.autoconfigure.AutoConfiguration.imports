@@ -1,0 +1,5 @@
+com.pangu.common.translation.config.TranslationConfig
+com.pangu.common.translation.core.impl.DeptNameTranslationImpl
+com.pangu.common.translation.core.impl.DictTypeTranslationImpl
+com.pangu.common.translation.core.impl.OssUrlTranslationImpl
+com.pangu.common.translation.core.impl.UserNameTranslationImpl

@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.pangu</groupId>
+    <artifactId>pangu-common-bom</artifactId>
+    <version>1.0.0</version>
+    <packaging>pom</packaging>
+
+    <description>
+        pangu-common-bom common依赖项
+    </description>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- 核心模块 -->
+            <dependency>
+                <groupId>com.pangu</groupId>
+                <artifactId>pangu-common-core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <!-- 接口模块 -->
+            <dependency>
+                <groupId>com.pangu</groupId>
+                <artifactId>pangu-common-doc</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <!-- 安全模块 -->
+            <dependency>
+                <groupId>com.pangu</groupId>
+                <artifactId>pangu-common-security</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.pangu</groupId>
+                <artifactId>pangu-common-satoken</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <!-- 日志记录 -->
+            <dependency>
+                <groupId>com.pangu</groupId>
+                <artifactId>pangu-common-log</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <!-- 字典 -->
+            <dependency>
+                <groupId>com.pangu</groupId>
+                <artifactId>pangu-common-dict</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <!-- excel -->
+            <dependency>
+                <groupId>com.pangu</groupId>
+                <artifactId>pangu-common-excel</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <!-- 缓存服务 -->
+            <dependency>
+                <groupId>com.pangu</groupId>
+                <artifactId>pangu-common-redis</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <!-- web服务 -->
+            <dependency>
+                <groupId>com.pangu</groupId>
+                <artifactId>pangu-common-web</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <!-- 数据库服务 -->
+            <dependency>
+                <groupId>com.pangu</groupId>
+                <artifactId>pangu-common-mybatis</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.pangu</groupId>
+                <artifactId>pangu-common-job</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.pangu</groupId>
+                <artifactId>pangu-common-dubbo</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.pangu</groupId>
+                <artifactId>pangu-common-seata</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.pangu</groupId>
+                <artifactId>pangu-common-loadbalancer</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.pangu</groupId>
+                <artifactId>pangu-common-oss</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.pangu</groupId>
+                <artifactId>pangu-common-idempotent</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.pangu</groupId>
+                <artifactId>pangu-common-mail</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.pangu</groupId>
+                <artifactId>pangu-common-sms</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.pangu</groupId>
+                <artifactId>pangu-common-logstash</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.pangu</groupId>
+                <artifactId>pangu-common-elasticsearch</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.pangu</groupId>
+                <artifactId>pangu-common-sentinel</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.pangu</groupId>
+                <artifactId>pangu-common-skylog</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.pangu</groupId>
+                <artifactId>pangu-common-prometheus</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.pangu</groupId>
+                <artifactId>pangu-common-translation</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.pangu</groupId>
+                <artifactId>pangu-common-encrypt</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
+</project>

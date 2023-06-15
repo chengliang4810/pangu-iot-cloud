@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>com.pangu</groupId>
+        <artifactId>pangu-modules</artifactId>
+        <version>1.0.0</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>pangu-system</artifactId>
+
+    <description>
+        pangu-system系统模块
+    </description>
+
+    <dependencies>
+
+        <!-- SpringCloud Alibaba Nacos -->
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+        </dependency>
+
+        <!-- SpringCloud Alibaba Nacos Config -->
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.pangu</groupId>
+            <artifactId>pangu-common-sentinel</artifactId>
+        </dependency>
+
+        <!-- RuoYi Common Log -->
+        <dependency>
+            <groupId>com.pangu</groupId>
+            <artifactId>pangu-common-log</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.pangu</groupId>
+            <artifactId>pangu-common-dict</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.pangu</groupId>
+            <artifactId>pangu-common-doc</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.pangu</groupId>
+            <artifactId>pangu-common-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.pangu</groupId>
+            <artifactId>pangu-common-mybatis</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.pangu</groupId>
+            <artifactId>pangu-common-dubbo</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.pangu</groupId>
+            <artifactId>pangu-common-seata</artifactId>
+        </dependency>
+
+        <!-- RuoYi Api System -->
+        <dependency>
+            <groupId>com.pangu</groupId>
+            <artifactId>pangu-api-system</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.pangu</groupId>
+            <artifactId>pangu-api-resource</artifactId>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <finalName>${project.artifactId}</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${spring-boot.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

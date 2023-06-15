@@ -1,5 +1,0 @@
-com.ruoyi.common.translation.config.TranslationConfig
-com.ruoyi.common.translation.core.impl.DeptNameTranslationImpl
-com.ruoyi.common.translation.core.impl.DictTypeTranslationImpl
-com.ruoyi.common.translation.core.impl.OssUrlTranslationImpl
-com.ruoyi.common.translation.core.impl.UserNameTranslationImpl

@@ -24,7 +24,7 @@ body:
     attributes:
       label: 这个问题是否已经存在？
       options:
-        - label: 我已经搜索过现有的问题 (https://gitee.com/dromara/RuoYi-Cloud-Plus/issues)
+        - label: 我已经搜索过现有的问题 (https://gitee.com/dromara/pangu-cloud-plus/issues)
           required: true
   - type: textarea
     attributes:

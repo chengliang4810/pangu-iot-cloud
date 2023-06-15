@@ -15,7 +15,7 @@
 
 > 此报错都涉及到那些系统模块
 
-例如 ruoyi-system ruoyi-auth 等等
+例如 pangu-system pangu-auth 等等
 
 ### 问题描述
 
