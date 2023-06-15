@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * XSS跨站脚本配置
  *
- * @author pangu
+ * @author ruoyi
  */
 @Data
 @Configuration

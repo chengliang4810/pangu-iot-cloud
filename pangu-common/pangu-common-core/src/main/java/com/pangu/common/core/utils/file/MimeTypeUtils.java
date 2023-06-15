@@ -3,7 +3,7 @@ package com.pangu.common.core.utils.file;
 /**
  * 媒体类型工具类
  *
- * @author pangu
+ * @author ruoyi
  */
 public class MimeTypeUtils {
     public static final String IMAGE_PNG = "image/png";

@@ -1,23 +1,23 @@
-package com.pangu.gateway;
+package com.pangu.auth;
 
+import org.apache.dubbo.config.spring.context.annotation.EnableDubbo;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.context.metrics.buffering.BufferingApplicationStartup;
 
 /**
- * 网关启动程序
+ * 认证授权中心
  *
- * @author pangu
+ * @author ruoyi
  */
+@EnableDubbo
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
-public class RuoYiGatewayApplication {
+public class PanGuAuthApplication {
     public static void main(String[] args) {
-        // 标记 sentinel 类型为 网关
-        System.setProperty("csp.sentinel.app.type", "1");
-        SpringApplication application = new SpringApplication(RuoYiGatewayApplication.class);
+        SpringApplication application = new SpringApplication(PanGuAuthApplication.class);
         application.setApplicationStartup(new BufferingApplicationStartup(2048));
         application.run(args);
-        System.out.println("(♥◠‿◠)ﾉﾞ  网关启动成功   ლ(´ڡ`ლ)ﾞ  ");
+        System.out.println("(♥◠‿◠)ﾉﾞ  认证授权中心启动成功   ლ(´ڡ`ლ)ﾞ  ");
     }
 }

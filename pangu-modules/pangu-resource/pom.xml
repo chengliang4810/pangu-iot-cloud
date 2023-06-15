@@ -90,7 +90,7 @@
             <artifactId>pangu-common-mybatis</artifactId>
         </dependency>
 
-        <!-- RuoYi Api System -->
+        <!-- PanGu Api System -->
         <dependency>
             <groupId>com.pangu</groupId>
             <artifactId>pangu-api-system</artifactId>

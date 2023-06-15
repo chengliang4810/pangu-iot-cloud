@@ -7,13 +7,13 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 /**
  * 监控中心
  *
- * @author pangu
+ * @author ruoyi
  */
 @EnableAdminServer
 @SpringBootApplication
-public class RuoYiMonitorApplication {
+public class PanGuMonitorApplication {
     public static void main(String[] args) {
-        SpringApplication.run(RuoYiMonitorApplication.class, args);
+        SpringApplication.run(PanGuMonitorApplication.class, args);
         System.out.println("(♥◠‿◠)ﾉﾞ  监控中心启动成功   ლ(´ڡ`ლ)ﾞ  ");
     }
 }

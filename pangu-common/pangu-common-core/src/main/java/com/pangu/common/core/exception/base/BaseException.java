@@ -8,7 +8,7 @@ import lombok.Getter;
 /**
  * 基础异常
  *
- * @author pangu
+ * @author ruoyi
  */
 @Getter
 @AllArgsConstructor

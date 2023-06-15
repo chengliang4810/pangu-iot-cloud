@@ -39,7 +39,7 @@ import java.util.function.Supplier;
 /**
  * 登录校验方法
  *
- * @author pangu
+ * @author ruoyi
  */
 @Service
 public class SysLoginService {

@@ -8,13 +8,13 @@ import org.springframework.boot.context.metrics.buffering.BufferingApplicationSt
 /**
  * 代码生成
  *
- * @author pangu
+ * @author ruoyi
  */
 @EnableDubbo
 @SpringBootApplication
-public class RuoYiGenApplication {
+public class PanGuGenApplication {
     public static void main(String[] args) {
-        SpringApplication application = new SpringApplication(RuoYiGenApplication.class);
+        SpringApplication application = new SpringApplication(PanGuGenApplication.class);
         application.setApplicationStartup(new BufferingApplicationStartup(2048));
         application.run(args);
         System.out.println("(♥◠‿◠)ﾉﾞ  代码生成模块启动成功   ლ(´ڡ`ლ)ﾞ  ");

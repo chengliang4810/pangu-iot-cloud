@@ -95,7 +95,7 @@
             <artifactId>pangu-common-satoken</artifactId>
         </dependency>
 
-        <!-- RuoYi Common Redis-->
+        <!-- PanGu Common Redis-->
         <dependency>
             <groupId>com.pangu</groupId>
             <artifactId>pangu-common-redis</artifactId>

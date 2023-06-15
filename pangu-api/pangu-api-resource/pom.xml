@@ -17,7 +17,7 @@
 
     <dependencies>
 
-        <!-- RuoYi Common Core-->
+        <!-- PanGu Common Core-->
         <dependency>
             <groupId>com.pangu</groupId>
             <artifactId>pangu-common-core</artifactId>

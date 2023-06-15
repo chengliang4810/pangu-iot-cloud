@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 /**
  * 验证码过滤器
  *
- * @author pangu
+ * @author ruoyi
  */
 @Component
 public class ValidateCodeFilter extends AbstractGatewayFilterFactory<Object> {

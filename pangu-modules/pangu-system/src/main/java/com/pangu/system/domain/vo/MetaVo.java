@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 /**
  * 路由显示信息
  *
- * @author pangu
+ * @author ruoyi
  */
 @Data
 @NoArgsConstructor

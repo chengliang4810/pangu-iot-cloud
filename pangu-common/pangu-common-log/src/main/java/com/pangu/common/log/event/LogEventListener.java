@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 /**
  * 异步调用日志服务
  *
- * @author pangu
+ * @author ruoyi
  */
 @Component
 public class LogEventListener {

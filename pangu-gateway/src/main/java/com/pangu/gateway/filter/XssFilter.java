@@ -25,7 +25,7 @@ import java.nio.charset.StandardCharsets;
 /**
  * 跨站脚本过滤器
  *
- * @author pangu
+ * @author ruoyi
  */
 @Component
 @ConditionalOnProperty(value = "security.xss.enabled", havingValue = "true")

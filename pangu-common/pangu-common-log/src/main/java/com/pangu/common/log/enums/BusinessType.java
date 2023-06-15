@@ -3,7 +3,7 @@ package com.pangu.common.log.enums;
 /**
  * 业务操作类型
  *
- * @author pangu
+ * @author ruoyi
  */
 public enum BusinessType {
     /**

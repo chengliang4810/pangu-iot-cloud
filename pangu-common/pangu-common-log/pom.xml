@@ -17,7 +17,7 @@
 
     <dependencies>
 
-        <!-- RuoYi Common Security -->
+        <!-- PanGu Common Security -->
         <dependency>
             <groupId>com.pangu</groupId>
             <artifactId>pangu-common-security</artifactId>

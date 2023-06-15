@@ -3,7 +3,7 @@ package com.pangu.common.core.exception;
 /**
  * 业务异常
  *
- * @author pangu
+ * @author ruoyi
  */
 public final class ServiceException extends RuntimeException {
     private static final long serialVersionUID = 1L;

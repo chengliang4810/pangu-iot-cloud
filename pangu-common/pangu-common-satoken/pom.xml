@@ -40,13 +40,13 @@
             <artifactId>hutool-jwt</artifactId>
         </dependency>
 
-        <!-- RuoYi Api System -->
+        <!-- PanGu Api System -->
         <dependency>
             <groupId>com.pangu</groupId>
             <artifactId>pangu-api-system</artifactId>
         </dependency>
 
-        <!-- RuoYi Common Redis-->
+        <!-- PanGu Common Redis-->
         <dependency>
             <groupId>com.pangu</groupId>
             <artifactId>pangu-common-redis</artifactId>

@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * 岗位信息 服务层
  *
- * @author pangu
+ * @author ruoyi
  */
 public interface ISysPostService {
 

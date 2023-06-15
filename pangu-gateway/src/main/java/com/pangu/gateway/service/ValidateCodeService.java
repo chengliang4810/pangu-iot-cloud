@@ -9,7 +9,7 @@ import java.util.Map;
 /**
  * 验证码处理
  *
- * @author pangu
+ * @author ruoyi
  */
 public interface ValidateCodeService {
     /**

@@ -34,7 +34,7 @@
             <artifactId>pangu-common-sentinel</artifactId>
         </dependency>
 
-        <!-- RuoYi Common Log -->
+        <!-- PanGu Common Log -->
         <dependency>
             <groupId>com.pangu</groupId>
             <artifactId>pangu-common-log</artifactId>
@@ -70,7 +70,7 @@
             <artifactId>pangu-common-seata</artifactId>
         </dependency>
 
-        <!-- RuoYi Api System -->
+        <!-- PanGu Api System -->
         <dependency>
             <groupId>com.pangu</groupId>
             <artifactId>pangu-api-system</artifactId>

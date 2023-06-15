@@ -3,7 +3,7 @@ package com.pangu.common.core.exception;
 /**
  * 全局异常
  *
- * @author pangu
+ * @author ruoyi
  */
 public class GlobalException extends RuntimeException {
 

@@ -3,7 +3,7 @@ package com.pangu.common.core.exception;
 /**
  * 检查异常
  *
- * @author pangu
+ * @author ruoyi
  */
 public class CheckedException extends RuntimeException {
     private static final long serialVersionUID = 1L;

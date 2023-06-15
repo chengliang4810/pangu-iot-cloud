@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * 操作日志 服务层
  *
- * @author pangu
+ * @author ruoyi
  */
 public interface ISysOperLogService {
 

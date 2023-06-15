@@ -4,7 +4,7 @@
       <el-col :sm="24" :lg="12" style="padding-left: 20px">
         <h2>pangu-cloud-plus后台管理系统</h2>
         <p>
-          pangu-cloud-plus 微服务通用权限管理系统 重写 RuoYi-Cloud 全方位升级(不兼容原框架)
+          pangu-cloud-plus 微服务通用权限管理系统 重写 PanGu-Cloud 全方位升级(不兼容原框架)
           <br/>
           * 前端开发框架 Vue、Element UI<br/>
           * 后端开发框架 Spring Boot<br/>

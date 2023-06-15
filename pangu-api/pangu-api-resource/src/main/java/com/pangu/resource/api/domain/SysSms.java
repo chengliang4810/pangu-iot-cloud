@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * 文件信息
  *
- * @author pangu
+ * @author ruoyi
  */
 @Data
 public class SysSms implements Serializable {

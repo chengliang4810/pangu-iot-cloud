@@ -8,13 +8,13 @@ import org.springframework.boot.context.metrics.buffering.BufferingApplicationSt
 /**
  * 系统模块
  *
- * @author pangu
+ * @author ruoyi
  */
 @EnableDubbo
 @SpringBootApplication
-public class RuoYiSystemApplication {
+public class PanGuSystemApplication {
     public static void main(String[] args) {
-        SpringApplication application = new SpringApplication(RuoYiSystemApplication.class);
+        SpringApplication application = new SpringApplication(PanGuSystemApplication.class);
         application.setApplicationStartup(new BufferingApplicationStartup(2048));
         application.run(args);
         System.out.println("(♥◠‿◠)ﾉﾞ  系统模块启动成功   ლ(´ڡ`ლ)ﾞ  ");

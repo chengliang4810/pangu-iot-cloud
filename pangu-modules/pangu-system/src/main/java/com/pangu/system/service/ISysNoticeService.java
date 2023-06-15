@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * 公告 服务层
  *
- * @author pangu
+ * @author ruoyi
  */
 public interface ISysNoticeService {
     TableDataInfo<SysNotice> selectPageNoticeList(SysNotice notice, PageQuery pageQuery);

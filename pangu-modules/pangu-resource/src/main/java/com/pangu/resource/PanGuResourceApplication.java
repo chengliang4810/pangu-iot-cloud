@@ -13,9 +13,9 @@ import org.springframework.boot.context.metrics.buffering.BufferingApplicationSt
  */
 @EnableDubbo
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
-public class RuoYiResourceApplication {
+public class PanGuResourceApplication {
     public static void main(String[] args) {
-        SpringApplication application = new SpringApplication(RuoYiResourceApplication.class);
+        SpringApplication application = new SpringApplication(PanGuResourceApplication.class);
         application.setApplicationStartup(new BufferingApplicationStartup(2048));
         application.run(args);
         System.out.println("(♥◠‿◠)ﾉﾞ  资源服务模块启动成功   ლ(´ڡ`ლ)ﾞ  ");

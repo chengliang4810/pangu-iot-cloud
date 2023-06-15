@@ -3,7 +3,7 @@ package com.pangu.common.log.enums;
 /**
  * 操作人类别
  *
- * @author pangu
+ * @author ruoyi
  */
 public enum OperatorType {
     /**

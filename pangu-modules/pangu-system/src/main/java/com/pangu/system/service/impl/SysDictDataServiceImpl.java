@@ -20,7 +20,7 @@ import java.util.List;
 /**
  * 字典 业务层处理
  *
- * @author pangu
+ * @author ruoyi
  */
 @RequiredArgsConstructor
 @Service

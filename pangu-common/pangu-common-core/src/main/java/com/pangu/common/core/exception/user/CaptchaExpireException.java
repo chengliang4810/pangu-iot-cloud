@@ -3,7 +3,7 @@ package com.pangu.common.core.exception.user;
 /**
  * 验证码失效异常类
  *
- * @author pangu
+ * @author ruoyi
  */
 public class CaptchaExpireException extends UserException {
     private static final long serialVersionUID = 1L;

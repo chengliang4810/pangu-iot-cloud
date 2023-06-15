@@ -5,7 +5,7 @@ import com.pangu.common.core.exception.base.BaseException;
 /**
  * 文件信息异常类
  *
- * @author pangu
+ * @author ruoyi
  */
 public class FileException extends BaseException {
     private static final long serialVersionUID = 1L;

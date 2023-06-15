@@ -29,7 +29,7 @@ import java.util.Map;
 /**
  * 验证码实现处理
  *
- * @author pangu
+ * @author ruoyi
  */
 @Service
 public class ValidateCodeServiceImpl implements ValidateCodeService {

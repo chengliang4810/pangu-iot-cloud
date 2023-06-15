@@ -6,7 +6,7 @@ import lombok.Getter;
 /**
  * 用户状态
  *
- * @author pangu
+ * @author ruoyi
  */
 @Getter
 @AllArgsConstructor

@@ -3,7 +3,7 @@ package com.pangu.common.core.constant;
 /**
  * 用户常量信息
  *
- * @author pangu
+ * @author ruoyi
  */
 public interface UserConstants {
     /**

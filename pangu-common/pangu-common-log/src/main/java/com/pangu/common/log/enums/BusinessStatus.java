@@ -3,7 +3,7 @@ package com.pangu.common.log.enums;
 /**
  * 操作状态
  *
- * @author pangu
+ * @author ruoyi
  */
 public enum BusinessStatus {
     /**

@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * 字典 业务层
  *
- * @author pangu
+ * @author ruoyi
  */
 public interface ISysDictTypeService {
 

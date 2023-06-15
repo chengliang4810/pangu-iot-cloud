@@ -11,7 +11,7 @@ import java.util.Set;
 /**
  * 角色业务层
  *
- * @author pangu
+ * @author ruoyi
  */
 public interface ISysRoleService {
     TableDataInfo<SysRole> selectPageRoleList(SysRole role, PageQuery pageQuery);
