@@ -1,4 +1,4 @@
-package com.pangu.system;
+package com.pangu.manager;
 
 import org.apache.dubbo.config.spring.context.annotation.EnableDubbo;
 import org.springframework.boot.SpringApplication;
@@ -17,6 +17,6 @@ public class PanGuManagerApplication {
         SpringApplication application = new SpringApplication(PanGuManagerApplication.class);
         application.setApplicationStartup(new BufferingApplicationStartup(2048));
         application.run(args);
-        Manager.out.println("(♥◠‿◠)ﾉﾞ  IOT管理模块启动成功   ლ(´ڡ`ლ)ﾞ  ");
+        System.out.println("(♥◠‿◠)ﾉﾞ  IOT管理模块启动成功   ლ(´ڡ`ლ)ﾞ  ");
     }
 }

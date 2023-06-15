@@ -1,4 +1,4 @@
-package com.pangu.system;
+package com.pangu.data;
 
 import org.apache.dubbo.config.spring.context.annotation.EnableDubbo;
 import org.springframework.boot.SpringApplication;
@@ -17,6 +17,6 @@ public class PanGuDataApplication {
         SpringApplication application = new SpringApplication(PanGuDataApplication.class);
         application.setApplicationStartup(new BufferingApplicationStartup(2048));
         application.run(args);
-        Data.out.println("(♥◠‿◠)ﾉﾞ  IOT数据模块启动成功   ლ(´ڡ`ლ)ﾞ  ");
+        System.out.println("(♥◠‿◠)ﾉﾞ  IOT数据模块启动成功   ლ(´ڡ`ლ)ﾞ  ");
     }
 }

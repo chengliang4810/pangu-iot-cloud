@@ -4,7 +4,7 @@
     <parent>
         <groupId>com.pangu</groupId>
         <artifactId>pangu-iot-cloud</artifactId>
-        <version>1.0.0</version>
+        <version>2.0.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -26,10 +26,10 @@
 
     <dependencies>
         <!-- 自定义负载均衡(多团队开发使用) -->
-<!--        <dependency>-->
-<!--            <groupId>com.pangu</groupId>-->
-<!--            <artifactId>pangu-common-loadbalancer</artifactId>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>com.pangu</groupId>
+            <artifactId>pangu-common-loadbalancer</artifactId>
+        </dependency>
 
         <!-- ELK 日志收集 -->
 <!--        <dependency>-->
