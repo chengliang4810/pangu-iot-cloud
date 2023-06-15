@@ -13,6 +13,8 @@
         <module>pangu-gen</module>
         <module>pangu-job</module>
         <module>pangu-resource</module>
+        <module>pangu-manager</module>
+        <module>pangu-data</module>
     </modules>
 
     <artifactId>pangu-modules</artifactId>
