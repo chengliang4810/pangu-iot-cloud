@@ -12,7 +12,7 @@ import java.util.List;
  *
  * @author Lion Li
  */
-public interface SysDictDataMapper extends BaseMapperPlus<SysDictDataMapper, SysDictData, SysDictData> {
+public interface SysDictDataMapper extends BaseMapperPlus<SysDictData, SysDictData> {
 
     default List<SysDictData> selectDictDataByType(String dictType) {
         return selectList(

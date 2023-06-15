@@ -25,6 +25,7 @@ import ${import};
 
 @Data
 @EqualsAndHashCode(callSuper = true)
+@AutoMapper(target = ${ClassName}.class, reverseConvertGenerate = false)
 public class ${ClassName}Bo extends ${Entity} {
 
 #foreach ($column in $columns)

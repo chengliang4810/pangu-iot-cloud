@@ -14,7 +14,7 @@ import java.util.List;
  * @author Lion Li
  */
 @InterceptorIgnore(dataPermission = "true")
-public interface GenTableMapper extends BaseMapperPlus<GenTableMapper, GenTable, GenTable> {
+public interface GenTableMapper extends BaseMapperPlus<GenTable, GenTable> {
 
     Page<GenTable> selectPageDbTableList(@Param("page") Page<GenTable> page, @Param("genTable") GenTable genTable);
 

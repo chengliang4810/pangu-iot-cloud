@@ -9,7 +9,6 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.pangu.common.core.constant.CacheNames;
 import com.pangu.common.core.exception.ServiceException;
-import com.pangu.common.core.utils.BeanCopyUtils;
 import com.pangu.common.core.utils.SpringUtils;
 import com.pangu.common.core.utils.StringUtils;
 import com.pangu.common.core.utils.file.FileUtils;
@@ -25,6 +24,7 @@ import com.pangu.resource.domain.vo.SysOssVo;
 import com.pangu.resource.mapper.SysOssMapper;
 import com.pangu.resource.service.ISysOssService;
 import lombok.RequiredArgsConstructor;
+import org.dromara.common.core.utils.MapstructUtils;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -33,7 +33,10 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -137,8 +140,7 @@ public class SysOssServiceImpl implements ISysOssService {
         oss.setOriginalName(originalfileName);
         oss.setService(storage.getConfigKey());
         baseMapper.insert(oss);
-        SysOssVo sysOssVo = new SysOssVo();
-        BeanCopyUtils.copy(oss, sysOssVo);
+        SysOssVo sysOssVo = MapstructUtils.convert(oss, SysOssVo.class);
         return this.matchingUrl(sysOssVo);
     }
 

@@ -8,6 +8,6 @@ import com.pangu.system.api.domain.SysOperLog;
  *
  * @author Lion Li
  */
-public interface SysOperLogMapper extends BaseMapperPlus<SysOperLogMapper, SysOperLog, SysOperLog> {
+public interface SysOperLogMapper extends BaseMapperPlus<SysOperLog, SysOperLog> {
 
 }

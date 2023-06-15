@@ -3,6 +3,8 @@ package com.pangu.resource.domain.bo;
 import com.pangu.common.core.validate.AddGroup;
 import com.pangu.common.core.validate.EditGroup;
 import com.pangu.common.core.web.domain.BaseEntity;
+import com.pangu.resource.domain.SysOssConfig;
+import io.github.linpeilie.annotations.AutoMapper;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -20,6 +22,7 @@ import javax.validation.constraints.Size;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
+@AutoMapper(target = SysOssConfig.class, reverseConvertGenerate = false)
 public class SysOssConfigBo extends BaseEntity {
 
     /**

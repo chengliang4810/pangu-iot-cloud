@@ -1,6 +1,8 @@
 package com.pangu.resource.domain.bo;
 
 import com.pangu.common.core.web.domain.BaseEntity;
+import com.pangu.resource.domain.SysOss;
+import io.github.linpeilie.annotations.AutoMapper;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -11,6 +13,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
+@AutoMapper(target = SysOss.class, reverseConvertGenerate = false)
 public class SysOssBo extends BaseEntity {
 
     /**

@@ -18,6 +18,7 @@ import lombok.Data;
  */
 @Data
 @ExcelIgnoreUnannotated
+@AutoMapper(target = ${ClassName}.class)
 public class ${ClassName}Vo {
 
     private static final long serialVersionUID = 1L;

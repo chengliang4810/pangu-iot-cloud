@@ -8,6 +8,6 @@ import com.pangu.system.domain.SysNotice;
  *
  * @author Lion Li
  */
-public interface SysNoticeMapper extends BaseMapperPlus<SysNoticeMapper, SysNotice, SysNotice> {
+public interface SysNoticeMapper extends BaseMapperPlus<SysNotice, SysNotice> {
 
 }

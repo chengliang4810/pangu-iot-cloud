@@ -16,7 +16,7 @@ import java.util.List;
  *
  * @author Lion Li
  */
-public interface SysUserMapper extends BaseMapperPlus<SysUserMapper, SysUser, SysUser> {
+public interface SysUserMapper extends BaseMapperPlus<SysUser, SysUser> {
 
     @DataPermission({
         @DataColumn(key = "deptName", value = "d.dept_id"),

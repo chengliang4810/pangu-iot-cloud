@@ -1,5 +1,7 @@
 package com.pangu.resource.domain.vo;
 
+import com.pangu.resource.domain.SysOssConfig;
+import io.github.linpeilie.annotations.AutoMapper;
 import lombok.Data;
 
 
@@ -11,6 +13,7 @@ import lombok.Data;
  * @date 2021-08-13
  */
 @Data
+@AutoMapper(target = SysOssConfig.class)
 public class SysOssConfigVo {
 
     private static final long serialVersionUID = 1L;

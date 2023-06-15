@@ -1,6 +1,6 @@
 package com.pangu.common.log.event;
 
-import com.pangu.common.core.utils.BeanCopyUtils;
+import cn.hutool.core.bean.BeanUtil;
 import com.pangu.system.api.RemoteLogService;
 import com.pangu.system.api.domain.SysLogininfor;
 import com.pangu.system.api.domain.SysOperLog;
@@ -26,14 +26,14 @@ public class LogEventListener {
     @Async
     @EventListener
     public void saveLog(OperLogEvent operLogEvent) {
-        SysOperLog sysOperLog = BeanCopyUtils.copy(operLogEvent, SysOperLog.class);
+        SysOperLog sysOperLog = BeanUtil.toBean(operLogEvent, SysOperLog.class);
         remoteLogService.saveLog(sysOperLog);
     }
 
     @Async
     @EventListener
     public void saveLogininfor(LogininforEvent logininforEvent) {
-        SysLogininfor sysLogininfor = BeanCopyUtils.copy(logininforEvent, SysLogininfor.class);
+        SysLogininfor sysLogininfor = BeanUtil.toBean(logininforEvent, SysLogininfor.class);
         remoteLogService.saveLogininfor(sysLogininfor);
     }
 

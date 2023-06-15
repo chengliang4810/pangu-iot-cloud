@@ -8,6 +8,6 @@ import com.pangu.system.domain.SysConfig;
  *
  * @author Lion Li
  */
-public interface SysConfigMapper extends BaseMapperPlus<SysConfigMapper, SysConfig, SysConfig> {
+public interface SysConfigMapper extends BaseMapperPlus<SysConfig, SysConfig> {
 
 }

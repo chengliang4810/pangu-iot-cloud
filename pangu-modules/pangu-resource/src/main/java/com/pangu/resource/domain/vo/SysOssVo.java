@@ -1,5 +1,7 @@
 package com.pangu.resource.domain.vo;
 
+import com.pangu.resource.domain.SysOss;
+import io.github.linpeilie.annotations.AutoMapper;
 import lombok.Data;
 
 import java.util.Date;
@@ -10,6 +12,7 @@ import java.util.Date;
  * @author Lion Li
  */
 @Data
+@AutoMapper(target = SysOss.class)
 public class SysOssVo {
 
     private static final long serialVersionUID = 1L;
