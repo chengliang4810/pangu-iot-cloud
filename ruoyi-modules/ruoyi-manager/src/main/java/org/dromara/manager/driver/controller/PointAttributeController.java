@@ -17,9 +17,9 @@ import org.dromara.common.core.validate.AddGroup;
 import org.dromara.common.core.validate.EditGroup;
 import org.dromara.common.log.enums.BusinessType;
 import org.dromara.common.excel.utils.ExcelUtil;
-import org.dromara.manager.driver.domain.vo.DriverAttributeVo;
-import org.dromara.manager.driver.domain.bo.DriverAttributeBo;
-import org.dromara.manager.driver.service.IDriverAttributeService;
+import org.dromara.manager.driver.domain.vo.PointAttributeVo;
+import org.dromara.manager.driver.domain.bo.PointAttributeBo;
+import org.dromara.manager.driver.service.IPointAttributeService;
 import org.dromara.common.mybatis.core.page.TableDataInfo;
 
 /**
@@ -31,29 +31,29 @@ import org.dromara.common.mybatis.core.page.TableDataInfo;
 @Validated
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/driverAttribute")
-public class DriverAttributeController extends BaseController {
+@RequestMapping("/pointAttribute")
+public class PointAttributeController extends BaseController {
 
-    private final IDriverAttributeService driverAttributeService;
+    private final IPointAttributeService pointAttributeService;
 
     /**
      * 查询驱动属性列表
      */
-    @SaCheckPermission("manager:driverAttribute:list")
+    @SaCheckPermission("manager:pointAttribute:list")
     @GetMapping("/list")
-    public TableDataInfo<DriverAttributeVo> list(DriverAttributeBo bo, PageQuery pageQuery) {
-        return driverAttributeService.queryPageList(bo, pageQuery);
+    public TableDataInfo<PointAttributeVo> list(PointAttributeBo bo, PageQuery pageQuery) {
+        return pointAttributeService.queryPageList(bo, pageQuery);
     }
 
     /**
      * 导出驱动属性列表
      */
-    @SaCheckPermission("manager:driverAttribute:export")
+    @SaCheckPermission("manager:pointAttribute:export")
     @Log(title = "驱动属性", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
-    public void export(DriverAttributeBo bo, HttpServletResponse response) {
-        List<DriverAttributeVo> list = driverAttributeService.queryList(bo);
-        ExcelUtil.exportExcel(list, "驱动属性", DriverAttributeVo.class, response);
+    public void export(PointAttributeBo bo, HttpServletResponse response) {
+        List<PointAttributeVo> list = pointAttributeService.queryList(bo);
+        ExcelUtil.exportExcel(list, "驱动属性", PointAttributeVo.class, response);
     }
 
     /**
@@ -61,33 +61,33 @@ public class DriverAttributeController extends BaseController {
      *
      * @param id 主键
      */
-    @SaCheckPermission("manager:driverAttribute:query")
+    @SaCheckPermission("manager:pointAttribute:query")
     @GetMapping("/{id}")
-    public R<DriverAttributeVo> getInfo(@NotNull(message = "主键不能为空")
+    public R<PointAttributeVo> getInfo(@NotNull(message = "主键不能为空")
                                      @PathVariable Long id) {
-        return R.ok(driverAttributeService.queryById(id));
+        return R.ok(pointAttributeService.queryById(id));
     }
 
     /**
      * 新增驱动属性
      */
-    @SaCheckPermission("manager:driverAttribute:add")
+    @SaCheckPermission("manager:pointAttribute:add")
     @Log(title = "驱动属性", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
-    public R<Void> add(@Validated(AddGroup.class) @RequestBody DriverAttributeBo bo) {
-        return toAjax(driverAttributeService.insertByBo(bo));
+    public R<Void> add(@Validated(AddGroup.class) @RequestBody PointAttributeBo bo) {
+        return toAjax(pointAttributeService.insertByBo(bo));
     }
 
     /**
      * 修改驱动属性
      */
-    @SaCheckPermission("manager:driverAttribute:edit")
+    @SaCheckPermission("manager:pointAttribute:edit")
     @Log(title = "驱动属性", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
-    public R<Void> edit(@Validated(EditGroup.class) @RequestBody DriverAttributeBo bo) {
-        return toAjax(driverAttributeService.updateByBo(bo));
+    public R<Void> edit(@Validated(EditGroup.class) @RequestBody PointAttributeBo bo) {
+        return toAjax(pointAttributeService.updateByBo(bo));
     }
 
     /**
@@ -95,11 +95,11 @@ public class DriverAttributeController extends BaseController {
      *
      * @param ids 主键串
      */
-    @SaCheckPermission("manager:driverAttribute:remove")
+    @SaCheckPermission("manager:pointAttribute:remove")
     @Log(title = "驱动属性", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
     public R<Void> remove(@NotEmpty(message = "主键不能为空")
                           @PathVariable Long[] ids) {
-        return toAjax(driverAttributeService.deleteWithValidByIds(List.of(ids), true));
+        return toAjax(pointAttributeService.deleteWithValidByIds(List.of(ids), true));
     }
 }

@@ -31,7 +31,7 @@ import org.dromara.common.mybatis.core.page.TableDataInfo;
 @Validated
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/manager/driverAttributeValue")
+@RequestMapping("/driverAttributeValue")
 public class DriverAttributeValueController extends BaseController {
 
     private final IDriverAttributeValueService driverAttributeValueService;

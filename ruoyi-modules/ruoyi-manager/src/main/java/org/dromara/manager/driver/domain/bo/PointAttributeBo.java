@@ -1,6 +1,6 @@
 package org.dromara.manager.driver.domain.bo;
 
-import org.dromara.manager.driver.domain.DriverAttribute;
+import org.dromara.manager.driver.domain.PointAttribute;
 import org.dromara.common.mybatis.core.domain.BaseEntity;
 import org.dromara.common.core.validate.AddGroup;
 import org.dromara.common.core.validate.EditGroup;
@@ -10,14 +10,15 @@ import lombok.EqualsAndHashCode;
 import jakarta.validation.constraints.*;
 
 /**
- * 驱动属性业务对象 iot_driver_attribute
+ * 驱动属性业务对象 iot_point_attribute
  *
  * @author chengliang4810
  * @date 2023-06-19
  */
 @Data
-@AutoMapper(target = DriverAttribute.class, reverseConvertGenerate = false)
-public class DriverAttributeBo {
+@EqualsAndHashCode(callSuper = true)
+@AutoMapper(target = PointAttribute.class, reverseConvertGenerate = false)
+public class PointAttributeBo extends BaseEntity {
 
     /**
      * 主键ID

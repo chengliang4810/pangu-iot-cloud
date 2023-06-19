@@ -1,6 +1,6 @@
 package org.dromara.manager.driver.domain;
 
-import org.dromara.common.tenant.core.TenantEntity;
+import org.dromara.common.mybatis.core.domain.BaseEntity;
 import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -8,15 +8,17 @@ import lombok.EqualsAndHashCode;
 import java.io.Serial;
 
 /**
- * 驱动属性对象 iot_driver_attribute
+ * 驱动属性对象 iot_point_attribute
  *
  * @author chengliang4810
  * @date 2023-06-19
  */
 @Data
-@TableName("iot_driver_attribute")
-public class DriverAttribute {
+@EqualsAndHashCode(callSuper = true)
+@TableName("iot_point_attribute")
+public class PointAttribute extends BaseEntity {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**

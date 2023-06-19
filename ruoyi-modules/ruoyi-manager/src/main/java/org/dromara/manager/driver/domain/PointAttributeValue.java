@@ -8,15 +8,17 @@ import lombok.EqualsAndHashCode;
 import java.io.Serial;
 
 /**
- * 驱动属性值对象 iot_driver_attribute_value
+ * 驱动属性值对象 iot_point_attribute_value
  *
  * @author chengliang4810
  * @date 2023-06-19
  */
 @Data
-@TableName("iot_driver_attribute_value")
-public class DriverAttributeValue {
+@EqualsAndHashCode(callSuper = true)
+@TableName("iot_point_attribute_value")
+public class PointAttributeValue extends BaseEntity {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**
@@ -26,14 +28,19 @@ public class DriverAttributeValue {
     private Long id;
 
     /**
-     * 驱动属性ID
+     * 点位属性ID
      */
-    private Long driverAttributeId;
+    private Long pointAttributeId;
 
     /**
-     * 网关设备ID
+     * 设备ID
      */
-    private Long gatewayDeviceId;
+    private Long deviceId;
+
+    /**
+     * 设备属性ID
+     */
+    private Long deviceAttributeId;
 
     /**
      * 属性值
