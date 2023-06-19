@@ -17,7 +17,7 @@ import jakarta.validation.constraints.*;
  */
 @Data
 @AutoMapper(target = DriverAttributeValue.class, reverseConvertGenerate = false)
-public class DriverAttributeValueBo {
+public class DriverAttributeValueBo extends BaseEntity {
 
     /**
      * 主键ID
