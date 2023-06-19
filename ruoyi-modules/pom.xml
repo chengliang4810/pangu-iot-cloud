@@ -13,6 +13,8 @@
         <module>ruoyi-gen</module>
         <module>ruoyi-job</module>
         <module>ruoyi-resource</module>
+        <module>ruoyi-manager</module>
+        <module>ruoyi-data</module>
     </modules>
 
     <artifactId>ruoyi-modules</artifactId>

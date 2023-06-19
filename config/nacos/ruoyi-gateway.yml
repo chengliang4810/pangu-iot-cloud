@@ -87,7 +87,20 @@ spring:
             - Path=/stream-mq/**
           filters:
             - StripPrefix=1
-
+        # 系统模块
+        - id: ruoyi-manager
+          uri: lb://ruoyi-manager
+          predicates:
+            - Path=/manager/**
+          filters:
+            - StripPrefix=1
+        # 系统模块
+        - id: ruoyi-data
+          uri: lb://ruoyi-data
+          predicates:
+            - Path=/data/**
+          filters:
+            - StripPrefix=1
     # sentinel 配置
     sentinel:
       filter:
