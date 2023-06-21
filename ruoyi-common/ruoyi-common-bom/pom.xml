@@ -207,6 +207,18 @@
 
             <dependency>
                 <groupId>org.dromara</groupId>
+                <artifactId>ruoyi-common-iot</artifactId>
+                <version>${revision}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.dromara</groupId>
+                <artifactId>ruoyi-common-sdk</artifactId>
+                <version>${revision}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.dromara</groupId>
                 <artifactId>ruoyi-common-emqx</artifactId>
                 <version>${revision}</version>
             </dependency>

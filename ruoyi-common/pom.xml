@@ -40,6 +40,8 @@
         <module>ruoyi-common-encrypt</module>
         <module>ruoyi-common-tenant</module>
         <module>ruoyi-common-websocket</module>
+        <module>ruoyi-common-iot</module>
+        <module>ruoyi-common-sdk</module>
         <module>ruoyi-common-emqx</module>
     </modules>
 
