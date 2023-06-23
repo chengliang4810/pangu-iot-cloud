@@ -1,31 +1,15 @@
-/*
- * Copyright 2016-present the original author or authors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package org.dromara.common.sdk.service.impl;
 
-import cn.hutool.core.util.ObjectUtil;
-import io.github.pnoker.common.constant.driver.ScheduleConstant;
-import io.github.pnoker.driver.sdk.entity.property.DriverProperty;
-import io.github.pnoker.driver.sdk.entity.property.ScheduleProperty;
-import io.github.pnoker.driver.sdk.service.DriverScheduleService;
-import io.github.pnoker.driver.sdk.service.job.DriverCustomScheduleJob;
-import io.github.pnoker.driver.sdk.service.job.DriverReadScheduleJob;
-import io.github.pnoker.driver.sdk.service.job.DriverStatusScheduleJob;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ObjectUtils;
+import org.dromara.common.iot.constant.ScheduleConstant;
+import org.dromara.common.sdk.property.DriverProperty;
+import org.dromara.common.sdk.property.ScheduleProperty;
+import org.dromara.common.sdk.service.DriverScheduleService;
+import org.dromara.common.sdk.service.job.DriverCustomScheduleJob;
+import org.dromara.common.sdk.service.job.DriverReadScheduleJob;
+import org.dromara.common.sdk.service.job.DriverStatusScheduleJob;
 import org.quartz.*;
 import org.springframework.stereotype.Service;
 
@@ -47,7 +31,7 @@ public class DriverScheduleServiceImpl implements DriverScheduleService {
     @Override
     public void initial() {
         ScheduleProperty property = driverProperty.getSchedule();
-        if (ObjectUtil.isNull(property)) {
+        if (ObjectUtils.anyNull(property)) {
             return;
         }
 

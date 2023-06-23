@@ -1,5 +1,7 @@
 package org.dromara.common.core.exception;
 
+import cn.hutool.core.util.StrUtil;
+
 import java.io.Serial;
 
 /**
@@ -31,6 +33,13 @@ public final class ServiceException extends RuntimeException {
      * 空构造方法，避免反序列化问题
      */
     public ServiceException() {
+    }
+
+    /**
+     * 模板message构造方法
+     */
+    public ServiceException(String message, Object... values) {
+        this.message = StrUtil.format(message, values);
     }
 
     public ServiceException(String message) {

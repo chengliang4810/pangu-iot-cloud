@@ -1,31 +1,12 @@
-/*
- * Copyright 2016-present the original author or authors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package org.dromara.common.sdk.utils;
 
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.ObjectUtil;
-import io.github.pnoker.common.constant.common.ExceptionConstant;
-import io.github.pnoker.common.entity.driver.AttributeInfo;
-import io.github.pnoker.common.enums.PointTypeFlagEnum;
-import io.github.pnoker.common.utils.DecodeUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.dromara.common.iot.entity.driver.AttributeInfo;
+import org.dromara.common.iot.enums.PointTypeFlagEnum;
 
 import java.nio.charset.StandardCharsets;
-import java.util.Base64;
 import java.util.Map;
 
 /**
@@ -35,9 +16,7 @@ import java.util.Map;
 @Slf4j
 public class DriverUtil {
 
-    private DriverUtil() {
-        throw new IllegalStateException(ExceptionConstant.UTILITY_CLASS);
-    }
+    private DriverUtil() {}
 
     /**
      * 获取 属性值
@@ -64,28 +43,6 @@ public class DriverUtil {
     }
 
     /**
-     * Base 64 解码
-     *
-     * @param content string
-     * @return string
-     */
-    public static String base64Encode(String content) {
-        byte[] bytes = DecodeUtil.stringToByte(content);
-        return Base64.getEncoder().encodeToString(bytes);
-    }
-
-    /**
-     * Base 64 编码
-     *
-     * @param content string
-     * @return string
-     */
-    public static String base64Decode(String content) {
-        byte[] bytes = DecodeUtil.stringToByte(content);
-        return new String(Base64.getDecoder().decode(bytes));
-    }
-
-    /**
      * 将 BCD byte[] 转成十进制字符串
      *
      * @param bytes Byte Array
@@ -99,46 +56,6 @@ public class DriverUtil {
         }
         return sb.toString().substring(0, 1).equalsIgnoreCase("0") ? sb
                 .toString().substring(1) : sb.toString();
-    }
-
-    /**
-     * 将十进制字符串转成 BCD byte[]
-     *
-     * @param decimalString decimal string
-     * @return byte array
-     */
-    public static byte[] strToBcdBytes(String decimalString) {
-        int length = decimalString.length();
-        int mod = length % 2;
-        if (mod != 0) {
-            decimalString = "0" + decimalString;
-            length = decimalString.length();
-        }
-        if (length >= 2) {
-            length = length / 2;
-        }
-        byte[] bcdBytes = new byte[length];
-        byte[] decimalBytes = DecodeUtil.stringToByte(decimalString);
-        int j;
-        int k;
-        for (int i = 0; i < decimalString.length() / 2; i++) {
-            if ((decimalBytes[2 * i] >= '0') && (decimalBytes[2 * i] <= '9')) {
-                j = decimalBytes[2 * i] - '0';
-            } else if ((decimalBytes[2 * i] >= 'a') && (decimalBytes[2 * i] <= 'z')) {
-                j = decimalBytes[2 * i] - 'a' + 0x0a;
-            } else {
-                j = decimalBytes[2 * i] - 'A' + 0x0a;
-            }
-            if ((decimalBytes[2 * i + 1] >= '0') && (decimalBytes[2 * i + 1] <= '9')) {
-                k = decimalBytes[2 * i + 1] - '0';
-            } else if ((decimalBytes[2 * i + 1] >= 'a') && (decimalBytes[2 * i + 1] <= 'z')) {
-                k = decimalBytes[2 * i + 1] - 'a' + 0x0a;
-            } else {
-                k = decimalBytes[2 * i + 1] - 'A' + 0x0a;
-            }
-            bcdBytes[i] = (byte) ((j << 4) + k);
-        }
-        return bcdBytes;
     }
 
     /**

@@ -1,10 +1,12 @@
 package org.dromara.common.emqx.config;
 
+import cn.hutool.core.util.StrUtil;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.dromara.common.emqx.annotation.Topic;
 import org.dromara.common.emqx.constant.Pattern;
 import org.dromara.common.emqx.core.DefaultMqttCallback;
+import org.dromara.common.emqx.core.MqttConsumer;
 import org.dromara.common.emqx.doamin.EmqxClient;
 import org.dromara.common.emqx.doamin.SubscriptTopic;
 import org.dromara.common.emqx.properties.EmqProperties;
@@ -75,7 +77,8 @@ public class EmqxConfig {
         List<SubscriptTopic> topicMap = new ArrayList<SubscriptTopic>(beansWithAnnotation.size());
         //遍历所有使用@Topic注解的类
         for (String className : beansWithAnnotation.keySet()) {
-            Class<?> classByteCode = beansWithAnnotation.get(className).getClass();
+            Object obj = beansWithAnnotation.get(className);
+            Class<?> classByteCode = obj.getClass();
             //获取类的注解属性
             Topic annotation = AnnotationUtils.findAnnotation(classByteCode, Topic.class);
             String topic = annotation.topic();
@@ -83,6 +86,16 @@ public class EmqxConfig {
             int qos = annotation.qos();
             Pattern patten = annotation.patten();
             String group = annotation.group();
+
+            // 判断类是否重写 topic 和 group
+            if (obj instanceof MqttConsumer<?> mqttConsumer) {
+                if (StrUtil.isNotBlank(mqttConsumer.getTopic())) {
+                    topic = mqttConsumer.getTopic();
+                }
+                if (StrUtil.isNotBlank(mqttConsumer.getGroup())) {
+                    group = mqttConsumer.getGroup();
+                }
+            }
 
             // 判断共享订阅类型
             String subTopic = topic;

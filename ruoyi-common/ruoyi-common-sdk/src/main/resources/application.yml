@@ -1,0 +1,8 @@
+# 以下内容会覆盖application.yml，即：application.yml配置以下内容是不会生效的
+# 如果想要覆盖以下内容需要在dev、test、pre、pro中进行重新配置
+server:
+  thread:
+    prefix: ruoyi-thread-
+    core-pool-size: 4
+    maximum-pool-size: 32
+    keep-alive-time: 15

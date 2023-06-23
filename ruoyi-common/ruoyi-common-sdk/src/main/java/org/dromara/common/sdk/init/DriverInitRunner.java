@@ -20,7 +20,7 @@ import javax.annotation.Resource;
  */
 @Component
 @ComponentScan(basePackages = {
-        "org.driver.common.sdk",
+        "org.dromara.common.sdk",
 })
 @EnableConfigurationProperties({DriverProperty.class})
 public class DriverInitRunner implements ApplicationRunner {

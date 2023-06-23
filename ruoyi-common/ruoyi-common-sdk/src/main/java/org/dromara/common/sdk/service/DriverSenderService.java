@@ -1,25 +1,10 @@
-/*
- * Copyright 2016-present the original author or authors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package org.dromara.common.sdk.service;
 
-import io.github.pnoker.common.dto.DriverEventDTO;
-import io.github.pnoker.common.entity.DeviceEvent;
-import io.github.pnoker.common.entity.point.PointValue;
-import io.github.pnoker.common.enums.DeviceStatusEnum;
+
+import org.dromara.common.iot.dto.DriverEventDTO;
+import org.dromara.common.iot.entity.device.DeviceEvent;
+import org.dromara.common.iot.entity.point.PointValue;
+import org.dromara.common.iot.enums.DeviceStatusEnum;
 
 import java.util.List;
 
@@ -65,4 +50,10 @@ public interface DriverSenderService {
      */
     void pointValueSender(List<PointValue> pointValues);
 
+    /**
+     * 发送驱动状态
+     *
+     * @param driverStatus 驱动状态
+     */
+    void driverStatusSender(DriverEventDTO.DriverStatus driverStatus);
 }

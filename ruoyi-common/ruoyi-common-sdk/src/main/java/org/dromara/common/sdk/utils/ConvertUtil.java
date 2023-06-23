@@ -1,32 +1,11 @@
-/*
- * Copyright 2016-present the original author or authors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package org.dromara.common.sdk.utils;
 
 import cn.hutool.core.util.ObjectUtil;
-import io.github.pnoker.common.constant.common.ExceptionConstant;
-import io.github.pnoker.common.enums.PointTypeFlagEnum;
-import io.github.pnoker.common.exception.EmptyException;
-import io.github.pnoker.common.exception.OutRangeException;
-import io.github.pnoker.common.model.Point;
-import io.github.pnoker.common.utils.ArithmeticUtil;
+import com.graphbuilder.curve.Point;
 import lombok.extern.slf4j.Slf4j;
+import org.dromara.common.core.exception.ServiceException;
 
 import java.math.BigDecimal;
-import java.util.Optional;
 
 /**
  * 类型转换相关工具类集合
@@ -37,9 +16,7 @@ import java.util.Optional;
 @Slf4j
 public class ConvertUtil {
 
-    private ConvertUtil() {
-        throw new IllegalStateException(ExceptionConstant.UTILITY_CLASS);
-    }
+    private ConvertUtil() {}
 
     private static final BigDecimal defaultBase = new BigDecimal(0);
     private static final BigDecimal defaultMultiple = new BigDecimal(1);
@@ -55,42 +32,43 @@ public class ConvertUtil {
      */
     public static String convertValue(Point point, String rawValue) {
         if (ObjectUtil.isNull(point)) {
-            throw new EmptyException("Point is empty");
+            // throw new EmptyException("Point is empty");
         }
 
-        PointTypeFlagEnum valueType = Optional.ofNullable(point.getPointTypeFlag()).orElse(PointTypeFlagEnum.STRING);
-        BigDecimal base = Optional.ofNullable(point.getBaseValue()).orElse(defaultBase);
-        BigDecimal multiple = Optional.ofNullable(point.getMultiple()).orElse(defaultMultiple);
-        byte decimal = Optional.ofNullable(point.getValueDecimal()).orElse((byte) 6);
+//        PointTypeFlagEnum valueType = Optional.ofNullable(point.getPointTypeFlag()).orElse(PointTypeFlagEnum.STRING);
+//        BigDecimal base = Optional.ofNullable(point.getBaseValue()).orElse(defaultBase);
+//        BigDecimal multiple = Optional.ofNullable(point.getMultiple()).orElse(defaultMultiple);
+//        byte decimal = Optional.ofNullable(point.getValueDecimal()).orElse((byte) 6);
+//
+//        Object value;
+//        switch (valueType) {
+//            case BYTE:
+//                value = convertByte(rawValue, base, multiple);
+//                break;
+//            case SHORT:
+//                value = convertShort(rawValue, base, multiple);
+//                break;
+//            case INT:
+//                value = convertInteger(rawValue, base, multiple);
+//                break;
+//            case LONG:
+//                value = convertLong(rawValue, base, multiple);
+//                break;
+//            case FLOAT:
+//                value = convertFloat(rawValue, base, multiple, decimal);
+//                break;
+//            case DOUBLE:
+//                value = convertDouble(rawValue, base, multiple, decimal);
+//                break;
+//            case BOOLEAN:
+//                value = convertBoolean(rawValue);
+//                break;
+//            default:
+//                return rawValue;
+//        }
 
-        Object value;
-        switch (valueType) {
-            case BYTE:
-                value = convertByte(rawValue, base, multiple);
-                break;
-            case SHORT:
-                value = convertShort(rawValue, base, multiple);
-                break;
-            case INT:
-                value = convertInteger(rawValue, base, multiple);
-                break;
-            case LONG:
-                value = convertLong(rawValue, base, multiple);
-                break;
-            case FLOAT:
-                value = convertFloat(rawValue, base, multiple, decimal);
-                break;
-            case DOUBLE:
-                value = convertDouble(rawValue, base, multiple, decimal);
-                break;
-            case BOOLEAN:
-                value = convertBoolean(rawValue);
-                break;
-            default:
-                return rawValue;
-        }
-
-        return String.valueOf(value);
+//        return String.valueOf(value);
+        return "";
     }
 
     /**
@@ -105,7 +83,7 @@ public class ConvertUtil {
             BigDecimal multiply = linear(multiple, content, base);
             return multiply.byteValue();
         } catch (Exception e) {
-            throw new OutRangeException("Out of byte range: {} ~ {}, current: {}", Byte.MIN_VALUE, Byte.MAX_VALUE, content);
+            throw new ServiceException("Out of byte range: {} ~ {}, current: {}", Byte.MIN_VALUE, Byte.MAX_VALUE, content);
         }
     }
 
@@ -121,7 +99,7 @@ public class ConvertUtil {
             BigDecimal multiply = linear(multiple, content, base);
             return multiply.shortValue();
         } catch (Exception e) {
-            throw new OutRangeException("Out of short range: {} ~ {}, current: {}", Short.MIN_VALUE, Short.MAX_VALUE, content);
+            throw new ServiceException("Out of short range: {} ~ {}, current: {}", Short.MIN_VALUE, Short.MAX_VALUE, content);
         }
     }
 
@@ -137,7 +115,7 @@ public class ConvertUtil {
             BigDecimal multiply = linear(multiple, content, base);
             return multiply.intValue();
         } catch (Exception e) {
-            throw new OutRangeException("Out of int range: {} ~ {}, current: {}", Integer.MIN_VALUE, Integer.MAX_VALUE, content);
+            throw new ServiceException("Out of int range: {} ~ {}, current: {}", Integer.MIN_VALUE, Integer.MAX_VALUE, content);
         }
     }
 
@@ -153,7 +131,7 @@ public class ConvertUtil {
             BigDecimal multiply = linear(multiple, content, base);
             return multiply.longValue();
         } catch (Exception e) {
-            throw new OutRangeException("Out of long range: {} ~ {}, current: {}", Long.MIN_VALUE, Long.MAX_VALUE, content);
+            throw new ServiceException("Out of long range: {} ~ {}, current: {}", Long.MIN_VALUE, Long.MAX_VALUE, content);
         }
     }
 
@@ -167,11 +145,11 @@ public class ConvertUtil {
         try {
             BigDecimal multiply = linear(multiple, content, base);
             if (Float.isInfinite(multiply.floatValue())) {
-                throw new OutRangeException();
+                throw new ServiceException();
             }
             return ArithmeticUtil.round(multiply.floatValue(), decimal);
         } catch (Exception e) {
-            throw new OutRangeException("Out of float range: |{} ~ {}|, current: {}", Float.MIN_VALUE, Float.MAX_VALUE, content);
+            throw new ServiceException("Out of float range: |{} ~ {}|, current: {}", Float.MIN_VALUE, Float.MAX_VALUE, content);
         }
     }
 
@@ -185,11 +163,11 @@ public class ConvertUtil {
         try {
             BigDecimal multiply = linear(multiple, content, base);
             if (Double.isInfinite(multiply.doubleValue())) {
-                throw new OutRangeException();
+                throw new ServiceException();
             }
             return ArithmeticUtil.round(multiply.doubleValue(), decimal);
         } catch (Exception e) {
-            throw new OutRangeException("Out of double range: |{} ~ {}|, current: {}", Double.MIN_VALUE, Double.MAX_VALUE, content);
+            throw new ServiceException("Out of double range: |{} ~ {}|, current: {}", Double.MIN_VALUE, Double.MAX_VALUE, content);
         }
     }
 
