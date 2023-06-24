@@ -39,6 +39,13 @@ public class DriverMetadata implements Serializable {
     private Map<String, DriverAttribute> driverAttributeMap;
     private Map<String, PointAttribute> pointAttributeMap;
 
+
+    /**
+     * 网关设备
+     * deviceId,device
+     */
+    private Map<String, Device> gatewayDeviceMap;
+
     /**
      * deviceId(driverAttribute.name,(driverInfo.value,driverAttribute.type))
      */

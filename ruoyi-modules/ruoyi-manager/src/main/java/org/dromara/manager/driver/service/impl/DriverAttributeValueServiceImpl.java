@@ -1,23 +1,23 @@
 package org.dromara.manager.driver.service.impl;
 
-import org.dromara.common.core.utils.MapstructUtils;
-import org.dromara.common.core.utils.StringUtils;
-import org.dromara.common.mybatis.core.page.TableDataInfo;
-import org.dromara.common.mybatis.core.page.PageQuery;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import org.dromara.common.core.utils.MapstructUtils;
+import org.dromara.common.core.utils.StringUtils;
+import org.dromara.common.mybatis.core.page.PageQuery;
+import org.dromara.common.mybatis.core.page.TableDataInfo;
+import org.dromara.manager.driver.domain.DriverAttributeValue;
 import org.dromara.manager.driver.domain.bo.DriverAttributeValueBo;
 import org.dromara.manager.driver.domain.vo.DriverAttributeValueVo;
-import org.dromara.manager.driver.domain.DriverAttributeValue;
 import org.dromara.manager.driver.mapper.DriverAttributeValueMapper;
 import org.dromara.manager.driver.service.IDriverAttributeValueService;
+import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Collection;
 
 /**
  * 驱动属性值Service业务层处理
@@ -108,4 +108,17 @@ public class DriverAttributeValueServiceImpl implements IDriverAttributeValueSer
         }
         return baseMapper.deleteBatchIds(ids) > 0;
     }
+
+
+    /**
+     * 选择通过属性id
+     *
+     * @param attributeId 属性id
+     */
+    @Override
+    public Long countByAttributeId(Long attributeId) {
+        return baseMapper.selectCount(Wrappers.lambdaQuery(DriverAttributeValue.class).eq(DriverAttributeValue::getDriverAttributeId, attributeId));
+    }
+
+
 }

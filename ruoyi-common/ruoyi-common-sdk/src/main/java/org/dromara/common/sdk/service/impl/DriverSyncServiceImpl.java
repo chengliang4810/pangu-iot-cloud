@@ -91,9 +91,10 @@ public class DriverSyncServiceImpl implements DriverSyncService {
         }
         driverContext.setDriverMetadata(driverMetadata);
         driverContext.setDriverStatus(DriverStatusEnum.ONLINE);
-        //driverMetadata.getDriverAttributeMap().values().forEach(driverAttribute -> log.info("Syncing driver attribute[{}] metadata: {}", driverAttribute.getAttributeName(), JsonUtil.toPrettyJsonString(driverAttribute)));
-        //driverMetadata.getPointAttributeMap().values().forEach(pointAttribute -> log.info("Syncing point attribute[{}] metadata: {}", pointAttribute.getAttributeName(), JsonUtil.toPrettyJsonString(pointAttribute)));
-        //driverMetadata.getDeviceMap().values().forEach(device -> log.info("Syncing device[{}] metadata: {}", device.getDeviceName(), JsonUtil.toPrettyJsonString(device)));
+        driverMetadata.getDriverAttributeMap().values().forEach(driverAttribute -> log.info("Syncing driver attribute[{}] metadata: {}", driverAttribute.getAttributeName(), JSONUtil.toJsonPrettyStr(driverAttribute)));
+        driverMetadata.getPointAttributeMap().values().forEach(pointAttribute -> log.info("Syncing point attribute[{}] metadata: {}", pointAttribute.getAttributeName(), JSONUtil.toJsonPrettyStr(pointAttribute)));
+        driverMetadata.getDeviceMap().values().forEach(device -> log.info("Syncing device[{}] metadata: {}", device.getDeviceName(), JSONUtil.toJsonPrettyStr(device)));
+        driverMetadata.getGatewayDeviceMap().values().forEach(device -> log.info("Syncing gateway device[{}] metadata: {}", device.getDeviceName(), JSONUtil.toJsonPrettyStr(device)));
         log.info("The metadata synced successfully.");
     }
 

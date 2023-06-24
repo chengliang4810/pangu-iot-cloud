@@ -1,13 +1,15 @@
 package org.dromara.manager.driver.domain.bo;
 
-import org.dromara.manager.driver.domain.Driver;
-import org.dromara.common.mybatis.core.domain.BaseEntity;
-import org.dromara.common.core.validate.AddGroup;
-import org.dromara.common.core.validate.EditGroup;
 import io.github.linpeilie.annotations.AutoMapper;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import jakarta.validation.constraints.*;
+import lombok.experimental.Accessors;
+import org.dromara.common.core.validate.AddGroup;
+import org.dromara.common.core.validate.EditGroup;
+import org.dromara.common.mybatis.core.domain.BaseEntity;
+import org.dromara.manager.driver.domain.Driver;
 
 /**
  * 驱动业务对象 iot_driver
@@ -16,6 +18,7 @@ import jakarta.validation.constraints.*;
  * @date 2023-06-16
  */
 @Data
+@Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
 @AutoMapper(target = Driver.class, reverseConvertGenerate = false)
 public class DriverBo extends BaseEntity {

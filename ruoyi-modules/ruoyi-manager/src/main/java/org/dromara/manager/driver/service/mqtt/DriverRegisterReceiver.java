@@ -32,7 +32,6 @@ public class DriverRegisterReceiver extends MqttConsumer<DriverSyncUpDTO> {
             log.error("Invalid driver register: {}", entityDTO);
             return;
         }
-        System.out.println("driver register.............");
         driverSyncService.up(entityDTO);
     }
 

@@ -1,23 +1,23 @@
 package org.dromara.manager.driver.service.impl;
 
-import org.dromara.common.core.utils.MapstructUtils;
-import org.dromara.common.core.utils.StringUtils;
-import org.dromara.common.mybatis.core.page.TableDataInfo;
-import org.dromara.common.mybatis.core.page.PageQuery;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import org.dromara.common.core.utils.MapstructUtils;
+import org.dromara.common.core.utils.StringUtils;
+import org.dromara.common.mybatis.core.page.PageQuery;
+import org.dromara.common.mybatis.core.page.TableDataInfo;
+import org.dromara.manager.driver.domain.Driver;
 import org.dromara.manager.driver.domain.bo.DriverBo;
 import org.dromara.manager.driver.domain.vo.DriverVo;
-import org.dromara.manager.driver.domain.Driver;
 import org.dromara.manager.driver.mapper.DriverMapper;
 import org.dromara.manager.driver.service.IDriverService;
+import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Collection;
 
 /**
  * 驱动Service业务层处理
@@ -96,6 +96,20 @@ public class DriverServiceImpl implements IDriverService {
      */
     private void validEntityBeforeSave(Driver entity){
         //TODO 做一些数据校验,如唯一约束
+    }
+
+    /**
+     * 根据code查询驱动信息
+     *
+     * @param driverCode 驱动代码
+     * @return {@link Driver}
+     */
+    @Override
+    public Driver queryByCode(String driverCode) {
+        if (StringUtils.isBlank(driverCode)){
+            return null;
+        }
+        return baseMapper.selectOne(Wrappers.lambdaQuery(Driver.class).eq(Driver::getCode, driverCode).last("limit 1"));
     }
 
     /**

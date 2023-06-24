@@ -7,9 +7,8 @@ import org.dromara.common.emqx.annotation.Topic;
 import org.dromara.common.emqx.core.MqttConsumer;
 import org.dromara.common.iot.constant.DriverTopic;
 import org.dromara.common.iot.dto.DriverSyncDownDTO;
-import org.dromara.common.iot.enums.DriverStatusEnum;
 import org.dromara.common.json.utils.JsonUtils;
-import org.dromara.common.sdk.DriverContext;
+import org.dromara.common.sdk.service.DriverSyncService;
 import org.dromara.common.sdk.utils.AddressUtils;
 import org.eclipse.paho.mqttv5.common.MqttMessage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +23,7 @@ public class DriverSyncDownReceiver extends MqttConsumer<DriverSyncDownDTO> {
     @Value("${spring.application.name}")
     private String applicationName;
     @Autowired
-    private DriverContext driverContext;
+    private DriverSyncService driverSyncService;
 
     /**
      * 消息处理程序,业务操作
@@ -34,8 +33,7 @@ public class DriverSyncDownReceiver extends MqttConsumer<DriverSyncDownDTO> {
      */
     @Override
     protected void messageHandler(String topic, DriverSyncDownDTO entity) {
-        System.out.println("driver register back....." + driverContext);
-        driverContext.setDriverStatus(DriverStatusEnum.ONLINE);
+        driverSyncService.down(entity);
     }
 
     /**

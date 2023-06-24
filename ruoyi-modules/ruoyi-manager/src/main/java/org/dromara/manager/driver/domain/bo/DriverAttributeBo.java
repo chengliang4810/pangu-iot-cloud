@@ -1,13 +1,13 @@
 package org.dromara.manager.driver.domain.bo;
 
-import org.dromara.manager.driver.domain.DriverAttribute;
-import org.dromara.common.mybatis.core.domain.BaseEntity;
+import io.github.linpeilie.annotations.AutoMapper;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import lombok.Data;
 import org.dromara.common.core.validate.AddGroup;
 import org.dromara.common.core.validate.EditGroup;
-import io.github.linpeilie.annotations.AutoMapper;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import jakarta.validation.constraints.*;
+import org.dromara.common.mybatis.core.domain.BaseEntity;
+import org.dromara.manager.driver.domain.DriverAttribute;
 
 /**
  * 驱动属性业务对象 iot_driver_attribute
@@ -59,7 +59,7 @@ public class DriverAttributeBo extends BaseEntity {
      * 必填
      */
     @NotNull(message = "必填不能为空", groups = { AddGroup.class, EditGroup.class })
-    private Integer required;
+    private Boolean required;
 
     /**
      * 描述

@@ -1,10 +1,10 @@
 package org.dromara.manager.driver.service;
 
-import org.dromara.manager.driver.domain.DriverAttribute;
-import org.dromara.manager.driver.domain.vo.DriverAttributeVo;
-import org.dromara.manager.driver.domain.bo.DriverAttributeBo;
-import org.dromara.common.mybatis.core.page.TableDataInfo;
 import org.dromara.common.mybatis.core.page.PageQuery;
+import org.dromara.common.mybatis.core.page.TableDataInfo;
+import org.dromara.manager.driver.domain.DriverAttribute;
+import org.dromara.manager.driver.domain.bo.DriverAttributeBo;
+import org.dromara.manager.driver.domain.vo.DriverAttributeVo;
 
 import java.util.Collection;
 import java.util.List;
@@ -46,4 +46,13 @@ public interface IDriverAttributeService {
      * 校验并批量删除驱动属性信息
      */
     Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid);
+
+    /**
+     * 通过驱动id查询驱动属性
+     *
+     * @param driverId driverId
+     * @return {@link List}<{@link DriverAttribute}>
+     */
+    List<DriverAttributeVo> selectByDriverId(Long driverId);
+
 }
