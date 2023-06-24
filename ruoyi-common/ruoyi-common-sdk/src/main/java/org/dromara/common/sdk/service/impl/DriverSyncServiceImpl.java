@@ -19,6 +19,7 @@ import org.dromara.common.sdk.property.DriverProperty;
 import org.dromara.common.sdk.service.DriverSenderService;
 import org.dromara.common.sdk.service.DriverSyncService;
 import org.dromara.common.sdk.utils.AddressUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -36,9 +37,9 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class DriverSyncServiceImpl implements DriverSyncService {
 
-    @Resource
+    @Autowired
     private DriverContext driverContext;
-    @Resource
+    @Autowired
     private DriverProperty driverProperty;
     @Value("${spring.application.name}")
     private String applicationName;
@@ -48,7 +49,7 @@ public class DriverSyncServiceImpl implements DriverSyncService {
     @Resource
     private DriverSenderService driverSenderService;
 
-    @Resource
+    @Autowired
     private ThreadPoolExecutor threadPoolExecutor;
 
     @Override
@@ -60,7 +61,7 @@ public class DriverSyncServiceImpl implements DriverSyncService {
             log.info("The driver {} is initializing", applicationName);
             log.debug("The driver {} initialization information is: {}", driverProperty.getName(), JSONUtil.toJsonPrettyStr(entityDTO));
             // 发送驱动注册信息
-            EmqxUtil.getClient().publish(DriverTopic.getDriverRegisterTopic(driverUniqueKey), JsonUtils.toJsonString(entityDTO));
+            EmqxUtil.getClient().publish(DriverTopic.getDriverRegisterTopic(driverUniqueKey), JsonUtils.toJsonString(entityDTO), 2);
 
             threadPoolExecutor.submit(() -> {
                 while (!DriverStatusEnum.ONLINE.equals(driverContext.getDriverStatus())) {
@@ -70,6 +71,7 @@ public class DriverSyncServiceImpl implements DriverSyncService {
 
             log.info("The driver {} is initialized successfully.", entityDTO.getDriver().getDriverName());
         } catch (Exception ignored) {
+            ignored.printStackTrace();
             log.error("The driver initialization failed, registration response timed out.");
             Thread.currentThread().interrupt();
             System.exit(1);

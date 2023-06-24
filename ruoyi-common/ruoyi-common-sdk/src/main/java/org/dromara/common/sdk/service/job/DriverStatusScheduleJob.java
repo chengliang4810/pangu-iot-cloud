@@ -7,10 +7,9 @@ import org.dromara.common.sdk.DriverContext;
 import org.dromara.common.sdk.service.DriverSenderService;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.springframework.stereotype.Component;
-
-import javax.annotation.Resource;
 
 /**
  * 驱动状态调度任务
@@ -22,9 +21,9 @@ import javax.annotation.Resource;
 @Component
 public class DriverStatusScheduleJob extends QuartzJobBean {
 
-    @Resource
+    @Autowired
     private DriverContext driverContext;
-    @Resource
+    @Autowired
     private DriverSenderService driverSenderService;
 
     @Override

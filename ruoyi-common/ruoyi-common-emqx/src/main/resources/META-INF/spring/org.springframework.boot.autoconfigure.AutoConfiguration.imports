@@ -1,0 +1,2 @@
+org.dromara.common.emqx.config.EmqxConfig
+org.dromara.common.emqx.properties.EmqProperties

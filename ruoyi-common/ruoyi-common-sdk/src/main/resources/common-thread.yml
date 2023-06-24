@@ -1,0 +1,7 @@
+# 如果想要覆盖以下内容需要在nacos中进行重新配置
+server:
+  thread:
+    prefix: ruoyi-thread-
+    core-pool-size: 4
+    maximum-pool-size: 32
+    keep-alive-time: 15

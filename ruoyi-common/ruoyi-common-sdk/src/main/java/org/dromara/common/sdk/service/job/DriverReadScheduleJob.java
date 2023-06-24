@@ -6,6 +6,7 @@ import org.dromara.common.sdk.DriverContext;
 import org.dromara.common.sdk.service.DriverCommandService;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.springframework.stereotype.Component;
 
@@ -23,7 +24,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 @Component
 public class DriverReadScheduleJob extends QuartzJobBean {
 
-    @Resource
+    @Autowired
     private DriverContext driverContext;
     @Resource
     private ThreadPoolExecutor threadPoolExecutor;

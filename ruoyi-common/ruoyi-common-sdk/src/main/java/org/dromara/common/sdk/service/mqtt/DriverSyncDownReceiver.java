@@ -12,9 +12,8 @@ import org.dromara.common.json.utils.JsonUtils;
 import org.dromara.common.sdk.DriverContext;
 import org.dromara.common.sdk.utils.AddressUtils;
 import org.eclipse.paho.mqttv5.common.MqttMessage;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-
-import javax.annotation.Resource;
 
 @Slf4j
 @Topic(qos = 2)
@@ -24,7 +23,7 @@ public class DriverSyncDownReceiver extends MqttConsumer<DriverSyncDownDTO> {
     private Integer servicePort;
     @Value("${spring.application.name}")
     private String applicationName;
-    @Resource
+    @Autowired
     private DriverContext driverContext;
 
     /**
@@ -35,6 +34,7 @@ public class DriverSyncDownReceiver extends MqttConsumer<DriverSyncDownDTO> {
      */
     @Override
     protected void messageHandler(String topic, DriverSyncDownDTO entity) {
+        System.out.println("driver register back....." + driverContext);
         driverContext.setDriverStatus(DriverStatusEnum.ONLINE);
     }
 

@@ -11,9 +11,8 @@ import org.dromara.common.sdk.service.job.DriverCustomScheduleJob;
 import org.dromara.common.sdk.service.job.DriverReadScheduleJob;
 import org.dromara.common.sdk.service.job.DriverStatusScheduleJob;
 import org.quartz.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import javax.annotation.Resource;
 
 /**
  * @author pnoker
@@ -23,9 +22,9 @@ import javax.annotation.Resource;
 @Service
 public class DriverScheduleServiceImpl implements DriverScheduleService {
 
-    @Resource
+    @Autowired
     private Scheduler scheduler;
-    @Resource
+    @Autowired
     private DriverProperty driverProperty;
 
     @Override

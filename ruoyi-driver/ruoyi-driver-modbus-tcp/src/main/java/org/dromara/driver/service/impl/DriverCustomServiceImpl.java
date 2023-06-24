@@ -13,7 +13,6 @@ import java.util.Map;
 @Service
 public class DriverCustomServiceImpl implements DriverCustomService {
 
-
     /**
      * 初始化接口，会在驱动启动时执行
      */

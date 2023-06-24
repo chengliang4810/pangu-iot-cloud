@@ -1,16 +1,17 @@
 package org.dromara.common.sdk.init;
 
+import org.dromara.common.core.factory.YmlPropertySourceFactory;
 import org.dromara.common.sdk.property.DriverProperty;
 import org.dromara.common.sdk.service.DriverCustomService;
 import org.dromara.common.sdk.service.DriverScheduleService;
 import org.dromara.common.sdk.service.DriverSyncService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
-
-import javax.annotation.Resource;
 
 /**
  * Driver SDK Initial
@@ -20,16 +21,17 @@ import javax.annotation.Resource;
  */
 @Component
 @ComponentScan(basePackages = {
-        "org.dromara.common.sdk",
+        "org.dromara.common.sdk"
 })
 @EnableConfigurationProperties({DriverProperty.class})
+@PropertySource(value = "classpath:common-thread.yml", factory = YmlPropertySourceFactory.class)
 public class DriverInitRunner implements ApplicationRunner {
 
-    @Resource
+    @Autowired
     private DriverSyncService driverSyncService;
-    @Resource
+    @Autowired
     private DriverCustomService driverCustomService;
-    @Resource
+    @Autowired
     private DriverScheduleService driverScheduleService;
 
     @Override
