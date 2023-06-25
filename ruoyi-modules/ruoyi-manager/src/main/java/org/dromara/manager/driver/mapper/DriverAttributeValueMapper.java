@@ -1,8 +1,8 @@
 package org.dromara.manager.driver.mapper;
 
+import org.dromara.common.mybatis.core.mapper.BaseMapperPlus;
 import org.dromara.manager.driver.domain.DriverAttributeValue;
 import org.dromara.manager.driver.domain.vo.DriverAttributeValueVo;
-import org.dromara.common.mybatis.core.mapper.BaseMapperPlus;
 
 /**
  * 驱动属性值Mapper接口

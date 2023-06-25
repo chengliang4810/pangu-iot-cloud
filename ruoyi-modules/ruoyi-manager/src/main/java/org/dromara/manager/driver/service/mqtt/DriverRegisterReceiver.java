@@ -23,7 +23,7 @@ public class DriverRegisterReceiver extends MqttConsumer<DriverSyncUpDTO> {
     /**
      * 消息处理程序,业务操作
      *
-     * @param topic  主题
+     * @param topic     主题
      * @param entityDTO 实体
      */
     @Override

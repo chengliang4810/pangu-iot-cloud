@@ -26,31 +26,31 @@ public class DriverBo extends BaseEntity {
     /**
      * 主键ID
      */
-    @NotNull(message = "主键ID不能为空", groups = { EditGroup.class })
+    @NotNull(message = "主键ID不能为空", groups = {EditGroup.class})
     private Long id;
 
     /**
      * 协议唯一性标识
      */
-    @NotBlank(message = "协议唯一性标识不能为空", groups = { AddGroup.class, EditGroup.class })
+    @NotBlank(message = "协议唯一性标识不能为空", groups = {AddGroup.class, EditGroup.class})
     private String code;
 
     /**
      * 显示名称
      */
-    @NotBlank(message = "显示名称不能为空", groups = { AddGroup.class, EditGroup.class })
+    @NotBlank(message = "显示名称不能为空", groups = {AddGroup.class, EditGroup.class})
     private String displayName;
 
     /**
      * 启用|禁用
      */
-    @NotNull(message = "启用|禁用不能为空", groups = { AddGroup.class, EditGroup.class })
+    @NotNull(message = "启用|禁用不能为空", groups = {AddGroup.class, EditGroup.class})
     private Long enable;
 
     /**
      * 描述
      */
-    @NotBlank(message = "描述不能为空", groups = { AddGroup.class, EditGroup.class })
+    @NotBlank(message = "描述不能为空", groups = {AddGroup.class, EditGroup.class})
     private String remark;
 
 

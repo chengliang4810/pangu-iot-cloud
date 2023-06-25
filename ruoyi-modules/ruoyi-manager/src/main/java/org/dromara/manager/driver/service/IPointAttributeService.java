@@ -1,10 +1,9 @@
 package org.dromara.manager.driver.service;
 
-import org.dromara.manager.driver.domain.PointAttribute;
-import org.dromara.manager.driver.domain.vo.PointAttributeVo;
-import org.dromara.manager.driver.domain.bo.PointAttributeBo;
-import org.dromara.common.mybatis.core.page.TableDataInfo;
 import org.dromara.common.mybatis.core.page.PageQuery;
+import org.dromara.common.mybatis.core.page.TableDataInfo;
+import org.dromara.manager.driver.domain.bo.PointAttributeBo;
+import org.dromara.manager.driver.domain.vo.PointAttributeVo;
 
 import java.util.Collection;
 import java.util.List;

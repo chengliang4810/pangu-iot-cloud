@@ -1,26 +1,27 @@
 package org.dromara.manager.driver.controller;
 
-import java.util.List;
-
-import lombok.RequiredArgsConstructor;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.validation.constraints.*;
 import cn.dev33.satoken.annotation.SaCheckPermission;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.validation.annotation.Validated;
-import org.dromara.common.idempotent.annotation.RepeatSubmit;
-import org.dromara.common.log.annotation.Log;
-import org.dromara.common.web.core.BaseController;
-import org.dromara.common.mybatis.core.page.PageQuery;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import lombok.RequiredArgsConstructor;
 import org.dromara.common.core.domain.R;
 import org.dromara.common.core.validate.AddGroup;
 import org.dromara.common.core.validate.EditGroup;
-import org.dromara.common.log.enums.BusinessType;
 import org.dromara.common.excel.utils.ExcelUtil;
-import org.dromara.manager.driver.domain.vo.PointAttributeVo;
-import org.dromara.manager.driver.domain.bo.PointAttributeBo;
-import org.dromara.manager.driver.service.IPointAttributeService;
+import org.dromara.common.idempotent.annotation.RepeatSubmit;
+import org.dromara.common.log.annotation.Log;
+import org.dromara.common.log.enums.BusinessType;
+import org.dromara.common.mybatis.core.page.PageQuery;
 import org.dromara.common.mybatis.core.page.TableDataInfo;
+import org.dromara.common.web.core.BaseController;
+import org.dromara.manager.driver.domain.bo.PointAttributeBo;
+import org.dromara.manager.driver.domain.vo.PointAttributeVo;
+import org.dromara.manager.driver.service.IPointAttributeService;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * 驱动属性
@@ -64,7 +65,7 @@ public class PointAttributeController extends BaseController {
     @SaCheckPermission("manager:pointAttribute:query")
     @GetMapping("/{id}")
     public R<PointAttributeVo> getInfo(@NotNull(message = "主键不能为空")
-                                     @PathVariable Long id) {
+                                       @PathVariable Long id) {
         return R.ok(pointAttributeService.queryById(id));
     }
 

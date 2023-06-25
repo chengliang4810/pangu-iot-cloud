@@ -1,11 +1,8 @@
 package org.dromara.manager.driver.domain;
 
-import org.dromara.common.mybatis.core.domain.BaseEntity;
-import com.baomidou.mybatisplus.annotation.*;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-
-import java.io.Serial;
 
 /**
  * 驱动属性值对象 iot_driver_attribute_value

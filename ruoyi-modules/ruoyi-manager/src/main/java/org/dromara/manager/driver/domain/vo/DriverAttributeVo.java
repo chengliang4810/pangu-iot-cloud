@@ -10,7 +10,6 @@ import java.io.Serial;
 import java.io.Serializable;
 
 
-
 /**
  * 驱动属性视图对象 iot_driver_attribute
  *

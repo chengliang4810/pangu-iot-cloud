@@ -1,10 +1,9 @@
 package org.dromara.manager.driver.service;
 
-import org.dromara.manager.driver.domain.DriverApplication;
-import org.dromara.manager.driver.domain.vo.DriverApplicationVo;
-import org.dromara.manager.driver.domain.bo.DriverApplicationBo;
-import org.dromara.common.mybatis.core.page.TableDataInfo;
 import org.dromara.common.mybatis.core.page.PageQuery;
+import org.dromara.common.mybatis.core.page.TableDataInfo;
+import org.dromara.manager.driver.domain.bo.DriverApplicationBo;
+import org.dromara.manager.driver.domain.vo.DriverApplicationVo;
 
 import java.util.Collection;
 import java.util.List;

@@ -73,7 +73,7 @@ public class DriverSyncServiceImpl implements DriverSyncService {
         // 检查driver是否存在
         Driver driver = driverService.queryByCode(entityDTO.getDriver().getDriverCode());
 
-        if (ObjectUtil.isNull(driver)){
+        if (ObjectUtil.isNull(driver)) {
             log.debug("Driver does not registered, adding {} ", driverDTO);
             DriverBo driverBo = buildDriverBo(driverDTO);
             driverService.insertByBo(driverBo);
@@ -85,7 +85,7 @@ public class DriverSyncServiceImpl implements DriverSyncService {
         return driverService.queryById(driver.getId());
     }
 
-    private DriverBo buildDriverBo(DriverDTO driverDTO){
+    private DriverBo buildDriverBo(DriverDTO driverDTO) {
         DriverBo driverBo = new DriverBo();
         driverBo.setCode(driverDTO.getDriverCode());
         driverBo.setDisplayName(driverDTO.getDriverName());
@@ -133,7 +133,7 @@ public class DriverSyncServiceImpl implements DriverSyncService {
             String name = entry.getKey();
             if (!newDriverAttributeMap.containsKey(name)) {
                 Long count = driverAttributeValueService.countByAttributeId(oldDriverAttributeMap.get(name).getId());
-                if (count == 0){
+                if (count == 0) {
                     log.debug("Driver attribute is redundant, deleting: {}", oldDriverAttributeMap.get(name));
                     driverAttributeService.deleteWithValidByIds(Collections.singletonList(oldDriverAttributeMap.get(name).getId()), false);
                     continue;
@@ -143,7 +143,7 @@ public class DriverSyncServiceImpl implements DriverSyncService {
         }
     }
 
-    private DriverAttributeBo buildDriverAttributeBo(DriverAttribute driverAttribute){
+    private DriverAttributeBo buildDriverAttributeBo(DriverAttribute driverAttribute) {
         DriverAttributeBo driverAttributeBo = new DriverAttributeBo();
         driverAttributeBo.setId(driverAttribute.getId());
         driverAttributeBo.setDriverId(driverAttribute.getDriverId());

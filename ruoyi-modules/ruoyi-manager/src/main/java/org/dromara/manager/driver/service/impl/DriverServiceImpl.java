@@ -35,7 +35,7 @@ public class DriverServiceImpl implements IDriverService {
      * 查询驱动
      */
     @Override
-    public DriverVo queryById(Long id){
+    public DriverVo queryById(Long id) {
         return baseMapper.selectVoById(id);
     }
 
@@ -94,7 +94,7 @@ public class DriverServiceImpl implements IDriverService {
     /**
      * 保存前的数据校验
      */
-    private void validEntityBeforeSave(Driver entity){
+    private void validEntityBeforeSave(Driver entity) {
         //TODO 做一些数据校验,如唯一约束
     }
 
@@ -106,7 +106,7 @@ public class DriverServiceImpl implements IDriverService {
      */
     @Override
     public Driver queryByCode(String driverCode) {
-        if (StringUtils.isBlank(driverCode)){
+        if (StringUtils.isBlank(driverCode)) {
             return null;
         }
         return baseMapper.selectOne(Wrappers.lambdaQuery(Driver.class).eq(Driver::getCode, driverCode).last("limit 1"));
@@ -117,7 +117,7 @@ public class DriverServiceImpl implements IDriverService {
      */
     @Override
     public Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid) {
-        if(isValid){
+        if (isValid) {
             //TODO 做一些业务上的校验,判断是否需要校验
         }
         return baseMapper.deleteBatchIds(ids) > 0;
