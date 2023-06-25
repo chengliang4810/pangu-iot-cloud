@@ -11,6 +11,10 @@ spring:
     # 环境配置
     active: @profiles.active@
 
+logging:
+  level:
+    org.dromara.manager: debug
+
 --- # nacos 配置
 spring:
   cloud:

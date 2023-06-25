@@ -1,39 +1,36 @@
 package org.dromara.common.sdk.service.job;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.dromara.common.iot.entity.driver.Device;
 import org.dromara.common.sdk.DriverContext;
 import org.dromara.common.sdk.service.DriverCommandService;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
 import java.util.Map;
 import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * Read Schedule Job
  *
- * @author pnoker
- * @since 2022.1.0
+ * @author pnoker, chengliang4810
+ * @date 2023/06/25
  */
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class DriverReadScheduleJob extends QuartzJobBean {
 
-    @Autowired
-    private DriverContext driverContext;
-    @Resource
-    private ThreadPoolExecutor threadPoolExecutor;
-    @Resource
-    private DriverCommandService driverCommandService;
+    private final DriverContext driverContext;
+    private final ThreadPoolExecutor threadPoolExecutor;
+    private final DriverCommandService driverCommandService;
 
     @Override
     protected void executeInternal(JobExecutionContext jobExecutionContext) throws JobExecutionException {
-        Map<String, Device> deviceMap = driverContext.getDriverMetadata().getDeviceMap();
+        Map<Long, Device> deviceMap = driverContext.getDriverMetadata().getDeviceMap();
 //        if (ObjectUtil.isNull(deviceMap)) {
 //            return;
 //        }

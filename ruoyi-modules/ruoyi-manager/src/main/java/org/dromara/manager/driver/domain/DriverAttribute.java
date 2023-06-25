@@ -1,11 +1,8 @@
 package org.dromara.manager.driver.domain;
 
-import org.dromara.common.tenant.core.TenantEntity;
-import com.baomidou.mybatisplus.annotation.*;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-
-import java.io.Serial;
 
 /**
  * 驱动属性对象 iot_driver_attribute
@@ -53,7 +50,7 @@ public class DriverAttribute {
     /**
      * 必填
      */
-    private Integer required;
+    private Boolean required;
 
     /**
      * 描述

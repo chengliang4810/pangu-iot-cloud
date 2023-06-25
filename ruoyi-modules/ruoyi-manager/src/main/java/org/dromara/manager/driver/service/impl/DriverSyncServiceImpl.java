@@ -52,6 +52,7 @@ public class DriverSyncServiceImpl implements DriverSyncService {
         // 注册驱动基础信息
         DriverVo driverVo = registerDriver(entityDTO);
 
+        System.out.println("=+++++" + driverVo);
 
         DriverMetadata driverMetadata = new DriverMetadata();
 
@@ -72,7 +73,7 @@ public class DriverSyncServiceImpl implements DriverSyncService {
         // 检查driver是否存在
         Driver driver = driverService.queryByCode(entityDTO.getDriver().getDriverCode());
 
-        if (driver == null){
+        if (ObjectUtil.isNull(driver)){
             log.debug("Driver does not registered, adding {} ", driverDTO);
             DriverBo driverBo = buildDriverBo(driverDTO);
             driverService.insertByBo(driverBo);

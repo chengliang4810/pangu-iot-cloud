@@ -1,16 +1,13 @@
 package org.dromara.manager.driver.domain.vo;
 
-import org.dromara.manager.driver.domain.DriverAttribute;
 import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import com.alibaba.excel.annotation.ExcelProperty;
-import org.dromara.common.excel.annotation.ExcelDictFormat;
-import org.dromara.common.excel.convert.ExcelDictConvert;
 import io.github.linpeilie.annotations.AutoMapper;
 import lombok.Data;
+import org.dromara.manager.driver.domain.DriverAttribute;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Date;
 
 
 
@@ -68,7 +65,7 @@ public class DriverAttributeVo implements Serializable {
      * 必填
      */
     @ExcelProperty(value = "必填")
-    private Integer required;
+    private Boolean required;
 
     /**
      * 描述
