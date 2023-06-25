@@ -44,7 +44,7 @@ public class DriverContext {
      * @param deviceId 设备ID
      * @return Map String:AttributeInfo
      */
-    public Map<String, AttributeInfo> getDriverInfoByDeviceId(String deviceId) {
+    public Map<String, AttributeInfo> getDriverInfoByDeviceId(Long deviceId) {
         return this.driverMetadata.getDriverInfoMap().get(deviceId);
     }
 
@@ -54,8 +54,8 @@ public class DriverContext {
      * @param deviceId 设备ID
      * @return Map String:(Map String:AttributeInfo)
      */
-    public Map<String, Map<String, AttributeInfo>> getPointInfoByDeviceId(String deviceId) {
-        Map<String, Map<String, AttributeInfo>> tmpMap = this.driverMetadata.getPointInfoMap().get(deviceId);
+    public Map<Long, Map<String, AttributeInfo>> getPointInfoByDeviceId(Long deviceId) {
+        Map<Long, Map<String, AttributeInfo>> tmpMap = this.driverMetadata.getPointInfoMap().get(deviceId);
         if (MapUtils.isEmpty(tmpMap)) {
             throw new ServiceException("Device({" + deviceId + "}) does not exist");
         }
@@ -69,7 +69,7 @@ public class DriverContext {
      * @param pointId  位号ID
      * @return Map String:AttributeInfo
      */
-    public Map<String, AttributeInfo> getPointInfoByDeviceIdAndPointId(String deviceId, String pointId) {
+    public Map<String, AttributeInfo> getPointInfoByDeviceIdAndPointId(Long deviceId, Long pointId) {
         Map<String, AttributeInfo> tmpMap = getPointInfoByDeviceId(deviceId).get(pointId);
         if (MapUtils.isEmpty(tmpMap)) {
             throw new ServiceException("Point({"+pointId+"}) info does not exist");
@@ -83,7 +83,7 @@ public class DriverContext {
      * @param deviceId 设备ID
      * @return Device
      */
-    public Device getDeviceByDeviceId(String deviceId) {
+    public Device getDeviceByDeviceId(Long deviceId) {
         Device device = this.driverMetadata.getDeviceMap().get(deviceId);
         if (ObjectUtils.anyNull(device)) {
             throw new ServiceException("Device({"+deviceId+"}) does not exist");
@@ -97,7 +97,7 @@ public class DriverContext {
      * @param deviceId 设备ID
      * @return Point Array
      */
-    public List<Point> getPointByDeviceId(String deviceId) {
+    public List<Point> getPointByDeviceId(Long deviceId) {
         Device device = getDeviceByDeviceId(deviceId);
         return null;
 //        return this.driverMetadata.getProfilePointMap().entrySet().stream()
@@ -116,7 +116,7 @@ public class DriverContext {
      * @param pointId  位号ID
      * @return Point
      */
-    public Point getPointByDeviceIdAndPointId(String deviceId, String pointId) {
+    public Point getPointByDeviceIdAndPointId(Long deviceId, Long pointId) {
         // TODO 当设备量很大的时候，建议用本地数据库来存储设备数据，弄个热数据缓存，仅仅把经常使用的数据放到内存中来
 //        Device device = getDeviceByDeviceId(deviceId);
 //        Optional<Map<String, Point>> optional = this.driverMetadata.getProfilePointMap().entrySet().stream()

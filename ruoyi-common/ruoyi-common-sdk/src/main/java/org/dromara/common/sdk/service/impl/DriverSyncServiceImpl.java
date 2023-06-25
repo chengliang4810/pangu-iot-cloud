@@ -2,6 +2,7 @@ package org.dromara.common.sdk.service.impl;
 
 import cn.hutool.core.thread.ThreadUtil;
 import cn.hutool.json.JSONUtil;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -19,11 +20,9 @@ import org.dromara.common.sdk.property.DriverProperty;
 import org.dromara.common.sdk.service.DriverSenderService;
 import org.dromara.common.sdk.service.DriverSyncService;
 import org.dromara.common.sdk.utils.AddressUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
@@ -35,22 +34,17 @@ import java.util.concurrent.TimeUnit;
  */
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class DriverSyncServiceImpl implements DriverSyncService {
 
-    @Autowired
-    private DriverContext driverContext;
-    @Autowired
-    private DriverProperty driverProperty;
     @Value("${spring.application.name}")
     private String applicationName;
     @Value("${server.port}")
     private Integer servicePort;
-
-    @Resource
-    private DriverSenderService driverSenderService;
-
-    @Autowired
-    private ThreadPoolExecutor threadPoolExecutor;
+    private final DriverContext driverContext;
+    private final DriverProperty driverProperty;
+    private final ThreadPoolExecutor threadPoolExecutor;
+    private final DriverSenderService driverSenderService;
 
     @Override
     public void up() {

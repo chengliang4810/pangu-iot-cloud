@@ -1,16 +1,21 @@
 package org.dromara.common.sdk.service.impl;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.dromara.common.emqx.utils.EmqxUtil;
+import org.dromara.common.iot.constant.DeviceTopic;
 import org.dromara.common.iot.dto.DriverEventDTO;
 import org.dromara.common.iot.entity.device.DeviceEvent;
+import org.dromara.common.iot.entity.device.DeviceStatus;
 import org.dromara.common.iot.entity.point.PointValue;
 import org.dromara.common.iot.enums.DeviceStatusEnum;
+import org.dromara.common.json.utils.JsonUtils;
 import org.dromara.common.sdk.property.DriverProperty;
 import org.dromara.common.sdk.service.DriverSenderService;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author pnoker
@@ -18,10 +23,11 @@ import java.util.List;
  */
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class DriverSenderServiceImpl implements DriverSenderService {
 
-    @Resource
-    private DriverProperty driverProperty;
+    private final DriverProperty driverProperty;
+
 
     @Override
     public void driverEventSender(DriverEventDTO entityDTO) {
@@ -47,9 +53,41 @@ public class DriverSenderServiceImpl implements DriverSenderService {
 //        }
     }
 
+    /**
+     * 发送设备状态
+     * 状态保存时间采用默认 30秒
+     *
+     * @param deviceId 设备id
+     * @param status   状态
+     */
     @Override
-    public void deviceStatusSender(String deviceId, DeviceStatusEnum status) {
-        // deviceEventSender(new DeviceEvent(deviceId, EventConstant.Device.STATUS, status));
+    public void deviceStatusSender(Long deviceId, DeviceStatusEnum status) {
+        this.deviceStatusSender(deviceId, status, 30, TimeUnit.SECONDS);
+    }
+
+    /**
+     * 发送设备状态事件
+     *
+     * @param deviceId 设备ID
+     * @param status   StatusEnum
+     * @param time     时间
+     * @param timeUnit 时间单位
+     */
+    @Override
+    public void deviceStatusSender(Long deviceId, DeviceStatusEnum status, long time, TimeUnit timeUnit) {
+        this.deviceStatusSender(DeviceStatus.of(deviceId, status, time, timeUnit));
+    }
+
+    /**
+     * 发送设备状态
+     *
+     * @param deviceStatus 设备状态
+     */
+    @Override
+    public void deviceStatusSender(DeviceStatus deviceStatus) {
+        if (null != deviceStatus) {
+            EmqxUtil.publish(DeviceTopic.getDeviceStatusTopic(deviceStatus.getDeviceId()), JsonUtils.toJsonString(deviceStatus));
+        }
     }
 
     @Override

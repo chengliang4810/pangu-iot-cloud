@@ -1,8 +1,9 @@
 package org.dromara.common.sdk.service.impl;
 
+import cn.hutool.core.util.ObjectUtil;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.ObjectUtils;
 import org.dromara.common.iot.constant.ScheduleConstant;
 import org.dromara.common.sdk.property.DriverProperty;
 import org.dromara.common.sdk.property.ScheduleProperty;
@@ -10,30 +11,31 @@ import org.dromara.common.sdk.service.DriverScheduleService;
 import org.dromara.common.sdk.service.job.DriverCustomScheduleJob;
 import org.dromara.common.sdk.service.job.DriverReadScheduleJob;
 import org.dromara.common.sdk.service.job.DriverStatusScheduleJob;
+import org.dromara.common.sdk.service.job.GatewayDeviceStatusScheduleJob;
 import org.quartz.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- * @author pnoker
+ * @author pnoker, chengliang4810
  * @since 2022.1.0
  */
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class DriverScheduleServiceImpl implements DriverScheduleService {
 
-    @Autowired
-    private Scheduler scheduler;
-    @Autowired
-    private DriverProperty driverProperty;
+    private final Scheduler scheduler;
+    private final DriverProperty driverProperty;
 
     @Override
     public void initial() {
         ScheduleProperty property = driverProperty.getSchedule();
-        if (ObjectUtils.anyNull(property)) {
+        if (ObjectUtil.isNotNull(property)) {
             return;
         }
-
+        if (Boolean.TRUE.equals(property.getGateway().getEnable())) {
+            createScheduleJobWithCorn(ScheduleConstant.DRIVER_SCHEDULE_GROUP, ScheduleConstant.GATEWAY_STATUS_SCHEDULE_JOB, property.getCustom().getCorn(), GatewayDeviceStatusScheduleJob.class);
+        }
         if (Boolean.TRUE.equals(property.getRead().getEnable())) {
             createScheduleJobWithCorn(ScheduleConstant.DRIVER_SCHEDULE_GROUP, ScheduleConstant.READ_SCHEDULE_JOB, property.getRead().getCorn(), DriverReadScheduleJob.class);
         }

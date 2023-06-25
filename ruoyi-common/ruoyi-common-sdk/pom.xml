@@ -53,6 +53,11 @@
             <artifactId>ruoyi-common-emqx</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-cache</artifactId>
+        </dependency>
+
         <!-- Spring Quartz -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

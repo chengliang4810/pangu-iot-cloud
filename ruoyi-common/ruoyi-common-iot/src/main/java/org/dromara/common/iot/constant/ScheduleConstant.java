@@ -31,7 +31,13 @@ public class ScheduleConstant {
     public static final String STATUS_SCHEDULE_JOB = "StatusScheduleJob";
 
     /**
+     * 网关状态任务
+     */
+    public static final String GATEWAY_STATUS_SCHEDULE_JOB = "GatewayStatusScheduleJob";
+
+    /**
      * 驱动状态任务 Corn
      */
     public static final String DRIVER_STATUS_CORN = "0/5 * * * * ?";
+
 }

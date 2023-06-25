@@ -1,15 +1,19 @@
 package org.dromara.common.sdk.service.job;
 
+import cn.hutool.core.collection.CollUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.dromara.common.iot.entity.driver.Device;
 import org.dromara.common.sdk.DriverContext;
 import org.dromara.common.sdk.service.DriverCustomService;
 import org.dromara.common.sdk.service.DriverSenderService;
+import org.dromara.common.sdk.service.GatewayStatusService;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
+import java.util.Map;
 import java.util.concurrent.ThreadPoolExecutor;
 
 /**
@@ -22,20 +26,23 @@ import java.util.concurrent.ThreadPoolExecutor;
 @Component
 public class GatewayDeviceStatusScheduleJob extends QuartzJobBean {
 
-    @Resource
+    @Autowired
     private DriverContext driverContext;
-    @Resource
+    @Autowired
     private DriverSenderService driverSenderService;
-    @Resource
+    @Autowired
     private DriverCustomService driverCustomService;
-    @Resource
+    @Autowired
     private ThreadPoolExecutor threadPoolExecutor;
+    @Autowired
+    private GatewayStatusService gatewayStatusService;
 
     @Override
     protected void executeInternal(JobExecutionContext jobExecutionContext) throws JobExecutionException {
-//         DriverEventDTO.DriverStatus driverStatus = new DriverEventDTO.DriverStatus(driverContext.getDriverMetadata().getDriverId(), driverContext.getDriverStatus());
-//         log.debug("Send driver status event: {}", JsonUtils.toJsonString(driverStatus));
-//         driverSenderService.driverStatusSender(driverStatus);
-//         threadPoolExecutor.execute(() -> driverCustomService.gatewayStatus());
+        Map<Long, Device> deviceMap = driverContext.getDriverMetadata().getGatewayDeviceMap();
+        if (CollUtil.isEmpty(deviceMap)) {
+            return;
+        }
+        deviceMap.keySet().forEach(deviceId -> threadPoolExecutor.execute(() -> gatewayStatusService.status(deviceId)));
     }
 }

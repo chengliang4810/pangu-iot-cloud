@@ -44,27 +44,27 @@ public class DriverMetadata implements Serializable {
      * 网关设备
      * deviceId,device
      */
-    private Map<String, Device> gatewayDeviceMap;
+    private Map<Long, Device> gatewayDeviceMap;
 
     /**
      * deviceId(driverAttribute.name,(driverInfo.value,driverAttribute.type))
      */
-    private Map<String, Map<String, AttributeInfo>> driverInfoMap;
+    private Map<Long, Map<String, AttributeInfo>> driverInfoMap;
 
     /**
      * deviceId(pointId(pointAttribute.name,(pointInfo.value,pointAttribute.type)))
      */
-    private Map<String, Map<String, Map<String, AttributeInfo>>> pointInfoMap;
+    private Map<Long, Map<Long, Map<String, AttributeInfo>>> pointInfoMap;
 
     /**
      * deviceId,device
      */
-    private Map<String, Device> deviceMap;
+    private Map<Long, Device> deviceMap;
 
     /**
      * profileId(pointId,point)
      */
-    private Map<String, Map<String, Point>> profilePointMap;
+    private Map<Long, Map<Long, Point>> profilePointMap;
 
     public DriverMetadata() {
         this.driverAttributeMap = new ConcurrentHashMap<>(16);

@@ -24,6 +24,11 @@ public class ScheduleProperty {
     private ScheduleConfig custom;
 
     /**
+     * 网关状态任务配置
+     */
+    private ScheduleConfig gateway;
+
+    /**
      * 驱动调度任务配置
      *
      * @author pnoker

@@ -2,6 +2,7 @@ package org.dromara.common.sdk.service;
 
 
 import com.graphbuilder.curve.Point;
+import org.dromara.common.iot.entity.device.DeviceStatus;
 import org.dromara.common.iot.entity.driver.AttributeInfo;
 import org.dromara.common.iot.entity.driver.Device;
 
@@ -18,12 +19,12 @@ public interface DriverCustomService {
     /**
      * 初始化接口，会在驱动启动时执行
      */
-    void initial();
+    default void initial() {};
 
     /**
      * 自定义调度接口，配置文件 driver.schedule.custom 进行配置
      */
-    void schedule();
+    default void schedule() {};
 
     /**
      * 读操作，请灵活运行，有些类型设备不一定能直接读取数据
@@ -45,6 +46,19 @@ public interface DriverCustomService {
      * @param value      Value Attribute Info
      * @return Boolean 是否写入
      */
-    Boolean write(Map<String, AttributeInfo> driverInfo, Map<String, AttributeInfo> pointInfo, Device device, AttributeInfo value);
+    default Boolean write(Map<String, AttributeInfo> driverInfo, Map<String, AttributeInfo> pointInfo, Device device, AttributeInfo value) {
+        return false;
+    };
+
+    /**
+     * 网关状态
+     *
+     * @param driverInfo driver info
+     * @param device     设备
+     * @return {@link DeviceStatus}
+     */
+    default DeviceStatus gatewayStatus(Map<String, AttributeInfo> driverInfo, Device device) {
+        return DeviceStatus.online(device.getDeviceId());
+    }
 
 }

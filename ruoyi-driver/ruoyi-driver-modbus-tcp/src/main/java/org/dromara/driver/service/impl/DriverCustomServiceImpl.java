@@ -2,6 +2,7 @@ package org.dromara.driver.service.impl;
 
 import com.graphbuilder.curve.Point;
 import lombok.extern.slf4j.Slf4j;
+import org.dromara.common.iot.entity.device.DeviceStatus;
 import org.dromara.common.iot.entity.driver.AttributeInfo;
 import org.dromara.common.iot.entity.driver.Device;
 import org.dromara.common.sdk.service.DriverCustomService;
@@ -27,6 +28,18 @@ public class DriverCustomServiceImpl implements DriverCustomService {
     @Override
     public void schedule() {
 
+    }
+
+    /**
+     * 网关状态
+     *
+     * @param driverInfo driver info
+     * @param device     设备
+     * @return {@link DeviceStatus}
+     */
+    @Override
+    public DeviceStatus gatewayStatus(Map<String, AttributeInfo> driverInfo, Device device) {
+        return DeviceStatus.online(device.getDeviceId());
     }
 
     /**

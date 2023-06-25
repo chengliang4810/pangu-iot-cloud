@@ -3,10 +3,12 @@ package org.dromara.common.sdk.service;
 
 import org.dromara.common.iot.dto.DriverEventDTO;
 import org.dromara.common.iot.entity.device.DeviceEvent;
+import org.dromara.common.iot.entity.device.DeviceStatus;
 import org.dromara.common.iot.entity.point.PointValue;
 import org.dromara.common.iot.enums.DeviceStatusEnum;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author pnoker
@@ -34,7 +36,24 @@ public interface DriverSenderService {
      * @param deviceId 设备ID
      * @param status   StatusEnum
      */
-    void deviceStatusSender(String deviceId, DeviceStatusEnum status);
+    void deviceStatusSender(Long deviceId, DeviceStatusEnum status);
+
+    /**
+     * 发送设备状态事件
+     *
+     * @param deviceId 设备ID
+     * @param status   StatusEnum
+     * @param time     时间
+     * @param timeUnit 时间单位
+     */
+    void deviceStatusSender(Long deviceId, DeviceStatusEnum status, long time, TimeUnit timeUnit);
+
+    /**
+     * 发送设备状态
+     *
+     * @param deviceStatus 设备状态
+     */
+    void deviceStatusSender(DeviceStatus deviceStatus);
 
     /**
      * 发送位号值到消息组件
