@@ -1,5 +1,5 @@
 driver:
-  tenant: 000000
+  tenant: '000000'
   name: Modbus-Tcp驱动
   code: ModbusTcpDriver
   remark: @project.description@

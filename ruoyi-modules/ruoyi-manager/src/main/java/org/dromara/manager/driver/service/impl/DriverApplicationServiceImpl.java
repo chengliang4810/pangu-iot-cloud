@@ -69,6 +69,28 @@ public class DriverApplicationServiceImpl implements IDriverApplicationService {
     }
 
     /**
+     * 查询一个
+     *
+     * @param bo 薄
+     * @return {@link DriverApplicationVo}
+     */
+    @Override
+    public DriverApplicationVo queryOne(DriverApplicationBo bo) {
+        return baseMapper.selectVoOne(buildQueryWrapper(bo).last("LIMIT 1"));
+    }
+
+    /**
+     * 查询是否存在
+     *
+     * @param bo 薄
+     * @return {@link DriverApplicationVo}
+     */
+    @Override
+    public Boolean exist(DriverApplicationBo bo) {
+        return baseMapper.exists(buildQueryWrapper(bo).last("LIMIT 1"));
+    }
+
+    /**
      * 新增驱动应用
      */
     @Override

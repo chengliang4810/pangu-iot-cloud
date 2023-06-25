@@ -52,7 +52,7 @@ public class DriverApplicationVo implements Serializable {
      * 端口号
      */
     @ExcelProperty(value = "端口号")
-    private Long port;
+    private Integer port;
 
 
 }

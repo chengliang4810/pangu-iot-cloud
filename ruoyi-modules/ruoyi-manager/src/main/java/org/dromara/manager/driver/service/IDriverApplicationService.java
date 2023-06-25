@@ -45,4 +45,20 @@ public interface IDriverApplicationService {
      * 校验并批量删除驱动应用信息
      */
     Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid);
+
+    /**
+     * 查询一个
+     *
+     * @param bo 薄
+     * @return {@link DriverApplicationVo}
+     */
+    DriverApplicationVo queryOne(DriverApplicationBo bo);
+
+    /**
+     * 存在
+     *
+     * @param bo 薄
+     * @return {@link Boolean}
+     */
+    Boolean exist(DriverApplicationBo bo);
 }

@@ -46,7 +46,7 @@ public class DriverApplication extends TenantEntity {
     /**
      * 端口号
      */
-    private Long port;
+    private Integer port;
 
 
 }

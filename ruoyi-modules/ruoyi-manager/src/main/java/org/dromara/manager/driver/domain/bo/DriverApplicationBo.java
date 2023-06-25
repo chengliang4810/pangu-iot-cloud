@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.dromara.common.core.validate.AddGroup;
 import org.dromara.common.core.validate.EditGroup;
-import org.dromara.common.mybatis.core.domain.BaseEntity;
+import org.dromara.common.tenant.core.TenantEntity;
 import org.dromara.manager.driver.domain.DriverApplication;
 
 /**
@@ -19,7 +19,7 @@ import org.dromara.manager.driver.domain.DriverApplication;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @AutoMapper(target = DriverApplication.class, reverseConvertGenerate = false)
-public class DriverApplicationBo extends BaseEntity {
+public class DriverApplicationBo extends TenantEntity {
 
     /**
      * 主键ID
@@ -49,7 +49,7 @@ public class DriverApplicationBo extends BaseEntity {
      * 端口号
      */
     @NotNull(message = "端口号不能为空", groups = {AddGroup.class, EditGroup.class})
-    private Long port;
+    private Integer port;
 
 
 }
