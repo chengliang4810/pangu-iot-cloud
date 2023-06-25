@@ -18,10 +18,10 @@ import java.util.concurrent.ConcurrentHashMap;
 public class DriverMetadata implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private String driverId;
+    private Long driverId;
     private String tenantId;
-    private Map<String, DriverAttribute> driverAttributeMap;
-    private Map<String, PointAttribute> pointAttributeMap;
+    private Map<Long, DriverAttribute> driverAttributeMap;
+    private Map<Long, PointAttribute> pointAttributeMap;
 
     /**
      * 网关设备

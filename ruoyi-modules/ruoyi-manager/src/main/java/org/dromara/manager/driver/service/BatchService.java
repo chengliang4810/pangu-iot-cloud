@@ -4,6 +4,12 @@ import org.dromara.common.iot.entity.driver.DriverMetadata;
 
 public interface BatchService {
 
-    DriverMetadata batchDriverMetadata();
+    /**
+     * 批处理驱动程序元数据
+     *
+     * @param code 代码
+     * @return {@link DriverMetadata}
+     */
+    DriverMetadata batchDriverMetadata(String code);
 
 }

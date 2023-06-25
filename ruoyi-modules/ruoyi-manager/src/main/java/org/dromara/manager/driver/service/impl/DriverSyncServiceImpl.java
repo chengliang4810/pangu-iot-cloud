@@ -35,6 +35,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class DriverSyncServiceImpl implements DriverSyncService {
 
+    private final BatchService batchService;
     private final IDriverService driverService;
     private final IPointAttributeService pointAttributeService;
     private final IDriverAttributeService driverAttributeService;
@@ -62,6 +63,8 @@ public class DriverSyncServiceImpl implements DriverSyncService {
         registerDriverAttribute(entityDTO, driverVo);
         // 注册点位属性
         registerPointAttribute(entityDTO, driverVo);
+
+        DriverMetadata driverMetadata2 = batchService.batchDriverMetadata(driverVo.getCode());
 
         DriverMetadata driverMetadata = new DriverMetadata();
 
