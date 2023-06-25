@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.dromara.common.core.constant.SymbolConstants;
 import org.dromara.common.emqx.utils.EmqxUtil;
 import org.dromara.common.iot.constant.DriverTopic;
 import org.dromara.common.iot.dto.DriverDTO;
@@ -51,7 +50,7 @@ public class DriverSyncServiceImpl implements DriverSyncService {
         try {
             DriverSyncUpDTO entityDTO = buildRegisterDTOByProperty();
             // 驱动唯一标识： 应用名称_IP地址_IP端口
-            String driverUniqueKey = applicationName + SymbolConstants.UNDERSCORE + entityDTO.getDriver().getServiceHost() + SymbolConstants.UNDERSCORE + servicePort;
+            String driverUniqueKey = entityDTO.getDriverUniqueKey();
             log.info("The driver {} is initializing", applicationName);
             log.debug("The driver {} initialization information is: {}", driverProperty.getName(), JSONUtil.toJsonPrettyStr(entityDTO));
             // 发送驱动注册信息

@@ -53,6 +53,8 @@ public class DriverSyncServiceImpl implements DriverSyncService {
         DriverVo driverVo = registerDriver(entityDTO);
         // 注册驱动服务应用
         registerDriverApplication(driverVo, entityDTO);
+        // 注册驱动属性
+        registerDriverAttribute(entityDTO, driverVo);
 
         DriverMetadata driverMetadata = new DriverMetadata();
 
@@ -74,9 +76,7 @@ public class DriverSyncServiceImpl implements DriverSyncService {
         bo.setApplicationName(entityDTO.getDriver().getServiceName());
         bo.setPort(entityDTO.getDriver().getServicePort());
         bo.setHost(entityDTO.getDriver().getServiceHost());
-        System.out.println("检查驱动服务是否存在");
         Boolean exist = driverApplicationService.exist(bo);
-        System.out.println("检查驱动服务是否存在 结果" + exist);
         if (BooleanUtil.isTrue(exist)){
           return;
         }
@@ -179,7 +179,7 @@ public class DriverSyncServiceImpl implements DriverSyncService {
         driverAttributeBo.setId(driverAttribute.getId());
         driverAttributeBo.setDriverId(driverAttribute.getDriverId());
         driverAttributeBo.setAttributeName(driverAttribute.getAttributeName());
-        driverAttributeBo.setAttributeType(driverAttributeBo.getAttributeType());
+        driverAttributeBo.setAttributeType(driverAttribute.getAttributeTypeFlag());
         driverAttributeBo.setDisplayName(driverAttribute.getDisplayName());
         driverAttributeBo.setDefaultValue(driverAttribute.getDefaultValue());
         driverAttributeBo.setRequired(driverAttribute.getRequired());
