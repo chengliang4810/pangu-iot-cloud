@@ -56,7 +56,7 @@ public class PointAttribute extends BaseEntity {
     /**
      * 必填
      */
-    private Integer required;
+    private Boolean required;
 
     /**
      * 描述

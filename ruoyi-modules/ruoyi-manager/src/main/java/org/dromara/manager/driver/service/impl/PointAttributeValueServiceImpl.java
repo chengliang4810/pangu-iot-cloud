@@ -109,4 +109,17 @@ public class PointAttributeValueServiceImpl implements IPointAttributeValueServi
         }
         return baseMapper.deleteBatchIds(ids) > 0;
     }
+
+
+    /**
+     * 选择通过属性id
+     *
+     * @param attributeId 属性id
+     * @return {@link PointAttributeValueVo}
+     */
+    @Override
+    public Boolean existByAttributeId(Long attributeId) {
+        return baseMapper.exists(Wrappers.<PointAttributeValue>lambdaQuery().eq(PointAttributeValue::getPointAttributeId, attributeId));
+    }
+
 }

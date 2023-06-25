@@ -64,7 +64,7 @@ public class PointAttributeVo implements Serializable {
      * 必填
      */
     @ExcelProperty(value = "必填")
-    private Integer required;
+    private Boolean required;
 
     /**
      * 描述

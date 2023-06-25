@@ -45,4 +45,12 @@ public interface IPointAttributeValueService {
      * 校验并批量删除驱动属性值信息
      */
     Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid);
+
+    /**
+     * 选择通过属性id
+     *
+     * @param attributeId 属性id
+     * @return {@link PointAttributeValueVo}
+     */
+    Boolean existByAttributeId(Long attributeId);
 }

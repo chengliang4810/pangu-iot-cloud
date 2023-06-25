@@ -1,5 +1,6 @@
 package org.dromara.manager.driver.service;
 
+import org.dromara.common.iot.entity.point.PointAttribute;
 import org.dromara.common.mybatis.core.page.PageQuery;
 import org.dromara.common.mybatis.core.page.TableDataInfo;
 import org.dromara.manager.driver.domain.bo.PointAttributeBo;
@@ -45,4 +46,12 @@ public interface IPointAttributeService {
      * 校验并批量删除驱动属性信息
      */
     Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid);
+
+    /**
+     * 选择通过驱动程序id
+     *
+     * @param driverId 司机身份证
+     * @return {@link List}<{@link PointAttribute}>
+     */
+    List<PointAttributeVo> selectByDriverId(Long driverId);
 }

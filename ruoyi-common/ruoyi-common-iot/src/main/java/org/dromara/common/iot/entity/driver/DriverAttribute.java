@@ -57,4 +57,10 @@ public class DriverAttribute {
      * 租户ID
      */
     private String tenantId;
+
+    /**
+     * 备注
+     */
+    private String remark;
+
 }

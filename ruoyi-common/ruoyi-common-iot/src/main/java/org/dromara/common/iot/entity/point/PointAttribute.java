@@ -17,6 +17,11 @@ import lombok.*;
 public class PointAttribute {
 
     /**
+     * id
+     */
+    private Long id;
+
+    /**
      * 显示名称
      */
     private String displayName;
@@ -32,6 +37,11 @@ public class PointAttribute {
     private String attributeTypeFlag;
 
     /**
+     * 必填
+     */
+    private Boolean required = true;
+
+    /**
      * 默认值
      */
     private String defaultValue;
@@ -39,10 +49,15 @@ public class PointAttribute {
     /**
      * 驱动ID
      */
-    private String driverId;
+    private Long driverId;
 
     /**
      * 租户ID
      */
     private String tenantId;
+
+    /**
+     * 描述
+     */
+    private String remark;
 }

@@ -12,13 +12,16 @@ import org.dromara.common.iot.dto.DriverSyncDownDTO;
 import org.dromara.common.iot.dto.DriverSyncUpDTO;
 import org.dromara.common.iot.entity.driver.DriverAttribute;
 import org.dromara.common.iot.entity.driver.DriverMetadata;
+import org.dromara.common.iot.entity.point.PointAttribute;
 import org.dromara.common.json.utils.JsonUtils;
 import org.dromara.manager.driver.domain.Driver;
 import org.dromara.manager.driver.domain.bo.DriverApplicationBo;
 import org.dromara.manager.driver.domain.bo.DriverAttributeBo;
 import org.dromara.manager.driver.domain.bo.DriverBo;
+import org.dromara.manager.driver.domain.bo.PointAttributeBo;
 import org.dromara.manager.driver.domain.vo.DriverAttributeVo;
 import org.dromara.manager.driver.domain.vo.DriverVo;
+import org.dromara.manager.driver.domain.vo.PointAttributeVo;
 import org.dromara.manager.driver.service.*;
 import org.springframework.stereotype.Service;
 
@@ -33,8 +36,10 @@ import java.util.Map;
 public class DriverSyncServiceImpl implements DriverSyncService {
 
     private final IDriverService driverService;
+    private final IPointAttributeService pointAttributeService;
     private final IDriverAttributeService driverAttributeService;
     private final IDriverApplicationService driverApplicationService;
+    private final IPointAttributeValueService pointAttributeValueService;
     private final IDriverAttributeValueService driverAttributeValueService;
 
     /**
@@ -55,12 +60,81 @@ public class DriverSyncServiceImpl implements DriverSyncService {
         registerDriverApplication(driverVo, entityDTO);
         // 注册驱动属性
         registerDriverAttribute(entityDTO, driverVo);
+        // 注册点位属性
+        registerPointAttribute(entityDTO, driverVo);
 
         DriverMetadata driverMetadata = new DriverMetadata();
 
         DriverSyncDownDTO driverSyncDownDTO = new DriverSyncDownDTO(JsonUtils.toJsonString(driverMetadata));
 
         EmqxUtil.getClient().publish(DriverTopic.getDriverRegisterBackTopic(entityDTO.getDriverUniqueKey()), JsonUtils.toJsonString(driverSyncDownDTO));
+    }
+
+    /**
+     * 注册点属性
+     *
+     * @param driverSyncUpDTO driverSyncUpDTO
+     * @param driverVo  司机签证官
+     */
+    private void registerPointAttribute(DriverSyncUpDTO driverSyncUpDTO, DriverVo driverVo) {
+
+        // 新驱动属性
+        Map<String, PointAttribute> newPointAttributeMap = new HashMap<>(8);
+        if (ObjectUtil.isNotNull(driverSyncUpDTO.getPointAttributes()) && !driverSyncUpDTO.getPointAttributes().isEmpty()) {
+            driverSyncUpDTO.getPointAttributes().forEach(pointAttribute -> newPointAttributeMap.put(pointAttribute.getAttributeName(), pointAttribute));
+        }
+
+        // 旧驱动属性
+        Map<String, PointAttributeVo> oldPointAttributeMap = new HashMap<>(8);
+        List<PointAttributeVo> byDriverId = pointAttributeService.selectByDriverId(driverVo.getId());
+        byDriverId.forEach(pointAttribute -> oldPointAttributeMap.put(pointAttribute.getAttributeName(), pointAttribute));
+
+
+        for (Map.Entry<String, PointAttribute> entry : newPointAttributeMap.entrySet()) {
+            String name = entry.getKey();
+            PointAttribute attribute = newPointAttributeMap.get(name);
+            attribute.setDriverId(driverVo.getId());
+            PointAttributeBo pointAttributeBo = convertPointAttribute(attribute);
+            if (oldPointAttributeMap.containsKey(name)) {
+                attribute.setId(oldPointAttributeMap.get(name).getId());
+                pointAttributeBo.setId(attribute.getId());
+                log.debug("Point attribute registered, updating: {}", attribute);
+                pointAttributeService.updateByBo(pointAttributeBo);
+            } else {
+                log.debug("Point attribute registered, adding: {}", attribute);
+                pointAttributeService.insertByBo(pointAttributeBo);
+            }
+        }
+
+        for (Map.Entry<String, PointAttributeVo> entry : oldPointAttributeMap.entrySet()) {
+            String name = entry.getKey();
+            if (!newPointAttributeMap.containsKey(name)) {
+                Boolean exist = pointAttributeValueService.existByAttributeId(oldPointAttributeMap.get(name).getId());
+                if (BooleanUtil.isTrue(exist)) {
+                    log.warn("Point attribute({}) is used by point attribute config and cannot be deleted", name);
+                    continue;
+                }
+
+                pointAttributeService.deleteWithValidByIds(Collections.singletonList(oldPointAttributeMap.get(name).getId()), false);
+            }
+        }
+    }
+
+    private PointAttributeBo convertPointAttribute(PointAttribute pointAttribute) {
+        PointAttributeBo pointAttributeBo = new PointAttributeBo();
+
+        pointAttributeBo.setDriverId(pointAttribute.getDriverId());
+        pointAttributeBo.setAttributeName(pointAttribute.getAttributeName());
+        pointAttributeBo.setAttributeType(pointAttribute.getAttributeTypeFlag());
+        pointAttributeBo.setDisplayName(pointAttribute.getDisplayName());
+        pointAttributeBo.setDefaultValue(pointAttribute.getDefaultValue());
+        pointAttributeBo.setRequired(pointAttribute.getRequired());
+        pointAttributeBo.setRemark(pointAttribute.getRemark());
+
+        pointAttributeBo.setCreateBy(0L);
+        pointAttributeBo.setUpdateBy(0L);
+        pointAttributeBo.setCreateDept(0L);
+        return pointAttributeBo;
     }
 
     /**

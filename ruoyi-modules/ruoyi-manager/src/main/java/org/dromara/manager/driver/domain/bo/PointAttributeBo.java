@@ -61,7 +61,7 @@ public class PointAttributeBo extends BaseEntity {
      * 必填
      */
     @NotNull(message = "必填不能为空", groups = {AddGroup.class, EditGroup.class})
-    private Integer required;
+    private Boolean required;
 
     /**
      * 描述

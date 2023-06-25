@@ -111,4 +111,16 @@ public class PointAttributeServiceImpl implements IPointAttributeService {
         }
         return baseMapper.deleteBatchIds(ids) > 0;
     }
+
+    /**
+     * 选择通过驱动程序id
+     *
+     * @param driverId 司机身份证
+     * @return {@link List}<{@link PointAttribute}>
+     */
+    @Override
+    public List<PointAttributeVo> selectByDriverId(Long driverId) {
+        return baseMapper.selectVoList(Wrappers.<PointAttribute>lambdaQuery().eq(PointAttribute::getDriverId, driverId));
+    }
+
 }
