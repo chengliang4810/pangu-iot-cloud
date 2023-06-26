@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.dromara.manager.device.mapper.DeviceMapper">
+
+    <select id="selectDeviceListByDriverId" resultType="org.dromara.manager.device.domain.vo.DeviceVo">
+        select d.* from iot_device d left join iot_product p on d.product_id = p.id where p.driver_id = #{driverId}
+        <if test="enabled != null and enabled != ''">
+            and d.status = #{enabled}
+        </if>
+    </select>
+
+</mapper>

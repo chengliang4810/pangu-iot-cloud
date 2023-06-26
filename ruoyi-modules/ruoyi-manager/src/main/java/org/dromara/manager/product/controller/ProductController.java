@@ -47,6 +47,15 @@ public class ProductController extends BaseController {
     }
 
     /**
+     * 查询产品列表
+     */
+    @SaCheckPermission("manager:product:list")
+    @GetMapping("/tree")
+    public R<List<ProductVo>> tree(ProductBo bo) {
+        return R.ok(productService.queryList(bo));
+    }
+
+    /**
      * 导出产品列表
      */
     @SaCheckPermission("manager:product:export")
