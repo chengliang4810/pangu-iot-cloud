@@ -20,4 +20,19 @@ public interface DeviceMapper extends BaseMapperPlus<Device, DeviceVo> {
      */
     List<DeviceVo> selectDeviceListByDriverId(Long driverId, Boolean enabled);
 
+    /**
+     * 查询子设备通过设备id列表
+     *
+     * @param deviceId 设备id
+     * @return {@link List}<{@link DeviceVo}>
+     */
+    List<DeviceVo> selectChildDeviceListByDeviceId(Long deviceId, Boolean enabled);
+
+    /**
+     * 子设备数量
+     *
+     * @param deviceId 设备id
+     * @return {@link Long}
+     */
+    Long countChildByDeviceId(Long deviceId, Boolean enabled);
 }

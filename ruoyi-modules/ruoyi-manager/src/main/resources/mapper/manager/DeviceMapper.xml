@@ -11,4 +11,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </if>
     </select>
 
+    <select id="selectChildDeviceListByDeviceId" resultType="org.dromara.manager.device.domain.vo.DeviceVo">
+        select device.* from iot_device device left join iot_gateway_bind_relation relation on device.id = relation.device_id where relation.gateway_device_id = #{deviceId}
+        <if test="enabled != null and enabled != ''">
+            and d.status = #{enabled}
+        </if>
+    </select>
+
+
+    <select id="countChildByDeviceId" resultType="java.lang.Long">
+        select count(device.id) from iot_device device left join iot_gateway_bind_relation relation on device.id = relation.device_id where relation.gateway_device_id = #{deviceId}
+        <if test="enabled != null and enabled != ''">
+            and d.status = #{enabled}
+        </if>
+    </select>
+
 </mapper>

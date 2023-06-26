@@ -4,6 +4,7 @@ import io.github.linpeilie.annotations.AutoMapper;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import lombok.experimental.Accessors;
 import org.dromara.common.core.validate.AddGroup;
 import org.dromara.common.core.validate.EditGroup;
 import org.dromara.common.mybatis.core.domain.BaseEntity;
@@ -16,6 +17,7 @@ import org.dromara.manager.driver.domain.DriverAttributeValue;
  * @date 2023-06-19
  */
 @Data
+@Accessors(chain = true)
 @AutoMapper(target = DriverAttributeValue.class, reverseConvertGenerate = false)
 public class DriverAttributeValueBo extends BaseEntity {
 

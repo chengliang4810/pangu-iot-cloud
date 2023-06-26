@@ -137,4 +137,18 @@ public class DeviceServiceImpl implements IDeviceService {
         }
         return baseMapper.deleteBatchIds(ids) > 0;
     }
+
+
+    /**
+     * 查询设备通过网关id列表
+     *
+     * @param deviceId 设备id
+     * @return {@link List}<{@link DeviceVo}>
+     */
+    @Override
+    public List<DeviceVo> queryChildDeviceListByDeviceId(Long deviceId, Boolean enabled) {
+        return baseMapper.selectChildDeviceListByDeviceId(deviceId, enabled);
+    }
+
+
 }

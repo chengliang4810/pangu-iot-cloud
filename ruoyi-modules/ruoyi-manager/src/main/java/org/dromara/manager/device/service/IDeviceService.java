@@ -50,4 +50,14 @@ public interface IDeviceService {
      * 校验并批量删除设备信息
      */
     Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid);
+
+    /**
+     * 查询子设备通过设备id列表
+     * 查询设备通过网关id列表
+     *
+     * @param deviceId 设备id
+     * @param enabled  启用
+     * @return {@link List}<{@link DeviceVo}>
+     */
+    List<DeviceVo> queryChildDeviceListByDeviceId(Long deviceId, Boolean enabled);
 }

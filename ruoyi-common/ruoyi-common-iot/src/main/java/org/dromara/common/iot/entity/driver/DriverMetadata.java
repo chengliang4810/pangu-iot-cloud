@@ -5,6 +5,7 @@ import org.dromara.common.iot.entity.point.PointAttribute;
 
 import java.awt.*;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -32,7 +33,7 @@ public class DriverMetadata implements Serializable {
     /**
      * deviceId,device
      */
-    private Map<Long, Device> deviceMap;
+    private Map<Long, List<Device>> deviceMap;
 
     /**
      * deviceId(driverAttribute.name,(driverInfo.value,driverAttribute.type))
