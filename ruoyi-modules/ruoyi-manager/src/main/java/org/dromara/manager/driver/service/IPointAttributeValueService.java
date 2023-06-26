@@ -53,4 +53,13 @@ public interface IPointAttributeValueService {
      * @return {@link PointAttributeValueVo}
      */
     Boolean existByAttributeId(Long attributeId);
+
+    /**
+     * 通过设备id pointId 查询配置信息
+     *
+     * @param deviceId 设备id
+     * @param pointId  点id
+     * @return {@link List}<{@link PointAttributeValueVo}>
+     */
+    List<PointAttributeValueVo> queryByDeviceIdAndPointId(Long deviceId, Long pointId);
 }

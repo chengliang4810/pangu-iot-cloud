@@ -5,16 +5,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="org.dromara.manager.device.mapper.DeviceMapper">
 
     <select id="selectDeviceListByDriverId" resultType="org.dromara.manager.device.domain.vo.DeviceVo">
-        select d.* from iot_device d left join iot_product p on d.product_id = p.id where p.driver_id = #{driverId}
+        select device.* from iot_device device left join iot_product product on device.product_id = product.id where product.driver_id = #{driverId}
         <if test="enabled != null and enabled != ''">
-            and d.status = #{enabled}
+            and device.status = #{enabled}
         </if>
     </select>
 
     <select id="selectChildDeviceListByDeviceId" resultType="org.dromara.manager.device.domain.vo.DeviceVo">
         select device.* from iot_device device left join iot_gateway_bind_relation relation on device.id = relation.device_id where relation.gateway_device_id = #{deviceId}
         <if test="enabled != null and enabled != ''">
-            and d.status = #{enabled}
+            and device.status = #{enabled}
         </if>
     </select>
 
@@ -22,7 +22,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="countChildByDeviceId" resultType="java.lang.Long">
         select count(device.id) from iot_device device left join iot_gateway_bind_relation relation on device.id = relation.device_id where relation.gateway_device_id = #{deviceId}
         <if test="enabled != null and enabled != ''">
-            and d.status = #{enabled}
+            and device.status = #{enabled}
         </if>
     </select>
 

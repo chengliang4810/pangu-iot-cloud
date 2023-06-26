@@ -1,10 +1,10 @@
 package org.dromara.common.sdk.service.impl;
 
 import cn.hutool.core.thread.ThreadUtil;
+import cn.hutool.core.util.ObjUtil;
 import cn.hutool.json.JSONUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.dromara.common.emqx.utils.EmqxUtil;
 import org.dromara.common.iot.constant.DriverTopic;
@@ -79,7 +79,7 @@ public class DriverSyncServiceImpl implements DriverSyncService {
         }
 
         DriverMetadata driverMetadata = JsonUtils.parseObject(entityDTO.getContent(), DriverMetadata.class);
-        if (ObjectUtils.anyNull(driverMetadata)) {
+        if (ObjUtil.isNull(driverMetadata)) {
             driverMetadata = new DriverMetadata();
         }
         driverContext.setDriverMetadata(driverMetadata);
@@ -88,7 +88,8 @@ public class DriverSyncServiceImpl implements DriverSyncService {
         driverMetadata.getPointAttributeMap().values().forEach(pointAttribute -> log.info("Syncing point attribute[{}] metadata: {}", pointAttribute.getAttributeName(), JSONUtil.toJsonPrettyStr(pointAttribute)));
         driverMetadata.getDeviceMap().values().forEach(device -> log.info("Syncing device[{}] metadata: {}", device.getDeviceName(), JSONUtil.toJsonPrettyStr(device)));
         driverMetadata.getGatewayDeviceMap().values().forEach(device -> log.info("Syncing gateway device[{}] metadata: {}", device.getDeviceName(), JSONUtil.toJsonPrettyStr(device)));
-        log.info("The metadata synced successfully.");
+        log.info("The metadata synced successfully. executionTime {} ms", entityDTO.getExecutionTime());
+
     }
 
     /**

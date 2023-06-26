@@ -1,5 +1,8 @@
 package org.dromara.manager.driver.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.date.TimeInterval;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.dromara.common.iot.entity.driver.AttributeInfo;
@@ -14,11 +17,11 @@ import org.dromara.manager.driver.domain.Driver;
 import org.dromara.manager.driver.domain.bo.DriverAttributeValueBo;
 import org.dromara.manager.driver.domain.vo.DriverAttributeValueVo;
 import org.dromara.manager.driver.domain.vo.DriverAttributeVo;
+import org.dromara.manager.driver.domain.vo.PointAttributeValueVo;
 import org.dromara.manager.driver.domain.vo.PointAttributeVo;
 import org.dromara.manager.driver.service.*;
 import org.springframework.stereotype.Service;
 
-import java.awt.*;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -34,10 +37,14 @@ public class BatchServiceImpl implements BatchService {
     private final IDeviceService deviceService;
     private final IPointAttributeService pointAttributeService;
     private final IDriverAttributeService driverAttributeService;
+    private final IPointAttributeValueService pointAttributeValueService;
     private final IDriverAttributeValueService driverAttributeValueService;
 
     @Override
     public DriverMetadata batchDriverMetadata(String code) {
+
+        TimeInterval timer = DateUtil.timer();
+
         DriverMetadata driverMetadata = new DriverMetadata();
         // 驱动信息
         Driver driver = driverService.queryByCode(code);
@@ -59,24 +66,70 @@ public class BatchServiceImpl implements BatchService {
         // 网关设备的驱动属性
         Map<Long, Map<String, AttributeInfo>> driverInfoMap = getDriverInfoMap(gatewayDeviceIds, driverAttributeMap);
         driverMetadata.setDriverInfoMap(driverInfoMap);
-
         // 网关子设备
-        Map<Long, List<Device>> deviceMap = getDeviceMap(gatewayDeviceIds);
-        Set<Long> deviceIds = deviceMap.values().stream().flatMap(List::stream).map(Device::getDeviceId).collect(Collectors.toSet());
+        Map<Long, List<Device>> gatewayChildDeviceMap = getDeviceMap(gatewayDeviceIds);
+        Set<Long> deviceIds = gatewayChildDeviceMap.values().stream().flatMap(List::stream).map(Device::getDeviceId).collect(Collectors.toSet());
+        Map<Long, Device> deviceMap = gatewayChildDeviceMap.values().stream().flatMap(List::stream).collect(Collectors.toMap(Device::getDeviceId, device -> device, (o, o2) -> o));
+        driverMetadata.setGatewayChildDeviceMap(gatewayChildDeviceMap);
         driverMetadata.setDeviceMap(deviceMap);
 
-//        // 网关子设备的点位属性
-//        Map<String, Map<String, Point>> profilePointMap = getPointMap(deviceIds);
-//        driverMetadata.setProfilePointMap(profilePointMap);
+        // 网关子设备的点位属性值
+        Map<Long, Map<Long, Map<String, AttributeInfo>>> devicePointInfoMap = getPointInfoMap(deviceIds, pointAttributeMap);
+        driverMetadata.setPointInfoMap(devicePointInfoMap);
 
+        log.info("batchDriverMetadata execute time {} ms", timer.interval());
         return driverMetadata;
     }
 
-    private Map<String, Map<String, Point>> getPointMap(Set<Long> deviceIds) {
-
-        return null;
+    /**
+     * Get point attribute config map
+     *
+     * @param deviceIds         设备id
+     * @param pointAttributeMap 点属性映射
+     * @return map(deviceId ( pointId, attribute ( attributeName, attributeInfo ( value, type))))
+     */
+    private Map<Long, Map<Long, Map<String, AttributeInfo>>> getPointInfoMap(Set<Long> deviceIds, Map<Long, PointAttribute> pointAttributeMap) {
+        Map<Long, Map<Long, Map<String, AttributeInfo>>> devicePointInfoMap = new ConcurrentHashMap<>(16);
+        deviceIds.forEach(deviceId -> {
+            Map<Long, Map<String, AttributeInfo>> infoMap = getPointInfoMap(deviceId, pointAttributeMap);
+            if (CollUtil.isEmpty(infoMap)){
+                return;
+            }
+            devicePointInfoMap.put(deviceId, infoMap);
+        });
+        return devicePointInfoMap;
     }
 
+    /**
+     * Get point attribute config map
+     *
+     * @param deviceId          设备id
+     * @param pointAttributeMap 点属性映射
+     * @return map(pointId, attribute ( attributeName, attributeInfo ( value, type)))
+     */
+    private Map<Long, Map<String, AttributeInfo>> getPointInfoMap(Long deviceId, Map<Long, PointAttribute> pointAttributeMap) {
+        Map<Long, Map<String, AttributeInfo>> attributeInfoMap = new ConcurrentHashMap<>(16);
+        pointAttributeMap.keySet().forEach(pointId -> {
+            List<PointAttributeValueVo> pointAttributeConfigs = pointAttributeValueService.queryByDeviceIdAndPointId(deviceId, pointId);
+            Map<String, AttributeInfo> infoMap = new ConcurrentHashMap<>(16);
+            pointAttributeConfigs.forEach(pointInfo -> {
+                PointAttribute attribute = pointAttributeMap.get(pointInfo.getPointAttributeId());
+                infoMap.put(attribute.getAttributeName(), new AttributeInfo(pointInfo.getValue(), AttributeType.ofCode(attribute.getAttributeTypeFlag())));
+            });
+
+            if (CollUtil.isNotEmpty(infoMap)) {
+                attributeInfoMap.put(pointId, infoMap);
+            }
+        });
+        return attributeInfoMap;
+    }
+
+    /**
+     * DeviceMap
+     *
+     * @param gatewayDeviceIds 网关设备id
+     * @return {@link Map}<{@link Long}, {@link List}<{@link Device}>>
+     */
     private Map<Long, List<Device>> getDeviceMap(Set<Long> gatewayDeviceIds) {
         Map<Long, List<Device>> deviceMap = new ConcurrentHashMap<>(16);
         gatewayDeviceIds.forEach(gatewayId -> {

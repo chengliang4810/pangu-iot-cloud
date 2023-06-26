@@ -19,4 +19,9 @@ public class DriverSyncDownDTO implements Serializable {
      */
     private String content;
 
+    /**
+     * 执行时间 ms
+     */
+    private Long executionTime;
+
 }

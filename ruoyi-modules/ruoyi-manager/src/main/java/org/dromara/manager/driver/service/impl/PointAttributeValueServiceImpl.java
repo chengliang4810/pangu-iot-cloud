@@ -16,6 +16,7 @@ import org.dromara.manager.driver.service.IPointAttributeValueService;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -30,6 +31,23 @@ import java.util.Map;
 public class PointAttributeValueServiceImpl implements IPointAttributeValueService {
 
     private final PointAttributeValueMapper baseMapper;
+
+
+    /**
+     * 通过设备id pointId 查询配置信息
+     *
+     * @param deviceId 设备id
+     * @param pointId  点id
+     * @return {@link List}<{@link PointAttributeValueVo}>
+     */
+    @Override
+    public List<PointAttributeValueVo> queryByDeviceIdAndPointId(Long deviceId, Long pointId) {
+        if (null == deviceId || null == pointId){
+            return Collections.emptyList();
+        }
+        return baseMapper.selectVoList(Wrappers.lambdaQuery(PointAttributeValue.class)
+            .eq(PointAttributeValue::getDeviceId, deviceId).eq(PointAttributeValue::getPointAttributeId, pointId));
+    }
 
     /**
      * 查询驱动属性值

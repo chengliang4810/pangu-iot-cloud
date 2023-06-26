@@ -1,6 +1,8 @@
 package org.dromara.manager.driver.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.date.TimeInterval;
 import cn.hutool.core.util.BooleanUtil;
 import cn.hutool.core.util.ObjectUtil;
 import lombok.RequiredArgsConstructor;
@@ -55,6 +57,8 @@ public class DriverSyncServiceImpl implements DriverSyncService {
             return;
         }
 
+        TimeInterval timer = DateUtil.timer();
+
         // 注册驱动基础信息
         DriverVo driverVo = registerDriver(entityDTO);
         // 注册驱动服务应用
@@ -64,11 +68,9 @@ public class DriverSyncServiceImpl implements DriverSyncService {
         // 注册点位属性
         registerPointAttribute(entityDTO, driverVo);
 
-        DriverMetadata driverMetadata2 = batchService.batchDriverMetadata(driverVo.getCode());
+        DriverMetadata driverMetadata = batchService.batchDriverMetadata(driverVo.getCode());
 
-        DriverMetadata driverMetadata = new DriverMetadata();
-
-        DriverSyncDownDTO driverSyncDownDTO = new DriverSyncDownDTO(JsonUtils.toJsonString(driverMetadata));
+        DriverSyncDownDTO driverSyncDownDTO = new DriverSyncDownDTO(JsonUtils.toJsonString(driverMetadata), timer.interval());
 
         EmqxUtil.getClient().publish(DriverTopic.getDriverRegisterBackTopic(entityDTO.getDriverUniqueKey()), JsonUtils.toJsonString(driverSyncDownDTO));
     }
