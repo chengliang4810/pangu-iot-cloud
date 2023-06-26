@@ -35,7 +35,6 @@ public class ProductBo extends BaseEntity {
     /**
      * 驱动ID
      */
-    @NotNull(message = "驱动ID不能为空", groups = { AddGroup.class, EditGroup.class })
     private Long driverId;
 
     /**

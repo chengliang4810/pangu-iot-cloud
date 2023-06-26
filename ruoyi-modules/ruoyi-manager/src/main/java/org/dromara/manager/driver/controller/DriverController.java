@@ -43,6 +43,15 @@ public class DriverController extends BaseController {
     }
 
     /**
+     * 查询驱动列表
+     */
+    @SaCheckPermission("manager:driver:list")
+    @GetMapping("/tree")
+    public R<List<DriverVo>> tree(DriverBo bo) {
+        return R.ok(driverService.queryList(bo));
+    }
+
+    /**
      * 导出驱动列表
      */
     @SaCheckPermission("manager:driver:export")
