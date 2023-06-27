@@ -31,6 +31,15 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GlobalExceptionHandler {
 
     /**
+     * 参数异常
+     */
+    @ExceptionHandler({ IllegalArgumentException.class, IllegalStateException.class })
+    public R<Void> handleIllegalArgumentException(Exception e) {
+        log.error("参数异常: {}", e.getMessage());
+        return R.fail(e.getMessage());
+    }
+
+    /**
      * 权限码异常
      */
     @ExceptionHandler(NotPermissionException.class)
