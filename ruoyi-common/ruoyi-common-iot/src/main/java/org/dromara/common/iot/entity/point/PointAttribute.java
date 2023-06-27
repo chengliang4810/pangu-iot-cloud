@@ -47,16 +47,6 @@ public class PointAttribute {
     private String defaultValue;
 
     /**
-     * 驱动ID
-     */
-    private Long driverId;
-
-    /**
-     * 租户ID
-     */
-    private String tenantId;
-
-    /**
      * 描述
      */
     private String remark;

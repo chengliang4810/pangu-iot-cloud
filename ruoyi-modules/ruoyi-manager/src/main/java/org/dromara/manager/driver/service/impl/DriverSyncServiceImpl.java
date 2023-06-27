@@ -57,6 +57,7 @@ public class DriverSyncServiceImpl implements DriverSyncService {
             return;
         }
 
+        // 记录执行时间
         TimeInterval timer = DateUtil.timer();
 
         // 注册驱动基础信息
@@ -98,8 +99,8 @@ public class DriverSyncServiceImpl implements DriverSyncService {
         for (Map.Entry<String, PointAttribute> entry : newPointAttributeMap.entrySet()) {
             String name = entry.getKey();
             PointAttribute attribute = newPointAttributeMap.get(name);
-            attribute.setDriverId(driverVo.getId());
             PointAttributeBo pointAttributeBo = convertPointAttribute(attribute);
+            pointAttributeBo.setDriverId(driverVo.getId());
             if (oldPointAttributeMap.containsKey(name)) {
                 attribute.setId(oldPointAttributeMap.get(name).getId());
                 pointAttributeBo.setId(attribute.getId());
@@ -127,8 +128,6 @@ public class DriverSyncServiceImpl implements DriverSyncService {
 
     private PointAttributeBo convertPointAttribute(PointAttribute pointAttribute) {
         PointAttributeBo pointAttributeBo = new PointAttributeBo();
-
-        pointAttributeBo.setDriverId(pointAttribute.getDriverId());
         pointAttributeBo.setAttributeName(pointAttribute.getAttributeName());
         pointAttributeBo.setAttributeType(pointAttribute.getAttributeTypeFlag());
         pointAttributeBo.setDisplayName(pointAttribute.getDisplayName());
