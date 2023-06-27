@@ -1,11 +1,11 @@
 package org.dromara.manager.device.service.impl;
 
+import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.ObjUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
-import org.dromara.common.core.exception.ServiceException;
 import org.dromara.common.core.utils.MapstructUtils;
 import org.dromara.common.core.utils.StringUtils;
 import org.dromara.common.mybatis.core.page.PageQuery;
@@ -18,11 +18,13 @@ import org.dromara.manager.device.service.IDeviceService;
 import org.dromara.manager.product.domain.vo.ProductVo;
 import org.dromara.manager.product.service.IProductService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 设备Service业务层处理
@@ -95,12 +97,14 @@ public class DeviceServiceImpl implements IDeviceService {
      * 新增设备
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Boolean insertByBo(DeviceBo bo) {
         ProductVo productVo = productService.queryById(bo.getProductId());
-        if (ObjUtil.isNull(productVo)) {
-            throw new ServiceException("产品不存在");
-        }
+        Assert.notNull(productVo, "产品不存在");
+        // 与产品关联的设备类型一致
         bo.setDeviceType(productVo.getType());
+        // 更新产品设备数量
+        productService.updateDeviceNumber(bo.getProductId(), 1);
         Device add = MapstructUtils.convert(bo, Device.class);
         validEntityBeforeSave(add);
         boolean flag = baseMapper.insert(add) > 0;
@@ -131,11 +135,32 @@ public class DeviceServiceImpl implements IDeviceService {
      * 批量删除设备
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid) {
         if(isValid){
             //TODO 做一些业务上的校验,判断是否需要校验
         }
-        return baseMapper.deleteBatchIds(ids) > 0;
+
+        AtomicInteger count = new AtomicInteger();
+
+        ids.forEach(id -> {
+            DeviceVo deviceVo = queryById(id);
+            if (deviceVo == null) {
+                // 设备不存在,跳过
+                return;
+            }
+
+            // 检查是否关联子设备
+            Long deviceNumber = baseMapper.countChildByDeviceId(deviceVo.getId(), null);
+            Assert.isFalse(deviceNumber > 0, "设备存在子设备,请先删除子设备");
+
+            int i = baseMapper.deleteById(deviceVo.getId());
+            count.addAndGet(i);
+            // 更新产品设备数量
+            productService.updateDeviceNumber(deviceVo.getProductId(), -1);
+        });
+
+        return count.get() > 0;
     }
 
 
