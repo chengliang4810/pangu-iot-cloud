@@ -40,9 +40,16 @@ public class BatchServiceImpl implements BatchService {
     private final IPointAttributeValueService pointAttributeValueService;
     private final IDriverAttributeValueService driverAttributeValueService;
 
+    /**
+     * 批处理驱动程序元数据
+     * TODO 后续优化循环查询逻辑
+     * @param code 代码
+     * @return {@link DriverMetadata}
+     */
     @Override
     public DriverMetadata batchDriverMetadata(String code) {
 
+        TimeInterval totalTimer = DateUtil.timer();
         TimeInterval timer = DateUtil.timer();
 
         DriverMetadata driverMetadata = new DriverMetadata();
@@ -54,30 +61,41 @@ public class BatchServiceImpl implements BatchService {
         // 驱动属性
         Map<Long, DriverAttribute> driverAttributeMap = getDriverAttributeMap(driver.getId());
         driverMetadata.setDriverAttributeMap(driverAttributeMap);
+        log.info("driver attribute map size {} , query time {}ms", driverAttributeMap.size(), timer.intervalRestart());
 
         // 点位属性
         Map<Long, PointAttribute> pointAttributeMap = getPointAttributeMap(driver.getId());
         driverMetadata.setPointAttributeMap(pointAttributeMap);
+        log.info("point attribute map size {} , query time {}ms", pointAttributeMap.size(), timer.intervalRestart());
 
-        // 所有启用的网关设备
+        // 所有启用的网关设备 1000网关设备（无子设备场景） 启动驱动总耗时 4500ms 左右
         List<DeviceVo> gatewayDeviceList = deviceService.queryDeviceListByDriverId(driver.getId(), true);
-        Set<Long> gatewayDeviceIds = gatewayDeviceList.stream().map(DeviceVo::getId).collect(Collectors.toSet());
+        Map<Long, Device> gatewayDeviceMap = gatewayDeviceList.stream().map(this::convertDevice).collect(Collectors.toMap(Device::getDeviceId, device -> device, (o, o2) -> o));
+        Set<Long> gatewayDeviceIds = gatewayDeviceMap.values().stream().map(Device::getDeviceId).collect(Collectors.toSet());
+        driverMetadata.setGatewayDeviceMap(gatewayDeviceMap);
+        log.info("gateway device list size {} , query time {}ms", gatewayDeviceList.size(), timer.intervalRestart());
 
         // 网关设备的驱动属性
         Map<Long, Map<String, AttributeInfo>> driverInfoMap = getDriverInfoMap(gatewayDeviceIds, driverAttributeMap);
         driverMetadata.setDriverInfoMap(driverInfoMap);
+        // 1000网关设备无属性配置， 用时3508ms
+        log.info("gateway device driver attribute size {} , query time {}ms", driverInfoMap.size(), timer.intervalRestart());
+
         // 网关子设备
         Map<Long, List<Device>> gatewayChildDeviceMap = getDeviceMap(gatewayDeviceIds);
         Set<Long> deviceIds = gatewayChildDeviceMap.values().stream().flatMap(List::stream).map(Device::getDeviceId).collect(Collectors.toSet());
         Map<Long, Device> deviceMap = gatewayChildDeviceMap.values().stream().flatMap(List::stream).collect(Collectors.toMap(Device::getDeviceId, device -> device, (o, o2) -> o));
         driverMetadata.setGatewayChildDeviceMap(gatewayChildDeviceMap);
         driverMetadata.setDeviceMap(deviceMap);
+        // 1000网关设备 0子设备 query time 2766ms
+        log.info("gateway child device size {} , query time {}ms", deviceMap.size(), timer.intervalRestart());
 
         // 网关子设备的点位属性值
         Map<Long, Map<Long, Map<String, AttributeInfo>>> devicePointInfoMap = getPointInfoMap(deviceIds, pointAttributeMap);
         driverMetadata.setPointInfoMap(devicePointInfoMap);
+        log.info("gateway child device point attribute size {} , query time {}ms", devicePointInfoMap.size(), timer.intervalRestart());
 
-        log.info("batchDriverMetadata execute time {} ms", timer.interval());
+        log.info("batchDriverMetadata execute time {} ms", totalTimer.interval());
         return driverMetadata;
     }
 
@@ -197,7 +215,6 @@ public class BatchServiceImpl implements BatchService {
         pointAttribute.setAttributeTypeFlag(vo.getAttributeType());
         pointAttribute.setRequired(vo.getRequired());
         pointAttribute.setDefaultValue(vo.getDefaultValue());
-        pointAttribute.setDriverId(vo.getDriverId());
         pointAttribute.setRemark(vo.getRemark());
         return pointAttribute;
     }
