@@ -85,6 +85,7 @@ public class DeviceServiceImpl implements IDeviceService {
         LambdaQueryWrapper<Device> lqw = Wrappers.lambdaQuery();
         lqw.eq(bo.getGroupId() != null, Device::getGroupId, bo.getGroupId());
         lqw.eq(bo.getProductId() != null, Device::getProductId, bo.getProductId());
+        lqw.eq(bo.getDeviceType() != null, Device::getDeviceType, bo.getDeviceType());
         lqw.eq(StringUtils.isNotBlank(bo.getCode()), Device::getCode, bo.getCode());
         lqw.like(StringUtils.isNotBlank(bo.getName()), Device::getName, bo.getName());
         lqw.eq(bo.getStatus() != null, Device::getStatus, bo.getStatus());
