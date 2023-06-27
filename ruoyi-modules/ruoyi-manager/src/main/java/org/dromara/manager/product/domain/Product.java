@@ -1,5 +1,6 @@
 package org.dromara.manager.product.domain;
 
+import lombok.experimental.Accessors;
 import org.dromara.common.tenant.core.TenantEntity;
 import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
@@ -14,6 +15,7 @@ import java.io.Serial;
  * @date 2023-06-26
  */
 @Data
+@Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
 @TableName("iot_product")
 public class Product extends TenantEntity {

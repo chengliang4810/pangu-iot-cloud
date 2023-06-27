@@ -1,10 +1,9 @@
 package org.dromara.manager.product.service;
 
-import org.dromara.manager.product.domain.Product;
-import org.dromara.manager.product.domain.vo.ProductVo;
-import org.dromara.manager.product.domain.bo.ProductBo;
-import org.dromara.common.mybatis.core.page.TableDataInfo;
 import org.dromara.common.mybatis.core.page.PageQuery;
+import org.dromara.common.mybatis.core.page.TableDataInfo;
+import org.dromara.manager.product.domain.bo.ProductBo;
+import org.dromara.manager.product.domain.vo.ProductVo;
 
 import java.util.Collection;
 import java.util.List;
@@ -16,6 +15,16 @@ import java.util.List;
  * @date 2023-06-26
  */
 public interface IProductService {
+
+
+    /**
+     * 修改设备数量
+     *
+     * @param product id
+     * @param number  数量 -1代表减少一个 1代表增加一个
+     * @return {@link Boolean}
+     */
+    Boolean updateDeviceNumber(Long product, Integer number);
 
     /**
      * 查询产品

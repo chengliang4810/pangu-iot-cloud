@@ -1,5 +1,6 @@
 package org.dromara.manager.product.service.impl;
 
+import cn.hutool.core.lang.Assert;
 import org.dromara.common.core.utils.MapstructUtils;
 import org.dromara.common.core.utils.StringUtils;
 import org.dromara.common.mybatis.core.page.TableDataInfo;
@@ -30,6 +31,21 @@ import java.util.Collection;
 public class ProductServiceImpl implements IProductService {
 
     private final ProductMapper baseMapper;
+
+    /**
+     * 更新设备数量
+     *
+     * @param productId 产品Id
+     * @param number 增减的数量
+     * @return {@link Boolean}
+     */
+    @Override
+    public Boolean updateDeviceNumber(Long productId, Integer number) {
+        ProductVo productVo = queryById(productId);
+        Assert.notNull(productVo, "产品不存在");
+        Product product = new Product().setDeviceCount(productVo.getDeviceCount() + number);
+        return baseMapper.update(product, Wrappers.<Product>lambdaUpdate().eq(Product::getId, productId)) > 0;
+    }
 
     /**
      * 查询产品
