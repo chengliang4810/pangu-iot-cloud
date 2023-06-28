@@ -1,11 +1,11 @@
 package org.dromara.manager.device.domain;
 
-import org.dromara.common.mybatis.core.domain.BaseEntity;
-import com.baomidou.mybatisplus.annotation.*;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 import java.io.Serial;
+import java.io.Serializable;
 
 /**
  * 网关设备绑定子设备关系对象 iot_gateway_bind_relation
@@ -14,9 +14,8 @@ import java.io.Serial;
  * @date 2023-06-26
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
 @TableName("iot_gateway_bind_relation")
-public class GatewayBindRelation extends BaseEntity {
+public class GatewayBindRelation implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;

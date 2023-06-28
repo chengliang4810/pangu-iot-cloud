@@ -1,5 +1,6 @@
 package org.dromara.manager.device.domain.bo;
 
+import lombok.experimental.Accessors;
 import org.dromara.manager.device.domain.GatewayBindRelation;
 import org.dromara.common.mybatis.core.domain.BaseEntity;
 import org.dromara.common.core.validate.AddGroup;
@@ -16,6 +17,7 @@ import jakarta.validation.constraints.*;
  * @date 2023-06-26
  */
 @Data
+@Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
 @AutoMapper(target = GatewayBindRelation.class, reverseConvertGenerate = false)
 public class GatewayBindRelationBo extends BaseEntity {

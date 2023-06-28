@@ -6,7 +6,9 @@ import io.github.linpeilie.annotations.AutoMapper;
 import lombok.Data;
 import org.dromara.common.excel.annotation.ExcelDictFormat;
 import org.dromara.common.excel.convert.ExcelDictConvert;
+import org.dromara.common.translation.annotation.Translation;
 import org.dromara.manager.device.domain.Device;
+import org.dromara.manager.device.translation.DeviceTransConstant;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -93,5 +95,12 @@ public class DeviceVo implements Serializable {
     @ExcelProperty(value = "描述")
     private String remark;
 
+
+    /**
+     * 子设备数量
+     */
+    @ExcelProperty(value = "子设备数量")
+    @Translation(type = DeviceTransConstant.GATEWAY_ID_TO_CHILD_DEVICE_NUMBER, mapper = "id")
+    private Long childDeviceNumber;
 
 }

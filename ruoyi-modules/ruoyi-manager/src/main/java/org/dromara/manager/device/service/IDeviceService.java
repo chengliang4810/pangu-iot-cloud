@@ -2,6 +2,7 @@ package org.dromara.manager.device.service;
 
 import org.dromara.common.mybatis.core.page.PageQuery;
 import org.dromara.common.mybatis.core.page.TableDataInfo;
+import org.dromara.manager.device.domain.bo.ChildDeviceBo;
 import org.dromara.manager.device.domain.bo.DeviceBo;
 import org.dromara.manager.device.domain.vo.DeviceVo;
 
@@ -60,4 +61,12 @@ public interface IDeviceService {
      * @return {@link List}<{@link DeviceVo}>
      */
     List<DeviceVo> queryChildDeviceListByDeviceId(Long deviceId, Boolean enabled);
+
+    /**
+     * 添加子设备
+     *
+     * @param bo 薄
+     * @return int {@link Integer} 成功条数
+     */
+    Integer addChildDevice(ChildDeviceBo bo);
 }

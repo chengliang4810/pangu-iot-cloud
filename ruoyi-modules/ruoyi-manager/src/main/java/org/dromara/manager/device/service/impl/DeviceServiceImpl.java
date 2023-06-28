@@ -12,10 +12,13 @@ import org.dromara.common.mybatis.core.domain.BaseEntity;
 import org.dromara.common.mybatis.core.page.PageQuery;
 import org.dromara.common.mybatis.core.page.TableDataInfo;
 import org.dromara.manager.device.domain.Device;
+import org.dromara.manager.device.domain.bo.ChildDeviceBo;
 import org.dromara.manager.device.domain.bo.DeviceBo;
+import org.dromara.manager.device.domain.bo.GatewayBindRelationBo;
 import org.dromara.manager.device.domain.vo.DeviceVo;
 import org.dromara.manager.device.mapper.DeviceMapper;
 import org.dromara.manager.device.service.IDeviceService;
+import org.dromara.manager.device.service.IGatewayBindRelationService;
 import org.dromara.manager.product.domain.vo.ProductVo;
 import org.dromara.manager.product.service.IProductService;
 import org.springframework.stereotype.Service;
@@ -39,6 +42,7 @@ public class DeviceServiceImpl implements IDeviceService {
 
     private final DeviceMapper baseMapper;
     private final IProductService productService;
+    private final IGatewayBindRelationService gatewayBindRelationService;
 
     /**
      * 通过驱动ID查询设备列表
@@ -176,6 +180,38 @@ public class DeviceServiceImpl implements IDeviceService {
     @Override
     public List<DeviceVo> queryChildDeviceListByDeviceId(Long deviceId, Boolean enabled) {
         return baseMapper.selectChildDeviceListByDeviceId(deviceId, enabled);
+    }
+
+
+    /**
+     * 添加子设备
+     *
+     * @param bo 薄
+     * @return int
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Integer addChildDevice(ChildDeviceBo bo) {
+        Long deviceId = bo.getDeviceId();
+        DeviceVo deviceVo = queryById(deviceId);
+
+        Assert.notNull(deviceVo, "设备不存在");
+        Assert.isTrue(deviceVo.getDeviceType().equals(2), "非网关设备无法绑定子设备");
+
+        AtomicInteger count = new AtomicInteger(0);
+
+        bo.getChildDeviceIds().forEach(childDeviceId -> {
+            Boolean existed = gatewayBindRelationService.existChildDevice(deviceId, childDeviceId);
+            if (existed){
+                return;
+            }
+            Boolean aBoolean = gatewayBindRelationService.insertByBo(new GatewayBindRelationBo().setDeviceId(childDeviceId).setGatewayDeviceId(deviceId));
+            if (aBoolean){
+                count.incrementAndGet();
+            }
+        });
+
+        return count.get();
     }
 
 

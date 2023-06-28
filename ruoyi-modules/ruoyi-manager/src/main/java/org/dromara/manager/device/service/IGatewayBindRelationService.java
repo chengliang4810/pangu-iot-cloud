@@ -45,4 +45,20 @@ public interface IGatewayBindRelationService {
      * 校验并批量删除网关设备绑定子设备关系信息
      */
     Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid);
+
+    /**
+     * 存在子设备
+     *
+     * @param deviceId      设备id
+     * @param childDeviceId 子设备id
+     * @return {@link Boolean}
+     */
+    Boolean existChildDevice(Long deviceId, Long childDeviceId);
+
+
+    /**
+     * 统计子设备数量
+     */
+    Long countChildDevice(Long deviceId);
+
 }

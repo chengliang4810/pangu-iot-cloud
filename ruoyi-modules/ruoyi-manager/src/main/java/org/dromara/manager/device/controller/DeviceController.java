@@ -15,6 +15,7 @@ import org.dromara.common.log.enums.BusinessType;
 import org.dromara.common.mybatis.core.page.PageQuery;
 import org.dromara.common.mybatis.core.page.TableDataInfo;
 import org.dromara.common.web.core.BaseController;
+import org.dromara.manager.device.domain.bo.ChildDeviceBo;
 import org.dromara.manager.device.domain.bo.DeviceBo;
 import org.dromara.manager.device.domain.vo.DeviceVo;
 import org.dromara.manager.device.service.IDeviceService;
@@ -36,6 +37,17 @@ import java.util.List;
 public class DeviceController extends BaseController {
 
     private final IDeviceService deviceService;
+
+    /**
+     * 添加子设备
+     */
+    @SaCheckPermission("manager:device:add")
+    @Log(title = "设备", businessType = BusinessType.INSERT)
+    @RepeatSubmit()
+    @PostMapping("/child")
+    public R<Integer> addSubDevice(@Validated @RequestBody ChildDeviceBo bo) {
+        return R.ok(deviceService.addChildDevice(bo));
+    }
 
     /**
      * 查询设备列表

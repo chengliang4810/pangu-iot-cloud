@@ -106,4 +106,35 @@ public class GatewayBindRelationServiceImpl implements IGatewayBindRelationServi
         }
         return baseMapper.deleteBatchIds(ids) > 0;
     }
+
+
+    /**
+     * 存在子设备
+     *
+     * @param deviceId      设备id
+     * @param childDeviceId 子设备id
+     * @return {@link Boolean}
+     */
+    @Override
+    public Boolean existChildDevice(Long deviceId, Long childDeviceId) {
+        return baseMapper.exists(Wrappers.lambdaQuery(GatewayBindRelation.class)
+                .eq(GatewayBindRelation::getGatewayDeviceId, deviceId)
+                .eq(GatewayBindRelation::getDeviceId, childDeviceId));
+    }
+
+    /**
+     * 统计子设备数量
+     *
+     * @param deviceId
+     */
+    @Override
+    public Long countChildDevice(Long deviceId) {
+        if (deviceId == null) {
+            return 0L;
+        }
+        return baseMapper.selectCount(Wrappers.lambdaQuery(GatewayBindRelation.class)
+                .eq(GatewayBindRelation::getGatewayDeviceId, deviceId));
+    }
+
+
 }
