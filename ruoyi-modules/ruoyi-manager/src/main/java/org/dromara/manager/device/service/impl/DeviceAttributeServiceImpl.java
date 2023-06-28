@@ -150,4 +150,16 @@ public class DeviceAttributeServiceImpl implements IDeviceAttributeService {
         ) > 0;
     }
 
+    /**
+     * 按产品id删除
+     *
+     * @param productId 产品id
+     * @return {@link Boolean}
+     */
+    @Override
+    public Boolean deleteByProductId(Long productId) {
+        return baseMapper.delete(Wrappers.lambdaQuery(DeviceAttribute.class)
+            .eq(DeviceAttribute::getProductId, productId)
+        ) > 0;
+    }
 }

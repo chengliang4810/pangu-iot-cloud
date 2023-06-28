@@ -61,4 +61,12 @@ public interface IDeviceAttributeService {
      * @return {@link Boolean}
      */
     Boolean deleteByDeviceId(Long deviceId);
+
+    /**
+     * 按产品id删除
+     *
+     * @param productId 产品id
+     * @return {@link Boolean}
+     */
+    Boolean deleteByProductId(Long productId);
 }

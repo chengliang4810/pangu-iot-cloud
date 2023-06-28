@@ -1,24 +1,23 @@
 package org.dromara.manager.product.service.impl;
 
 import cn.hutool.core.lang.Assert;
-import org.dromara.common.core.utils.MapstructUtils;
-import org.dromara.common.core.utils.StringUtils;
-import org.dromara.common.mybatis.core.page.TableDataInfo;
-import org.dromara.common.mybatis.core.page.PageQuery;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import org.dromara.common.core.utils.MapstructUtils;
+import org.dromara.common.core.utils.StringUtils;
+import org.dromara.common.mybatis.core.page.PageQuery;
+import org.dromara.common.mybatis.core.page.TableDataInfo;
+import org.dromara.manager.product.domain.Product;
 import org.dromara.manager.product.domain.bo.ProductBo;
 import org.dromara.manager.product.domain.vo.ProductVo;
-import org.dromara.manager.product.domain.Product;
 import org.dromara.manager.product.mapper.ProductMapper;
 import org.dromara.manager.product.service.IProductService;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Collection;
 
 /**
  * 产品Service业务层处理
@@ -119,13 +118,14 @@ public class ProductServiceImpl implements IProductService {
     }
 
     /**
-     * 批量删除产品
+     * 删除产品通过id
+     *
+     * @param id id
+     * @return {@link Boolean}
      */
     @Override
-    public Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid) {
-        if(isValid){
-            //TODO 做一些业务上的校验,判断是否需要校验
-        }
-        return baseMapper.deleteBatchIds(ids) > 0;
+    public Boolean deleteById(Long id) {
+        return baseMapper.deleteById(id) > 0;
     }
+
 }

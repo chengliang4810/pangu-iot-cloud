@@ -80,4 +80,12 @@ public interface IDeviceService {
      * @return {@link Boolean}
      */
     Boolean deleteById(Long deviceId);
+
+    /**
+     * 根据产品id统计设备数量
+     *
+     * @param id id
+     * @return {@link Long}
+     */
+    Long countDeviceByProductId(Long id);
 }

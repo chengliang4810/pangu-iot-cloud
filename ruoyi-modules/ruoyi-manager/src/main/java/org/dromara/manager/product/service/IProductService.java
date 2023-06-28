@@ -5,7 +5,6 @@ import org.dromara.common.mybatis.core.page.TableDataInfo;
 import org.dromara.manager.product.domain.bo.ProductBo;
 import org.dromara.manager.product.domain.vo.ProductVo;
 
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -51,8 +50,12 @@ public interface IProductService {
      */
     Boolean updateByBo(ProductBo bo);
 
+
     /**
-     * 校验并批量删除产品信息
+     * 删除产品通过id
+     *
+     * @param id id
+     * @return {@link Boolean}
      */
-    Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid);
+    Boolean deleteById(Long id);
 }

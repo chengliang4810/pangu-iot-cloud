@@ -17,6 +17,7 @@ import org.dromara.common.mybatis.core.page.TableDataInfo;
 import org.dromara.common.web.core.BaseController;
 import org.dromara.manager.product.domain.bo.ProductBo;
 import org.dromara.manager.product.domain.vo.ProductVo;
+import org.dromara.manager.product.service.IProductBatchService;
 import org.dromara.manager.product.service.IProductService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -36,6 +37,7 @@ import java.util.List;
 public class ProductController extends BaseController {
 
     private final IProductService productService;
+    private final IProductBatchService productBatchService;
 
     /**
      * 查询产品列表
@@ -110,6 +112,6 @@ public class ProductController extends BaseController {
     @DeleteMapping("/{ids}")
     public R<Void> remove(@NotEmpty(message = "主键不能为空")
                           @PathVariable Long[] ids) {
-        return toAjax(productService.deleteWithValidByIds(List.of(ids), true));
+        return toAjax(productBatchService.deleteWithValidByIds(List.of(ids), true));
     }
 }

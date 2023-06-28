@@ -212,5 +212,14 @@ public class DeviceServiceImpl implements IDeviceService {
         return count.get();
     }
 
-
+    /**
+     * 根据产品id统计设备数量
+     *
+     * @param id id
+     * @return {@link Long}
+     */
+    @Override
+    public Long countDeviceByProductId(Long id) {
+        return baseMapper.selectCount(Wrappers.lambdaQuery(Device.class).eq(Device::getProductId, id));
+    }
 }
