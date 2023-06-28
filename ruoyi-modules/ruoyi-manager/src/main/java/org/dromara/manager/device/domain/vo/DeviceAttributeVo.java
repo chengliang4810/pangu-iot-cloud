@@ -73,6 +73,11 @@ public class DeviceAttributeVo implements Serializable {
     private String unit;
 
     /**
+     * 数据预处理代码
+     */
+    private String pretreatmentScript;
+
+    /**
      * 创建时间
      */
     @ExcelProperty(value = "创建时间")

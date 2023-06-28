@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.dromara.common.core.validate.AddGroup;
 import org.dromara.common.core.validate.EditGroup;
-import org.dromara.common.mybatis.core.domain.BaseEntity;
+import org.dromara.common.tenant.core.TenantEntity;
 import org.dromara.manager.driver.domain.DriverAttribute;
 
 /**
@@ -17,7 +17,7 @@ import org.dromara.manager.driver.domain.DriverAttribute;
  */
 @Data
 @AutoMapper(target = DriverAttribute.class, reverseConvertGenerate = false)
-public class DriverAttributeBo extends BaseEntity {
+public class DriverAttributeBo extends TenantEntity {
 
     /**
      * 主键ID

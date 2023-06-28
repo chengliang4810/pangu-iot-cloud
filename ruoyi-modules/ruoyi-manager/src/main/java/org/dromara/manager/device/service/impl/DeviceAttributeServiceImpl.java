@@ -117,4 +117,21 @@ public class DeviceAttributeServiceImpl implements IDeviceAttributeService {
         }
         return baseMapper.deleteBatchIds(ids) > 0;
     }
+
+
+    /**
+     * 查询设备id 属性对应的列表
+     *
+     * @param bo
+     * @return {@link List}<{@link DeviceAttributeVo}>
+     */
+    @Override
+    public List<DeviceAttributeVo> queryListByProductIdAndDeviceId(DeviceAttributeBo bo) {
+        Assert.notNull(bo.getProductId(), "产品id不能为空");
+        Assert.notNull(bo.getDeviceId(), "设备id不能为空");
+        return baseMapper.selectVoList( Wrappers.lambdaQuery(DeviceAttribute.class)
+            .eq(DeviceAttribute::getProductId, bo.getProductId())
+            .in(DeviceAttribute::getDeviceId, bo.getDeviceId(), 0)
+        );
+    }
 }

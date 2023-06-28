@@ -33,7 +33,7 @@ public class DriverMetadataTempServiceImpl implements DriverMetadataTempService 
 
     @Override
     public void deleteProfile(String id) {
-        driverContext.getDriverMetadata().getProfilePointMap().entrySet().removeIf(next -> next.getKey().equals(id));
+        // driverContext.getDriverMetadata().getProfilePointMap().entrySet().removeIf(next -> next.getKey().equals(id));
     }
 
     @Override

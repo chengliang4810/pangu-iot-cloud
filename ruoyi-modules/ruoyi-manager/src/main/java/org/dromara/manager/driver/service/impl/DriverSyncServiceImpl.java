@@ -104,10 +104,12 @@ public class DriverSyncServiceImpl implements DriverSyncService {
             if (oldPointAttributeMap.containsKey(name)) {
                 attribute.setId(oldPointAttributeMap.get(name).getId());
                 pointAttributeBo.setId(attribute.getId());
+                pointAttributeBo.setTenantId(driverVo.getTenantId());
                 log.debug("Point attribute registered, updating: {}", attribute);
                 pointAttributeService.updateByBo(pointAttributeBo);
             } else {
                 log.debug("Point attribute registered, adding: {}", attribute);
+                pointAttributeBo.setTenantId(driverSyncUpDTO.getTenant());
                 pointAttributeService.insertByBo(pointAttributeBo);
             }
         }
@@ -163,6 +165,7 @@ public class DriverSyncServiceImpl implements DriverSyncService {
 
         bo.setCreateBy(0L);
         bo.setCreateDept(0L);
+        bo.setTenantId(driverVo.getTenantId());
         driverApplicationService.insertByBo(bo);
     }
 
@@ -180,22 +183,23 @@ public class DriverSyncServiceImpl implements DriverSyncService {
         log.info("Driver {}", driver);
         if (ObjectUtil.isNull(driver)) {
             log.info("Driver does not registered, adding {} ", driverDTO);
-            DriverBo driverBo = buildDriverBo(driverDTO);
+            DriverBo driverBo = buildDriverBo(driverDTO, entityDTO.getTenant());
             driverService.insertByBo(driverBo);
             return driverService.queryById(driverBo.getId());
         }
 
         log.debug("Driver already registered, updating {} ", driverDTO);
-        driverService.updateByBo(buildDriverBo(driverDTO).setId(driver.getId()));
+        driverService.updateByBo(buildDriverBo(driverDTO ,entityDTO.getTenant()).setId(driver.getId()));
         return driverService.queryById(driver.getId());
     }
 
-    private DriverBo buildDriverBo(DriverDTO driverDTO) {
+    private DriverBo buildDriverBo(DriverDTO driverDTO, String tenantId) {
         DriverBo driverBo = new DriverBo();
         driverBo.setCode(driverDTO.getDriverCode());
         driverBo.setDisplayName(driverDTO.getDriverName());
         driverBo.setRemark(driverDTO.getRemark());
 
+        driverBo.setTenantId(tenantId);
         driverBo.setCreateBy(0L);
         driverBo.setCreateDept(0L);
         driverBo.setUpdateBy(0L);
@@ -206,9 +210,9 @@ public class DriverSyncServiceImpl implements DriverSyncService {
      * 注册驱动属性
      *
      * @param driverSyncUpDTO DriverSyncUpDTO
-     * @param entityDO        Driver
+     * @param driverVo        Driver
      */
-    private void registerDriverAttribute(DriverSyncUpDTO driverSyncUpDTO, DriverVo entityDO) {
+    private void registerDriverAttribute(DriverSyncUpDTO driverSyncUpDTO, DriverVo driverVo) {
 
         // 新驱动属性Map
         Map<String, DriverAttribute> newDriverAttributeMap = new HashMap<>(8);
@@ -218,19 +222,20 @@ public class DriverSyncServiceImpl implements DriverSyncService {
 
         // 原驱动属性Map
         Map<String, DriverAttributeVo> oldDriverAttributeMap = new HashMap<>(8);
-        List<DriverAttributeVo> byDriverId = driverAttributeService.selectByDriverId(entityDO.getId());
+        List<DriverAttributeVo> byDriverId = driverAttributeService.selectByDriverId(driverVo.getId());
         byDriverId.forEach(driverAttribute -> oldDriverAttributeMap.put(driverAttribute.getAttributeName(), driverAttribute));
 
         for (Map.Entry<String, DriverAttribute> entry : newDriverAttributeMap.entrySet()) {
             String name = entry.getKey();
             DriverAttribute info = newDriverAttributeMap.get(name);
-            info.setDriverId(entityDO.getId());
+            info.setDriverId(driverVo.getId());
 
             DriverAttributeBo driverAttributeBo = buildDriverAttributeBo(info);
             if (oldDriverAttributeMap.containsKey(name)) {
                 info.setId(oldDriverAttributeMap.get(name).getId());
                 log.debug("Driver attribute registered, updating: {}", info);
                 driverAttributeBo.setId(info.getId());
+                driverAttributeBo.setTenantId(driverVo.getTenantId());
                 driverAttributeService.updateByBo(driverAttributeBo);
             } else {
                 log.debug("Driver attribute does not registered, adding: {}", info);
@@ -253,20 +258,20 @@ public class DriverSyncServiceImpl implements DriverSyncService {
     }
 
     private DriverAttributeBo buildDriverAttributeBo(DriverAttribute driverAttribute) {
-        DriverAttributeBo driverAttributeBo = new DriverAttributeBo();
-        driverAttributeBo.setId(driverAttribute.getId());
-        driverAttributeBo.setDriverId(driverAttribute.getDriverId());
-        driverAttributeBo.setAttributeName(driverAttribute.getAttributeName());
-        driverAttributeBo.setAttributeType(driverAttribute.getAttributeTypeFlag());
-        driverAttributeBo.setDisplayName(driverAttribute.getDisplayName());
-        driverAttributeBo.setDefaultValue(driverAttribute.getDefaultValue());
-        driverAttributeBo.setRequired(driverAttribute.getRequired());
-        driverAttributeBo.setRemark(driverAttributeBo.getRemark());
+        DriverAttributeBo bo = new DriverAttributeBo();
+        bo.setId(driverAttribute.getId());
+        bo.setDriverId(driverAttribute.getDriverId());
+        bo.setAttributeName(driverAttribute.getAttributeName());
+        bo.setAttributeType(driverAttribute.getAttributeTypeFlag());
+        bo.setDisplayName(driverAttribute.getDisplayName());
+        bo.setDefaultValue(driverAttribute.getDefaultValue());
+        bo.setRequired(driverAttribute.getRequired());
+        bo.setRemark(driverAttribute.getRemark());
 
-        driverAttributeBo.setCreateBy(0L);
-        driverAttributeBo.setCreateDept(0L);
-        driverAttributeBo.setUpdateBy(0L);
-        return driverAttributeBo;
+        bo.setCreateBy(0L);
+        bo.setCreateDept(0L);
+        bo.setUpdateBy(0L);
+        return bo;
     }
 
 

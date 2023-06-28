@@ -25,6 +25,11 @@ public class DriverVo implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
+     * 租户编号
+     */
+    private String tenantId;
+
+    /**
      * 主键ID
      */
     @ExcelProperty(value = "主键ID")

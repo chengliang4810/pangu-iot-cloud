@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.dromara.common.core.validate.AddGroup;
 import org.dromara.common.core.validate.EditGroup;
-import org.dromara.common.mybatis.core.domain.BaseEntity;
+import org.dromara.common.tenant.core.TenantEntity;
 import org.dromara.manager.driver.domain.PointAttribute;
 
 /**
@@ -19,7 +19,7 @@ import org.dromara.manager.driver.domain.PointAttribute;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @AutoMapper(target = PointAttribute.class, reverseConvertGenerate = false)
-public class PointAttributeBo extends BaseEntity {
+public class PointAttributeBo extends TenantEntity {
 
     /**
      * 主键ID

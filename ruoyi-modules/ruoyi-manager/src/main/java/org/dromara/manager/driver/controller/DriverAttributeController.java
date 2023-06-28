@@ -41,6 +41,15 @@ public class DriverAttributeController extends BaseController {
      * 查询驱动属性列表
      */
     @SaCheckPermission("manager:driverAttribute:list")
+    @GetMapping("/tree")
+    public R<List<DriverAttributeVo>> tree(DriverAttributeBo bo) {
+        return R.ok(driverAttributeService.queryList(bo));
+    }
+
+    /**
+     * 查询驱动属性列表
+     */
+    @SaCheckPermission("manager:driverAttribute:list")
     @GetMapping("/list")
     public TableDataInfo<DriverAttributeVo> list(DriverAttributeBo bo, PageQuery pageQuery) {
         return driverAttributeService.queryPageList(bo, pageQuery);

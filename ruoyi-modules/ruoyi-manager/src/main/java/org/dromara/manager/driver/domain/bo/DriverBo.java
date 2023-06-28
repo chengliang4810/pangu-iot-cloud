@@ -8,7 +8,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import org.dromara.common.core.validate.AddGroup;
 import org.dromara.common.core.validate.EditGroup;
-import org.dromara.common.mybatis.core.domain.BaseEntity;
+import org.dromara.common.tenant.core.TenantEntity;
 import org.dromara.manager.driver.domain.Driver;
 
 /**
@@ -21,7 +21,7 @@ import org.dromara.manager.driver.domain.Driver;
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
 @AutoMapper(target = Driver.class, reverseConvertGenerate = false)
-public class DriverBo extends BaseEntity {
+public class DriverBo extends TenantEntity {
 
     /**
      * 主键ID

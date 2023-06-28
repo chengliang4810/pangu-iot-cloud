@@ -11,17 +11,19 @@ import org.dromara.common.iot.entity.driver.DriverAttribute;
 import org.dromara.common.iot.entity.driver.DriverMetadata;
 import org.dromara.common.iot.entity.point.PointAttribute;
 import org.dromara.common.iot.enums.AttributeType;
+import org.dromara.common.iot.model.Point;
+import org.dromara.manager.device.domain.bo.DeviceAttributeBo;
+import org.dromara.manager.device.domain.vo.DeviceAttributeVo;
 import org.dromara.manager.device.domain.vo.DeviceVo;
+import org.dromara.manager.device.service.IDeviceAttributeService;
 import org.dromara.manager.device.service.IDeviceService;
 import org.dromara.manager.driver.domain.Driver;
 import org.dromara.manager.driver.domain.bo.DriverAttributeValueBo;
-import org.dromara.manager.driver.domain.vo.DriverAttributeValueVo;
-import org.dromara.manager.driver.domain.vo.DriverAttributeVo;
-import org.dromara.manager.driver.domain.vo.PointAttributeValueVo;
-import org.dromara.manager.driver.domain.vo.PointAttributeVo;
+import org.dromara.manager.driver.domain.vo.*;
 import org.dromara.manager.driver.service.*;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -37,6 +39,7 @@ public class BatchServiceImpl implements BatchService {
     private final IDeviceService deviceService;
     private final IPointAttributeService pointAttributeService;
     private final IDriverAttributeService driverAttributeService;
+    private final IDeviceAttributeService deviceAttributeService;
     private final IPointAttributeValueService pointAttributeValueService;
     private final IDriverAttributeValueService driverAttributeValueService;
 
@@ -90,8 +93,12 @@ public class BatchServiceImpl implements BatchService {
         // 1000网关设备 0子设备 query time 2766ms
         log.info("gateway child device size {} , query time {}ms", deviceMap.size(), timer.intervalRestart());
 
+        // 查询设备的点位属性(对应物联网设备的属性)
+        Map<Long, Point> pointMap = getPointMap(deviceMap.values());
+        driverMetadata.setPointMap(pointMap);
+
         // 网关子设备的点位属性值
-        Map<Long, Map<Long, Map<String, AttributeInfo>>> devicePointInfoMap = getPointInfoMap(deviceIds, pointAttributeMap);
+        Map<Long, Map<Long, Map<String, AttributeInfo>>> devicePointInfoMap = getPointInfoMap(deviceIds, pointMap);
         driverMetadata.setPointInfoMap(devicePointInfoMap);
         log.info("gateway child device point attribute size {} , query time {}ms", devicePointInfoMap.size(), timer.intervalRestart());
 
@@ -100,16 +107,44 @@ public class BatchServiceImpl implements BatchService {
     }
 
     /**
+     * 得到设备点位
+     * 查询物联网设备的属性转换为点位
+     * @param bo 设备属性bo
+     * @return {@link Map}<{@link Long}, {@link Point}>
+     */
+    private Map<Long, Point> getPointMap(Collection<Device> bo) {
+        Map<Long, Point> pointMap = new ConcurrentHashMap<>(16);
+        bo.forEach(device -> {
+            DeviceAttributeBo queryBo = new DeviceAttributeBo().setProductId(device.getProductId()).setDeviceId(device.getDeviceId());
+            List<DeviceAttributeVo> deviceAttributeVoList = deviceAttributeService.queryListByProductIdAndDeviceId(queryBo);
+            deviceAttributeVoList.forEach(deviceAttributeVo -> pointMap.put(deviceAttributeVo.getId(), convertPoint(deviceAttributeVo)));
+        });
+        return pointMap;
+    }
+
+    private Point convertPoint(DeviceAttributeVo deviceAttributeVo){
+        Point point = new Point();
+        point.setId(deviceAttributeVo.getId());
+        point.setProductId(deviceAttributeVo.getProductId());
+        point.setDeviceId(deviceAttributeVo.getDeviceId());
+        point.setAttributeName(deviceAttributeVo.getAttributeName());
+        point.setIdentifier(deviceAttributeVo.getIdentifier());
+        point.setAttributeType(deviceAttributeVo.getAttributeType());
+        point.setPretreatmentScript(deviceAttributeVo.getPretreatmentScript());
+        return point;
+    }
+
+    /**
      * Get point attribute config map
      *
      * @param deviceIds         设备id
-     * @param pointAttributeMap 点属性映射
+     * @param pointMap 点属性映射
      * @return map(deviceId ( pointId, attribute ( attributeName, attributeInfo ( value, type))))
      */
-    private Map<Long, Map<Long, Map<String, AttributeInfo>>> getPointInfoMap(Set<Long> deviceIds, Map<Long, PointAttribute> pointAttributeMap) {
+    private Map<Long, Map<Long, Map<String, AttributeInfo>>> getPointInfoMap(Set<Long> deviceIds, Map<Long, Point> pointMap) {
         Map<Long, Map<Long, Map<String, AttributeInfo>>> devicePointInfoMap = new ConcurrentHashMap<>(16);
         deviceIds.forEach(deviceId -> {
-            Map<Long, Map<String, AttributeInfo>> infoMap = getPointInfoMap(deviceId, pointAttributeMap);
+            Map<Long, Map<String, AttributeInfo>> infoMap = getPointInfoMap(deviceId, pointMap);
             if (CollUtil.isEmpty(infoMap)){
                 return;
             }
@@ -122,17 +157,17 @@ public class BatchServiceImpl implements BatchService {
      * Get point attribute config map
      *
      * @param deviceId          设备id
-     * @param pointAttributeMap 点属性映射
+     * @param pointMap 点映射
      * @return map(pointId, attribute ( attributeName, attributeInfo ( value, type)))
      */
-    private Map<Long, Map<String, AttributeInfo>> getPointInfoMap(Long deviceId, Map<Long, PointAttribute> pointAttributeMap) {
+    private Map<Long, Map<String, AttributeInfo>> getPointInfoMap(Long deviceId, Map<Long, Point> pointMap) {
         Map<Long, Map<String, AttributeInfo>> attributeInfoMap = new ConcurrentHashMap<>(16);
-        pointAttributeMap.keySet().forEach(pointId -> {
+        pointMap.keySet().forEach(pointId -> {
             List<PointAttributeValueVo> pointAttributeConfigs = pointAttributeValueService.queryByDeviceIdAndPointId(deviceId, pointId);
             Map<String, AttributeInfo> infoMap = new ConcurrentHashMap<>(16);
             pointAttributeConfigs.forEach(pointInfo -> {
-                PointAttribute attribute = pointAttributeMap.get(pointInfo.getPointAttributeId());
-                infoMap.put(attribute.getAttributeName(), new AttributeInfo(pointInfo.getValue(), AttributeType.ofCode(attribute.getAttributeTypeFlag())));
+                Point point = pointMap.get(pointInfo.getPointAttributeId());
+                infoMap.put(point.getAttributeName(), new AttributeInfo(pointInfo.getValue(), AttributeType.ofCode(point.getAttributeType())));
             });
 
             if (CollUtil.isNotEmpty(infoMap)) {

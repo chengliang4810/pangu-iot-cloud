@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Null;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
 import org.dromara.common.core.validate.AddGroup;
 import org.dromara.common.core.validate.EditGroup;
 import org.dromara.common.mybatis.core.domain.BaseEntity;
@@ -18,6 +19,7 @@ import org.dromara.manager.device.domain.DeviceAttribute;
  * @date 2023-06-27
  */
 @Data
+@Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
 @AutoMapper(target = DeviceAttribute.class, reverseConvertGenerate = false)
 public class DeviceAttributeBo extends BaseEntity {

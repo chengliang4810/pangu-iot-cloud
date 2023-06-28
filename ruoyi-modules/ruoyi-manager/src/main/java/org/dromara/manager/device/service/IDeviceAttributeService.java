@@ -45,4 +45,12 @@ public interface IDeviceAttributeService {
      * 校验并批量删除设备属性信息
      */
     Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid);
+
+    /**
+     * 查询设备id 属性对应的列表
+     *
+     * @param bo
+     * @return {@link List}<{@link DeviceAttributeVo}>
+     */
+    List<DeviceAttributeVo> queryListByProductIdAndDeviceId(DeviceAttributeBo bo);
 }

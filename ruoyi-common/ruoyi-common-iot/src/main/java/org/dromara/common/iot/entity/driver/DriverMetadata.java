@@ -2,8 +2,8 @@ package org.dromara.common.iot.entity.driver;
 
 import lombok.Data;
 import org.dromara.common.iot.entity.point.PointAttribute;
+import org.dromara.common.iot.model.Point;
 
-import java.awt.*;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
@@ -48,9 +48,9 @@ public class DriverMetadata implements Serializable {
     private Map<Long, Map<Long, Map<String, AttributeInfo>>> pointInfoMap;
 
     /**
-     * profileId(pointId,point)
+     * (pointId,point)
      */
-    private Map<Long, Map<Long, Point>> profilePointMap;
+    private Map<Long, Point> pointMap;
 
     public DriverMetadata() {
         this.driverAttributeMap = new ConcurrentHashMap<>(16);
@@ -58,6 +58,6 @@ public class DriverMetadata implements Serializable {
         this.deviceMap = new ConcurrentHashMap<>(16);
         this.driverInfoMap = new ConcurrentHashMap<>(16);
         this.pointInfoMap = new ConcurrentHashMap<>(16);
-        this.profilePointMap = new ConcurrentHashMap<>(16);
+        this.pointMap = new ConcurrentHashMap<>(16);
     }
 }

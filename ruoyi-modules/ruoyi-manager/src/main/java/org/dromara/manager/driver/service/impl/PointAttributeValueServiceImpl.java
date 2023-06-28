@@ -46,7 +46,7 @@ public class PointAttributeValueServiceImpl implements IPointAttributeValueServi
             return Collections.emptyList();
         }
         return baseMapper.selectVoList(Wrappers.lambdaQuery(PointAttributeValue.class)
-            .eq(PointAttributeValue::getDeviceId, deviceId).eq(PointAttributeValue::getPointAttributeId, pointId));
+            .eq(PointAttributeValue::getDeviceId, deviceId).eq(PointAttributeValue::getDeviceAttributeId, pointId));
     }
 
     /**
