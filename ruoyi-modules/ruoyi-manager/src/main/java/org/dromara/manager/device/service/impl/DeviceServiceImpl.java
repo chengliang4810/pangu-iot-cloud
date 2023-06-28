@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.dromara.common.core.utils.MapstructUtils;
 import org.dromara.common.core.utils.StringUtils;
+import org.dromara.common.mybatis.core.domain.BaseEntity;
 import org.dromara.common.mybatis.core.page.PageQuery;
 import org.dromara.common.mybatis.core.page.TableDataInfo;
 import org.dromara.manager.device.domain.Device;
@@ -89,6 +90,7 @@ public class DeviceServiceImpl implements IDeviceService {
         lqw.eq(StringUtils.isNotBlank(bo.getCode()), Device::getCode, bo.getCode());
         lqw.like(StringUtils.isNotBlank(bo.getName()), Device::getName, bo.getName());
         lqw.eq(bo.getStatus() != null, Device::getStatus, bo.getStatus());
+        lqw.orderByDesc(BaseEntity::getCreateTime);
         lqw.between(params.get("beginCreateTime") != null && params.get("endCreateTime") != null,
             Device::getCreateTime ,params.get("beginCreateTime"), params.get("endCreateTime"));
         return lqw;
