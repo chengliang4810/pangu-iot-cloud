@@ -3,6 +3,7 @@ package org.dromara.manager.device.domain.bo;
 import io.github.linpeilie.annotations.AutoMapper;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.dromara.common.core.validate.AddGroup;
@@ -43,8 +44,10 @@ public class DeviceBo extends BaseEntity {
 
     /**
      * 设备编号
+     * 字母、数字和下划线组成，且不能以数字开头
      */
     @NotBlank(message = "设备编号不能为空", groups = { AddGroup.class })
+    @Pattern(regexp = "^[a-zA-Z_][a-zA-Z0-9_]*$", message = "设备编号格式不正确", groups = { AddGroup.class, EditGroup.class })
     private String code;
 
     /**
