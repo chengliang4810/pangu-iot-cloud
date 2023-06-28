@@ -62,7 +62,7 @@ public class DeviceServiceImpl implements IDeviceService {
      * 查询设备
      */
     @Override
-    public DeviceVo queryById(Long id){
+    public DeviceVo queryById(Long id) {
         return baseMapper.selectVoById(id);
     }
 
@@ -96,7 +96,7 @@ public class DeviceServiceImpl implements IDeviceService {
         lqw.eq(bo.getStatus() != null, Device::getStatus, bo.getStatus());
         lqw.orderByDesc(BaseEntity::getCreateTime);
         lqw.between(params.get("beginCreateTime") != null && params.get("endCreateTime") != null,
-            Device::getCreateTime ,params.get("beginCreateTime"), params.get("endCreateTime"));
+            Device::getCreateTime, params.get("beginCreateTime"), params.get("endCreateTime"));
         return lqw;
     }
 
@@ -134,8 +134,15 @@ public class DeviceServiceImpl implements IDeviceService {
     /**
      * 保存前的数据校验
      */
-    private void validEntityBeforeSave(Device entity){
+    private void validEntityBeforeSave(Device entity) {
         //TODO 做一些数据校验,如唯一约束
+        Assert.notNull(entity, "设备不能为空");
+        // 设备编码唯一
+        String code = entity.getCode();
+        boolean exists = baseMapper.exists(Wrappers.lambdaQuery(Device.class)
+            .eq(Device::getCode, code).ne(entity.getId() != null, Device::getId, entity.getId()));
+        Assert.isFalse(exists, "设备编码已存在");
+
     }
 
     /**
@@ -144,7 +151,7 @@ public class DeviceServiceImpl implements IDeviceService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid) {
-        if(isValid){
+        if (isValid) {
             //TODO 做一些业务上的校验,判断是否需要校验
         }
 
@@ -205,11 +212,11 @@ public class DeviceServiceImpl implements IDeviceService {
 
         bo.getChildDeviceIds().forEach(childDeviceId -> {
             Boolean existed = gatewayBindRelationService.existChildDevice(deviceId, childDeviceId);
-            if (existed){
+            if (existed) {
                 return;
             }
             Boolean aBoolean = gatewayBindRelationService.insertByBo(new GatewayBindRelationBo().setDeviceId(childDeviceId).setGatewayDeviceId(deviceId));
-            if (aBoolean){
+            if (aBoolean) {
                 count.incrementAndGet();
             }
         });
