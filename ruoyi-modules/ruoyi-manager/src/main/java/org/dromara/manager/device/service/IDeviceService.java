@@ -6,7 +6,6 @@ import org.dromara.manager.device.domain.bo.ChildDeviceBo;
 import org.dromara.manager.device.domain.bo.DeviceBo;
 import org.dromara.manager.device.domain.vo.DeviceVo;
 
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -48,11 +47,6 @@ public interface IDeviceService {
     Boolean updateByBo(DeviceBo bo);
 
     /**
-     * 校验并批量删除设备信息
-     */
-    Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid);
-
-    /**
      * 查询子设备通过设备id列表
      * 查询设备通过网关id列表
      *
@@ -69,4 +63,21 @@ public interface IDeviceService {
      * @return int {@link Integer} 成功条数
      */
     Integer addChildDevice(ChildDeviceBo bo);
+
+    /**
+     * 数子设备id
+     *
+     * @param id id
+     * @param enabled  启用状态
+     * @return {@link Long}
+     */
+    Long countChildByDeviceId(Long id, Boolean enabled);
+
+    /**
+     * 根据ID删除设备信息
+     *
+     * @param deviceId 设备id
+     * @return {@link Boolean}
+     */
+    Boolean deleteById(Long deviceId);
 }

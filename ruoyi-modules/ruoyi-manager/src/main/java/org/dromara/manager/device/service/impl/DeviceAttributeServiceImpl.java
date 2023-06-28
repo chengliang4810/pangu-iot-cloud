@@ -134,4 +134,20 @@ public class DeviceAttributeServiceImpl implements IDeviceAttributeService {
             .in(DeviceAttribute::getDeviceId, bo.getDeviceId(), 0)
         );
     }
+
+
+    /**
+     * 根据设备id仅删除设备属性
+     *
+     * @param deviceId id
+     * @return {@link Boolean}
+     */
+    @Override
+    public Boolean deleteByDeviceId(Long deviceId) {
+        Assert.notNull(deviceId, "设备id不能为空");
+        return baseMapper.delete(Wrappers.lambdaQuery(DeviceAttribute.class)
+            .eq(DeviceAttribute::getDeviceId, deviceId)
+        ) > 0;
+    }
+
 }

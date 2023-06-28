@@ -18,6 +18,7 @@ import org.dromara.common.web.core.BaseController;
 import org.dromara.manager.device.domain.bo.ChildDeviceBo;
 import org.dromara.manager.device.domain.bo.DeviceBo;
 import org.dromara.manager.device.domain.vo.DeviceVo;
+import org.dromara.manager.device.service.IDeviceBatchService;
 import org.dromara.manager.device.service.IDeviceService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -37,6 +38,7 @@ import java.util.List;
 public class DeviceController extends BaseController {
 
     private final IDeviceService deviceService;
+    private final IDeviceBatchService deviceBatchService;
 
     /**
      * 添加子设备
@@ -113,6 +115,6 @@ public class DeviceController extends BaseController {
     @DeleteMapping("/{ids}")
     public R<Void> remove(@NotEmpty(message = "主键不能为空")
                           @PathVariable Long[] ids) {
-        return toAjax(deviceService.deleteWithValidByIds(List.of(ids), true));
+        return toAjax(deviceBatchService.deleteWithValidByIds(List.of(ids), true));
     }
 }

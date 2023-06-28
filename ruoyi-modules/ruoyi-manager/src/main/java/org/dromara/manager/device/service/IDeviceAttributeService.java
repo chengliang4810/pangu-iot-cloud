@@ -53,4 +53,12 @@ public interface IDeviceAttributeService {
      * @return {@link List}<{@link DeviceAttributeVo}>
      */
     List<DeviceAttributeVo> queryListByProductIdAndDeviceId(DeviceAttributeBo bo);
+
+    /**
+     * 根据设备id仅删除设备属性
+     *
+     * @param deviceId id
+     * @return {@link Boolean}
+     */
+    Boolean deleteByDeviceId(Long deviceId);
 }

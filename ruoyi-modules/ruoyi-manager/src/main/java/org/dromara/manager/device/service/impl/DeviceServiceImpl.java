@@ -24,7 +24,6 @@ import org.dromara.manager.product.service.IProductService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -145,40 +144,7 @@ public class DeviceServiceImpl implements IDeviceService {
 
     }
 
-    /**
-     * 批量删除设备
-     */
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid) {
-        if (isValid) {
-            //TODO 做一些业务上的校验,判断是否需要校验
-        }
 
-        AtomicInteger count = new AtomicInteger();
-
-        ids.forEach(id -> {
-            DeviceVo deviceVo = queryById(id);
-            if (deviceVo == null) {
-                // 设备不存在,跳过
-                return;
-            }
-
-            // 检查是否关联子设备
-            Long deviceNumber = baseMapper.countChildByDeviceId(deviceVo.getId(), null);
-            Assert.isFalse(deviceNumber > 0, "设备存在子设备,请先删除子设备");
-
-            // 删除网关绑定关系
-            gatewayBindRelationService.deleteByDeviceId(deviceVo.getId());
-
-            int i = baseMapper.deleteById(deviceVo.getId());
-            count.addAndGet(i);
-            // 更新产品设备数量
-            productService.updateDeviceNumber(deviceVo.getProductId(), -1);
-        });
-
-        return count.get() > 0;
-    }
 
 
     /**
@@ -192,6 +158,28 @@ public class DeviceServiceImpl implements IDeviceService {
         return baseMapper.selectChildDeviceListByDeviceId(deviceId, enabled);
     }
 
+    /**
+     * 数子设备id
+     *
+     * @param id id
+     * @param enabled  enabled
+     * @return {@link Long}
+     */
+    @Override
+    public Long countChildByDeviceId(Long id, Boolean enabled) {
+        return baseMapper.countChildByDeviceId(id, enabled);
+    }
+
+    /**
+     * 根据ID删除设备信息
+     *
+     * @param deviceId 设备id
+     * @return {@link Boolean}
+     */
+    @Override
+    public Boolean deleteById(Long deviceId) {
+        return baseMapper.deleteById(deviceId) > 0;
+    }
 
     /**
      * 添加子设备

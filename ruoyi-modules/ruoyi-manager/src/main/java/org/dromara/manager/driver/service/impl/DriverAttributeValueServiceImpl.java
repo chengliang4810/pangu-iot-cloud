@@ -120,5 +120,16 @@ public class DriverAttributeValueServiceImpl implements IDriverAttributeValueSer
         return baseMapper.selectCount(Wrappers.lambdaQuery(DriverAttributeValue.class).eq(DriverAttributeValue::getDriverAttributeId, attributeId));
     }
 
+    /**
+     * 按设备id删除
+     *
+     * @param deviceId deviceId
+     */
+    @Override
+    public Boolean deleteByDeviceId(Long deviceId) {
+        return baseMapper.delete(Wrappers.lambdaQuery(DriverAttributeValue.class)
+            .eq(DriverAttributeValue::getGatewayDeviceId, deviceId)) > 0;
+
+    }
 
 }

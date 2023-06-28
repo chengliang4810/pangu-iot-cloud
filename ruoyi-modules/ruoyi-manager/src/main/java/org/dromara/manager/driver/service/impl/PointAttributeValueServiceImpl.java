@@ -140,4 +140,16 @@ public class PointAttributeValueServiceImpl implements IPointAttributeValueServi
         return baseMapper.exists(Wrappers.<PointAttributeValue>lambdaQuery().eq(PointAttributeValue::getPointAttributeId, attributeId));
     }
 
+    /**
+     * 按设备id删除
+     *
+     * @param deviceId 设备id
+     * @return {@link Boolean}
+     */
+    @Override
+    public Boolean deleteByDeviceId(Long deviceId) {
+        return baseMapper.delete(Wrappers.<PointAttributeValue>lambdaQuery()
+            .eq(PointAttributeValue::getDeviceId, deviceId)) > 0;
+    }
+
 }

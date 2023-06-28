@@ -52,4 +52,11 @@ public interface IDriverAttributeValueService {
      * @param attributeId 属性id
      */
     Long countByAttributeId(Long attributeId);
+
+    /**
+     * 按设备id删除
+     *
+     * @param id id
+     */
+    Boolean deleteByDeviceId(Long id);
 }

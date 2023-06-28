@@ -62,4 +62,12 @@ public interface IPointAttributeValueService {
      * @return {@link List}<{@link PointAttributeValueVo}>
      */
     List<PointAttributeValueVo> queryByDeviceIdAndPointId(Long deviceId, Long pointId);
+
+    /**
+     * 按设备id删除
+     *
+     * @param deviceId 设备id
+     * @return {@link Boolean}
+     */
+    Boolean deleteByDeviceId(Long deviceId);
 }
