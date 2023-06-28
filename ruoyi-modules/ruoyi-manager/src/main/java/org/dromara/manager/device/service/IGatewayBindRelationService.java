@@ -1,9 +1,9 @@
 package org.dromara.manager.device.service;
 
-import org.dromara.manager.device.domain.vo.GatewayBindRelationVo;
-import org.dromara.manager.device.domain.bo.GatewayBindRelationBo;
-import org.dromara.common.mybatis.core.page.TableDataInfo;
 import org.dromara.common.mybatis.core.page.PageQuery;
+import org.dromara.common.mybatis.core.page.TableDataInfo;
+import org.dromara.manager.device.domain.bo.GatewayBindRelationBo;
+import org.dromara.manager.device.domain.vo.GatewayBindRelationVo;
 
 import java.util.Collection;
 import java.util.List;
@@ -61,4 +61,11 @@ public interface IGatewayBindRelationService {
      */
     Long countChildDevice(Long deviceId);
 
+    /**
+     * 按设备id删除
+     *
+     * @param id id
+     * @return {@link Boolean}
+     */
+    Boolean deleteByDeviceId(Long id);
 }

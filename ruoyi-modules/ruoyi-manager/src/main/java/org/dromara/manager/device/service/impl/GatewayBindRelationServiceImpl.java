@@ -1,22 +1,22 @@
 package org.dromara.manager.device.service.impl;
 
-import org.dromara.common.core.utils.MapstructUtils;
-import org.dromara.common.mybatis.core.page.TableDataInfo;
-import org.dromara.common.mybatis.core.page.PageQuery;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import org.dromara.common.core.utils.MapstructUtils;
+import org.dromara.common.mybatis.core.page.PageQuery;
+import org.dromara.common.mybatis.core.page.TableDataInfo;
+import org.dromara.manager.device.domain.GatewayBindRelation;
 import org.dromara.manager.device.domain.bo.GatewayBindRelationBo;
 import org.dromara.manager.device.domain.vo.GatewayBindRelationVo;
-import org.dromara.manager.device.domain.GatewayBindRelation;
 import org.dromara.manager.device.mapper.GatewayBindRelationMapper;
 import org.dromara.manager.device.service.IGatewayBindRelationService;
+import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Collection;
 
 /**
  * 网关设备绑定子设备关系Service业务层处理
@@ -136,5 +136,16 @@ public class GatewayBindRelationServiceImpl implements IGatewayBindRelationServi
                 .eq(GatewayBindRelation::getGatewayDeviceId, deviceId));
     }
 
+    /**
+     * 按设备id删除
+     *
+     * @param id id
+     * @return {@link Boolean}
+     */
+    @Override
+    public Boolean deleteByDeviceId(Long id) {
+        return baseMapper.delete(Wrappers.lambdaQuery(GatewayBindRelation.class)
+                .eq(GatewayBindRelation::getDeviceId, id)) > 0;
+    }
 
 }

@@ -110,12 +110,12 @@ public class DeviceServiceImpl implements IDeviceService {
         Assert.notNull(productVo, "产品不存在");
         // 与产品关联的设备类型一致
         bo.setDeviceType(productVo.getType());
-        // 更新产品设备数量
-        productService.updateDeviceNumber(bo.getProductId(), 1);
         Device add = MapstructUtils.convert(bo, Device.class);
         validEntityBeforeSave(add);
         boolean flag = baseMapper.insert(add) > 0;
         if (flag) {
+            // 更新产品设备数量
+            productService.updateDeviceNumber(bo.getProductId(), 1);
             bo.setId(add.getId());
         }
         return flag;
@@ -160,6 +160,9 @@ public class DeviceServiceImpl implements IDeviceService {
             // 检查是否关联子设备
             Long deviceNumber = baseMapper.countChildByDeviceId(deviceVo.getId(), null);
             Assert.isFalse(deviceNumber > 0, "设备存在子设备,请先删除子设备");
+
+            // 删除网关绑定关系
+            gatewayBindRelationService.deleteByDeviceId(deviceVo.getId());
 
             int i = baseMapper.deleteById(deviceVo.getId());
             count.addAndGet(i);
