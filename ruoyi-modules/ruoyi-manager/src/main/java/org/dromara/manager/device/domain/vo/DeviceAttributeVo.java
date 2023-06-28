@@ -35,6 +35,18 @@ public class DeviceAttributeVo implements Serializable {
     private Long id;
 
     /**
+     * 产品ID
+     */
+    @ExcelProperty(value = "产品ID")
+    private Long productId;
+
+    /**
+     * 设备编号
+     */
+    @ExcelProperty(value = "设备编号")
+    private Long deviceId;
+
+    /**
      * 属性名称
      */
     @ExcelProperty(value = "属性名称")

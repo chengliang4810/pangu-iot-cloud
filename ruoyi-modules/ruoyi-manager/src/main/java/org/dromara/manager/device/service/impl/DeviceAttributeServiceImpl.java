@@ -62,6 +62,9 @@ public class DeviceAttributeServiceImpl implements IDeviceAttributeService {
     private LambdaQueryWrapper<DeviceAttribute> buildQueryWrapper(DeviceAttributeBo bo) {
         Map<String, Object> params = bo.getParams();
         LambdaQueryWrapper<DeviceAttribute> lqw = Wrappers.lambdaQuery();
+        lqw.eq(bo.getId() != null, DeviceAttribute::getId, bo.getId());
+        lqw.in(bo.getDeviceId() != null, DeviceAttribute::getDeviceId, bo.getDeviceId(), 0);
+        lqw.eq(bo.getProductId() != null, DeviceAttribute::getProductId, bo.getProductId());
         lqw.like(StringUtils.isNotBlank(bo.getAttributeName()), DeviceAttribute::getAttributeName, bo.getAttributeName());
         lqw.eq(StringUtils.isNotBlank(bo.getIdentifier()), DeviceAttribute::getIdentifier, bo.getIdentifier());
         return lqw;
@@ -101,7 +104,7 @@ public class DeviceAttributeServiceImpl implements IDeviceAttributeService {
             .eq(DeviceAttribute::getProductId, entity.getProductId())
             .eq(DeviceAttribute::getIdentifier, identifier)
         );
-        Assert.isFalse(exists, "标识符{}重复", identifier);
+        Assert.isFalse(exists, "标识符{}已被使用", identifier);
     }
 
     /**
