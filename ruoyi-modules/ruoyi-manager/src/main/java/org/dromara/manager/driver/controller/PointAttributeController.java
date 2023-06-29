@@ -47,6 +47,15 @@ public class PointAttributeController extends BaseController {
     }
 
     /**
+     * 查询驱动属性列表
+     */
+    @SaCheckPermission("manager:pointAttribute:list")
+    @GetMapping("/tree")
+    public R<List<PointAttributeVo>> tree(PointAttributeBo bo) {
+        return R.ok(pointAttributeService.queryList(bo));
+    }
+
+    /**
      * 导出驱动属性列表
      */
     @SaCheckPermission("manager:pointAttribute:export")
