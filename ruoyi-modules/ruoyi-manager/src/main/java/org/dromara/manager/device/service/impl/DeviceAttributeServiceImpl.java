@@ -1,6 +1,8 @@
 package org.dromara.manager.device.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.Assert;
+import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -14,7 +16,10 @@ import org.dromara.manager.device.domain.bo.DeviceAttributeBo;
 import org.dromara.manager.device.domain.vo.DeviceAttributeVo;
 import org.dromara.manager.device.mapper.DeviceAttributeMapper;
 import org.dromara.manager.device.service.IDeviceAttributeService;
+import org.dromara.manager.driver.domain.bo.PointAttributeValueBo;
+import org.dromara.manager.driver.service.IPointAttributeValueService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.List;
@@ -31,6 +36,7 @@ import java.util.Map;
 public class DeviceAttributeServiceImpl implements IDeviceAttributeService {
 
     private final DeviceAttributeMapper baseMapper;
+    private final IPointAttributeValueService pointAttributeValueService;
 
     /**
      * 查询设备属性
@@ -74,14 +80,46 @@ public class DeviceAttributeServiceImpl implements IDeviceAttributeService {
      * 新增设备属性
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Boolean insertByBo(DeviceAttributeBo bo) {
         DeviceAttribute add = MapstructUtils.convert(bo, DeviceAttribute.class);
         validEntityBeforeSave(add);
         boolean flag = baseMapper.insert(add) > 0;
         if (flag) {
+
+            // 添加点位属性配置
+            savePointAttributeValue(bo);
+
             bo.setId(add.getId());
         }
         return flag;
+    }
+
+    /**
+     * 保存点位属性值
+     *
+     * @param bo 设备信息
+     */
+    private void savePointAttributeValue(DeviceAttributeBo bo) {
+        if (ObjectUtil.isNull(bo.getDeviceId()) || 0 == bo.getDeviceId()) {
+            // 无设备id忽略， 一般是产品属性，则无需保存点位属性值
+            return;
+        }
+        Map<Long, String> pointAttributeConfig = bo.getPointAttributeConfig();
+        if (CollUtil.isEmpty(pointAttributeConfig)){
+            // 无点位属性配置忽略
+            return;
+        }
+
+        pointAttributeConfig.forEach((attributeId, value) -> {
+            PointAttributeValueBo valueBo = new PointAttributeValueBo();
+            valueBo.setDeviceId(bo.getDeviceId());
+            valueBo.setDeviceAttributeId(bo.getId());
+            valueBo.setPointAttributeId(attributeId);
+            valueBo.setValue(value);
+            pointAttributeValueService.insertByBo(valueBo);
+        });
+
     }
 
     /**

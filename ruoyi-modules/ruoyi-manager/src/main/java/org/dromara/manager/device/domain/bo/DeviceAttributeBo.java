@@ -12,6 +12,8 @@ import org.dromara.common.core.validate.EditGroup;
 import org.dromara.common.mybatis.core.domain.BaseEntity;
 import org.dromara.manager.device.domain.DeviceAttribute;
 
+import java.util.Map;
+
 /**
  * 设备属性业务对象 iot_device_attribute
  *
@@ -81,5 +83,11 @@ public class DeviceAttributeBo extends BaseEntity {
      */
     private String remark;
 
+    /**
+     * 属性点位配置信息
+     * key: 属性ID
+     * value: 属性值
+     */
+    private Map<Long, String> pointAttributeConfig;
 
 }
