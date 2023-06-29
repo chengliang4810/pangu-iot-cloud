@@ -82,10 +82,11 @@ public class DeviceBo extends BaseEntity {
      */
     private String remark;
 
-
     /**
-     * 网关设备需要驱动配置
+     * 网关设备驱动配置信息
+     * key: 属性ID
+     * value: 属性值
      */
-    private Map<String, Object> driverAttributeConfig;
+    private Map<Long, String> driverAttributeConfig;
 
 }

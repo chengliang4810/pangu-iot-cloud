@@ -32,7 +32,7 @@ public class ProductBatchService implements IProductBatchService {
             //TODO 做一些业务上的校验,判断是否需要校验
             ids.forEach(id -> {
                 Long deviceNumber = deviceService.countDeviceByProductId(id);
-                Assert.isFalse(deviceNumber > 0, "产品[{}]存在设备,请先删除设备", id);
+                Assert.isFalse(deviceNumber > 0, "产品已被使用,请先删除设备");
             });
         }
 

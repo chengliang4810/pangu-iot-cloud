@@ -1,5 +1,6 @@
 package org.dromara.manager.device.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.ObjUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -19,6 +20,8 @@ import org.dromara.manager.device.domain.vo.DeviceVo;
 import org.dromara.manager.device.mapper.DeviceMapper;
 import org.dromara.manager.device.service.IDeviceService;
 import org.dromara.manager.device.service.IGatewayBindRelationService;
+import org.dromara.manager.driver.domain.bo.DriverAttributeValueBo;
+import org.dromara.manager.driver.service.IDriverAttributeValueService;
 import org.dromara.manager.product.domain.vo.ProductVo;
 import org.dromara.manager.product.service.IProductService;
 import org.springframework.stereotype.Service;
@@ -42,6 +45,7 @@ public class DeviceServiceImpl implements IDeviceService {
     private final DeviceMapper baseMapper;
     private final IProductService productService;
     private final IGatewayBindRelationService gatewayBindRelationService;
+    private final IDriverAttributeValueService driverAttributeValueService;
 
     /**
      * 通过驱动ID查询设备列表
@@ -113,11 +117,42 @@ public class DeviceServiceImpl implements IDeviceService {
         validEntityBeforeSave(add);
         boolean flag = baseMapper.insert(add) > 0;
         if (flag) {
+
             // 更新产品设备数量
             productService.updateDeviceNumber(bo.getProductId(), 1);
+            // 添加设备驱动属性值
+            saveDriverAttributeValue(bo);
+
             bo.setId(add.getId());
         }
         return flag;
+    }
+
+    /**
+     * 保存驱动属性值
+     *
+     * @param bo device信息
+     */
+    private void saveDriverAttributeValue(DeviceBo bo) {
+        Integer deviceType = bo.getDeviceType();
+        if (deviceType != 2){
+            // 非网关设备忽略
+            return;
+        }
+
+        Map<Long, String> driverAttributeConfig = bo.getDriverAttributeConfig();
+        if (CollUtil.isEmpty(driverAttributeConfig)){
+            // 无驱动属性配置忽略
+            return;
+        }
+        // 添加设备驱动属性值
+        driverAttributeConfig.forEach((attributeId, value) -> {
+            DriverAttributeValueBo driverAttributeValueBo = new DriverAttributeValueBo();
+            driverAttributeValueBo.setGatewayDeviceId(bo.getId());
+            driverAttributeValueBo.setDriverAttributeId(attributeId);
+            driverAttributeValueBo.setValue(value);
+            driverAttributeValueService.insertByBo(driverAttributeValueBo);
+        });
     }
 
     /**
@@ -143,9 +178,6 @@ public class DeviceServiceImpl implements IDeviceService {
         Assert.isFalse(exists, "设备编码已存在");
 
     }
-
-
-
 
     /**
      * 查询设备通过网关id列表
