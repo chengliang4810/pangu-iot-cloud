@@ -5,12 +5,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.dromara.manager.device.service.IDeviceAttributeService;
 import org.dromara.manager.device.service.IDeviceService;
+import org.dromara.manager.product.domain.vo.ProductVo;
 import org.dromara.manager.product.service.IProductBatchService;
 import org.dromara.manager.product.service.IProductService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Slf4j
@@ -21,6 +23,11 @@ public class ProductBatchService implements IProductBatchService {
     private final IDeviceService deviceService;
     private final IProductService productService;
     private final IDeviceAttributeService deviceAttributeService;
+
+    @Override
+    public List<ProductVo> queryParentDeviceProduct(Long deviceId) {
+        return productService.queryParentDeviceProduct(deviceId);
+    }
 
     /**
      * 批量删除产品

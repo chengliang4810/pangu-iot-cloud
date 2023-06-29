@@ -4,6 +4,8 @@ import org.dromara.manager.product.domain.Product;
 import org.dromara.manager.product.domain.vo.ProductVo;
 import org.dromara.common.mybatis.core.mapper.BaseMapperPlus;
 
+import java.util.List;
+
 /**
  * 产品Mapper接口
  *
@@ -12,4 +14,5 @@ import org.dromara.common.mybatis.core.mapper.BaseMapperPlus;
  */
 public interface ProductMapper extends BaseMapperPlus<Product, ProductVo> {
 
+    List<ProductVo> selectParentDeviceProduct(Long deviceId);
 }

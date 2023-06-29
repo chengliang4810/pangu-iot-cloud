@@ -58,4 +58,12 @@ public interface IProductService {
      * @return {@link Boolean}
      */
     Boolean deleteById(Long id);
+
+    /**
+     * 查询父设备产品
+     *
+     * @param deviceId 设备id
+     * @return {@link List}<{@link ProductVo}>
+     */
+    List<ProductVo> queryParentDeviceProduct(Long deviceId);
 }

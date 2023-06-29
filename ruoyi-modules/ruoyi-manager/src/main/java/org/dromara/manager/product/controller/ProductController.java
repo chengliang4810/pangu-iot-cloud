@@ -49,6 +49,15 @@ public class ProductController extends BaseController {
     }
 
     /**
+     * 查询父级设备对应的产品信息
+     */
+    @SaCheckPermission("manager:product:list")
+    @GetMapping("/parentDevice/{deviceId}")
+    public R<List<ProductVo>> parentDevice(@NotNull(message = "设备ID不能为空") @PathVariable Long deviceId) {
+        return R.ok(productBatchService.queryParentDeviceProduct(deviceId));
+    }
+
+    /**
      * 查询产品列表
      */
     @SaCheckPermission("manager:product:list")

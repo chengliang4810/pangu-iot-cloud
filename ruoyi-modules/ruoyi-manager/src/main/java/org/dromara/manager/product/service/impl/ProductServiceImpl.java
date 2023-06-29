@@ -128,4 +128,14 @@ public class ProductServiceImpl implements IProductService {
         return baseMapper.deleteById(id) > 0;
     }
 
+    /**
+     * 查询父设备产品
+     *
+     * @param deviceId 设备id
+     * @return {@link List}<{@link ProductVo}>
+     */
+    @Override
+    public List<ProductVo> queryParentDeviceProduct(Long deviceId) {
+        return baseMapper.selectParentDeviceProduct(deviceId);
+    }
 }
