@@ -1,5 +1,6 @@
 package org.dromara.manager.driver.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -14,6 +15,7 @@ import org.dromara.manager.driver.domain.vo.DriverAttributeValueVo;
 import org.dromara.manager.driver.mapper.DriverAttributeValueMapper;
 import org.dromara.manager.driver.service.IDriverAttributeValueService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.List;
@@ -82,6 +84,22 @@ public class DriverAttributeValueServiceImpl implements IDriverAttributeValueSer
     }
 
     /**
+     * 批量插入 DeviceAttributeValue
+     *
+     * @param bos bos
+     * @return {@link Boolean}
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Boolean batchInsertByBo(List<DriverAttributeValueBo> bos) {
+        if (CollUtil.isEmpty(bos)) {
+            return false;
+        }
+        List<DriverAttributeValue> list = MapstructUtils.convert(bos, DriverAttributeValue.class);
+        return baseMapper.insertOrUpdateBatch(list);
+    }
+
+    /**
      * 修改驱动属性值
      */
     @Override
@@ -129,7 +147,6 @@ public class DriverAttributeValueServiceImpl implements IDriverAttributeValueSer
     public Boolean deleteByDeviceId(Long deviceId) {
         return baseMapper.delete(Wrappers.lambdaQuery(DriverAttributeValue.class)
             .eq(DriverAttributeValue::getGatewayDeviceId, deviceId)) > 0;
-
     }
 
 }

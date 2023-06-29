@@ -59,4 +59,12 @@ public interface IDriverAttributeValueService {
      * @param id id
      */
     Boolean deleteByDeviceId(Long id);
+
+    /**
+     * 批量插入 DeviceAttributeValue
+     *
+     * @param bos bos
+     * @return {@link Boolean}
+     */
+    Boolean batchInsertByBo(List<DriverAttributeValueBo> bos);
 }

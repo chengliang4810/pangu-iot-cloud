@@ -3,6 +3,7 @@ package org.dromara.manager.driver.domain;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
+import org.dromara.common.mybatis.core.domain.BaseEntity;
 
 /**
  * 驱动属性值对象 iot_driver_attribute_value
@@ -12,7 +13,7 @@ import lombok.Data;
  */
 @Data
 @TableName("iot_driver_attribute_value")
-public class DriverAttributeValue {
+public class DriverAttributeValue extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 

@@ -84,11 +84,15 @@ public class DriverSyncServiceImpl implements DriverSyncService {
         }
         driverContext.setDriverMetadata(driverMetadata);
         driverContext.setDriverStatus(DriverStatusEnum.ONLINE);
+        // 驱动属性与点位属性
         driverMetadata.getDriverAttributeMap().values().forEach(driverAttribute -> log.info("Syncing driver attribute[{}] metadata: {}", driverAttribute.getAttributeName(), JSONUtil.toJsonPrettyStr(driverAttribute)));
         driverMetadata.getPointAttributeMap().values().forEach(pointAttribute -> log.info("Syncing point attribute[{}] metadata: {}", pointAttribute.getAttributeName(), JSONUtil.toJsonPrettyStr(pointAttribute)));
+        // 网关设备与设备
         driverMetadata.getGatewayDeviceMap().values().forEach(device -> log.info("Syncing gateway device[{}] metadata: {}", device.getDeviceName(), JSONUtil.toJsonPrettyStr(device)));
         driverMetadata.getDeviceMap().values().forEach(device -> log.info("Syncing device[{}] metadata: {}", device.getDeviceName(), JSONUtil.toJsonPrettyStr(device)));
 
+        String jsonPrettyStr = JSONUtil.toJsonPrettyStr(driverMetadata.getDriverInfoMap().values());
+        System.out.println(jsonPrettyStr);
         log.info("The metadata synced successfully. executionTime {} ms", entityDTO.getExecutionTime());
     }
 

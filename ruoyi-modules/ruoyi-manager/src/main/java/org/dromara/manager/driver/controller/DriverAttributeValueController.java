@@ -47,6 +47,16 @@ public class DriverAttributeValueController extends BaseController {
     }
 
     /**
+     * 查询驱动属性值列表
+     */
+    @SaCheckPermission("manager:driverAttributeValue:list")
+    @GetMapping("/tree")
+    public R<List<DriverAttributeValueVo>> tree(DriverAttributeValueBo bo) {
+        return R.ok(driverAttributeValueService.queryList(bo));
+    }
+
+
+    /**
      * 导出驱动属性值列表
      */
     @SaCheckPermission("manager:driverAttributeValue:export")
@@ -77,6 +87,17 @@ public class DriverAttributeValueController extends BaseController {
     @PostMapping()
     public R<Void> add(@Validated(AddGroup.class) @RequestBody DriverAttributeValueBo bo) {
         return toAjax(driverAttributeValueService.insertByBo(bo));
+    }
+
+    /**
+     * 新增驱动属性值
+     */
+    @SaCheckPermission("manager:driverAttributeValue:add")
+    @Log(title = "驱动属性值", businessType = BusinessType.INSERT)
+    @RepeatSubmit()
+    @PostMapping("/batch")
+    public R<Void> addBatch(@NotEmpty(message = "驱动属性不能为空") @RequestBody List<DriverAttributeValueBo> bos) {
+        return toAjax(driverAttributeValueService.batchInsertByBo(bos));
     }
 
     /**

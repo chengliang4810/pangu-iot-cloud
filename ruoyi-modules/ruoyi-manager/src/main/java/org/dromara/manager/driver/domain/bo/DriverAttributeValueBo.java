@@ -40,9 +40,9 @@ public class DriverAttributeValueBo extends BaseEntity {
     private Long gatewayDeviceId;
 
     /**
-     * 属性类型
+     * 属性值
      */
-    @NotBlank(message = "属性类型不能为空", groups = {AddGroup.class, EditGroup.class})
+    @NotBlank(message = "属性值不能为空", groups = {AddGroup.class, EditGroup.class})
     private String value;
 
 
