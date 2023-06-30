@@ -3,4 +3,13 @@
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.dromara.manager.driver.mapper.DriverMapper">
+
+    <select id="selectParentDeviceDriver" resultType="org.dromara.manager.driver.domain.vo.DriverVo">
+        select driver.* from iot_gateway_bind_relation relation
+        left join iot_device device on relation.gateway_device_id = device.id
+        left join iot_product product on device.product_id = product.id
+        left join iot_driver driver on product.driver_id = driver.id
+        where relation.device_id = #{deviceId}
+    </select>
+
 </mapper>

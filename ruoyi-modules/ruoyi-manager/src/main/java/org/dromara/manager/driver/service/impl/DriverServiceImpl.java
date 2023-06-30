@@ -122,4 +122,17 @@ public class DriverServiceImpl implements IDriverService {
         }
         return baseMapper.deleteBatchIds(ids) > 0;
     }
+
+
+    /**
+     * 查询父设备的驱动信息
+     *
+     * @param deviceId 设备id
+     * @return {@link List}<{@link DriverVo}>
+     */
+    @Override
+    public List<DriverVo> queryParentDeviceDriver(Long deviceId) {
+        return baseMapper.selectParentDeviceDriver(deviceId);
+    }
+
 }

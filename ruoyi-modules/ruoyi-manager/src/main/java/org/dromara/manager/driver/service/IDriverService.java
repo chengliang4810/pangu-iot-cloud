@@ -54,4 +54,12 @@ public interface IDriverService {
      * @return {@link Driver}
      */
     Driver queryByCode(String driverCode);
+
+    /**
+     * 查询父设备的驱动信息
+     *
+     * @param deviceId 设备id
+     * @return {@link List}<{@link DriverVo}>
+     */
+    List<DriverVo> queryParentDeviceDriver(Long deviceId);
 }

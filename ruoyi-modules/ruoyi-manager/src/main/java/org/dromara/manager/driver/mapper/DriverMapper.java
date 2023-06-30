@@ -4,6 +4,8 @@ import org.dromara.common.mybatis.core.mapper.BaseMapperPlus;
 import org.dromara.manager.driver.domain.Driver;
 import org.dromara.manager.driver.domain.vo.DriverVo;
 
+import java.util.List;
+
 /**
  * 驱动Mapper接口
  *
@@ -12,4 +14,5 @@ import org.dromara.manager.driver.domain.vo.DriverVo;
  */
 public interface DriverMapper extends BaseMapperPlus<Driver, DriverVo> {
 
+    List<DriverVo> selectParentDeviceDriver(Long deviceId);
 }

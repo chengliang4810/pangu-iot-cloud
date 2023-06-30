@@ -13,6 +13,7 @@ import org.dromara.common.mybatis.core.page.TableDataInfo;
 import org.dromara.common.web.core.BaseController;
 import org.dromara.manager.driver.domain.bo.DriverBo;
 import org.dromara.manager.driver.domain.vo.DriverVo;
+import org.dromara.manager.driver.service.BatchService;
 import org.dromara.manager.driver.service.IDriverService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +33,16 @@ import java.util.List;
 public class DriverController extends BaseController {
 
     private final IDriverService driverService;
+    private final BatchService batchService;
+
+    /**
+     * 查询父级设备（多个）对应的驱动信息列表
+     */
+    @SaCheckPermission("manager:driver:list")
+    @GetMapping("/parentDevice/{deviceId}")
+    public R<List<DriverVo>> parentDevice(@NotNull(message = "设备ID不能为空") @PathVariable Long deviceId) {
+        return R.ok(batchService.queryParentDeviceDriver(deviceId));
+    }
 
     /**
      * 查询驱动列表

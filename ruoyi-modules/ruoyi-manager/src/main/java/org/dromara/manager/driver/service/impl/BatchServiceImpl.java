@@ -43,6 +43,11 @@ public class BatchServiceImpl implements BatchService {
     private final IPointAttributeValueService pointAttributeValueService;
     private final IDriverAttributeValueService driverAttributeValueService;
 
+    @Override
+    public List<DriverVo> queryParentDeviceDriver(Long deviceId) {
+        return driverService.queryParentDeviceDriver(deviceId);
+    }
+
     /**
      * 批处理驱动程序元数据
      * TODO 后续优化循环查询逻辑

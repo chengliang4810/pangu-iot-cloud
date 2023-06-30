@@ -1,6 +1,9 @@
 package org.dromara.manager.driver.service;
 
 import org.dromara.common.iot.entity.driver.DriverMetadata;
+import org.dromara.manager.driver.domain.vo.DriverVo;
+
+import java.util.List;
 
 public interface BatchService {
 
@@ -12,4 +15,5 @@ public interface BatchService {
      */
     DriverMetadata batchDriverMetadata(String code);
 
+    List<DriverVo> queryParentDeviceDriver(Long deviceId);
 }
