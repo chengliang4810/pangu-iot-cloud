@@ -1,6 +1,8 @@
 package org.dromara.auth.controller;
 
 import cn.hutool.core.collection.CollUtil;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.dromara.auth.domain.vo.LoginTenantVo;
@@ -24,8 +26,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.constraints.NotBlank;
 import java.net.URL;
 import java.util.List;
 
@@ -35,8 +35,8 @@ import java.util.List;
  * @author Lion Li
  */
 @Validated
-@RequiredArgsConstructor
 @RestController
+@RequiredArgsConstructor
 public class TokenController {
 
     private final SysLoginService sysLoginService;

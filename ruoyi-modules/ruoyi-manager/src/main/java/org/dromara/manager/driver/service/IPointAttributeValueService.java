@@ -2,6 +2,7 @@ package org.dromara.manager.driver.service;
 
 import org.dromara.common.mybatis.core.page.PageQuery;
 import org.dromara.common.mybatis.core.page.TableDataInfo;
+import org.dromara.manager.driver.domain.bo.BatchPointAttributeValueBo;
 import org.dromara.manager.driver.domain.bo.PointAttributeValueBo;
 import org.dromara.manager.driver.domain.vo.PointAttributeValueVo;
 
@@ -70,4 +71,10 @@ public interface IPointAttributeValueService {
      * @return {@link Boolean}
      */
     Boolean deleteByDeviceId(Long deviceId);
+
+    /**
+     * @param bo
+     * @return {@link Boolean}
+     */
+    Boolean insertByBo(BatchPointAttributeValueBo bo);
 }

@@ -9,16 +9,15 @@ import org.dromara.common.core.utils.StringUtils;
 import org.dromara.common.mybatis.core.page.PageQuery;
 import org.dromara.common.mybatis.core.page.TableDataInfo;
 import org.dromara.manager.driver.domain.PointAttributeValue;
+import org.dromara.manager.driver.domain.bo.BatchPointAttributeValueBo;
+import org.dromara.manager.driver.domain.bo.BatchPointAttributeValueItem;
 import org.dromara.manager.driver.domain.bo.PointAttributeValueBo;
 import org.dromara.manager.driver.domain.vo.PointAttributeValueVo;
 import org.dromara.manager.driver.mapper.PointAttributeValueMapper;
 import org.dromara.manager.driver.service.IPointAttributeValueService;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 驱动属性值Service业务层处理
@@ -98,6 +97,25 @@ public class PointAttributeValueServiceImpl implements IPointAttributeValueServi
             bo.setId(add.getId());
         }
         return flag;
+    }
+
+    /**
+     * 新增/修改驱动属性值
+     * @param bo
+     * @return {@link Boolean}
+     */
+    @Override
+    public Boolean insertByBo(BatchPointAttributeValueBo bo) {
+        List<BatchPointAttributeValueItem> valueItems = bo.getPointAttributeConfig();
+        List<PointAttributeValue> batchList = new ArrayList<>(valueItems.size());
+        valueItems.forEach(item -> {
+            PointAttributeValue add = MapstructUtils.convert(item, PointAttributeValue.class);
+            add.setPointAttributeId(item.getPointAttributeId());
+            add.setValue(item.getValue());
+            add.setId(item.getId());
+            batchList.add(add);
+        });
+        return baseMapper.insertOrUpdateBatch(batchList);
     }
 
     /**

@@ -15,6 +15,7 @@ import org.dromara.common.log.enums.BusinessType;
 import org.dromara.common.mybatis.core.page.PageQuery;
 import org.dromara.common.mybatis.core.page.TableDataInfo;
 import org.dromara.common.web.core.BaseController;
+import org.dromara.manager.driver.domain.bo.BatchPointAttributeValueBo;
 import org.dromara.manager.driver.domain.bo.PointAttributeValueBo;
 import org.dromara.manager.driver.domain.vo.PointAttributeValueVo;
 import org.dromara.manager.driver.service.IPointAttributeValueService;
@@ -86,6 +87,17 @@ public class PointAttributeValueController extends BaseController {
     @RepeatSubmit()
     @PostMapping()
     public R<Void> add(@Validated(AddGroup.class) @RequestBody PointAttributeValueBo bo) {
+        return toAjax(pointAttributeValueService.insertByBo(bo));
+    }
+
+    /**
+     * 批量新增驱动属性值
+     */
+    @SaCheckPermission("manager:pointAttributeValue:add")
+    @Log(title = "驱动属性值", businessType = BusinessType.INSERT)
+    @RepeatSubmit()
+    @PostMapping("/batch")
+    public R<Void> batchAdd(@Validated(AddGroup.class) @RequestBody BatchPointAttributeValueBo bo) {
         return toAjax(pointAttributeValueService.insertByBo(bo));
     }
 
