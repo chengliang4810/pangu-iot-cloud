@@ -3,4 +3,22 @@
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.dromara.manager.driver.mapper.PointAttributeValueMapper">
+
+    <select id="selectBy" resultType="org.dromara.manager.driver.domain.vo.PointAttributeValueVo">
+        select iot_point_attribute_value.*,iot_point_attribute.tenant_id from iot_point_attribute_value left join iot_point_attribute on iot_point_attribute_value.point_attribute_id = iot_point_attribute.id
+        <where>
+            <if test="driverId != null and driverId != ''">
+                and iot_point_attribute.driver_id = #{driverId}
+            </if>
+            <if test="deviceAttributeId != null">
+                and iot_point_attribute_value.device_attribute_id = #{deviceAttributeId}
+            </if>
+            <if test="deviceId != null and deviceId != ''">
+                and iot_point_attribute_value.device_id = #{deviceId}
+            </if>
+            <if test="tenantId != null and tenantId != ''">
+                and iot_point_attribute.tenant_id = #{tenantId}
+            </if>
+        </where>
+    </select>
 </mapper>

@@ -5,9 +5,9 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.dromara.common.core.utils.MapstructUtils;
-import org.dromara.common.core.utils.StringUtils;
 import org.dromara.common.mybatis.core.page.PageQuery;
 import org.dromara.common.mybatis.core.page.TableDataInfo;
+import org.dromara.common.tenant.helper.TenantHelper;
 import org.dromara.manager.driver.domain.PointAttributeValue;
 import org.dromara.manager.driver.domain.bo.BatchPointAttributeValueBo;
 import org.dromara.manager.driver.domain.bo.BatchPointAttributeValueItem;
@@ -30,7 +30,6 @@ import java.util.*;
 public class PointAttributeValueServiceImpl implements IPointAttributeValueService {
 
     private final PointAttributeValueMapper baseMapper;
-
 
     /**
      * 通过设备id pointId 查询配置信息
@@ -72,6 +71,10 @@ public class PointAttributeValueServiceImpl implements IPointAttributeValueServi
     @Override
     public List<PointAttributeValueVo> queryList(PointAttributeValueBo bo) {
         LambdaQueryWrapper<PointAttributeValue> lqw = buildQueryWrapper(bo);
+        if (null != bo.getDriverId()){
+            String tenantId = TenantHelper.getTenantId();
+            return baseMapper.selectBy(bo.getDeviceId(), bo.getDeviceAttributeId(), bo.getDriverId(), tenantId);
+        }
         return baseMapper.selectVoList(lqw);
     }
 
@@ -81,7 +84,6 @@ public class PointAttributeValueServiceImpl implements IPointAttributeValueServi
         lqw.eq(bo.getPointAttributeId() != null, PointAttributeValue::getPointAttributeId, bo.getPointAttributeId());
         lqw.eq(bo.getDeviceId() != null, PointAttributeValue::getDeviceId, bo.getDeviceId());
         lqw.eq(bo.getDeviceAttributeId() != null, PointAttributeValue::getDeviceAttributeId, bo.getDeviceAttributeId());
-        lqw.eq(StringUtils.isNotBlank(bo.getValue()), PointAttributeValue::getValue, bo.getValue());
         return lqw;
     }
 
@@ -110,9 +112,11 @@ public class PointAttributeValueServiceImpl implements IPointAttributeValueServi
         List<PointAttributeValue> batchList = new ArrayList<>(valueItems.size());
         valueItems.forEach(item -> {
             PointAttributeValue add = MapstructUtils.convert(item, PointAttributeValue.class);
+            add.setId(item.getId());
+            add.setDeviceId(bo.getDeviceId());
+            add.setDeviceAttributeId(bo.getDeviceAttributeId());
             add.setPointAttributeId(item.getPointAttributeId());
             add.setValue(item.getValue());
-            add.setId(item.getId());
             batchList.add(add);
         });
         return baseMapper.insertOrUpdateBatch(batchList);

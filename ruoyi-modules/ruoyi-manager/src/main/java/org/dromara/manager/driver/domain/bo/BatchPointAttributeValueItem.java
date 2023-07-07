@@ -1,16 +1,19 @@
 package org.dromara.manager.driver.domain.bo;
 
+import io.github.linpeilie.annotations.AutoMapper;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.dromara.common.core.validate.AddGroup;
 import org.dromara.common.core.validate.EditGroup;
+import org.dromara.manager.driver.domain.PointAttributeValue;
 
 import java.io.Serializable;
 
 @Data
 @Accessors(chain = true)
+@AutoMapper(target = PointAttributeValue.class, reverseConvertGenerate = false)
 public class BatchPointAttributeValueItem implements Serializable {
 
     /**

@@ -46,6 +46,11 @@ public class PointAttributeValueBo extends BaseEntity {
     private Long deviceAttributeId;
 
     /**
+     * 驱动ID 用于查询条件
+     */
+    private Long driverId;
+
+    /**
      * 属性值
      */
     @NotBlank(message = "属性值不能为空", groups = {AddGroup.class, EditGroup.class})
