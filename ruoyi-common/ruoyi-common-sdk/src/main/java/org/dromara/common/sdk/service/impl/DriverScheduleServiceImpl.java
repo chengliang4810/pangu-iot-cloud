@@ -1,6 +1,6 @@
 package org.dromara.common.sdk.service.impl;
 
-import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.ObjUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -30,11 +30,11 @@ public class DriverScheduleServiceImpl implements DriverScheduleService {
     @Override
     public void initial() {
         ScheduleProperty property = driverProperty.getSchedule();
-        if (ObjectUtil.isNotNull(property)) {
+        if (ObjUtil.isNull(property)) {
             return;
         }
         if (Boolean.TRUE.equals(property.getGateway().getEnable())) {
-            createScheduleJobWithCorn(ScheduleConstant.DRIVER_SCHEDULE_GROUP, ScheduleConstant.GATEWAY_STATUS_SCHEDULE_JOB, property.getCustom().getCorn(), GatewayDeviceStatusScheduleJob.class);
+            createScheduleJobWithCorn(ScheduleConstant.DRIVER_SCHEDULE_GROUP, ScheduleConstant.GATEWAY_STATUS_SCHEDULE_JOB, property.getGateway().getCorn(), GatewayDeviceStatusScheduleJob.class);
         }
         if (Boolean.TRUE.equals(property.getRead().getEnable())) {
             createScheduleJobWithCorn(ScheduleConstant.DRIVER_SCHEDULE_GROUP, ScheduleConstant.READ_SCHEDULE_JOB, property.getRead().getCorn(), DriverReadScheduleJob.class);
