@@ -1,11 +1,11 @@
 package org.dromara.common.sdk;
 
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.ObjUtil;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections4.MapUtils;
-import org.apache.commons.lang3.ObjectUtils;
 import org.dromara.common.core.exception.ServiceException;
 import org.dromara.common.iot.entity.driver.AttributeInfo;
 import org.dromara.common.iot.entity.driver.Device;
@@ -14,8 +14,7 @@ import org.dromara.common.iot.enums.DriverStatusEnum;
 import org.dromara.common.iot.model.Point;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author pnoker,chengliang4810
@@ -56,8 +55,9 @@ public class DriverContext {
      */
     public Map<Long, Map<String, AttributeInfo>> getPointInfoByDeviceId(Long deviceId) {
         Map<Long, Map<String, AttributeInfo>> tmpMap = this.driverMetadata.getPointInfoMap().get(deviceId);
-        if (MapUtils.isEmpty(tmpMap)) {
-            throw new ServiceException("Device({" + deviceId + "}) does not exist");
+        if (CollUtil.isEmpty(tmpMap)) {
+            return Collections.emptyMap();
+            //throw new ServiceException("Device({" + deviceId + "}) does not exist");
         }
         return tmpMap;
     }
@@ -71,8 +71,9 @@ public class DriverContext {
      */
     public Map<String, AttributeInfo> getPointInfoByDeviceIdAndPointId(Long deviceId, Long pointId) {
         Map<String, AttributeInfo> tmpMap = getPointInfoByDeviceId(deviceId).get(pointId);
-        if (MapUtils.isEmpty(tmpMap)) {
-            throw new ServiceException("Point({"+pointId+"}) info does not exist");
+        if (CollUtil.isEmpty(tmpMap)) {
+            return Collections.emptyMap();
+            // throw new ServiceException("Point({"+pointId+"}) info does not exist");
         }
         return tmpMap;
     }
@@ -85,49 +86,36 @@ public class DriverContext {
      */
     public Device getDeviceByDeviceId(Long deviceId) {
         Device device = this.driverMetadata.getDeviceMap().get(deviceId);
-        if (ObjectUtils.anyNull(device)) {
-            throw new ServiceException("Device({"+deviceId+"}) does not exist");
+        if (null == device) {
+            device = this.getDriverMetadata().getGatewayDeviceMap().get(deviceId);
+        }
+        if (ObjUtil.isNull(device)) {
+            throw new ServiceException("Device({" + deviceId + "}) does not exist");
         }
         return device;
     }
 
     /**
-     * 根据 设备Id 获取位号
+     * 获取位号列表
      *
-     * @param deviceId 设备ID
      * @return Point Array
      */
-    public List<Point> getPointByDeviceId(Long deviceId) {
-        Device device = getDeviceByDeviceId(deviceId);
-        return null;
-//        return this.driverMetadata.getProfilePointMap().entrySet().stream()
-//                .filter(entry -> device.getProfileIds().contains(entry.getKey()))
-//                .map(entry -> new ArrayList<>(entry.getValue().values()))
-//                .reduce(new ArrayList<>(), (total, temp) -> {
-//                    total.addAll(temp);
-//                    return total;
-//                });
+    public List<Point> getPointList() {
+        return new ArrayList<>(this.driverMetadata.getPointMap().values());
     }
 
     /**
-     * 根据 设备Id和位号Id 获取位号
+     * 根据 位号Id 获取位号
      *
-     * @param deviceId 设备ID
      * @param pointId  位号ID
      * @return Point
      */
-    public Point getPointByDeviceIdAndPointId(Long deviceId, Long pointId) {
+    public Point getPointByPointId(Long pointId) {
         // TODO 当设备量很大的时候，建议用本地数据库来存储设备数据，弄个热数据缓存，仅仅把经常使用的数据放到内存中来
-//        Device device = getDeviceByDeviceId(deviceId);
-//        Optional<Map<String, Point>> optional = this.driverMetadata.getProfilePointMap().entrySet().stream()
-//                .filter(entry -> device.getProfileIds().contains(entry.getKey()))
-//                .map(Map.Entry::getValue)
-//                .filter(entry -> entry.containsKey(pointId))
-//                .findFirst();
-//
-//        if (optional.isPresent()) {
-//            return optional.get().get(pointId);
-//        }
+        Optional<Point> optional = this.driverMetadata.getPointMap().values().stream().filter(point -> point.getId().equals(pointId)).findFirst();
+        if (optional.isPresent()) {
+            return optional.get();
+        }
         throw new ServiceException("Point(" + pointId + ") info does not exist");
     }
 
