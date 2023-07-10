@@ -3,7 +3,6 @@ package org.dromara.manager.driver.service.impl;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.date.TimeInterval;
-import cn.hutool.json.JSONUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.dromara.common.iot.entity.driver.AttributeInfo;
@@ -175,7 +174,7 @@ public class BatchServiceImpl implements BatchService {
             Map<String, AttributeInfo> infoMap = new ConcurrentHashMap<>(16);
             pointAttributeConfigs.forEach(pointInfo -> {
                 PointAttribute pointAttribute = pointAttributeMap.get(pointInfo.getPointAttributeId());
-                infoMap.put(pointAttribute.getAttributeName(), new AttributeInfo(pointInfo.getValue(), AttributeType.ofCode(pointAttribute.getAttributeTypeFlag())));
+                infoMap.put(pointAttribute.getAttributeName(), new AttributeInfo(pointInfo.getValue(), AttributeType.ofName(pointAttribute.getAttributeTypeFlag())));
             });
             if (CollUtil.isEmpty(infoMap)) {
                 return;
@@ -232,7 +231,7 @@ public class BatchServiceImpl implements BatchService {
         List<DriverAttributeValueVo> driverAttributeConfigs = driverAttributeValueService.queryList(new DriverAttributeValueBo().setGatewayDeviceId(deviceId));
         driverAttributeConfigs.forEach(driverInfo -> {
             DriverAttribute attribute = driverAttributeMap.get(driverInfo.getDriverAttributeId());
-            attributeInfoMap.put(attribute.getAttributeName(), new AttributeInfo(driverInfo.getValue(), AttributeType.ofCode(attribute.getAttributeTypeFlag())));
+            attributeInfoMap.put(attribute.getAttributeName(), new AttributeInfo(driverInfo.getValue(), AttributeType.ofName(attribute.getAttributeTypeFlag())));
         });
         return attributeInfoMap;
     }
