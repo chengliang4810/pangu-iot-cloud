@@ -7,7 +7,6 @@ import lombok.experimental.Accessors;
 import java.io.Serializable;
 
 /**
- * 点
  * 点位对应物联网的设备属性
  *
  * @author chengliang

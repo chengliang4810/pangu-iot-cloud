@@ -1,15 +1,13 @@
 package org.dromara.common.sdk.service.job;
 
 import cn.hutool.core.collection.CollUtil;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.dromara.common.iot.entity.driver.Device;
 import org.dromara.common.sdk.DriverContext;
-import org.dromara.common.sdk.service.DriverCustomService;
-import org.dromara.common.sdk.service.DriverSenderService;
 import org.dromara.common.sdk.service.GatewayStatusService;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.springframework.stereotype.Component;
 
@@ -24,18 +22,12 @@ import java.util.concurrent.ThreadPoolExecutor;
  */
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class GatewayDeviceStatusScheduleJob extends QuartzJobBean {
 
-    @Autowired
-    private DriverContext driverContext;
-    @Autowired
-    private DriverSenderService driverSenderService;
-    @Autowired
-    private DriverCustomService driverCustomService;
-    @Autowired
-    private ThreadPoolExecutor threadPoolExecutor;
-    @Autowired
-    private GatewayStatusService gatewayStatusService;
+    private final DriverContext driverContext;
+    private final ThreadPoolExecutor threadPoolExecutor;
+    private final GatewayStatusService gatewayStatusService;
 
     @Override
     protected void executeInternal(JobExecutionContext jobExecutionContext) throws JobExecutionException {
