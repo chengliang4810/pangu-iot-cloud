@@ -130,4 +130,14 @@ public class DeviceStatus implements Serializable {
         return new DeviceStatus(deviceId, DeviceStatusEnum.ONLINE, time, timeUnit);
     }
 
+    /**
+     * 离线
+     *
+     * @param deviceId 设备id
+     * @return {@link DeviceStatus}
+     */
+    public static DeviceStatus offline(Long deviceId) {
+        return of(deviceId, DeviceStatusEnum.OFFLINE);
+    }
+
 }
