@@ -209,29 +209,13 @@ public class DriverUtil {
         }
 
         switch (valueType) {
-            case BYTE:
-                className = Byte.class.getName();
-                break;
-            case SHORT:
-                className = Short.class.getName();
-                break;
-            case INT:
-                className = Integer.class.getName();
-                break;
-            case LONG:
-                className = Long.class.getName();
-                break;
-            case FLOAT:
-                className = Float.class.getName();
-                break;
-            case DOUBLE:
-                className = Double.class.getName();
-                break;
-            case BOOLEAN:
-                className = Boolean.class.getName();
-                break;
-            default:
-                break;
+            case INT -> className = Integer.class.getName();
+            case LONG -> className = Long.class.getName();
+            case FLOAT -> className = Float.class.getName();
+            case DOUBLE -> className = Double.class.getName();
+            case BOOLEAN -> className = Boolean.class.getName();
+            case DATE, JSON -> className = String.class.getName();
+            default -> { }
         }
         return className;
     }
