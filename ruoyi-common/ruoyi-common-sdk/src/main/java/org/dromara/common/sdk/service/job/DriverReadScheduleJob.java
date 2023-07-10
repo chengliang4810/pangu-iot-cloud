@@ -59,7 +59,7 @@ public class DriverReadScheduleJob extends QuartzJobBean {
             for (Device device : deviceList) {
                 threadPoolExecutor.execute(() -> {
                     try {
-                        driverCommandService.read(device.getDeviceId());
+                        driverCommandService.read(gateway.getDeviceId(), device.getDeviceId());
                     } catch (Exception e) {
                         log.error("Read Schedule Job Error: {}", e.getMessage(), e);
                     }

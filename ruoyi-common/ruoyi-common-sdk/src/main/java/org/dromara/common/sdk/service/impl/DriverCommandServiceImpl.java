@@ -1,7 +1,7 @@
 package org.dromara.common.sdk.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.text.CharSequenceUtil;
+import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.dromara.common.core.exception.ServiceException;
@@ -34,17 +34,17 @@ public class DriverCommandServiceImpl implements DriverCommandService {
 
 
     @Override
-    public DeviceValue read(Long deviceId) {
-        List<Point> pointList = driverContext.getPointByDeviceId(deviceId);
+    public DeviceValue read(Long gatewayDeviceId, Long deviceId) {
+        List<Point> pointList = driverContext.getPointList();
         if (CollUtil.isEmpty(pointList)) {
-            throw new ServiceException("The device has no point");
+            throw new ServiceException("The device has no point/attribute");
         }
 
         // 循环设备所有属性点，读取属性点值，发送至消息队列
         Map<String, String> attributeValueMap = new HashMap<>(pointList.size());
         for (Point point : pointList) {
             try {
-                DeviceValue deviceValue = read(deviceId, point.getId(), false);
+                DeviceValue deviceValue = read(gatewayDeviceId, deviceId, point.getId(), false);
                 if (CollUtil.isNotEmpty(deviceValue.getAttributes())) {
                     attributeValueMap.putAll(deviceValue.getAttributes());
                 }
@@ -63,27 +63,27 @@ public class DriverCommandServiceImpl implements DriverCommandService {
     }
 
     @Override
-    public DeviceValue read(Long deviceId, Long pointId) {
-        return read(deviceId, pointId, true);
+    public DeviceValue read(Long gatewayDeviceId, Long deviceId, Long pointId) {
+        return read(gatewayDeviceId, deviceId, pointId, true);
     }
 
-    private DeviceValue read(Long deviceId, Long pointId, Boolean senderValue) {
+    private DeviceValue read(Long gatewayDeviceId, Long deviceId, Long pointId, Boolean senderValue) {
         if (null == senderValue){
             senderValue = true;
         }
 
         Device device = driverContext.getDeviceByDeviceId(deviceId);
-        Point point = driverContext.getPointByDeviceIdAndPointId(deviceId, pointId);
+        Point point = driverContext.getPointByPointId(pointId);
 
         try {
             String rawValue = driverCustomService.read(
-                    driverContext.getDriverInfoByDeviceId(deviceId),
+                    driverContext.getDriverInfoByDeviceId(gatewayDeviceId),
                     driverContext.getPointInfoByDeviceIdAndPointId(deviceId, pointId),
                     device,
-                    driverContext.getPointByDeviceIdAndPointId(deviceId, pointId)
+                    point
             );
 
-            if (CharSequenceUtil.isEmpty(rawValue)) {
+            if (StrUtil.isEmpty(rawValue)) {
                 throw new ServiceException("The read point value is null");
             }
 
