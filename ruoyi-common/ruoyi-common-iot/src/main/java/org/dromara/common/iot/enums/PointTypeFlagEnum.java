@@ -22,16 +22,6 @@ public enum PointTypeFlagEnum {
     STRING((byte) 0x00, "string", "字符串"),
 
     /**
-     * 字节
-     */
-    BYTE((byte) 0x01, "byte", "字节"),
-
-    /**
-     * 短整数
-     */
-    SHORT((byte) 0x02, "short", "短整数"),
-
-    /**
      * 整数
      */
     INT((byte) 0x03, "int", "整数"),
@@ -55,6 +45,16 @@ public enum PointTypeFlagEnum {
      * 布尔量
      */
     BOOLEAN((byte) 0x07, "boolean", "布尔量"),
+
+    /**
+     * 时间
+     */
+    DATE((byte) 0x08, "date", "时间"),
+
+    /**
+     * json
+     */
+    JSON((byte) 0x09, "json", "结构体json"),
     ;
 
     /**
