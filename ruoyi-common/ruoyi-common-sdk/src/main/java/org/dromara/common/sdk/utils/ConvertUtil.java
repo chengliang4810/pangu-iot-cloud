@@ -1,11 +1,16 @@
 package org.dromara.common.sdk.utils;
 
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.BooleanUtil;
 import cn.hutool.core.util.ObjectUtil;
-import com.graphbuilder.curve.Point;
+import cn.hutool.json.JSONUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.dromara.common.core.exception.ServiceException;
+import org.dromara.common.iot.enums.PointTypeFlagEnum;
+import org.dromara.common.iot.model.Point;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
 /**
  * 类型转换相关工具类集合
@@ -18,8 +23,18 @@ public class ConvertUtil {
 
     private ConvertUtil() {}
 
+    /**
+     * 默认基础
+     */
     private static final BigDecimal defaultBase = new BigDecimal(0);
+    /**
+     * 默认倍数
+     */
     private static final BigDecimal defaultMultiple = new BigDecimal(1);
+    /**
+     * 浮点数小数点精确的位数
+     */
+    private static final byte decimal = 8;
 
     /**
      * 位号数据处理
@@ -32,75 +47,63 @@ public class ConvertUtil {
      */
     public static String convertValue(Point point, String rawValue) {
         if (ObjectUtil.isNull(point)) {
-            // throw new EmptyException("Point is empty");
+            throw new ServiceException("Point is empty");
         }
 
-//        PointTypeFlagEnum valueType = Optional.ofNullable(point.getPointTypeFlag()).orElse(PointTypeFlagEnum.STRING);
-//        BigDecimal base = Optional.ofNullable(point.getBaseValue()).orElse(defaultBase);
-//        BigDecimal multiple = Optional.ofNullable(point.getMultiple()).orElse(defaultMultiple);
-//        byte decimal = Optional.ofNullable(point.getValueDecimal()).orElse((byte) 6);
-//
-//        Object value;
-//        switch (valueType) {
-//            case BYTE:
-//                value = convertByte(rawValue, base, multiple);
-//                break;
-//            case SHORT:
-//                value = convertShort(rawValue, base, multiple);
-//                break;
-//            case INT:
-//                value = convertInteger(rawValue, base, multiple);
-//                break;
-//            case LONG:
-//                value = convertLong(rawValue, base, multiple);
-//                break;
-//            case FLOAT:
-//                value = convertFloat(rawValue, base, multiple, decimal);
-//                break;
-//            case DOUBLE:
-//                value = convertDouble(rawValue, base, multiple, decimal);
-//                break;
-//            case BOOLEAN:
-//                value = convertBoolean(rawValue);
-//                break;
-//            default:
-//                return rawValue;
-//        }
+        PointTypeFlagEnum valueType = Optional.ofNullable( PointTypeFlagEnum.ofCode(point.getAttributeType())).orElse(PointTypeFlagEnum.STRING);
 
-//        return String.valueOf(value);
-        return "";
+        Object value;
+        switch (valueType) {
+            case INT:
+                value = convertInteger(rawValue, defaultBase, defaultMultiple);
+                break;
+            case LONG:
+                value = convertLong(rawValue, defaultBase, defaultMultiple);
+                break;
+            case FLOAT:
+                value = convertFloat(rawValue, defaultBase, defaultMultiple, decimal);
+                break;
+            case DOUBLE:
+                value = convertDouble(rawValue, defaultBase, defaultMultiple, decimal);
+                break;
+            case BOOLEAN:
+                value = convertBoolean(rawValue);
+                break;
+            case JSON:
+                value = convertJson(rawValue);
+                break;
+            case DATE:
+                value = convertDate(rawValue);
+                break;
+            default:
+                return rawValue;
+        }
+
+        return String.valueOf(value);
     }
 
     /**
-     * 字符串转短字节值
-     * -128 ~ 127
+     * 日期转换
      *
-     * @param content 字符串
-     * @return short
+     * @param rawValue 值
+     * @return {@link Long}
      */
-    private static byte convertByte(String content, BigDecimal base, BigDecimal multiple) {
-        try {
-            BigDecimal multiply = linear(multiple, content, base);
-            return multiply.byteValue();
-        } catch (Exception e) {
-            throw new ServiceException("Out of byte range: {} ~ {}, current: {}", Byte.MIN_VALUE, Byte.MAX_VALUE, content);
-        }
+    private static Long convertDate(String rawValue) {
+        // 将字符串转换为时间戳
+        return DateUtil.parse(rawValue).getTime();
     }
 
     /**
-     * 字符串转短整数值
-     * -32768 ~ 32767
+     * string转换成json
      *
-     * @param content 字符串
-     * @return short
+     * @param rawValue 字符串
+     * @return {@link String}
      */
-    private static short convertShort(String content, BigDecimal base, BigDecimal multiple) {
-        try {
-            BigDecimal multiply = linear(multiple, content, base);
-            return multiply.shortValue();
-        } catch (Exception e) {
-            throw new ServiceException("Out of short range: {} ~ {}, current: {}", Short.MIN_VALUE, Short.MAX_VALUE, content);
+    private static String convertJson(String rawValue) {
+        if (JSONUtil.isTypeJSON(rawValue)){
+            return rawValue;
         }
+        throw new ServiceException("rowValue is not json, rawValue: {}", rawValue);
     }
 
     /**
@@ -173,12 +176,13 @@ public class ConvertUtil {
 
     /**
      * 字符串转布尔值
-     *
+     * 以下情况为true:  "true", "yes", "y", "t", "ok", "1", "on", "是", "对", "真", "對", "√"
+     * 其他为: false
      * @param content 字符串
      * @return boolean
      */
     private static boolean convertBoolean(String content) {
-        return Boolean.parseBoolean(content);
+        return BooleanUtil.toBoolean(content);
     }
 
     /**
