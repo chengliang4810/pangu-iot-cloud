@@ -1,5 +1,7 @@
 package org.dromara.common.sdk.service;
 
+import org.dromara.common.iot.entity.device.DeviceValue;
+
 /**
  * 驱动指令服务
  *
@@ -8,32 +10,40 @@ package org.dromara.common.sdk.service;
  */
 public interface DriverCommandService {
 
-//    /**
-//     * 读取位号值
-//     *
-//     * @param deviceId 设备ID
-//     * @param pointId  位号ID
-//     * @return 位号值
-//     */
-//    PointValue read(String deviceId, String pointId);
-//
+    /**
+     * 读取位号值
+     *
+     * @param deviceId 设备ID
+     * @return 位号值
+     */
+    DeviceValue read(Long deviceId);
+
+    /**
+     * 读取位号值
+     *
+     * @param deviceId 设备ID
+     * @param pointId  位号ID
+     * @return 位号值
+     */
+    DeviceValue read(Long deviceId, Long pointId);
+
 //    /**
 //     * 指令读取位号值
 //     *
 //     * @param commandDTO {@link DeviceCommandDTO}
 //     */
 //    void read(DeviceCommandDTO commandDTO);
-//
-//    /**
-//     * 写取位号值
-//     *
-//     * @param deviceId 设备ID
-//     * @param pointId  位号ID
-//     * @param value    位号值
-//     * @return 是否写成功
-//     */
-//    Boolean write(String deviceId, String pointId, String value);
-//
+
+    /**
+     * 写取位号值
+     *
+     * @param deviceId 设备ID
+     * @param pointId  位号ID
+     * @param value    位号值
+     * @return 是否写成功
+     */
+    Boolean write(Long deviceId, Long pointId, String value);
+
 //    /**
 //     * 指令写取位号值
 //     *

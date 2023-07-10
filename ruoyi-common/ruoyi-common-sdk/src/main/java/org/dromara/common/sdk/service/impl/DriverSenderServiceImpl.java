@@ -1,20 +1,22 @@
 package org.dromara.common.sdk.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.ObjectUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.dromara.common.emqx.utils.EmqxUtil;
+import org.dromara.common.iot.constant.DeviceAttributeTopic;
 import org.dromara.common.iot.constant.DeviceTopic;
 import org.dromara.common.iot.dto.DriverEventDTO;
 import org.dromara.common.iot.entity.device.DeviceEvent;
 import org.dromara.common.iot.entity.device.DeviceStatus;
-import org.dromara.common.iot.entity.point.PointValue;
+import org.dromara.common.iot.entity.device.DeviceValue;
 import org.dromara.common.iot.enums.DeviceStatusEnum;
 import org.dromara.common.json.utils.JsonUtils;
 import org.dromara.common.sdk.property.DriverProperty;
 import org.dromara.common.sdk.service.DriverSenderService;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -91,22 +93,12 @@ public class DriverSenderServiceImpl implements DriverSenderService {
     }
 
     @Override
-    public void pointValueSender(PointValue pointValue) {
-//        if (ObjectUtil.isNotNull(pointValue)) {
-//            log.debug("Send point value: {}", JsonUtil.toJsonString(pointValue));
-//            rabbitTemplate.convertAndSend(
-//                    RabbitConstant.TOPIC_EXCHANGE_VALUE,
-//                    RabbitConstant.ROUTING_POINT_VALUE_PREFIX + driverProperty.getService(),
-//                    pointValue
-//            );
-//        }
-    }
-
-    @Override
-    public void pointValueSender(List<PointValue> pointValues) {
-//        if (ObjectUtil.isNotNull(pointValues)) {
-//            pointValues.forEach(this::pointValueSender);
-//        }
+    public void pointValueSender(DeviceValue deviceValue) {
+        if (ObjectUtil.isNotNull(deviceValue) && CollUtil.isNotEmpty(deviceValue.getAttributes())) {
+            String jsonString = JsonUtils.toJsonString(deviceValue);
+            log.debug("Send point values: {}", jsonString);
+            EmqxUtil.publish(DeviceAttributeTopic.getDeviceAttributeReportTopic(deviceValue.getDeviceCode()), jsonString);
+        }
     }
 
     /**

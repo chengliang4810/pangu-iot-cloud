@@ -1,15 +1,19 @@
 package org.dromara.common.sdk.service.job;
 
+import cn.hutool.core.collection.CollUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.dromara.common.iot.entity.driver.Device;
+import org.dromara.common.iot.enums.DeviceStatusEnum;
 import org.dromara.common.sdk.DriverContext;
+import org.dromara.common.sdk.GatewayStatusContext;
 import org.dromara.common.sdk.service.DriverCommandService;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ThreadPoolExecutor;
 
@@ -30,7 +34,42 @@ public class DriverReadScheduleJob extends QuartzJobBean {
 
     @Override
     protected void executeInternal(JobExecutionContext jobExecutionContext) throws JobExecutionException {
-        Map<Long, Device> deviceMap = driverContext.getDriverMetadata().getDeviceMap();
+
+        // 网关设备循环
+        Map<Long, Device> gatewayDeviceMap = driverContext.getDriverMetadata().getGatewayDeviceMap();
+        if (CollUtil.isEmpty(gatewayDeviceMap)) {
+            return;
+        }
+
+        for (Device gateway : gatewayDeviceMap.values()) {
+
+            DeviceStatusEnum gatewayStatus = GatewayStatusContext.getStatus(gateway.getDeviceId());
+            // 网关设备离线，跳过
+            if (DeviceStatusEnum.OFFLINE.equals(gatewayStatus)) {
+                continue;
+            }
+
+            // 网关设备在线，循环下属设备
+            List<Device> deviceList = driverContext.getDriverMetadata().getGatewayChildDeviceMap().get(gateway.getDeviceId());
+            if (CollUtil.isEmpty(deviceList)) {
+                continue;
+            }
+
+            // 按照设备循环，读取设备属性点
+            for (Device device : deviceList) {
+                threadPoolExecutor.execute(() -> {
+                    try {
+                        driverCommandService.read(device.getDeviceId());
+                    } catch (Exception e) {
+                        log.error("Read Schedule Job Error: {}", e.getMessage(), e);
+                    }
+                });
+            }
+
+        }
+
+
+//        Map<Long, Device> deviceMap = driverContext.getDriverMetadata().getDeviceMap();
 //        if (ObjectUtil.isNull(deviceMap)) {
 //            return;
 //        }

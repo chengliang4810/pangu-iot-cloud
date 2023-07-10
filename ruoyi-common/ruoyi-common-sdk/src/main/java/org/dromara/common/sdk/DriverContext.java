@@ -1,6 +1,5 @@
 package org.dromara.common.sdk;
 
-import com.graphbuilder.curve.Point;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,6 +11,7 @@ import org.dromara.common.iot.entity.driver.AttributeInfo;
 import org.dromara.common.iot.entity.driver.Device;
 import org.dromara.common.iot.entity.driver.DriverMetadata;
 import org.dromara.common.iot.enums.DriverStatusEnum;
+import org.dromara.common.iot.model.Point;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

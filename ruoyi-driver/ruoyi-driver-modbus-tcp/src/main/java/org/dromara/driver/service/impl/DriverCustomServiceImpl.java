@@ -1,10 +1,10 @@
 package org.dromara.driver.service.impl;
 
-import com.graphbuilder.curve.Point;
 import lombok.extern.slf4j.Slf4j;
 import org.dromara.common.iot.entity.device.DeviceStatus;
 import org.dromara.common.iot.entity.driver.AttributeInfo;
 import org.dromara.common.iot.entity.driver.Device;
+import org.dromara.common.iot.model.Point;
 import org.dromara.common.sdk.service.DriverCustomService;
 import org.springframework.stereotype.Service;
 

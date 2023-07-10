@@ -1,10 +1,10 @@
 package org.dromara.common.sdk.service;
 
 
-import com.graphbuilder.curve.Point;
 import org.dromara.common.iot.entity.device.DeviceStatus;
 import org.dromara.common.iot.entity.driver.AttributeInfo;
 import org.dromara.common.iot.entity.driver.Device;
+import org.dromara.common.iot.model.Point;
 
 import java.util.Map;
 

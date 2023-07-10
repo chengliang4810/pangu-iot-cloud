@@ -4,10 +4,9 @@ package org.dromara.common.sdk.service;
 import org.dromara.common.iot.dto.DriverEventDTO;
 import org.dromara.common.iot.entity.device.DeviceEvent;
 import org.dromara.common.iot.entity.device.DeviceStatus;
-import org.dromara.common.iot.entity.point.PointValue;
+import org.dromara.common.iot.entity.device.DeviceValue;
 import org.dromara.common.iot.enums.DeviceStatusEnum;
 
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -58,16 +57,9 @@ public interface DriverSenderService {
     /**
      * 发送位号值到消息组件
      *
-     * @param pointValue PointValue
+     * @param deviceValue PointValue
      */
-    void pointValueSender(PointValue pointValue);
-
-    /**
-     * 批量发送位号值到消息组件
-     *
-     * @param pointValues PointValue Array
-     */
-    void pointValueSender(List<PointValue> pointValues);
+    void pointValueSender(DeviceValue deviceValue);
 
     /**
      * 发送驱动状态
