@@ -32,7 +32,7 @@ public class DriverSyncDownReceiver extends MqttConsumer<DriverSyncDownDTO> {
      * @param entity 实体
      */
     @Override
-    protected void messageHandler(String topic, DriverSyncDownDTO entity) {
+    protected void messageHandler(String topic, DriverSyncDownDTO entity) throws Exception {
         driverSyncService.down(entity);
     }
 

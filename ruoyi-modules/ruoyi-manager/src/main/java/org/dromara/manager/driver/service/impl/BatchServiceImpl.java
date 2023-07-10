@@ -171,10 +171,9 @@ public class BatchServiceImpl implements BatchService {
             List<PointAttributeValueVo> pointAttributeConfigs = pointAttributeValueService.queryByDeviceIdAndPointId(deviceId, pointId);
             Map<String, AttributeInfo> infoMap = new ConcurrentHashMap<>(16);
             pointAttributeConfigs.forEach(pointInfo -> {
-                Point point = pointMap.get(pointInfo.getPointAttributeId());
+                Point point = pointMap.get(pointInfo.getDeviceAttributeId());
                 infoMap.put(point.getAttributeName(), new AttributeInfo(pointInfo.getValue(), AttributeType.ofCode(point.getAttributeType())));
             });
-
             if (CollUtil.isNotEmpty(infoMap)) {
                 attributeInfoMap.put(pointId, infoMap);
             }

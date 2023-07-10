@@ -69,11 +69,14 @@ public class DriverSyncServiceImpl implements DriverSyncService {
         // 注册点位属性
         registerPointAttribute(entityDTO, driverVo);
 
-        DriverMetadata driverMetadata = batchService.batchDriverMetadata(driverVo.getCode());
-
-        DriverSyncDownDTO driverSyncDownDTO = new DriverSyncDownDTO(JsonUtils.toJsonString(driverMetadata), timer.interval());
-
-        EmqxUtil.getClient().publish(DriverTopic.getDriverRegisterBackTopic(entityDTO.getDriverUniqueKey()), JsonUtils.toJsonString(driverSyncDownDTO));
+        try {
+            DriverMetadata driverMetadata = batchService.batchDriverMetadata(driverVo.getCode());
+            DriverSyncDownDTO driverSyncDownDTO = new DriverSyncDownDTO(JsonUtils.toJsonString(driverMetadata), timer.interval());
+            EmqxUtil.getClient().publish(DriverTopic.getDriverRegisterBackTopic(entityDTO.getDriverUniqueKey()), JsonUtils.toJsonString(driverSyncDownDTO));
+        } catch (Exception e) {
+            log.error("驱动注册上线失败,驱动信息:{}", JsonUtils.toJsonString(entityDTO));
+            e.printStackTrace();
+        }
     }
 
     /**

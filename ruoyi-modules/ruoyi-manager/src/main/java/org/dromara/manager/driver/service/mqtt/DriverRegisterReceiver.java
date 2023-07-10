@@ -27,7 +27,7 @@ public class DriverRegisterReceiver extends MqttConsumer<DriverSyncUpDTO> {
      * @param entityDTO 实体
      */
     @Override
-    protected void messageHandler(String topic, DriverSyncUpDTO entityDTO) {
+    protected void messageHandler(String topic, DriverSyncUpDTO entityDTO) throws Exception {
         if (ObjectUtil.isNull(entityDTO)) {
             log.error("Invalid driver register: {}", entityDTO);
             return;

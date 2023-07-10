@@ -18,7 +18,7 @@ import org.eclipse.paho.mqttv5.common.MqttMessage;
 public abstract class MqttConsumer<T> implements IMqttMessageListener, MessageDecoder<T> {
 
     @Override
-    public void messageArrived(String topic, MqttMessage mqttMessage) {
+    public void messageArrived(String topic, MqttMessage mqttMessage) throws Exception {
         T decoder = decoder(mqttMessage);
         messageHandler(topic, decoder);
     }
@@ -29,7 +29,7 @@ public abstract class MqttConsumer<T> implements IMqttMessageListener, MessageDe
      * @param topic  主题
      * @param entity 实体
      */
-    protected abstract void messageHandler(String topic, T entity);
+    protected abstract void messageHandler(String topic, T entity) throws Exception;
 
     /**
      * 订阅主题
