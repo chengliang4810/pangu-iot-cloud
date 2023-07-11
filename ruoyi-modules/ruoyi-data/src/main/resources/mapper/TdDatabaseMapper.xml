@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.dromara.data.mapper.TdDatabaseMapper">
+
+<insert id="createSuperTable" >
+    create STABLE  if not exists ${database}.${tableName}
+    <foreach collection="columns" open="(" close=")" item="column" separator=",">
+        ${column.name} ${column.type}
+    </foreach>
+
+    <foreach collection="tags" open="TAGS(" close=")" item="tag" separator=",">
+        ${tag.name} ${tag.type}
+    </foreach>
+</insert>
+
+<insert id="insertData">
+    INSERT INTO ${table}
+    <foreach collection="value.keys" open="(" close=")" item="item" separator=",">
+        ${item}
+    </foreach>
+    USING ${superTable}
+    <foreach collection="tags" open="TAGS(" close=")" item="tag" separator=",">
+        ${tag}
+    </foreach>
+    <foreach collection="value.values" open="VALUES (" close=")" item="item" separator=",">
+        #{item}
+    </foreach>
+</insert>
+
+<select id="showDbCreateSql" resultType="String">
+    SHOW CREATE DATABASE ${database}
+</select>
+
+<delete id="dropTable">
+    DROP TABLE
+    <foreach collection="tables" item="table" separator="," open="" close="">
+        IF EXISTS ${table}
+    </foreach>
+</delete>
+
+</mapper>
