@@ -14,9 +14,6 @@ import org.eclipse.paho.mqttv5.common.MqttMessage;
 @Topic(topic = DeviceAttributeTopic.DEVICE_STATUS_SUB_TOPIC, qos = 2, patten = Pattern.SHARE, group = "${spring.application.name}-group")
 public class DriverRegisterReceiver extends MqttConsumer<DeviceValue> {
 
-//    @Autowired
-//    private DriverSyncService driverSyncService;
-
     /**
      * 消息处理程序,业务操作
      *
