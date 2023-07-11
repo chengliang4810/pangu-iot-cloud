@@ -42,11 +42,6 @@
 
         <dependency>
             <groupId>org.dromara</groupId>
-            <artifactId>ruoyi-common-dict</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.dromara</groupId>
             <artifactId>ruoyi-common-doc</artifactId>
         </dependency>
 
@@ -70,31 +65,35 @@
             <artifactId>ruoyi-common-seata</artifactId>
         </dependency>
 
-        <!-- RuoYi Api System -->
-        <dependency>
-            <groupId>org.dromara</groupId>
-            <artifactId>ruoyi-api-system</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.dromara</groupId>
-            <artifactId>ruoyi-api-resource</artifactId>
-        </dependency>
         <dependency>
             <groupId>org.dromara</groupId>
             <artifactId>ruoyi-common-idempotent</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.dromara</groupId>
             <artifactId>ruoyi-common-tenant</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.dromara</groupId>
             <artifactId>ruoyi-common-translation</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.dromara</groupId>
-            <artifactId>ruoyi-common-sensitive</artifactId>
+            <artifactId>ruoyi-common-iot</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.dromara</groupId>
+            <artifactId>ruoyi-common-emqx</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.taosdata.jdbc</groupId>
+            <artifactId>taos-jdbcdriver</artifactId>
+            <version>3.2.2</version>
         </dependency>
 
     </dependencies>
