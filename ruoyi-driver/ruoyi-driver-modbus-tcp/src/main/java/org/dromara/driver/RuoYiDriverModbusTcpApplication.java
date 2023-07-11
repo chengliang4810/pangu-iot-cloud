@@ -13,9 +13,9 @@ import org.springframework.boot.context.metrics.buffering.BufferingApplicationSt
  */
 @EnableDubbo
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
-public class RuoYiDriverModbusTCpApplication {
+public class RuoYiDriverModbusTcpApplication {
     public static void main(String[] args) {
-        SpringApplication application = new SpringApplication(RuoYiDriverModbusTCpApplication.class);
+        SpringApplication application = new SpringApplication(RuoYiDriverModbusTcpApplication.class);
         application.setApplicationStartup(new BufferingApplicationStartup(2048));
         application.run(args);
         System.out.println("(♥◠‿◠)ﾉﾞ  ModbusTcp驱动模块启动成功   ლ(´ڡ`ლ)ﾞ  ");

@@ -113,7 +113,6 @@ public class DriverCustomServiceImpl implements DriverCustomService {
         ModbusMaster modbusMaster = connectMap.get(deviceId);
         if (ObjUtil.isNull(modbusMaster)) {
             IpParameters params = new IpParameters();
-            System.out.println("driverInfo:" + driverInfo);
             params.setHost(attribute(driverInfo, "host"));
             params.setPort(attribute(driverInfo, "port"));
             modbusMaster = modbusFactory.createTcpMaster(params, true);

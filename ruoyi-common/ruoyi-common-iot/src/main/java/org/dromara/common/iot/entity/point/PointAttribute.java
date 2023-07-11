@@ -3,18 +3,19 @@ package org.dromara.common.iot.entity.point;
 
 import lombok.*;
 
+import java.io.Serializable;
+
 
 /**
  * 模板配置信息表
  *
- * @author pnoker
- * @since 2022.1.0
+ * @author pnoker, chengliang4810
+ * @date 2023/07/11
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(callSuper = true)
-public class PointAttribute {
+public class PointAttribute implements Serializable {
 
     /**
      * id
