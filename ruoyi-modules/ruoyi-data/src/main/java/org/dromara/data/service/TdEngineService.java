@@ -49,6 +49,14 @@ public interface TdEngineService {
     void dropSuperTableField(String table, String... fieldName);
 
     /**
+     * 使用超级表创建子表
+     *
+     * @param superTableName 超级表名
+     * @param tableName      表名
+     */
+    void createTable(String superTableName, String tableName);
+
+    /**
      * 插入数据
      *
      * @param table      表格

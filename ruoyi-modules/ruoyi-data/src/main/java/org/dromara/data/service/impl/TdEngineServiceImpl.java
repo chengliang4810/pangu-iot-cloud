@@ -20,6 +20,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static org.dromara.data.constant.TableConstants.DEVICE_TABLE_NAME_PREFIX;
+import static org.dromara.data.constant.TableConstants.SUPER_TABLE_PREFIX;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -38,7 +41,7 @@ public class TdEngineServiceImpl implements TdEngineService {
         // 创建超级表默认字段
         List<TdColumn> tdColumns = ListUtil.of(new TdColumn(TableConstants.TABLE_PRIMARY_FIELD, "TIMESTAMP"), new TdColumn(TableConstants.TABLE_STATUS_FIELD, "int"));
         List<TdColumn> tags = ListUtil.of(new TdColumn(TableConstants.TABLE_LOCATION_FIELD, "NCHAR(20)"));
-        createSuperTable(TableConstants.SUPER_TABLE_PREFIX + tableName, tdColumns, tags);
+        createSuperTable(SUPER_TABLE_PREFIX + tableName, tdColumns, tags);
     }
 
     /**
@@ -77,11 +80,11 @@ public class TdEngineServiceImpl implements TdEngineService {
         // 参数检查
         Assert.notNull(table, "id is null");
         // 删除表
-        databaseMapper.deleteSuperTable(getDatabaseName(), TableConstants.SUPER_TABLE_PREFIX + table);
+        databaseMapper.deleteSuperTable(getDatabaseName(), SUPER_TABLE_PREFIX + table);
     }
 
     /**
-     * 创建表字段
+     * 创建超级表字段
      *
      * @param table     table
      * @param key       关键
@@ -94,7 +97,7 @@ public class TdEngineServiceImpl implements TdEngineService {
         Assert.notBlank(key, "key is blank");
         Assert.notBlank(valueType, "valueType is blank");
         // 创建表字段
-        databaseMapper.createSuperTableField(getDatabaseName(), TableConstants.SUPER_TABLE_PREFIX + table, key, convertType(valueType));
+        databaseMapper.createSuperTableField(getDatabaseName(), SUPER_TABLE_PREFIX + table, key, convertType(valueType));
     }
 
     /**
@@ -110,19 +113,34 @@ public class TdEngineServiceImpl implements TdEngineService {
         Assert.notNull(key, "key is blank");
         // 删除表字段
         for (String k : key) {
-            databaseMapper.deleteSuperTableField(getDatabaseName(),TableConstants.SUPER_TABLE_PREFIX + table, k);
+            databaseMapper.deleteSuperTableField(getDatabaseName(), SUPER_TABLE_PREFIX + table, k);
         }
     }
 
     /**
-     * 删除表
+     * 使用超级表创建子表
+     *
+     * @param superTableName 超级表名
+     * @param tableName      表名
+     */
+    @Override
+    public void createTable(String superTableName, String tableName) {
+        // 参数检查
+        Assert.notBlank(superTableName, "superTableName is blank");
+        Assert.notBlank(tableName, "tableName is blank");
+        // 创建子表
+        databaseMapper.createTable(SUPER_TABLE_PREFIX + superTableName, DEVICE_TABLE_NAME_PREFIX + tableName);
+    }
+
+    /**
+     * 删除普通表/子表
      *
      * @param tableNameList 表名称列表
      */
     @Override
     public void dropTable(List<String> tableNameList) {
         Assert.notEmpty(tableNameList, "表名称列表不能为空");
-        List<String> resultList = tableNameList.stream().map(tableName -> TableConstants.DEVICE_TABLE_NAME_PREFIX + tableName).collect(Collectors.toList());
+        List<String> resultList = tableNameList.stream().map(tableName -> DEVICE_TABLE_NAME_PREFIX + tableName).collect(Collectors.toList());
         databaseMapper.dropTable(resultList);
     }
 
@@ -165,8 +183,10 @@ public class TdEngineServiceImpl implements TdEngineService {
         // 处理Key 删除last()
         Map<String, Object> result = MapUtil.newHashMap(lastRowData.size());
         lastRowData.forEach((key, value) -> {
-            String newKey = key.substring(5, key.length() - 1);
-            result.put(newKey, value);
+            if (key.contains("last_row(")) {
+                key = key.substring(5, key.length() - 1);
+            }
+            result.put(key, value);
         });
         return result;
     }

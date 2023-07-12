@@ -36,69 +36,78 @@ public interface TdDatabaseMapper {
      * 创建super表字段
      *
      * @param database  数据库
-     * @param table     表格
+     * @param tableName 表名
      * @param key       关键
      * @param valueType 值类型
      */
     @Insert("ALTER STABLE ${database}.${table} ADD COLUMN #{key} ${valueType}")
-    void createSuperTableField(@Param("database") String database, @Param("table") String table, @Param("key") String key, @Param("valueType") String valueType);
+    void createSuperTableField(@Param("database") String database, @Param("table") String tableName, @Param("key") String key, @Param("valueType") String valueType);
 
     /**
      * 删除超级表字段
      *
      * @param database 数据库
-     * @param table    表格
+     * @param tableName 表名
      * @param key      关键
      */
     @Delete("ALTER STABLE ${database}.${table} DROP COLUMN #{key}")
-    void deleteSuperTableField(@Param("database") String database, @Param("table") String table, @Param("key") String key);
+    void deleteSuperTableField(@Param("database") String database, @Param("table") String tableName, @Param("key") String key);
 
     /**
      * 删除超级表
      *
      * @param database 数据库
-     * @param table    表格
+     * @param tableName 表名
      */
     @Delete("DROP STABLE IF EXISTS ${database}.${table}")
-    void deleteSuperTable(@Param("database") String database, @Param("table") String table);
+    void deleteSuperTable(@Param("database") String database, @Param("table") String tableName);
 
     /**
      * 插入数据
      *
-     * @param table      表格
+     * @param tableName 表名
      * @param superTable 超级表
      * @param value      值 key - value1,value2
      * @param tags       标签
      * @return int
      */
-    int insertData(@Param("table") String table, @Param("superTable") String superTable, @Param("value") Map<String,Object> value, @Param("tags") Object[] tags);
+    int insertData(@Param("table") String tableName, @Param("superTable") String superTable, @Param("value") Map<String,Object> value, @Param("tags") Object[] tags);
 
     /**
      * 查询当日最后一行数据
      *
-     * @param table 表格
+     * @param tableName 表名
      * @return {@link Map}<{@link String}, {@link Object}>
      */
     @Select("select LAST_ROW(*) from ${table} where ts > TODAY()")
-    Map<String, Object> selectTodayLastRowData(@Param("table") String table);
+    Map<String, Object> selectTodayLastRowData(@Param("table") String tableName);
 
     /**
      * 查询最后一行数据
      *
-     * @param table 表格
+     * @param tableName 表名
      * @return {@link Map}<{@link String}, {@link Object}>
      */
     @Select("select LAST_ROW(*) from ${table}")
-    Map<String, Object> selectLastRowData(@Param("table") String table);
+    Map<String, Object> selectLastRowData(@Param("table") String tableName);
 
     /**
      * 查询最后一行数据
      *
-     * @param table 表格
+     * @param tableName 表名
      * @return {@link Map}<{@link String}, {@link Object}>
      */
     @Select("select LAST(*) from ${table}")
-    Map<String, Object> selectLastData(@Param("table") String table);
+    Map<String, Object> selectLastData(@Param("table") String tableName);
+
+
+    /**
+     * 使用超级表创建子表
+     * @param superTableName 超级表名
+     * @param tableName      表名
+     */
+    @Insert("CREATE TABLE  IF NOT EXISTS ${table} USING ${superTable}(location) TAGS('')")
+    void createTable(@Param("superTable") String superTableName, @Param("table") String tableName);
 
     /**
      * 删除表
