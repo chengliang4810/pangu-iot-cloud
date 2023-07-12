@@ -174,30 +174,6 @@ public class TdEngineServiceImpl implements TdEngineService {
     }
 
     /**
-     * 属性类型转换为TdEngine类型
-     * 转换类型
-     *
-     * @param valueType 值类型
-     * @return {@link String}
-     */
-    private String convertType(String valueType) {
-        AttributeType attributeType = AttributeType.ofCode(valueType);
-        if (attributeType == null) {
-            // 匹配失败，尝试使用名称匹配
-            attributeType = AttributeType.ofName(valueType);
-        }
-        Assert.notNull(attributeType, "valueType is not match");
-        return switch (attributeType) {
-            case INT -> "INT";
-            case LONG -> "BIGINT";
-            case FLOAT -> "FLOAT";
-            case DOUBLE -> "DOUBLE";
-            case BOOLEAN -> "BOOL";
-            case STRING -> "NCHAR(100)";
-        };
-    }
-
-    /**
      * 删除超级表字段
      *
      * @param table 表格
@@ -228,6 +204,30 @@ public class TdEngineServiceImpl implements TdEngineService {
             endIndex = jdbcUrl.length();
         }
         return jdbcUrl.substring(startIndex, endIndex);
+    }
+
+    /**
+     * 属性类型转换为TdEngine类型
+     * TODO 特别注意String类型长度，这里默认为100，如有需要请自行修改，后续考虑使用配置文件
+     *
+     * @param valueType 值类型
+     * @return {@link String}
+     */
+    private String convertType(String valueType) {
+        AttributeType attributeType = AttributeType.ofCode(valueType);
+        if (attributeType == null) {
+            // 匹配失败，尝试使用名称匹配
+            attributeType = AttributeType.ofName(valueType);
+        }
+        Assert.notNull(attributeType, "valueType is not match");
+        return switch (attributeType) {
+            case INT -> "INT";
+            case LONG -> "BIGINT";
+            case FLOAT -> "FLOAT";
+            case DOUBLE -> "DOUBLE";
+            case BOOLEAN -> "BOOL";
+            case STRING -> "NCHAR(100)";
+        };
     }
 
 }
