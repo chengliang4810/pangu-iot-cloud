@@ -20,4 +20,13 @@ public interface RemoteTableService {
      * @param productId 产品id
      */
     void dropSuperTable(Long productId);
+
+    /**
+     * 添加超级表字段
+     *
+     * @param productId     产品id
+     * @param identifier    标识符
+     * @param attributeType 属性类型
+     */
+    void addSuperTableField(Long productId, String identifier, String attributeType);
 }

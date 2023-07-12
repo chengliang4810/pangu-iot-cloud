@@ -6,9 +6,10 @@ import cn.hutool.core.map.MapUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.dromara.common.core.enums.AttributeType;
+import org.dromara.data.api.domain.TdColumn;
 import org.dromara.data.constant.TableConstants;
 import org.dromara.data.domain.SuperTable;
-import org.dromara.data.api.domain.TdColumn;
 import org.dromara.data.mapper.TdDatabaseMapper;
 import org.dromara.data.service.TdEngineService;
 import org.springframework.stereotype.Service;
@@ -168,13 +169,32 @@ public class TdEngineServiceImpl implements TdEngineService {
         Assert.notNull(table, "id is null");
         Assert.notBlank(key, "key is blank");
         Assert.notBlank(valueType, "valueType is blank");
-        String type = switch (valueType) {
-            case "0" -> "float";
-            case "3" -> "int";
-            default -> "NCHAR(200)";
-        };
         // 创建表字段
-        databaseMapper.createSuperTableField(getDatabaseName(), table, key, type);
+        databaseMapper.createSuperTableField(getDatabaseName(), TableConstants.SUPER_TABLE_PREFIX + table, key, convertType(valueType));
+    }
+
+    /**
+     * 属性类型转换为TdEngine类型
+     * 转换类型
+     *
+     * @param valueType 值类型
+     * @return {@link String}
+     */
+    private String convertType(String valueType) {
+        AttributeType attributeType = AttributeType.ofCode(valueType);
+        if (attributeType == null) {
+            // 匹配失败，尝试使用名称匹配
+            attributeType = AttributeType.ofName(valueType);
+        }
+        Assert.notNull(attributeType, "valueType is not match");
+        return switch (attributeType) {
+            case INT -> "INT";
+            case LONG -> "BIGINT";
+            case FLOAT -> "FLOAT";
+            case DOUBLE -> "DOUBLE";
+            case BOOLEAN -> "BOOL";
+            case STRING -> "NCHAR(100)";
+        };
     }
 
     /**

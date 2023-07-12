@@ -23,16 +23,6 @@ public enum AttributeType {
     STRING(0, "string", "字符串"),
 
     /**
-     * 字节
-     */
-    BYTE(1, "byte", "字节"),
-
-    /**
-     * 短整数
-     */
-    SHORT(2, "short", "短整数"),
-
-    /**
      * 整数
      */
     INT(3, "int", "整数"),

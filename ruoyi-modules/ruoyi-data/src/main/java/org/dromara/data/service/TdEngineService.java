@@ -34,26 +34,26 @@ public interface TdEngineService {
     /**
      * 创建表字段
      *
-     * @param table     表名
-     * @param key       关键
+     * @param superTableName     表名
+     * @param fieldName       关键
      * @param valueType 值类型
      */
-    void createSuperTableField(String table, String key, String valueType);
+    void createSuperTableField(String superTableName, String fieldName, String valueType);
 
     /**
      * 删除超级表字段
      *
      * @param table 表格
-     * @param key   关键
+     * @param fieldName   关键
      */
-    void deleteSuperTableField(String table, String... key);
+    void deleteSuperTableField(String table, String... fieldName);
 
     /**
      * 插入数据
      *
      * @param table      表格
      * @param superTable 超级表
-     * @param value      值 key-values结构
+     * @param value      值 fieldName-values结构
      * @return int 插入条数
      */
     int insertData(String table, String superTable, Map<String, Object> value);

@@ -48,4 +48,24 @@ public class RemoteTableServiceImpl implements RemoteTableService {
             throw new ServiceException("删除超级表失败: {}", e.getMessage());
         }
     }
+
+    /**
+     * 添加超级表字段
+     *
+     * @param productId     产品id
+     * @param identifier    标识符
+     * @param attributeType 属性类型
+     */
+    @Override
+    public void addSuperTableField(Long productId, String identifier, String attributeType) {
+        Assert.notNull(productId, "产品id不能为空");
+        Assert.notBlank(identifier, "标识符不能为空");
+        Assert.notBlank(attributeType, "属性类型不能为空");
+        try {
+            tdEngineService.createSuperTableField(String.valueOf(productId), identifier, attributeType);
+        } catch (Exception e) {
+            throw new ServiceException("删除超级表失败: {}", e.getMessage());
+        }
+    }
+
 }

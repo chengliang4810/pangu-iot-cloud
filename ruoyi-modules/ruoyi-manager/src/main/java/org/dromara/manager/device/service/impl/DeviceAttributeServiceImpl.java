@@ -7,10 +7,12 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
+import org.apache.dubbo.config.annotation.DubboReference;
 import org.dromara.common.core.utils.MapstructUtils;
 import org.dromara.common.core.utils.StringUtils;
 import org.dromara.common.mybatis.core.page.PageQuery;
 import org.dromara.common.mybatis.core.page.TableDataInfo;
+import org.dromara.data.api.RemoteTableService;
 import org.dromara.manager.device.domain.DeviceAttribute;
 import org.dromara.manager.device.domain.bo.DeviceAttributeBo;
 import org.dromara.manager.device.domain.vo.DeviceAttributeVo;
@@ -35,6 +37,8 @@ import java.util.Map;
 @Service
 public class DeviceAttributeServiceImpl implements IDeviceAttributeService {
 
+    @DubboReference
+    private RemoteTableService remoteTableService;
     private final DeviceAttributeMapper baseMapper;
     private final IPointAttributeValueService pointAttributeValueService;
 
@@ -89,10 +93,25 @@ public class DeviceAttributeServiceImpl implements IDeviceAttributeService {
 
             // 添加点位属性配置
             savePointAttributeValue(bo);
+            // 更新TdEngine表结构
+            addTableField(bo);
 
             bo.setId(add.getId());
         }
         return flag;
+    }
+
+    /**
+     * 添加表字段
+     *
+     * @param bo 薄
+     */
+    private void addTableField(DeviceAttributeBo bo) {
+        if (ObjectUtil.isNotNull(bo.getDeviceId()) && 0 != bo.getDeviceId()) {
+            // 有设备id则为设备属性，不需要添加表字段
+            return;
+        }
+        remoteTableService.addSuperTableField(bo.getProductId(), bo.getIdentifier(), bo.getAttributeType());
     }
 
     /**
