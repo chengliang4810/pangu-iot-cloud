@@ -1,11 +1,25 @@
 package org.dromara.data.service;
 
-import org.dromara.data.TdColumn;
+import org.dromara.data.api.domain.TdColumn;
 
 import java.util.List;
 import java.util.Map;
 
 public interface TdEngineService {
+
+    /**
+     * init超级表
+     *
+     * @param tableName 表名
+     */
+    void initSuperTable(String tableName);
+
+    /**
+     * 删除超级表
+     *
+     * @param table 表格
+     */
+    void dropSuperTable(String table);
 
     /**
      * 创建超级表
@@ -26,7 +40,6 @@ public interface TdEngineService {
      */
     void createSuperTableField(String table, String key, String valueType);
 
-
     /**
      * 删除超级表字段
      *
@@ -34,14 +47,6 @@ public interface TdEngineService {
      * @param key   关键
      */
     void deleteSuperTableField(String table, String... key);
-
-    /**
-     * 删除超级表
-     *
-     * @param table 表格
-     */
-    void deleteSuperTable(String table);
-
 
     /**
      * 插入数据
@@ -77,5 +82,6 @@ public interface TdEngineService {
      * @param tableNameList 表名称列表
      */
     void dropTable(List<String> tableNameList);
+
 
 }

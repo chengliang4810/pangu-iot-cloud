@@ -3,7 +3,7 @@ package org.dromara.common.iot.entity.driver;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.dromara.common.iot.enums.AttributeType;
+import org.dromara.common.core.enums.AttributeType;
 
 /**
  * 属性配置

@@ -1,13 +1,14 @@
 package org.dromara.data.service.impl;
 
+import cn.hutool.core.collection.ListUtil;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.map.MapUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.dromara.data.IotConstants;
-import org.dromara.data.SuperTableDTO;
-import org.dromara.data.TdColumn;
+import org.dromara.data.constant.TableConstants;
+import org.dromara.data.domain.SuperTable;
+import org.dromara.data.api.domain.TdColumn;
 import org.dromara.data.mapper.TdDatabaseMapper;
 import org.dromara.data.service.TdEngineService;
 import org.springframework.stereotype.Service;
@@ -27,6 +28,32 @@ public class TdEngineServiceImpl implements TdEngineService {
     private final TdDatabaseMapper databaseMapper;
 
     /**
+     * init超级表
+     *
+     * @param tableName 表名
+     */
+    @Override
+    public void initSuperTable(String tableName) {
+        // 创建超级表默认字段
+        List<TdColumn> tdColumns = ListUtil.of(new TdColumn(TableConstants.TABLE_PRIMARY_FIELD, "TIMESTAMP"), new TdColumn(TableConstants.TABLE_STATUS_FIELD, "int"));
+        List<TdColumn> tags = ListUtil.of(new TdColumn(TableConstants.TABLE_LOCATION_FIELD, "NCHAR(20)"));
+        createSuperTable(TableConstants.SUPER_TABLE_PREFIX + tableName, tdColumns, tags);
+    }
+
+    /**
+     * 删除超级表
+     *
+     * @param table 表
+     */
+    @Override
+    public void dropSuperTable(String table) {
+        // 参数检查
+        Assert.notNull(table, "id is null");
+        // 删除表
+        databaseMapper.deleteSuperTable(getDatabaseName(), TableConstants.SUPER_TABLE_PREFIX + table);
+    }
+
+    /**
      * 删除表
      *
      * @param tableNameList 表名称列表
@@ -34,7 +61,7 @@ public class TdEngineServiceImpl implements TdEngineService {
     @Override
     public void dropTable(List<String> tableNameList) {
         Assert.notEmpty(tableNameList, "表名称列表不能为空");
-        List<String> resultList = tableNameList.stream().map(tableName -> IotConstants.DEVICE_TABLE_NAME_PREFIX + tableName).collect(Collectors.toList());
+        List<String> resultList = tableNameList.stream().map(tableName -> TableConstants.DEVICE_TABLE_NAME_PREFIX + tableName).collect(Collectors.toList());
         databaseMapper.dropTable(resultList);
     }
 
@@ -120,12 +147,12 @@ public class TdEngineServiceImpl implements TdEngineService {
         Assert.isTrue(columns.size() > 0, "columns size is zero");
         Assert.isTrue(tags.size() > 0, "tags size is zero");
 
-        SuperTableDTO superTableDTO = new SuperTableDTO();
-        superTableDTO.setDatabase(getDatabaseName());
-        superTableDTO.setTableName(table);
-        superTableDTO.setColumns(columns);
-        superTableDTO.setTags(tags);
-        databaseMapper.createSuperTable(superTableDTO);
+        SuperTable superTable = new SuperTable();
+        superTable.setDatabase(getDatabaseName());
+        superTable.setTableName(table);
+        superTable.setColumns(columns);
+        superTable.setTags(tags);
+        databaseMapper.createSuperTable(superTable);
     }
 
     /**
@@ -141,19 +168,14 @@ public class TdEngineServiceImpl implements TdEngineService {
         Assert.notNull(table, "id is null");
         Assert.notBlank(key, "key is blank");
         Assert.notBlank(valueType, "valueType is blank");
-        String type = "NCHAR(200)";
-        switch (valueType) {
-            case "0":
-                type = "float";
-                break;
-            case "3":
-                type = "int";
-                break;
-        }
+        String type = switch (valueType) {
+            case "0" -> "float";
+            case "3" -> "int";
+            default -> "NCHAR(200)";
+        };
         // 创建表字段
         databaseMapper.createSuperTableField(getDatabaseName(), table, key, type);
     }
-
 
     /**
      * 删除超级表字段
@@ -171,16 +193,6 @@ public class TdEngineServiceImpl implements TdEngineService {
             databaseMapper.deleteSuperTableField(getDatabaseName(), table, k);
         }
     }
-
-
-    @Override
-    public void deleteSuperTable(String table) {
-        // 参数检查
-        Assert.notNull(table, "id is null");
-        // 删除表
-        databaseMapper.deleteSuperTable(getDatabaseName(), table);
-    }
-
 
     @SneakyThrows
     private String getJdbcUrl() {

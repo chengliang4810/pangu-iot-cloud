@@ -10,7 +10,7 @@ import org.dromara.common.iot.entity.driver.Device;
 import org.dromara.common.iot.entity.driver.DriverAttribute;
 import org.dromara.common.iot.entity.driver.DriverMetadata;
 import org.dromara.common.iot.entity.point.PointAttribute;
-import org.dromara.common.iot.enums.AttributeType;
+import org.dromara.common.core.enums.AttributeType;
 import org.dromara.common.iot.model.Point;
 import org.dromara.manager.device.domain.bo.DeviceAttributeBo;
 import org.dromara.manager.device.domain.vo.DeviceAttributeVo;

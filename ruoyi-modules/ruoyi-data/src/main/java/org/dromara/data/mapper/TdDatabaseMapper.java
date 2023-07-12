@@ -5,7 +5,7 @@ import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
-import org.dromara.data.SuperTableDTO;
+import org.dromara.data.domain.SuperTable;
 
 import java.util.List;
 import java.util.Map;
@@ -22,7 +22,7 @@ public interface TdDatabaseMapper {
     /***
      * 创建超级表
      */
-    void  createSuperTable(SuperTableDTO table);
+    void  createSuperTable(SuperTable table);
 
     /**
      * 展示数据库创建sql
