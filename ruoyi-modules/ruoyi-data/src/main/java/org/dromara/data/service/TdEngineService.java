@@ -46,7 +46,7 @@ public interface TdEngineService {
      * @param table 表格
      * @param fieldName   关键
      */
-    void deleteSuperTableField(String table, String... fieldName);
+    void dropSuperTableField(String table, String... fieldName);
 
     /**
      * 插入数据

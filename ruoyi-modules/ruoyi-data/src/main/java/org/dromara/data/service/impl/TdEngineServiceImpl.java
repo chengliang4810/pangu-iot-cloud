@@ -42,6 +42,32 @@ public class TdEngineServiceImpl implements TdEngineService {
     }
 
     /**
+     * 创建超级表
+     * 超级表中列的最大个数为 4096，需要注意，这里的 4096 是包含 TAG 列在内的，详细内容查看TdEngine官网
+     *
+     * @param table   表名
+     * @param columns 列 至少一个
+     * @param tags    标签 至少一个
+     * @return {@link String}
+     */
+    @Override
+    public void createSuperTable(String table, List<TdColumn> columns, List<TdColumn> tags) {
+        // 参数检查
+        Assert.notBlank(table, "table name is blank");
+        Assert.notNull(tags, "tags is null");
+        Assert.notNull(columns, "columns is null");
+        Assert.isTrue(columns.size() > 0, "columns size is zero");
+        Assert.isTrue(tags.size() > 0, "tags size is zero");
+
+        SuperTable superTable = new SuperTable();
+        superTable.setDatabase(getDatabaseName());
+        superTable.setTableName(table);
+        superTable.setColumns(columns);
+        superTable.setTags(tags);
+        databaseMapper.createSuperTable(superTable);
+    }
+
+    /**
      * 删除超级表
      *
      * @param table 表
@@ -52,6 +78,40 @@ public class TdEngineServiceImpl implements TdEngineService {
         Assert.notNull(table, "id is null");
         // 删除表
         databaseMapper.deleteSuperTable(getDatabaseName(), TableConstants.SUPER_TABLE_PREFIX + table);
+    }
+
+    /**
+     * 创建表字段
+     *
+     * @param table     table
+     * @param key       关键
+     * @param valueType 值类型
+     */
+    @Override
+    public void createSuperTableField(String table, String key, String valueType) {
+        // 参数检查
+        Assert.notNull(table, "id is null");
+        Assert.notBlank(key, "key is blank");
+        Assert.notBlank(valueType, "valueType is blank");
+        // 创建表字段
+        databaseMapper.createSuperTableField(getDatabaseName(), TableConstants.SUPER_TABLE_PREFIX + table, key, convertType(valueType));
+    }
+
+    /**
+     * 删除超级表字段
+     *
+     * @param table 表格
+     * @param key   关键
+     */
+    @Override
+    public void dropSuperTableField(String table, String... key) {
+        // 参数检查
+        Assert.notNull(table, "id is null");
+        Assert.notNull(key, "key is blank");
+        // 删除表字段
+        for (String k : key) {
+            databaseMapper.deleteSuperTableField(getDatabaseName(), table, k);
+        }
     }
 
     /**
@@ -131,82 +191,6 @@ public class TdEngineServiceImpl implements TdEngineService {
     }
 
     /**
-     * 创建超级表
-     * 超级表中列的最大个数为 4096，需要注意，这里的 4096 是包含 TAG 列在内的，详细内容查看TdEngine官网
-     *
-     * @param table   表名
-     * @param columns 列 至少一个
-     * @param tags    标签 至少一个
-     * @return {@link String}
-     */
-    @Override
-    public void createSuperTable(String table, List<TdColumn> columns, List<TdColumn> tags) {
-        // 参数检查
-        Assert.notBlank(table, "table name is blank");
-        Assert.notNull(tags, "tags is null");
-        Assert.notNull(columns, "columns is null");
-        Assert.isTrue(columns.size() > 0, "columns size is zero");
-        Assert.isTrue(tags.size() > 0, "tags size is zero");
-
-        SuperTable superTable = new SuperTable();
-        superTable.setDatabase(getDatabaseName());
-        superTable.setTableName(table);
-        superTable.setColumns(columns);
-        superTable.setTags(tags);
-        databaseMapper.createSuperTable(superTable);
-    }
-
-    /**
-     * 创建表字段
-     *
-     * @param table     table
-     * @param key       关键
-     * @param valueType 值类型
-     */
-    @Override
-    public void createSuperTableField(String table, String key, String valueType) {
-        // 参数检查
-        Assert.notNull(table, "id is null");
-        Assert.notBlank(key, "key is blank");
-        Assert.notBlank(valueType, "valueType is blank");
-        // 创建表字段
-        databaseMapper.createSuperTableField(getDatabaseName(), TableConstants.SUPER_TABLE_PREFIX + table, key, convertType(valueType));
-    }
-
-    /**
-     * 删除超级表字段
-     *
-     * @param table 表格
-     * @param key   关键
-     */
-    @Override
-    public void deleteSuperTableField(String table, String... key) {
-        // 参数检查
-        Assert.notNull(table, "id is null");
-        Assert.notNull(key, "key is blank");
-        // 删除表字段
-        for (String k : key) {
-            databaseMapper.deleteSuperTableField(getDatabaseName(), table, k);
-        }
-    }
-
-    @SneakyThrows
-    private String getJdbcUrl() {
-        return dataSource.getConnection().getMetaData().getURL();
-    }
-
-    private String getDatabaseName() {
-        String jdbcUrl = getJdbcUrl();
-        // 截取数据库名称
-        int startIndex = jdbcUrl.lastIndexOf("/") + 1;
-        int endIndex = jdbcUrl.indexOf("?", startIndex);
-        if (endIndex == -1) {
-            endIndex = jdbcUrl.length();
-        }
-        return jdbcUrl.substring(startIndex, endIndex);
-    }
-
-    /**
      * 属性类型转换为TdEngine类型
      * TODO 特别注意String类型长度，这里默认为100，如有需要请自行修改，后续考虑使用配置文件
      *
@@ -228,6 +212,22 @@ public class TdEngineServiceImpl implements TdEngineService {
             case BOOLEAN -> "BOOL";
             case STRING -> "NCHAR(100)";
         };
+    }
+
+    @SneakyThrows
+    private String getJdbcUrl() {
+        return dataSource.getConnection().getMetaData().getURL();
+    }
+
+    private String getDatabaseName() {
+        String jdbcUrl = getJdbcUrl();
+        // 截取数据库名称
+        int startIndex = jdbcUrl.lastIndexOf("/") + 1;
+        int endIndex = jdbcUrl.indexOf("?", startIndex);
+        if (endIndex == -1) {
+            endIndex = jdbcUrl.length();
+        }
+        return jdbcUrl.substring(startIndex, endIndex);
     }
 
 }

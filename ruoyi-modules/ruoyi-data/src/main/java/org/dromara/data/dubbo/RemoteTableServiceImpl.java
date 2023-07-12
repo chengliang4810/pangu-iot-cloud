@@ -68,4 +68,20 @@ public class RemoteTableServiceImpl implements RemoteTableService {
         }
     }
 
+    /**
+     * 删除超级表字段
+     *
+     * @param productId  产品id
+     * @param identifier 标识符
+     */
+    @Override
+    public void deleteSuperTableField(Long productId, String identifier) {
+        Assert.notNull(productId, "产品id不能为空");
+        Assert.notBlank(identifier, "标识符不能为空");
+        try {
+            tdEngineService.dropSuperTableField(String.valueOf(productId), identifier);
+        } catch (Exception e) {
+            throw new ServiceException("删除超级表失败: {}", e.getMessage());
+        }
+    }
 }

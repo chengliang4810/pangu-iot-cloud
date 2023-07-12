@@ -29,4 +29,12 @@ public interface RemoteTableService {
      * @param attributeType 属性类型
      */
     void addSuperTableField(Long productId, String identifier, String attributeType);
+
+    /**
+     * 删除超级表字段
+     *
+     * @param productId 产品id
+     * @param identifier 标识符
+     */
+    void deleteSuperTableField(Long productId, String identifier);
 }
