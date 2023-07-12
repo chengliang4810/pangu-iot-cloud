@@ -1,4 +1,4 @@
-package org.dromara.common.iot.enums;
+package org.dromara.common.core.enums;
 
 import com.baomidou.mybatisplus.annotation.EnumValue;
 import lombok.AllArgsConstructor;
@@ -10,12 +10,13 @@ import java.util.Optional;
 /**
  * 通用属性类型标识枚举
  *
- * @author pnoker
- * @since 2022.1.0
+ * @author pnoker, chengliang4810
+ * @date 2023/07/12
  */
 @Getter
 @AllArgsConstructor
 public enum AttributeType {
+
     /**
      * 字符串
      */

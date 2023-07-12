@@ -1,7 +1,8 @@
-package org.dromara.data;
+package org.dromara.data.domain;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
+import org.dromara.data.api.domain.TdColumn;
 
 import java.io.Serializable;
 import java.util.List;
@@ -14,7 +15,7 @@ import java.util.List;
  */
 @Data
 @Accessors(chain = true)
-public class SuperTableDTO implements Serializable {
+public class SuperTable implements Serializable {
 
     /**
      * 数据库
