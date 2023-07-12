@@ -20,6 +20,8 @@ import org.dromara.manager.device.mapper.DeviceAttributeMapper;
 import org.dromara.manager.device.service.IDeviceAttributeService;
 import org.dromara.manager.driver.domain.bo.PointAttributeValueBo;
 import org.dromara.manager.driver.service.IPointAttributeValueService;
+import org.dromara.manager.product.domain.Product;
+import org.dromara.manager.product.mapper.ProductMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,6 +42,7 @@ public class DeviceAttributeServiceImpl implements IDeviceAttributeService {
     @DubboReference
     private RemoteTableService remoteTableService;
     private final DeviceAttributeMapper baseMapper;
+    private final ProductMapper productMapper;
     private final IPointAttributeValueService pointAttributeValueService;
 
     /**
@@ -145,9 +148,25 @@ public class DeviceAttributeServiceImpl implements IDeviceAttributeService {
      * 修改设备属性
      */
     @Override
-    public Boolean updateByBo(DeviceAttributeBo bo) {
-        DeviceAttribute update = MapstructUtils.convert(bo, DeviceAttribute.class);
+    @Transactional(rollbackFor = Exception.class)
+    public Boolean updateByBo(DeviceAttributeBo attributeBo) {
+        DeviceAttributeVo attribute = this.queryById(attributeBo.getId());
+        Assert.notNull(attribute, "属性不存在");
+        Product product = productMapper.selectById(attribute.getProductId());
+        Assert.notNull(product, "产品不存在");
+
+        DeviceAttribute update = MapstructUtils.convert(attributeBo, DeviceAttribute.class);
         validEntityBeforeSave(update);
+
+        // 标识符/数据类型发生改变
+        if (!attribute.getIdentifier().equals(attributeBo.getIdentifier()) || !attribute.getAttributeType().equals(attributeBo.getAttributeType())) {
+            // 删除原有的
+
+            remoteTableService.deleteSuperTableField(product.getId(), attribute.getIdentifier());
+            // 新增
+            remoteTableService.addSuperTableField(product.getId(), attributeBo.getIdentifier(), attributeBo.getAttributeType());
+        }
+
         return baseMapper.updateById(update) > 0;
     }
 
@@ -168,10 +187,19 @@ public class DeviceAttributeServiceImpl implements IDeviceAttributeService {
      * 批量删除设备属性
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid) {
         if(isValid){
             //TODO 做一些业务上的校验,判断是否需要校验
         }
+        Assert.notEmpty(ids, "id不能为空");
+
+        ids.forEach(id -> {
+            DeviceAttributeVo deviceAttributeVo = queryById(id);
+            Assert.notNull(deviceAttributeVo, "设备属性不存在");
+            remoteTableService.deleteSuperTableField(deviceAttributeVo.getProductId(), deviceAttributeVo.getIdentifier());
+        });
+
         return baseMapper.deleteBatchIds(ids) > 0;
     }
 
