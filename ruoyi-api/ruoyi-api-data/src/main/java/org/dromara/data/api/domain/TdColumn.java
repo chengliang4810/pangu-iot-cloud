@@ -1,4 +1,4 @@
-package org.dromara.data;
+package org.dromara.data.api.domain;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,7 +21,7 @@ public class TdColumn {
     private String name;
 
     /**
-     * 类型
+     * 数据类型
      */
     private String type;
 
