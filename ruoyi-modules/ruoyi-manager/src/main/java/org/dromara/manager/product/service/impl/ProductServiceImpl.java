@@ -5,16 +5,19 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
+import org.apache.dubbo.config.annotation.DubboReference;
 import org.dromara.common.core.utils.MapstructUtils;
 import org.dromara.common.core.utils.StringUtils;
 import org.dromara.common.mybatis.core.page.PageQuery;
 import org.dromara.common.mybatis.core.page.TableDataInfo;
+import org.dromara.data.api.RemoteTableService;
 import org.dromara.manager.product.domain.Product;
 import org.dromara.manager.product.domain.bo.ProductBo;
 import org.dromara.manager.product.domain.vo.ProductVo;
 import org.dromara.manager.product.mapper.ProductMapper;
 import org.dromara.manager.product.service.IProductService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -30,6 +33,8 @@ import java.util.Map;
 public class ProductServiceImpl implements IProductService {
 
     private final ProductMapper baseMapper;
+    @DubboReference
+    private RemoteTableService remoteTableService;
 
     /**
      * 更新设备数量
@@ -90,12 +95,14 @@ public class ProductServiceImpl implements IProductService {
      * 新增产品
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Boolean insertByBo(ProductBo bo) {
         Product add = MapstructUtils.convert(bo, Product.class);
         validEntityBeforeSave(add);
         boolean flag = baseMapper.insert(add) > 0;
         if (flag) {
             bo.setId(add.getId());
+            remoteTableService.initSuperTable(add.getId());
         }
         return flag;
     }

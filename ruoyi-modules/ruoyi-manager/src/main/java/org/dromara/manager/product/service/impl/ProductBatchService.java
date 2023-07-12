@@ -3,6 +3,8 @@ package org.dromara.manager.product.service.impl;
 import cn.hutool.core.lang.Assert;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.dubbo.config.annotation.DubboReference;
+import org.dromara.data.api.RemoteTableService;
 import org.dromara.manager.device.service.IDeviceAttributeService;
 import org.dromara.manager.device.service.IDeviceService;
 import org.dromara.manager.product.domain.vo.ProductVo;
@@ -19,6 +21,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Service
 @RequiredArgsConstructor
 public class ProductBatchService implements IProductBatchService {
+
+    @DubboReference
+    private RemoteTableService remoteTableService;
 
     private final IDeviceService deviceService;
     private final IProductService productService;
@@ -56,6 +61,7 @@ public class ProductBatchService implements IProductBatchService {
             if (result) {
                 count.getAndIncrement();
             }
+            remoteTableService.dropSuperTable(id);
         });
 
 
