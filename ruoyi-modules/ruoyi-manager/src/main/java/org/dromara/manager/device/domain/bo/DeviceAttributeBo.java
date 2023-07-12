@@ -4,6 +4,7 @@ import io.github.linpeilie.annotations.AutoMapper;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Null;
+import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -55,6 +56,7 @@ public class DeviceAttributeBo extends BaseEntity {
      * 标识符
      */
     @NotBlank(message = "标识符不能为空", groups = { AddGroup.class, EditGroup.class })
+    @Pattern(regexp = "^[a-zA-Z_][a-zA-Z0-9_]*$", message = "标识符只能包含字母、数字、下划线, 且不能数字开头", groups = { AddGroup.class, EditGroup.class })
     private String identifier;
 
     /**
