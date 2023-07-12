@@ -110,7 +110,7 @@ public class TdEngineServiceImpl implements TdEngineService {
         Assert.notNull(key, "key is blank");
         // 删除表字段
         for (String k : key) {
-            databaseMapper.deleteSuperTableField(getDatabaseName(), table, k);
+            databaseMapper.deleteSuperTableField(getDatabaseName(),TableConstants.SUPER_TABLE_PREFIX + table, k);
         }
     }
 
