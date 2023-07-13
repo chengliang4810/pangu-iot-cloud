@@ -37,4 +37,12 @@ public interface RemoteTableService {
      * @param identifier 标识符
      */
     void deleteSuperTableField(Long productId, String identifier);
+
+    /**
+     * 创建表
+     *
+     * @param productId 产品id
+     * @param deviceCode  设备编号
+     */
+    void createTable(Long productId, String deviceCode);
 }

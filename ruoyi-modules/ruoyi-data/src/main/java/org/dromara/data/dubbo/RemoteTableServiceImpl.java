@@ -84,4 +84,21 @@ public class RemoteTableServiceImpl implements RemoteTableService {
             throw new ServiceException("删除超级表失败: {}", e.getMessage());
         }
     }
+
+    /**
+     * 创建表
+     *
+     * @param productId 产品id
+     * @param deviceCode  设备编号
+     */
+    @Override
+    public void createTable(Long productId, String deviceCode) {
+        Assert.notNull(productId, "产品id不能为空");
+        Assert.notBlank(deviceCode, "设备编号不能为空");
+        try {
+            tdEngineService.createTable(String.valueOf(productId), deviceCode);
+        } catch (Exception e) {
+            throw new ServiceException("创建表失败: {}", e.getMessage());
+        }
+    }
 }

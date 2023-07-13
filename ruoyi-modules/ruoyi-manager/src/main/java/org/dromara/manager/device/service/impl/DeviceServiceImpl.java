@@ -7,11 +7,13 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
+import org.apache.dubbo.config.annotation.DubboReference;
 import org.dromara.common.core.utils.MapstructUtils;
 import org.dromara.common.core.utils.StringUtils;
 import org.dromara.common.mybatis.core.domain.BaseEntity;
 import org.dromara.common.mybatis.core.page.PageQuery;
 import org.dromara.common.mybatis.core.page.TableDataInfo;
+import org.dromara.data.api.RemoteTableService;
 import org.dromara.manager.device.domain.Device;
 import org.dromara.manager.device.domain.bo.ChildDeviceBo;
 import org.dromara.manager.device.domain.bo.DeviceBo;
@@ -42,6 +44,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Service
 public class DeviceServiceImpl implements IDeviceService {
 
+    @DubboReference
+    private RemoteTableService tableService;
     private final DeviceMapper baseMapper;
     private final IProductService productService;
     private final IGatewayBindRelationService gatewayBindRelationService;
@@ -122,7 +126,8 @@ public class DeviceServiceImpl implements IDeviceService {
             productService.updateDeviceNumber(bo.getProductId(), 1);
             // 添加设备驱动属性值
             saveDriverAttributeValue(bo);
-
+            // 创建data模块设备数据表
+            tableService.createTable(productVo.getId(), add.getCode());
             bo.setId(add.getId());
         }
         return flag;
