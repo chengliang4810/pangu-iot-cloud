@@ -2,7 +2,9 @@ package org.dromara.manager.device.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.Assert;
+import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ObjUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -115,6 +117,11 @@ public class DeviceServiceImpl implements IDeviceService {
     public Boolean insertByBo(DeviceBo bo) {
         ProductVo productVo = productService.queryById(bo.getProductId());
         Assert.notNull(productVo, "产品不存在");
+        if (StrUtil.isBlank(bo.getCode())) {
+            // 如果未指定Code则自动生成
+            bo.setCode(IdUtil.getSnowflakeNextIdStr());
+        }
+
         // 与产品关联的设备类型一致
         bo.setDeviceType(productVo.getType());
         Device add = MapstructUtils.convert(bo, Device.class);
