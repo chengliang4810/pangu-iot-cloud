@@ -22,11 +22,6 @@ import java.util.Map;
 public class DeviceValue implements Serializable {
 
     /**
-     * 产品id
-     */
-    private Long productId;
-
-    /**
      * 设备 CODE
      */
     private String deviceCode;
@@ -41,8 +36,7 @@ public class DeviceValue implements Serializable {
      */
     private Date originTime;
 
-    public DeviceValue(Long productId, String deviceCode, String key, String value) {
-        this.productId = productId;
+    public DeviceValue(String deviceCode, String key, String value) {
         this.deviceCode = deviceCode;
         if (CollUtil.isEmpty(attributes)) {
             attributes = new HashMap<>(5);
@@ -51,8 +45,7 @@ public class DeviceValue implements Serializable {
         this.originTime = new Date();
     }
 
-    public DeviceValue(Long productId, String deviceCode, Map<String, String> attributes) {
-        this.productId = productId;
+    public DeviceValue(String deviceCode, Map<String, String> attributes) {
         this.deviceCode = deviceCode;
         this.attributes = attributes;
         this.originTime = new Date();

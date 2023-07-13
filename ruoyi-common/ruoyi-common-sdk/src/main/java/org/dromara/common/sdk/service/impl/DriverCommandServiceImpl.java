@@ -59,7 +59,7 @@ public class DriverCommandServiceImpl implements DriverCommandService {
 
         // 发送并返回
         Device device = driverContext.getDeviceByDeviceId(deviceId);
-        DeviceValue deviceValue = new DeviceValue(device.getProductId(), device.getDeviceCode(), attributeValueMap);
+        DeviceValue deviceValue = new DeviceValue(device.getDeviceCode(), attributeValueMap);
         driverSenderService.pointValueSender(deviceValue);
         return deviceValue;
     }
@@ -89,7 +89,7 @@ public class DriverCommandServiceImpl implements DriverCommandService {
                 throw new ServiceException("The read point value is null");
             }
 
-            DeviceValue deviceValue = new DeviceValue(device.getProductId(), device.getDeviceCode(), point.getIdentifier(), ConvertUtil.convertValue(point, rawValue));
+            DeviceValue deviceValue = new DeviceValue(device.getDeviceCode(), point.getIdentifier(), ConvertUtil.convertValue(point, rawValue));
             if (senderValue){
                 driverSenderService.pointValueSender(deviceValue);
             }
