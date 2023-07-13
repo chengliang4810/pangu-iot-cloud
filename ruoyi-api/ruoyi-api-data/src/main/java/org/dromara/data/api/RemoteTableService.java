@@ -45,4 +45,11 @@ public interface RemoteTableService {
      * @param deviceCode  设备编号
      */
     void createTable(Long productId, String deviceCode);
+
+    /**
+     * 删除表
+     *
+     * @param id id
+     */
+    void dropTable(Long id);
 }

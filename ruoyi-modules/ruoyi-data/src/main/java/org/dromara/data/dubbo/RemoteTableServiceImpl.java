@@ -9,6 +9,8 @@ import org.dromara.data.api.RemoteTableService;
 import org.dromara.data.service.TdEngineService;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
+
 /**
  * 远程表服务实现
  *
@@ -31,7 +33,7 @@ public class RemoteTableServiceImpl implements RemoteTableService {
     @Override
     public void initSuperTable(Long productId) {
         Assert.notNull(productId, "产品id不能为空");
-        tdEngineService.initSuperTable(String.valueOf(productId));
+        tdEngineService.initSuperTable(productId.toString());
     }
 
     /**
@@ -43,7 +45,7 @@ public class RemoteTableServiceImpl implements RemoteTableService {
     public void dropSuperTable(Long productId) {
         Assert.notNull(productId, "产品id不能为空");
         try {
-            tdEngineService.dropSuperTable(String.valueOf(productId));
+            tdEngineService.dropSuperTable(productId.toString());
         } catch (Exception e) {
             throw new ServiceException("删除超级表失败: {}", e.getMessage());
         }
@@ -62,7 +64,7 @@ public class RemoteTableServiceImpl implements RemoteTableService {
         Assert.notBlank(identifier, "标识符不能为空");
         Assert.notBlank(attributeType, "属性类型不能为空");
         try {
-            tdEngineService.createSuperTableField(String.valueOf(productId), identifier, attributeType);
+            tdEngineService.createSuperTableField(productId.toString(), identifier, attributeType);
         } catch (Exception e) {
             throw new ServiceException("删除超级表失败: {}", e.getMessage());
         }
@@ -79,7 +81,7 @@ public class RemoteTableServiceImpl implements RemoteTableService {
         Assert.notNull(productId, "产品id不能为空");
         Assert.notBlank(identifier, "标识符不能为空");
         try {
-            tdEngineService.dropSuperTableField(String.valueOf(productId), identifier);
+            tdEngineService.dropSuperTableField(productId.toString(), identifier);
         } catch (Exception e) {
             throw new ServiceException("删除超级表失败: {}", e.getMessage());
         }
@@ -96,9 +98,24 @@ public class RemoteTableServiceImpl implements RemoteTableService {
         Assert.notNull(productId, "产品id不能为空");
         Assert.notBlank(deviceCode, "设备编号不能为空");
         try {
-            tdEngineService.createTable(String.valueOf(productId), deviceCode);
+            tdEngineService.createTable(productId.toString(), deviceCode);
         } catch (Exception e) {
             throw new ServiceException("创建表失败: {}", e.getMessage());
+        }
+    }
+
+    /**
+     * 删除表
+     *
+     * @param id id
+     */
+    @Override
+    public void dropTable(Long id) {
+        Assert.notNull(id, "id不能为空");
+        try {
+            tdEngineService.dropTable(Collections.singletonList(id.toString()));
+        } catch (Exception e) {
+            throw new ServiceException("删除表失败: {}", e.getMessage());
         }
     }
 }

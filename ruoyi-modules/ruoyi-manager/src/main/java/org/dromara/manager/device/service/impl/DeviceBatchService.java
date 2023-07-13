@@ -3,6 +3,8 @@ package org.dromara.manager.device.service.impl;
 import cn.hutool.core.lang.Assert;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.dubbo.config.annotation.DubboReference;
+import org.dromara.data.api.RemoteTableService;
 import org.dromara.manager.device.domain.vo.DeviceVo;
 import org.dromara.manager.device.service.IDeviceAttributeService;
 import org.dromara.manager.device.service.IDeviceBatchService;
@@ -22,6 +24,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 @RequiredArgsConstructor
 public class DeviceBatchService implements IDeviceBatchService {
 
+    @DubboReference
+    private RemoteTableService remoteTableService;
     private final IDeviceService deviceService;
     private final IProductService productService;
     private final IDeviceAttributeService deviceAttributeService;
@@ -70,7 +74,8 @@ public class DeviceBatchService implements IDeviceBatchService {
 
             // 更新产品设备数量
             productService.updateDeviceNumber(deviceVo.getProductId(), -1);
-
+            //
+            remoteTableService.dropTable(deviceVo.getId());
             // 删除设备
             boolean result = deviceService.deleteById(deviceVo.getId());
             count.addAndGet(result ? 1:0);
