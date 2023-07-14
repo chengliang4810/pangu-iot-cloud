@@ -34,4 +34,9 @@ public class DeviceAttributeValue implements Serializable {
      */
     private String value;
 
+    /**
+     * 采集时间
+     */
+    private Long originTime;
+
 }

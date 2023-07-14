@@ -42,7 +42,7 @@ public class DeviceValueReceiver extends MqttConsumer<DeviceValue> {
         }
         log.debug("messageHandler deviceValue: {}", deviceValue);
         deviceValue.getAttributes().forEach((key, value) -> {
-            DeviceAttributeValue deviceAttributeValue = new DeviceAttributeValue(deviceValue.getDeviceCode(), key, value);
+            DeviceAttributeValue deviceAttributeValue = new DeviceAttributeValue(deviceValue.getDeviceCode(), key, value, deviceValue.getOriginTime());
             try {
                 LiteflowResponse response = flowExecutor.execute2Resp("dataHandlerChain", deviceAttributeValue, DataHandlerContext.class);
                 log.debug("response success: {}", response.isSuccess());
