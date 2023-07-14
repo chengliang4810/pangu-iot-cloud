@@ -7,16 +7,19 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.dromara.common.core.utils.MapstructUtils;
 import org.dromara.common.core.utils.StringUtils;
 import org.dromara.common.mybatis.core.page.PageQuery;
 import org.dromara.common.mybatis.core.page.TableDataInfo;
 import org.dromara.data.api.RemoteTableService;
+import org.dromara.manager.device.domain.Device;
 import org.dromara.manager.device.domain.DeviceAttribute;
 import org.dromara.manager.device.domain.bo.DeviceAttributeBo;
 import org.dromara.manager.device.domain.vo.DeviceAttributeVo;
 import org.dromara.manager.device.mapper.DeviceAttributeMapper;
+import org.dromara.manager.device.mapper.DeviceMapper;
 import org.dromara.manager.device.service.IDeviceAttributeService;
 import org.dromara.manager.driver.domain.bo.PointAttributeValueBo;
 import org.dromara.manager.driver.service.IPointAttributeValueService;
@@ -35,15 +38,37 @@ import java.util.Map;
  * @author chengliang4810
  * @date 2023-06-27
  */
-@RequiredArgsConstructor
+@Slf4j
 @Service
+@RequiredArgsConstructor
 public class DeviceAttributeServiceImpl implements IDeviceAttributeService {
 
     @DubboReference
     private RemoteTableService remoteTableService;
     private final DeviceAttributeMapper baseMapper;
+    private final DeviceMapper deviceMapper;
     private final ProductMapper productMapper;
     private final IPointAttributeValueService pointAttributeValueService;
+
+    /**
+     * 查询设备属性
+     *
+     * @param deviceCode
+     * @param identifier
+     */
+    @Override
+    public DeviceAttributeVo queryByCodeAndIdentifier(String deviceCode, String identifier) {
+        Assert.notBlank(deviceCode, "设备代码不能为空");
+        Assert.notBlank(identifier, "属性标识符不能为空");
+        Device device = deviceMapper.selectOne(Wrappers.lambdaQuery(Device.class).eq(Device::getCode, deviceCode).last("limit 1")
+            .select(Device::getId, Device::getProductId, Device::getCode, Device::getStatus));
+        if (ObjectUtil.isNull(device)) {
+            log.warn("设备不存在, deviceCode: {}", deviceCode);
+            return null;
+        }
+        LambdaQueryWrapper<DeviceAttribute> query = buildQueryWrapper(new DeviceAttributeBo().setProductId(device.getProductId()).setDeviceId(device.getId()).setIdentifier(identifier)).last("limit 1");
+        return baseMapper.selectVoOne(query);
+    }
 
     /**
      * 查询设备属性
@@ -70,6 +95,22 @@ public class DeviceAttributeServiceImpl implements IDeviceAttributeService {
     public List<DeviceAttributeVo> queryList(DeviceAttributeBo bo) {
         LambdaQueryWrapper<DeviceAttribute> lqw = buildQueryWrapper(bo);
         return baseMapper.selectVoList(lqw);
+    }
+
+
+    /**
+     * 通过设备代码查询列表
+     *
+     * @param deviceCode 设备代码
+     * @return {@link List}<{@link DeviceAttributeVo}>
+     */
+    @Override
+    public List<DeviceAttributeVo> queryListByDeviceCode(String deviceCode) {
+        Assert.notBlank(deviceCode, "设备代码不能为空");
+        Device device = deviceMapper.selectOne(Wrappers.<Device>lambdaQuery().eq(Device::getCode, deviceCode).last("limit 1").select(Device::getId, Device::getProductId, Device::getCode, Device::getStatus));
+        Assert.notNull(device, "设备不存在");
+        Assert.isTrue(device.getStatus() > 0, "设备已禁用");
+        return queryList(new DeviceAttributeBo().setDeviceId(device.getId()).setProductId(device.getProductId()));
     }
 
     private LambdaQueryWrapper<DeviceAttribute> buildQueryWrapper(DeviceAttributeBo bo) {

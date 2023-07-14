@@ -19,6 +19,11 @@ public interface IDeviceAttributeService {
     /**
      * 查询设备属性
      */
+    DeviceAttributeVo queryByCodeAndIdentifier(String deviceCode, String identifier);
+
+    /**
+     * 查询设备属性
+     */
     DeviceAttributeVo queryById(Long id);
 
     /**
@@ -30,6 +35,14 @@ public interface IDeviceAttributeService {
      * 查询设备属性列表
      */
     List<DeviceAttributeVo> queryList(DeviceAttributeBo bo);
+
+    /**
+     * 通过设备代码查询列表
+     *
+     * @param deviceCode 设备代码
+     * @return {@link List}<{@link DeviceAttributeVo}>
+     */
+    List<DeviceAttributeVo> queryListByDeviceCode(String deviceCode);
 
     /**
      * 新增设备属性
