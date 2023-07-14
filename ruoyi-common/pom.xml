@@ -43,6 +43,7 @@
         <module>ruoyi-common-iot</module>
         <module>ruoyi-common-sdk</module>
         <module>ruoyi-common-emqx</module>
+        <module>ruoyi-common-script</module>
     </modules>
 
     <artifactId>ruoyi-common</artifactId>
