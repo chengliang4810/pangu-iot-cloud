@@ -117,6 +117,17 @@
             <artifactId>ruoyi-common-emqx</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.dromara</groupId>
+            <artifactId>ruoyi-common-script</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.yomahub</groupId>
+            <artifactId>liteflow-spring-boot-starter</artifactId>
+            <version>2.10.5</version>
+        </dependency>
+
     </dependencies>
 
     <build>
