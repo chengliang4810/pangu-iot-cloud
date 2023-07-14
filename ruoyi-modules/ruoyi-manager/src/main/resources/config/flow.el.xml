@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow>
+    <chain name="dataHandlerChain">
+        THEN(init, convert, script);
+    </chain>
+</flow>
