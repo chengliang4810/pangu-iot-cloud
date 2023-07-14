@@ -15,6 +15,9 @@ logging:
   level:
     org.dromara.manager: debug
 
+liteflow:
+  rule-source: config/flow.el.xml
+
 --- # nacos 配置
 spring:
   cloud:
