@@ -56,6 +56,7 @@ public class InitDataHandlerContextService extends NodeComponent {
         context.setDeviceCode(deviceAttributeValue.getDeviceCode());
         context.setDeviceId(deviceAttribute.getDeviceId());
         context.setAttributeScript(deviceAttribute.getPretreatmentScript());
+        context.setOriginTime(deviceAttributeValue.getOriginTime() != null ? deviceAttributeValue.getOriginTime() : System.currentTimeMillis());
         log.info("初始化数据处理程序上下文服务完成，context:{}", context);
     }
 

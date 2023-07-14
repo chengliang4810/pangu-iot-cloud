@@ -37,6 +37,11 @@ public class DataHandlerContext {
     private String attributeScript;
 
     /**
+     * 采集时间
+     */
+    private Long originTime;
+
+    /**
      * 原始值
      */
     private String originalValue;
