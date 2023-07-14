@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,7 +33,7 @@ public class DeviceValue implements Serializable {
     /**
      * 采集时间
      */
-    private Date originTime;
+    private Long originTime;
 
     public DeviceValue(String deviceCode, String key, String value) {
         this.deviceCode = deviceCode;
@@ -42,13 +41,13 @@ public class DeviceValue implements Serializable {
             attributes = new HashMap<>(5);
         }
         attributes.put(key, value);
-        this.originTime = new Date();
+        this.originTime = System.currentTimeMillis();
     }
 
     public DeviceValue(String deviceCode, Map<String, String> attributes) {
         this.deviceCode = deviceCode;
         this.attributes = attributes;
-        this.originTime = new Date();
+        this.originTime = System.currentTimeMillis();
     }
 
 }
