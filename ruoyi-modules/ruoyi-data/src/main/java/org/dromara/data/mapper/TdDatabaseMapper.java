@@ -66,12 +66,11 @@ public interface TdDatabaseMapper {
      * 插入数据
      *
      * @param tableName 表名
-     * @param superTable 超级表
      * @param value      值 key - value1,value2
      * @param tags       标签
      * @return int
      */
-    int insertData(@Param("table") String tableName, @Param("superTable") String superTable, @Param("value") Map<String,Object> value, @Param("tags") Object[] tags);
+    int insertData(@Param("table") String tableName, @Param("value") Map<String,Object> value, @Param("tags") Object[] tags);
 
     /**
      * 查询当日最后一行数据

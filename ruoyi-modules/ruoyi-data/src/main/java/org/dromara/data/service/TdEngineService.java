@@ -59,12 +59,11 @@ public interface TdEngineService {
     /**
      * 插入数据
      *
-     * @param table      表格
-     * @param superTable 超级表
+     * @param tableName  表名
      * @param value      值 fieldName-values结构
      * @return int 插入条数
      */
-    int insertData(String table, String superTable, Map<String, Object> value);
+    int insertData(String tableName, Map<String, Object> value);
 
 
     /**

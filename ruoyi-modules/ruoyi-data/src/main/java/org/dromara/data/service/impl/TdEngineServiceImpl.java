@@ -195,15 +195,14 @@ public class TdEngineServiceImpl implements TdEngineService {
      * 插入数据
      *
      * @param table      表格
-     * @param superTable 超级表
-     * @param value      值 key-values结构
+     * @param value      值 key-value结构
      * @return int 插入条数
      */
     @Override
-    public int insertData(String table, String superTable, Map<String, Object> value) {
+    public int insertData(String table, Map<String, Object> value) {
         int data = 0;
         try {
-            data = databaseMapper.insertData(table, superTable, value, new Object[]{1});
+            data = databaseMapper.insertData(DEVICE_TABLE_NAME_PREFIX + table, value, new Object[]{""});
         } catch (Exception e) {
             log.error("插入数据失败", e);
         }
