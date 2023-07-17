@@ -22,7 +22,7 @@ public interface DeviceAttributeTopic {
      * @return {@link String}
      */
     static String getDeviceAttributeReportTopic(String deviceId) {
-        return StrUtil.format(DEVICE_ATTRIBUTE_REPORT_TOPIC_TPL);
+        return StrUtil.format(DEVICE_ATTRIBUTE_REPORT_TOPIC_TPL, deviceId);
     }
 
     /**
