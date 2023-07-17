@@ -6,6 +6,7 @@ import com.yomahub.liteflow.core.NodeComponent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.dromara.common.emqx.utils.EmqxUtil;
+import org.dromara.common.iot.constant.StorageTopic;
 import org.dromara.common.iot.dto.StoreValueDTO;
 import org.dromara.common.json.utils.JsonUtils;
 import org.dromara.manager.data.context.DataHandlerContext;
@@ -36,7 +37,7 @@ public class StorageValueService extends NodeComponent {
         storeValue.setValue(value);
 
         // 通过emqx发送给data模块进行存储
-        EmqxUtil.publish("", JsonUtils.toJsonString(storeValue));
+        EmqxUtil.publish(StorageTopic.getStorageDevicePropertyTopic(deviceCode), JsonUtils.toJsonString(storeValue));
     }
 
 
