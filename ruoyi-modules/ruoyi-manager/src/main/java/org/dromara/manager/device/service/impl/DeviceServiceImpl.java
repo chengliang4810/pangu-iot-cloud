@@ -119,7 +119,7 @@ public class DeviceServiceImpl implements IDeviceService {
         Assert.notNull(productVo, "产品不存在");
         if (StrUtil.isBlank(bo.getCode())) {
             // 如果未指定Code则自动生成
-            bo.setCode(IdUtil.getSnowflakeNextIdStr());
+            bo.setCode(IdUtil.nanoId());
         }
 
         // 与产品关联的设备类型一致
@@ -128,6 +128,7 @@ public class DeviceServiceImpl implements IDeviceService {
         validEntityBeforeSave(add);
         boolean flag = baseMapper.insert(add) > 0;
         if (flag) {
+
 
             // 更新产品设备数量
             productService.updateDeviceNumber(bo.getProductId(), 1);
