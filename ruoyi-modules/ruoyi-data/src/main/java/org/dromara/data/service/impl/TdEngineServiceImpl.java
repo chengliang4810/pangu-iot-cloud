@@ -224,10 +224,8 @@ public class TdEngineServiceImpl implements TdEngineService {
         }
         Assert.notNull(attributeType, "valueType is not match");
         return switch (attributeType) {
-            case INT -> "INT";
-            case LONG -> "BIGINT";
-            case FLOAT -> "FLOAT";
-            case DOUBLE -> "DOUBLE";
+            case INT, FLOAT -> "FLOAT";
+            case LONG, DOUBLE -> "DOUBLE";
             case BOOLEAN -> "BOOL";
             case STRING -> "NCHAR(100)";
         };
