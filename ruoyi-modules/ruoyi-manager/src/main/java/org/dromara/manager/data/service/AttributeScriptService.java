@@ -1,5 +1,6 @@
 package org.dromara.manager.data.service;
 
+import cn.hutool.core.util.StrUtil;
 import com.yomahub.liteflow.annotation.LiteflowComponent;
 import com.yomahub.liteflow.core.NodeComponent;
 import lombok.extern.slf4j.Slf4j;
@@ -18,10 +19,10 @@ public class AttributeScriptService extends NodeComponent {
      *
      * @return boolean
      */
-//    @Override
-//    public boolean isAccess() {
-//        return StrUtil.isNotBlank(this.getContextBean(DataHandlerContext.class).getAttributeScript());
-//    }
+    @Override
+    public boolean isAccess() {
+        return StrUtil.isNotBlank(this.getContextBean(DataHandlerContext.class).getAttributeScript());
+    }
 
     @Override
     public void process() throws Exception {
@@ -35,7 +36,6 @@ public class AttributeScriptService extends NodeComponent {
     }
 
     private String executeScript(String script, String value) {
-        script = "return value;";
         return ScriptExecutor.execute(ATTRIBUTE_VALUE_SCRIPT_TPL, script, value);
     }
 
