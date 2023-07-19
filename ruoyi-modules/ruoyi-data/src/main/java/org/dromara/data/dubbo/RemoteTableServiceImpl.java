@@ -1,6 +1,7 @@
 package org.dromara.data.dubbo;
 
 import cn.hutool.core.lang.Assert;
+import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboService;
@@ -10,6 +11,7 @@ import org.dromara.data.service.TdEngineService;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
+import java.util.Map;
 
 /**
  * 远程表服务实现
@@ -137,6 +139,25 @@ public class RemoteTableServiceImpl implements RemoteTableService {
             tdEngineService.createTable(productId.toString(), newDeviceCode);
         } catch (Exception e) {
             throw new ServiceException("重命名表失败: {}", e.getMessage());
+        }
+    }
+
+    /**
+     * 查询最新的数据
+     *
+     * @param deviceCode 设备编码
+     * @return {@link Map}<{@link String}, {@link Object}>
+     */
+    @Override
+    public Map<String, Object> selectLastData(String deviceCode) {
+        if (StrUtil.isBlank(deviceCode)){
+            return Collections.emptyMap();
+        }
+        try {
+            return tdEngineService.selectLastData(deviceCode);
+        } catch (Exception e) {
+            log.warn("查询最新的数据失败: {}", e.getMessage());
+            return Collections.emptyMap();
         }
     }
 }

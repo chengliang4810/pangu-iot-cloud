@@ -1,5 +1,7 @@
 package org.dromara.data.api;
 
+import java.util.Map;
+
 /**
  * 数据表服务
  *
@@ -61,4 +63,12 @@ public interface RemoteTableService {
      * @param newDeviceCode 新设备代码
      */
     void renameTable(Long productId, String oldDeviceCode, String newDeviceCode);
+
+    /**
+     * 查询最新的数据
+     *
+     * @param deviceCode 设备编码
+     * @return {@link Map}<{@link String}, {@link Object}>
+     */
+    Map<String, Object> selectLastData(String deviceCode);
 }

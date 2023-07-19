@@ -66,6 +66,11 @@ public class DeviceAttributeBo extends BaseEntity {
     private String attributeType;
 
     /**
+     * 是否需要实时数据
+     */
+    private Boolean realTimeData;
+
+    /**
      * 单位
      */
     private String unit;

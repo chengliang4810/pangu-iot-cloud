@@ -59,6 +59,11 @@ public class DeviceAttributeVo implements Serializable {
     private String identifier;
 
     /**
+     * 属性值
+     */
+    private Object value;
+
+    /**
      * 属性类型
      */
     @ExcelProperty(value = "属性类型", converter = ExcelDictConvert.class)

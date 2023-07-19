@@ -183,7 +183,7 @@ public class TdEngineServiceImpl implements TdEngineService {
         // 处理Key 删除last()
         Map<String, Object> result = MapUtil.newHashMap(lastRowData.size());
         lastRowData.forEach((key, value) -> {
-            if (key.contains("last_row(")) {
+            if (key.contains("last(")) {
                 key = key.substring(5, key.length() - 1);
             }
             result.put(key, value);
