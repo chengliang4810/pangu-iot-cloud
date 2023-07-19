@@ -49,7 +49,16 @@ public interface RemoteTableService {
     /**
      * 删除表
      *
-     * @param id id
+     * @param productId id
      */
-    void dropTable(Long id);
+    void dropTable(Long productId);
+
+    /**
+     * 重命名表
+     * 删除旧表, 创建新表
+     * @param productId     产品id
+     * @param oldDeviceCode 旧设备代码
+     * @param newDeviceCode 新设备代码
+     */
+    void renameTable(Long productId, String oldDeviceCode, String newDeviceCode);
 }

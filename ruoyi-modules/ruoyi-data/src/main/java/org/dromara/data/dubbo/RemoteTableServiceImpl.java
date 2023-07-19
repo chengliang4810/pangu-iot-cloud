@@ -118,4 +118,25 @@ public class RemoteTableServiceImpl implements RemoteTableService {
             throw new ServiceException("删除表失败: {}", e.getMessage());
         }
     }
+
+    /**
+     * 重命名表
+     * 删除旧表, 创建新表
+     *
+     * @param productId     产品id
+     * @param oldDeviceCode 旧设备代码
+     * @param newDeviceCode 新设备代码
+     */
+    @Override
+    public void renameTable(Long productId, String oldDeviceCode, String newDeviceCode) {
+        Assert.notNull(productId, "产品id不能为空");
+        Assert.notBlank(oldDeviceCode, "旧设备代码不能为空");
+        Assert.notBlank(newDeviceCode, "新设备代码不能为空");
+        try {
+            tdEngineService.dropTable(Collections.singletonList(oldDeviceCode));
+            tdEngineService.createTable(productId.toString(), newDeviceCode);
+        } catch (Exception e) {
+            throw new ServiceException("重命名表失败: {}", e.getMessage());
+        }
+    }
 }
