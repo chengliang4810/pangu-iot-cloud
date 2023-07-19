@@ -36,6 +36,6 @@ public interface StorageTopic {
     /**
      * 存储设备属性订阅主题
      */
-    String DEVICE_STATUS_SUB_TOPIC = "storage/device/+/property";
+    String  STORAGE_DEVICE_PROPERTY_SUB_TOPIC = "storage/device/+/property";
 
 }

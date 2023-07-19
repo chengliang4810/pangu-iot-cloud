@@ -3,6 +3,8 @@ package org.dromara.data.service.mqtt;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.formula.functions.T;
+import org.dromara.common.emqx.annotation.Topic;
+import org.dromara.common.emqx.constant.Pattern;
 import org.dromara.common.emqx.core.MqttConsumer;
 import org.dromara.common.iot.dto.StoreValueDTO;
 import org.dromara.common.json.utils.JsonUtils;
@@ -10,8 +12,11 @@ import org.dromara.data.service.DataService;
 import org.eclipse.paho.mqttv5.common.MqttMessage;
 import org.springframework.stereotype.Component;
 
+import static org.dromara.common.iot.constant.StorageTopic.STORAGE_DEVICE_PROPERTY_SUB_TOPIC;
+
 @Slf4j
 @Component
+@Topic(topic = STORAGE_DEVICE_PROPERTY_SUB_TOPIC, patten = Pattern.SHARE, group = "${spring.application.name}-group")
 public class DevicePropertyStorageConsumer extends MqttConsumer<StoreValueDTO> {
 
     @Resource
