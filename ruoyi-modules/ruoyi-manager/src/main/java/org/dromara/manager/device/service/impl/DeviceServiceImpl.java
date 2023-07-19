@@ -171,9 +171,18 @@ public class DeviceServiceImpl implements IDeviceService {
      * 修改设备
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Boolean updateByBo(DeviceBo bo) {
         Device update = MapstructUtils.convert(bo, Device.class);
         validEntityBeforeSave(update);
+        // 检查是否修改了设备编码
+        DeviceVo deviceVo = queryById(bo.getId());
+        if (!deviceVo.getCode().equals(bo.getCode())) {
+            // 修改了设备编码,则需要修改data模块的设备数据表名
+            ProductVo productVo = productService.queryById(bo.getProductId());
+            Assert.notNull(productVo, "产品不存在");
+            tableService.renameTable(productVo.getId(), deviceVo.getCode(), bo.getCode());
+        }
         return baseMapper.updateById(update) > 0;
     }
 
