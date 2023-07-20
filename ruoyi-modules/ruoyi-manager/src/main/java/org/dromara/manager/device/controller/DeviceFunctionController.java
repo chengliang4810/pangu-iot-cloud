@@ -32,7 +32,7 @@ import java.util.List;
 @Validated
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/manager/deviceFunction")
+@RequestMapping("/deviceFunction")
 public class DeviceFunctionController extends BaseController {
 
     private final IDeviceFunctionService deviceFunctionService;
