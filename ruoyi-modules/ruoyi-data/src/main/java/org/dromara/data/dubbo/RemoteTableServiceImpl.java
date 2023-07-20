@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.dromara.common.core.exception.ServiceException;
 import org.dromara.data.api.RemoteTableService;
+import org.dromara.data.constant.TableConstants;
 import org.dromara.data.service.TdEngineService;
 import org.springframework.stereotype.Service;
 
@@ -154,7 +155,7 @@ public class RemoteTableServiceImpl implements RemoteTableService {
             return Collections.emptyMap();
         }
         try {
-            return tdEngineService.selectLastData(deviceCode);
+            return tdEngineService.selectLastData(TableConstants.DEVICE_TABLE_NAME_PREFIX + deviceCode);
         } catch (Exception e) {
             log.warn("查询最新的数据失败: {}", e.getMessage());
             return Collections.emptyMap();
