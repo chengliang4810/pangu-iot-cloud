@@ -37,7 +37,6 @@ public class ScriptExecutor {
      */
     public static String execute(String script, Object... params) {
         String formatResult = StrUtil.format(script, params);
-        log.info("执行脚本: {}", formatResult);
         try {
             Object eval = SCRIPT_ENGINE.eval(formatResult);
             String result = eval == null ? "" : eval.toString();

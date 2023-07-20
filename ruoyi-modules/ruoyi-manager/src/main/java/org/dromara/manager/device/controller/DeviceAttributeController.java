@@ -38,6 +38,15 @@ public class DeviceAttributeController extends BaseController {
     private final IDeviceAttributeService deviceAttributeService;
 
     /**
+     * 查询某个设备属性实时数据
+     */
+    @SaCheckPermission("manager:deviceAttribute:list")
+    @GetMapping("/device/{deviceId}")
+    public R<List<DeviceAttributeVo>> realTimeData(@NotNull(message = "设备编号不能为空") @PathVariable Long deviceId,@RequestParam(defaultValue = "false") Boolean realTime) {
+        return R.ok(deviceAttributeService.queryListByDeviceId(deviceId, realTime));
+    }
+
+    /**
      * 查询设备属性列表
      */
     @SaCheckPermission("manager:deviceAttribute:list")

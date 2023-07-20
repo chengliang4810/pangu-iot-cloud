@@ -82,4 +82,13 @@ public interface IDeviceAttributeService {
      * @return {@link Boolean}
      */
     Boolean deleteByProductId(Long productId);
+
+    /**
+     * 查询设备id列表
+     *
+     * @param deviceId   设备id
+     * @param isRealTime 是真实时间
+     * @return {@link List}<{@link DeviceAttributeVo}>
+     */
+    List<DeviceAttributeVo> queryListByDeviceId(Long deviceId, Boolean isRealTime);
 }

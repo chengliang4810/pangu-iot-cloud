@@ -5,6 +5,7 @@ import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.BooleanUtil;
 import cn.hutool.core.util.ObjUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -12,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.dromara.common.core.utils.MapstructUtils;
-import org.dromara.common.core.utils.StreamUtils;
 import org.dromara.common.core.utils.StringUtils;
 import org.dromara.common.mybatis.core.page.PageQuery;
 import org.dromara.common.mybatis.core.page.TableDataInfo;
@@ -88,45 +88,10 @@ public class DeviceAttributeServiceImpl implements IDeviceAttributeService {
     public TableDataInfo<DeviceAttributeVo> queryPageList(DeviceAttributeBo bo, PageQuery pageQuery) {
         LambdaQueryWrapper<DeviceAttribute> lqw = buildQueryWrapper(bo);
         Page<DeviceAttributeVo> result = baseMapper.selectVoPage(pageQuery.build(), lqw);
-        // 关联实时数据
-        realTimeData(result.getRecords(), bo.getRealTimeData());
         return TableDataInfo.build(result);
     }
 
-    /**
-     * 实时数据
-     *
-     * @param records      记录
-     * @param realTimeData 实时数据
-     */
-    private void realTimeData(List<DeviceAttributeVo> records, Boolean realTimeData) {
-        if (BooleanUtil.isFalse(realTimeData)) {
-            return;
-        }
-        // 使用stream按照设备ID分组
-        Map<Long, List<DeviceAttributeVo>> groupDevice = StreamUtils.groupByKey(records, DeviceAttributeVo::getDeviceId);
-        groupDevice.forEach((deviceId, attributeList) -> {
-            if (CollUtil.isEmpty(attributeList) || ObjUtil.isNull(deviceId)) {
-                return;
-            }
-            // 检查设备是否存在
-            Device device = deviceMapper.selectById(deviceId);
-            if (ObjUtil.isNull(device)) {
-                return;
-            }
-            Map<String, Object> dataMap = remoteTableService.selectLastData(device.getCode());
-            if (CollUtil.isEmpty(dataMap)) {
-                return;
-            }
-            attributeList.forEach(attribute -> {
-                Object value = dataMap.get(attribute.getIdentifier());
-                if (ObjUtil.isNull(value)) {
-                    return;
-                }
-                attribute.setValue(value);
-            });
-        });
-    }
+
 
     /**
      * 查询设备属性列表
@@ -328,4 +293,44 @@ public class DeviceAttributeServiceImpl implements IDeviceAttributeService {
             .eq(DeviceAttribute::getProductId, productId)
         ) > 0;
     }
+
+    @Override
+    public List<DeviceAttributeVo> queryListByDeviceId(Long deviceId, Boolean isRealTime) {
+        Assert.notNull(deviceId, "设备id不能为空");
+        Device device = deviceMapper.selectById(deviceId);
+        Assert.notNull(device, "设备不存在");
+        List<DeviceAttributeVo> deviceAttributeVos = baseMapper.selectVoList(buildQueryWrapper(new DeviceAttributeBo().setDeviceId(deviceId).setProductId(device.getProductId())));
+        if (BooleanUtil.isTrue(isRealTime)) {
+            // 关联实时数据
+            realTimeData(device.getCode(), deviceAttributeVos);
+        }
+        return deviceAttributeVos;
+    }
+
+    /**
+     * 实时数据
+     *
+     * @param records    记录
+     * @param deviceCode 设备代码
+     */
+    private void realTimeData(String deviceCode, List<DeviceAttributeVo> records) {
+        if (CollUtil.isEmpty(records) || StrUtil.isBlank(deviceCode)) {
+            return;
+        }
+
+
+        Map<String, Object> dataMap = remoteTableService.selectLastData(deviceCode);
+        if (CollUtil.isEmpty(dataMap)) {
+            return;
+        }
+
+        records.forEach(attribute -> {
+            Object value = dataMap.get(attribute.getIdentifier());
+            if (ObjUtil.isNull(value)) {
+                return;
+            }
+            attribute.setValue(value);
+        });
+    }
+
 }
