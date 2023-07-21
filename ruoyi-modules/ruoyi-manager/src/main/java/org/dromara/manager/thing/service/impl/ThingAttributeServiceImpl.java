@@ -1,4 +1,4 @@
-package org.dromara.manager.device.service.impl;
+package org.dromara.manager.thing.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.Assert;
@@ -18,12 +18,12 @@ import org.dromara.common.mybatis.core.page.PageQuery;
 import org.dromara.common.mybatis.core.page.TableDataInfo;
 import org.dromara.data.api.RemoteTableService;
 import org.dromara.manager.device.domain.Device;
-import org.dromara.manager.device.domain.DeviceAttribute;
-import org.dromara.manager.device.domain.bo.DeviceAttributeBo;
-import org.dromara.manager.device.domain.vo.DeviceAttributeVo;
-import org.dromara.manager.device.mapper.DeviceAttributeMapper;
+import org.dromara.manager.thing.domain.ThingAttribute;
+import org.dromara.manager.thing.domain.bo.ThingAttributeBo;
+import org.dromara.manager.thing.domain.vo.ThingAttributeVo;
+import org.dromara.manager.thing.mapper.ThingAttributeMapper;
 import org.dromara.manager.device.mapper.DeviceMapper;
-import org.dromara.manager.device.service.IDeviceAttributeService;
+import org.dromara.manager.thing.service.IThingAttributeService;
 import org.dromara.manager.driver.domain.bo.PointAttributeValueBo;
 import org.dromara.manager.driver.service.IPointAttributeValueService;
 import org.dromara.manager.product.domain.Product;
@@ -36,7 +36,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 设备属性Service业务层处理
+ * 物模型属性Service业务层处理
  *
  * @author chengliang4810
  * @date 2023-06-27
@@ -44,23 +44,23 @@ import java.util.Map;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class DeviceAttributeServiceImpl implements IDeviceAttributeService {
+public class ThingAttributeServiceImpl implements IThingAttributeService {
 
     @DubboReference
     private RemoteTableService remoteTableService;
-    private final DeviceAttributeMapper baseMapper;
+    private final ThingAttributeMapper baseMapper;
     private final DeviceMapper deviceMapper;
     private final ProductMapper productMapper;
     private final IPointAttributeValueService pointAttributeValueService;
 
     /**
-     * 查询设备属性
+     * 查询物模型属性
      *
      * @param deviceCode
      * @param identifier
      */
     @Override
-    public DeviceAttributeVo queryByCodeAndIdentifier(String deviceCode, String identifier) {
+    public ThingAttributeVo queryByCodeAndIdentifier(String deviceCode, String identifier) {
         Assert.notBlank(deviceCode, "设备代码不能为空");
         Assert.notBlank(identifier, "属性标识符不能为空");
         Device device = deviceMapper.selectOne(Wrappers.lambdaQuery(Device.class).eq(Device::getCode, deviceCode).last("limit 1")
@@ -69,36 +69,36 @@ public class DeviceAttributeServiceImpl implements IDeviceAttributeService {
             log.warn("设备不存在, deviceCode: {}", deviceCode);
             return null;
         }
-        LambdaQueryWrapper<DeviceAttribute> query = buildQueryWrapper(new DeviceAttributeBo().setProductId(device.getProductId()).setDeviceId(device.getId()).setIdentifier(identifier)).last("limit 1");
+        LambdaQueryWrapper<ThingAttribute> query = buildQueryWrapper(new ThingAttributeBo().setProductId(device.getProductId()).setDeviceId(device.getId()).setIdentifier(identifier)).last("limit 1");
         return baseMapper.selectVoOne(query);
     }
 
     /**
-     * 查询设备属性
+     * 查询物模型属性
      */
     @Override
-    public DeviceAttributeVo queryById(Long id){
+    public ThingAttributeVo queryById(Long id){
         return baseMapper.selectVoById(id);
     }
 
     /**
-     * 查询设备属性列表
+     * 查询物模型属性列表
      */
     @Override
-    public TableDataInfo<DeviceAttributeVo> queryPageList(DeviceAttributeBo bo, PageQuery pageQuery) {
-        LambdaQueryWrapper<DeviceAttribute> lqw = buildQueryWrapper(bo);
-        Page<DeviceAttributeVo> result = baseMapper.selectVoPage(pageQuery.build(), lqw);
+    public TableDataInfo<ThingAttributeVo> queryPageList(ThingAttributeBo bo, PageQuery pageQuery) {
+        LambdaQueryWrapper<ThingAttribute> lqw = buildQueryWrapper(bo);
+        Page<ThingAttributeVo> result = baseMapper.selectVoPage(pageQuery.build(), lqw);
         return TableDataInfo.build(result);
     }
 
 
 
     /**
-     * 查询设备属性列表
+     * 查询物模型属性列表
      */
     @Override
-    public List<DeviceAttributeVo> queryList(DeviceAttributeBo bo) {
-        LambdaQueryWrapper<DeviceAttribute> lqw = buildQueryWrapper(bo);
+    public List<ThingAttributeVo> queryList(ThingAttributeBo bo) {
+        LambdaQueryWrapper<ThingAttribute> lqw = buildQueryWrapper(bo);
         return baseMapper.selectVoList(lqw);
     }
 
@@ -107,35 +107,35 @@ public class DeviceAttributeServiceImpl implements IDeviceAttributeService {
      * 通过设备代码查询列表
      *
      * @param deviceCode 设备代码
-     * @return {@link List}<{@link DeviceAttributeVo}>
+     * @return {@link List}<{@link ThingAttributeVo}>
      */
     @Override
-    public List<DeviceAttributeVo> queryListByDeviceCode(String deviceCode) {
+    public List<ThingAttributeVo> queryListByDeviceCode(String deviceCode) {
         Assert.notBlank(deviceCode, "设备代码不能为空");
         Device device = deviceMapper.selectOne(Wrappers.<Device>lambdaQuery().eq(Device::getCode, deviceCode).last("limit 1").select(Device::getId, Device::getProductId, Device::getCode, Device::getStatus));
         Assert.notNull(device, "设备不存在");
         Assert.isTrue(device.getStatus() > 0, "设备已禁用");
-        return queryList(new DeviceAttributeBo().setDeviceId(device.getId()).setProductId(device.getProductId()));
+        return queryList(new ThingAttributeBo().setDeviceId(device.getId()).setProductId(device.getProductId()));
     }
 
-    private LambdaQueryWrapper<DeviceAttribute> buildQueryWrapper(DeviceAttributeBo bo) {
+    private LambdaQueryWrapper<ThingAttribute> buildQueryWrapper(ThingAttributeBo bo) {
         Map<String, Object> params = bo.getParams();
-        LambdaQueryWrapper<DeviceAttribute> lqw = Wrappers.lambdaQuery();
-        lqw.eq(bo.getId() != null, DeviceAttribute::getId, bo.getId());
-        lqw.in(bo.getDeviceId() != null, DeviceAttribute::getDeviceId, bo.getDeviceId(), 0);
-        lqw.eq(bo.getProductId() != null, DeviceAttribute::getProductId, bo.getProductId());
-        lqw.like(StringUtils.isNotBlank(bo.getAttributeName()), DeviceAttribute::getAttributeName, bo.getAttributeName());
-        lqw.eq(StringUtils.isNotBlank(bo.getIdentifier()), DeviceAttribute::getIdentifier, bo.getIdentifier());
+        LambdaQueryWrapper<ThingAttribute> lqw = Wrappers.lambdaQuery();
+        lqw.eq(bo.getId() != null, ThingAttribute::getId, bo.getId());
+        lqw.in(bo.getDeviceId() != null, ThingAttribute::getDeviceId, bo.getDeviceId(), 0);
+        lqw.eq(bo.getProductId() != null, ThingAttribute::getProductId, bo.getProductId());
+        lqw.like(StringUtils.isNotBlank(bo.getAttributeName()), ThingAttribute::getAttributeName, bo.getAttributeName());
+        lqw.eq(StringUtils.isNotBlank(bo.getIdentifier()), ThingAttribute::getIdentifier, bo.getIdentifier());
         return lqw;
     }
 
     /**
-     * 新增设备属性
+     * 新增物模型属性
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Boolean insertByBo(DeviceAttributeBo bo) {
-        DeviceAttribute add = MapstructUtils.convert(bo, DeviceAttribute.class);
+    public Boolean insertByBo(ThingAttributeBo bo) {
+        ThingAttribute add = MapstructUtils.convert(bo, ThingAttribute.class);
         validEntityBeforeSave(add);
         boolean flag = baseMapper.insert(add) > 0;
         if (flag) {
@@ -155,9 +155,9 @@ public class DeviceAttributeServiceImpl implements IDeviceAttributeService {
      *
      * @param bo 薄
      */
-    private void addTableField(DeviceAttributeBo bo) {
+    private void addTableField(ThingAttributeBo bo) {
         if (ObjectUtil.isNotNull(bo.getDeviceId()) && 0 != bo.getDeviceId()) {
-            // 有设备id则为设备属性，不需要添加表字段
+            // 有设备id则为物模型属性，不需要添加表字段
             return;
         }
         remoteTableService.addSuperTableField(bo.getProductId(), bo.getIdentifier(), bo.getAttributeType());
@@ -168,7 +168,7 @@ public class DeviceAttributeServiceImpl implements IDeviceAttributeService {
      *
      * @param bo 设备信息
      */
-    private void savePointAttributeValue(DeviceAttributeBo bo) {
+    private void savePointAttributeValue(ThingAttributeBo bo) {
         if (ObjectUtil.isNull(bo.getDeviceId()) || 0 == bo.getDeviceId()) {
             // 无设备id忽略， 一般是产品属性，则无需保存点位属性值
             return;
@@ -191,17 +191,17 @@ public class DeviceAttributeServiceImpl implements IDeviceAttributeService {
     }
 
     /**
-     * 修改设备属性
+     * 修改物模型属性
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Boolean updateByBo(DeviceAttributeBo attributeBo) {
-        DeviceAttributeVo attribute = this.queryById(attributeBo.getId());
+    public Boolean updateByBo(ThingAttributeBo attributeBo) {
+        ThingAttributeVo attribute = this.queryById(attributeBo.getId());
         Assert.notNull(attribute, "属性不存在");
         Product product = productMapper.selectById(attribute.getProductId());
         Assert.notNull(product, "产品不存在");
 
-        DeviceAttribute update = MapstructUtils.convert(attributeBo, DeviceAttribute.class);
+        ThingAttribute update = MapstructUtils.convert(attributeBo, ThingAttribute.class);
         validEntityBeforeSave(update);
 
         // 标识符/数据类型发生改变
@@ -219,18 +219,18 @@ public class DeviceAttributeServiceImpl implements IDeviceAttributeService {
     /**
      * 保存前的数据校验
      */
-    private void validEntityBeforeSave(DeviceAttribute entity){
+    private void validEntityBeforeSave(ThingAttribute entity){
         //TODO 做一些数据校验,如唯一约束
         String identifier = entity.getIdentifier();
-        boolean exists = baseMapper.exists(Wrappers.lambdaQuery(DeviceAttribute.class)
-            .eq(DeviceAttribute::getProductId, entity.getProductId())
-            .eq(DeviceAttribute::getIdentifier, identifier)
+        boolean exists = baseMapper.exists(Wrappers.lambdaQuery(ThingAttribute.class)
+            .eq(ThingAttribute::getProductId, entity.getProductId())
+            .eq(ThingAttribute::getIdentifier, identifier)
         );
         Assert.isFalse(exists, "标识符{}已被使用", identifier);
     }
 
     /**
-     * 批量删除设备属性
+     * 批量删除物模型属性
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -241,9 +241,9 @@ public class DeviceAttributeServiceImpl implements IDeviceAttributeService {
         Assert.notEmpty(ids, "id不能为空");
 
         ids.forEach(id -> {
-            DeviceAttributeVo deviceAttributeVo = queryById(id);
-            Assert.notNull(deviceAttributeVo, "设备属性不存在");
-            remoteTableService.deleteSuperTableField(deviceAttributeVo.getProductId(), deviceAttributeVo.getIdentifier());
+            ThingAttributeVo thingAttributeVo = queryById(id);
+            Assert.notNull(thingAttributeVo, "物模型属性不存在");
+            remoteTableService.deleteSuperTableField(thingAttributeVo.getProductId(), thingAttributeVo.getIdentifier());
         });
 
         return baseMapper.deleteBatchIds(ids) > 0;
@@ -254,21 +254,21 @@ public class DeviceAttributeServiceImpl implements IDeviceAttributeService {
      * 查询设备id 属性对应的列表
      *
      * @param bo
-     * @return {@link List}<{@link DeviceAttributeVo}>
+     * @return {@link List}<{@link ThingAttributeVo}>
      */
     @Override
-    public List<DeviceAttributeVo> queryListByProductIdAndDeviceId(DeviceAttributeBo bo) {
+    public List<ThingAttributeVo> queryListByProductIdAndDeviceId(ThingAttributeBo bo) {
         Assert.notNull(bo.getProductId(), "产品id不能为空");
         Assert.notNull(bo.getDeviceId(), "设备id不能为空");
-        return baseMapper.selectVoList( Wrappers.lambdaQuery(DeviceAttribute.class)
-            .eq(DeviceAttribute::getProductId, bo.getProductId())
-            .in(DeviceAttribute::getDeviceId, bo.getDeviceId(), 0)
+        return baseMapper.selectVoList( Wrappers.lambdaQuery(ThingAttribute.class)
+            .eq(ThingAttribute::getProductId, bo.getProductId())
+            .in(ThingAttribute::getDeviceId, bo.getDeviceId(), 0)
         );
     }
 
 
     /**
-     * 根据设备id仅删除设备属性
+     * 根据设备id仅删除物模型属性
      *
      * @param deviceId id
      * @return {@link Boolean}
@@ -276,8 +276,8 @@ public class DeviceAttributeServiceImpl implements IDeviceAttributeService {
     @Override
     public Boolean deleteByDeviceId(Long deviceId) {
         Assert.notNull(deviceId, "设备id不能为空");
-        return baseMapper.delete(Wrappers.lambdaQuery(DeviceAttribute.class)
-            .eq(DeviceAttribute::getDeviceId, deviceId)
+        return baseMapper.delete(Wrappers.lambdaQuery(ThingAttribute.class)
+            .eq(ThingAttribute::getDeviceId, deviceId)
         ) > 0;
     }
 
@@ -289,22 +289,22 @@ public class DeviceAttributeServiceImpl implements IDeviceAttributeService {
      */
     @Override
     public Boolean deleteByProductId(Long productId) {
-        return baseMapper.delete(Wrappers.lambdaQuery(DeviceAttribute.class)
-            .eq(DeviceAttribute::getProductId, productId)
+        return baseMapper.delete(Wrappers.lambdaQuery(ThingAttribute.class)
+            .eq(ThingAttribute::getProductId, productId)
         ) > 0;
     }
 
     @Override
-    public List<DeviceAttributeVo> queryListByDeviceId(Long deviceId, Boolean isRealTime) {
+    public List<ThingAttributeVo> queryListByDeviceId(Long deviceId, Boolean isRealTime) {
         Assert.notNull(deviceId, "设备id不能为空");
         Device device = deviceMapper.selectById(deviceId);
         Assert.notNull(device, "设备不存在");
-        List<DeviceAttributeVo> deviceAttributeVos = baseMapper.selectVoList(buildQueryWrapper(new DeviceAttributeBo().setDeviceId(deviceId).setProductId(device.getProductId())));
+        List<ThingAttributeVo> thingAttributeVos = baseMapper.selectVoList(buildQueryWrapper(new ThingAttributeBo().setDeviceId(deviceId).setProductId(device.getProductId())));
         if (BooleanUtil.isTrue(isRealTime)) {
             // 关联实时数据
-            realTimeData(device.getCode(), deviceAttributeVos);
+            realTimeData(device.getCode(), thingAttributeVos);
         }
-        return deviceAttributeVos;
+        return thingAttributeVos;
     }
 
     /**
@@ -313,7 +313,7 @@ public class DeviceAttributeServiceImpl implements IDeviceAttributeService {
      * @param records    记录
      * @param deviceCode 设备代码
      */
-    private void realTimeData(String deviceCode, List<DeviceAttributeVo> records) {
+    private void realTimeData(String deviceCode, List<ThingAttributeVo> records) {
         if (CollUtil.isEmpty(records) || StrUtil.isBlank(deviceCode)) {
             return;
         }

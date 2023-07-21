@@ -1,4 +1,4 @@
-package org.dromara.manager.device.controller;
+package org.dromara.manager.thing.controller;
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import jakarta.servlet.http.HttpServletResponse;
@@ -15,16 +15,16 @@ import org.dromara.common.log.enums.BusinessType;
 import org.dromara.common.mybatis.core.page.PageQuery;
 import org.dromara.common.mybatis.core.page.TableDataInfo;
 import org.dromara.common.web.core.BaseController;
-import org.dromara.manager.device.domain.bo.DeviceFunctionBo;
-import org.dromara.manager.device.domain.vo.DeviceFunctionVo;
-import org.dromara.manager.device.service.IDeviceFunctionService;
+import org.dromara.manager.thing.domain.bo.ThingFunctionBo;
+import org.dromara.manager.thing.domain.vo.ThingFunctionVo;
+import org.dromara.manager.thing.service.IThingFunctionService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 /**
- * 设备功能
+ * 物模型功能
  *
  * @author chengliang4810
  * @date 2023-07-20
@@ -32,72 +32,72 @@ import java.util.List;
 @Validated
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/deviceFunction")
-public class DeviceFunctionController extends BaseController {
+@RequestMapping("/thing/function")
+public class ThingFunctionController extends BaseController {
 
-    private final IDeviceFunctionService deviceFunctionService;
+    private final IThingFunctionService deviceFunctionService;
 
     /**
-     * 查询设备功能列表
+     * 查询物模型功能列表
      */
     @SaCheckPermission("manager:deviceFunction:list")
     @GetMapping("/list")
-    public TableDataInfo<DeviceFunctionVo> list(DeviceFunctionBo bo, PageQuery pageQuery) {
+    public TableDataInfo<ThingFunctionVo> list(ThingFunctionBo bo, PageQuery pageQuery) {
         return deviceFunctionService.queryPageList(bo, pageQuery);
     }
 
     /**
-     * 导出设备功能列表
+     * 导出物模型功能列表
      */
     @SaCheckPermission("manager:deviceFunction:export")
-    @Log(title = "设备功能", businessType = BusinessType.EXPORT)
+    @Log(title = "物模型功能", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
-    public void export(DeviceFunctionBo bo, HttpServletResponse response) {
-        List<DeviceFunctionVo> list = deviceFunctionService.queryList(bo);
-        ExcelUtil.exportExcel(list, "设备功能", DeviceFunctionVo.class, response);
+    public void export(ThingFunctionBo bo, HttpServletResponse response) {
+        List<ThingFunctionVo> list = deviceFunctionService.queryList(bo);
+        ExcelUtil.exportExcel(list, "物模型功能", ThingFunctionVo.class, response);
     }
 
     /**
-     * 获取设备功能详细信息
+     * 获取物模型功能详细信息
      *
      * @param id 主键
      */
     @SaCheckPermission("manager:deviceFunction:query")
     @GetMapping("/{id}")
-    public R<DeviceFunctionVo> getInfo(@NotNull(message = "主键不能为空")
+    public R<ThingFunctionVo> getInfo(@NotNull(message = "主键不能为空")
                                      @PathVariable Long id) {
         return R.ok(deviceFunctionService.queryById(id));
     }
 
     /**
-     * 新增设备功能
+     * 新增物模型功能
      */
     @SaCheckPermission("manager:deviceFunction:add")
-    @Log(title = "设备功能", businessType = BusinessType.INSERT)
+    @Log(title = "物模型功能", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
-    public R<Void> add(@Validated(AddGroup.class) @RequestBody DeviceFunctionBo bo) {
+    public R<Void> add(@Validated(AddGroup.class) @RequestBody ThingFunctionBo bo) {
         return toAjax(deviceFunctionService.insertByBo(bo));
     }
 
     /**
-     * 修改设备功能
+     * 修改物模型功能
      */
     @SaCheckPermission("manager:deviceFunction:edit")
-    @Log(title = "设备功能", businessType = BusinessType.UPDATE)
+    @Log(title = "物模型功能", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
-    public R<Void> edit(@Validated(EditGroup.class) @RequestBody DeviceFunctionBo bo) {
+    public R<Void> edit(@Validated(EditGroup.class) @RequestBody ThingFunctionBo bo) {
         return toAjax(deviceFunctionService.updateByBo(bo));
     }
 
     /**
-     * 删除设备功能
+     * 删除物模型功能
      *
      * @param ids 主键串
      */
     @SaCheckPermission("manager:deviceFunction:remove")
-    @Log(title = "设备功能", businessType = BusinessType.DELETE)
+    @Log(title = "物模型功能", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
     public R<Void> remove(@NotEmpty(message = "主键不能为空")
                           @PathVariable Long[] ids) {

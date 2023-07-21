@@ -1,4 +1,4 @@
-package org.dromara.manager.device.domain.bo;
+package org.dromara.manager.thing.domain.bo;
 
 import io.github.linpeilie.annotations.AutoMapper;
 import jakarta.validation.constraints.NotBlank;
@@ -11,12 +11,12 @@ import lombok.experimental.Accessors;
 import org.dromara.common.core.validate.AddGroup;
 import org.dromara.common.core.validate.EditGroup;
 import org.dromara.common.mybatis.core.domain.BaseEntity;
-import org.dromara.manager.device.domain.DeviceAttribute;
+import org.dromara.manager.thing.domain.ThingAttribute;
 
 import java.util.Map;
 
 /**
- * 设备属性业务对象 iot_device_attribute
+ * 物模型属性业务对象 iot_device_attribute
  *
  * @author chengliang4810
  * @date 2023-06-27
@@ -24,8 +24,8 @@ import java.util.Map;
 @Data
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-@AutoMapper(target = DeviceAttribute.class, reverseConvertGenerate = false)
-public class DeviceAttributeBo extends BaseEntity {
+@AutoMapper(target = ThingAttribute.class, reverseConvertGenerate = false)
+public class ThingAttributeBo extends BaseEntity {
 
     /**
      * 主键

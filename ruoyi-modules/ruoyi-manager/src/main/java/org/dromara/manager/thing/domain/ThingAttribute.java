@@ -1,4 +1,4 @@
-package org.dromara.manager.device.domain;
+package org.dromara.manager.thing.domain;
 
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -9,15 +9,15 @@ import org.dromara.common.mybatis.core.domain.BaseEntity;
 import java.io.Serial;
 
 /**
- * 设备属性对象 iot_device_attribute
+ * 物模型属性对象
  *
  * @author chengliang4810
  * @date 2023-06-27
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@TableName("iot_device_attribute")
-public class DeviceAttribute extends BaseEntity {
+@TableName("iot_thing_attribute")
+public class ThingAttribute extends BaseEntity {
 
     @Serial
     private static final long serialVersionUID = 1L;

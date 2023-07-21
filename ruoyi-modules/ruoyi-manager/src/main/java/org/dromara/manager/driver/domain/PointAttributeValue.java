@@ -39,7 +39,7 @@ public class PointAttributeValue extends BaseEntity {
     private Long deviceId;
 
     /**
-     * 设备属性ID
+     * 物模型属性ID
      */
     private Long deviceAttributeId;
 

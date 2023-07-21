@@ -43,9 +43,9 @@ public class PointAttributeValueVo implements Serializable {
     private Long deviceId;
 
     /**
-     * 设备属性ID
+     * 物模型属性ID
      */
-    @ExcelProperty(value = "设备属性ID")
+    @ExcelProperty(value = "物模型属性ID")
     private Long deviceAttributeId;
 
     /**

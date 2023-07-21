@@ -20,7 +20,7 @@ public interface PointAttributeValueMapper extends BaseMapperPlus<PointAttribute
      * 查询
      * 手动拼接租户条件
      * @param deviceId          设备id
-     * @param deviceAttributeId 设备属性id
+     * @param deviceAttributeId 物模型属性id
      * @param driverId          驱动Id
      * @param tenantId        租户Id
      * @return {@link List}<{@link PointAttributeValueVo}>

@@ -1,4 +1,4 @@
-package org.dromara.manager.device.domain.vo;
+package org.dromara.manager.thing.domain.vo;
 
 import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import com.alibaba.excel.annotation.ExcelProperty;
@@ -6,7 +6,7 @@ import io.github.linpeilie.annotations.AutoMapper;
 import lombok.Data;
 import org.dromara.common.excel.annotation.ExcelDictFormat;
 import org.dromara.common.excel.convert.ExcelDictConvert;
-import org.dromara.manager.device.domain.DeviceAttribute;
+import org.dromara.manager.thing.domain.ThingAttribute;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -15,15 +15,15 @@ import java.util.Date;
 
 
 /**
- * 设备属性视图对象 iot_device_attribute
+ * 物模型属性视图对象 iot_device_attribute
  *
  * @author chengliang4810
  * @date 2023-06-27
  */
 @Data
 @ExcelIgnoreUnannotated
-@AutoMapper(target = DeviceAttribute.class)
-public class DeviceAttributeVo implements Serializable {
+@AutoMapper(target = ThingAttribute.class)
+public class ThingAttributeVo implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;

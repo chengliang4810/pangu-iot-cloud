@@ -22,9 +22,9 @@ public class BatchPointAttributeValueBo implements Serializable {
     private Long deviceId;
 
     /**
-     * 设备属性ID
+     * 物模型属性ID
      */
-    @NotNull(message = "设备属性ID不能为空", groups = {AddGroup.class, EditGroup.class})
+    @NotNull(message = "物模型属性ID不能为空", groups = {AddGroup.class, EditGroup.class})
     private Long deviceAttributeId;
 
     /**

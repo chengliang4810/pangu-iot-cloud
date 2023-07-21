@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.dromara.data.api.RemoteTableService;
-import org.dromara.manager.device.service.IDeviceAttributeService;
+import org.dromara.manager.thing.service.IThingAttributeService;
 import org.dromara.manager.device.service.IDeviceService;
 import org.dromara.manager.product.domain.vo.ProductVo;
 import org.dromara.manager.product.service.IProductBatchService;
@@ -27,7 +27,7 @@ public class ProductBatchService implements IProductBatchService {
 
     private final IDeviceService deviceService;
     private final IProductService productService;
-    private final IDeviceAttributeService deviceAttributeService;
+    private final IThingAttributeService deviceAttributeService;
 
     @Override
     public List<ProductVo> queryParentDeviceProduct(Long deviceId) {

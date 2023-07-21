@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.dromara.data.api.RemoteTableService;
 import org.dromara.manager.device.domain.vo.DeviceVo;
-import org.dromara.manager.device.service.IDeviceAttributeService;
+import org.dromara.manager.thing.service.IThingAttributeService;
 import org.dromara.manager.device.service.IDeviceBatchService;
 import org.dromara.manager.device.service.IDeviceService;
 import org.dromara.manager.device.service.IGatewayBindRelationService;
@@ -28,7 +28,7 @@ public class DeviceBatchService implements IDeviceBatchService {
     private RemoteTableService remoteTableService;
     private final IDeviceService deviceService;
     private final IProductService productService;
-    private final IDeviceAttributeService deviceAttributeService;
+    private final IThingAttributeService deviceAttributeService;
     private final IGatewayBindRelationService gatewayBindRelationService;
     private final IPointAttributeValueService pointAttributeValueService;
     private final IDriverAttributeValueService driverAttributeValueService;
@@ -63,13 +63,13 @@ public class DeviceBatchService implements IDeviceBatchService {
             // 删除网关绑定关系
             gatewayBindRelationService.deleteByDeviceId(deviceVo.getId());
 
-            // 删除设备属性
+            // 删除物模型属性
             deviceAttributeService.deleteByDeviceId(deviceVo.getId());
 
             // 删除驱动属性配置
             driverAttributeValueService.deleteByDeviceId(deviceVo.getId());
 
-            // 删除设备属性配置
+            // 删除物模型属性配置
             pointAttributeValueService.deleteByDeviceId(deviceVo.getId());
 
             // 更新产品设备数量

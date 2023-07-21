@@ -55,7 +55,7 @@ public class DriverReadScheduleJob extends QuartzJobBean {
                 continue;
             }
 
-            // 按照设备循环，读取设备属性点
+            // 按照设备循环，读取物模型属性点
             for (Device device : deviceList) {
                 threadPoolExecutor.execute(() -> {
                     try {

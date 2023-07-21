@@ -1,6 +1,6 @@
-package org.dromara.manager.device.domain.bo;
+package org.dromara.manager.thing.domain.bo;
 
-import org.dromara.manager.device.domain.DeviceFunction;
+import org.dromara.manager.thing.domain.ThingFunction;
 import org.dromara.common.mybatis.core.domain.BaseEntity;
 import org.dromara.common.core.validate.AddGroup;
 import org.dromara.common.core.validate.EditGroup;
@@ -10,15 +10,15 @@ import lombok.EqualsAndHashCode;
 import jakarta.validation.constraints.*;
 
 /**
- * 设备功能业务对象 iot_device_function
+ * 物模型功能业务对象 iot_device_function
  *
  * @author chengliang4810
  * @date 2023-07-20
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@AutoMapper(target = DeviceFunction.class, reverseConvertGenerate = false)
-public class DeviceFunctionBo extends BaseEntity {
+@AutoMapper(target = ThingFunction.class, reverseConvertGenerate = false)
+public class ThingFunctionBo extends BaseEntity {
 
     /**
      * 主键
@@ -45,9 +45,9 @@ public class DeviceFunctionBo extends BaseEntity {
     private Long driverId;
 
     /**
-     * 设备属性
+     * 物模型属性
      */
-    @NotNull(message = "设备属性不能为空", groups = { AddGroup.class, EditGroup.class })
+    @NotNull(message = "物模型属性不能为空", groups = { AddGroup.class, EditGroup.class })
     private Long functionStatusAttribute;
 
     /**

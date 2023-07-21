@@ -12,10 +12,10 @@ import org.dromara.common.iot.entity.driver.DriverMetadata;
 import org.dromara.common.iot.entity.point.PointAttribute;
 import org.dromara.common.core.enums.AttributeType;
 import org.dromara.common.iot.model.Point;
-import org.dromara.manager.device.domain.bo.DeviceAttributeBo;
-import org.dromara.manager.device.domain.vo.DeviceAttributeVo;
+import org.dromara.manager.thing.domain.bo.ThingAttributeBo;
+import org.dromara.manager.thing.domain.vo.ThingAttributeVo;
 import org.dromara.manager.device.domain.vo.DeviceVo;
-import org.dromara.manager.device.service.IDeviceAttributeService;
+import org.dromara.manager.thing.service.IThingAttributeService;
 import org.dromara.manager.device.service.IDeviceService;
 import org.dromara.manager.driver.domain.Driver;
 import org.dromara.manager.driver.domain.bo.DriverAttributeValueBo;
@@ -39,7 +39,7 @@ public class BatchServiceImpl implements BatchService {
     private final IDeviceService deviceService;
     private final IPointAttributeService pointAttributeService;
     private final IDriverAttributeService driverAttributeService;
-    private final IDeviceAttributeService deviceAttributeService;
+    private final IThingAttributeService deviceAttributeService;
     private final IPointAttributeValueService pointAttributeValueService;
     private final IDriverAttributeValueService driverAttributeValueService;
 
@@ -114,28 +114,28 @@ public class BatchServiceImpl implements BatchService {
     /**
      * 得到设备点位
      * 查询物联网设备的属性转换为点位
-     * @param bo 设备属性bo
+     * @param bo 物模型属性bo
      * @return {@link Map}<{@link Long}, {@link Point}>
      */
     private Map<Long, Point> getPointMap(Collection<Device> bo) {
         Map<Long, Point> pointMap = new ConcurrentHashMap<>(16);
         bo.forEach(device -> {
-            DeviceAttributeBo queryBo = new DeviceAttributeBo().setProductId(device.getProductId()).setDeviceId(device.getDeviceId());
-            List<DeviceAttributeVo> deviceAttributeVoList = deviceAttributeService.queryListByProductIdAndDeviceId(queryBo);
-            deviceAttributeVoList.forEach(deviceAttributeVo -> pointMap.put(deviceAttributeVo.getId(), convertPoint(deviceAttributeVo)));
+            ThingAttributeBo queryBo = new ThingAttributeBo().setProductId(device.getProductId()).setDeviceId(device.getDeviceId());
+            List<ThingAttributeVo> thingAttributeVoList = deviceAttributeService.queryListByProductIdAndDeviceId(queryBo);
+            thingAttributeVoList.forEach(deviceAttributeVo -> pointMap.put(deviceAttributeVo.getId(), convertPoint(deviceAttributeVo)));
         });
         return pointMap;
     }
 
-    private Point convertPoint(DeviceAttributeVo deviceAttributeVo){
+    private Point convertPoint(ThingAttributeVo thingAttributeVo){
         Point point = new Point();
-        point.setId(deviceAttributeVo.getId());
-        point.setProductId(deviceAttributeVo.getProductId());
-        point.setDeviceId(deviceAttributeVo.getDeviceId());
-        point.setAttributeName(deviceAttributeVo.getAttributeName());
-        point.setIdentifier(deviceAttributeVo.getIdentifier());
-        point.setAttributeType(deviceAttributeVo.getAttributeType());
-        point.setPretreatmentScript(deviceAttributeVo.getPretreatmentScript());
+        point.setId(thingAttributeVo.getId());
+        point.setProductId(thingAttributeVo.getProductId());
+        point.setDeviceId(thingAttributeVo.getDeviceId());
+        point.setAttributeName(thingAttributeVo.getAttributeName());
+        point.setIdentifier(thingAttributeVo.getIdentifier());
+        point.setAttributeType(thingAttributeVo.getAttributeType());
+        point.setPretreatmentScript(thingAttributeVo.getPretreatmentScript());
         return point;
     }
 

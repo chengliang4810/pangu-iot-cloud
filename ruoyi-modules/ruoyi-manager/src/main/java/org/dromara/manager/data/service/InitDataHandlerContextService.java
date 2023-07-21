@@ -8,8 +8,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.dromara.manager.data.context.DataHandlerContext;
 import org.dromara.manager.data.dto.DeviceAttributeValue;
-import org.dromara.manager.device.domain.vo.DeviceAttributeVo;
-import org.dromara.manager.device.service.IDeviceAttributeService;
+import org.dromara.manager.thing.domain.vo.ThingAttributeVo;
+import org.dromara.manager.thing.service.IThingAttributeService;
 
 /**
  * 初始化数据处理程序上下文服务
@@ -22,7 +22,7 @@ import org.dromara.manager.device.service.IDeviceAttributeService;
 @LiteflowComponent(value = "init", name = "初始化上下文节点")
 public class InitDataHandlerContextService extends NodeComponent {
 
-    private final IDeviceAttributeService deviceAttributeService;
+    private final IThingAttributeService deviceAttributeService;
 
     /**
      * 入参检查，是否可以执行
@@ -42,8 +42,8 @@ public class InitDataHandlerContextService extends NodeComponent {
         DataHandlerContext context = this.getContextBean(DataHandlerContext.class);
         DeviceAttributeValue deviceAttributeValue = this.getRequestData();
 
-        // 查询设备属性列表 TODO: 2023/07/14 这里可以优化，该方法加入缓存
-        DeviceAttributeVo deviceAttribute = deviceAttributeService.queryByCodeAndIdentifier(deviceAttributeValue.getDeviceCode(), deviceAttributeValue.getIdentifier());
+        // 查询物模型属性列表 TODO: 2023/07/14 这里可以优化，该方法加入缓存
+        ThingAttributeVo deviceAttribute = deviceAttributeService.queryByCodeAndIdentifier(deviceAttributeValue.getDeviceCode(), deviceAttributeValue.getIdentifier());
         if (ObjUtil.isNull(deviceAttribute)) {
             return;
         }

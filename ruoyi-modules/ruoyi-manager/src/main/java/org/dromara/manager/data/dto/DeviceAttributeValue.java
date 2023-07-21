@@ -8,7 +8,7 @@ import lombok.experimental.Accessors;
 import java.io.Serializable;
 
 /**
- * 设备属性值
+ * 物模型属性值
  *
  * @author chengliang
  * @date 2023/07/14

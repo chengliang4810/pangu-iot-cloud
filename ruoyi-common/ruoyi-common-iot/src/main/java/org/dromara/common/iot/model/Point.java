@@ -7,7 +7,7 @@ import lombok.experimental.Accessors;
 import java.io.Serializable;
 
 /**
- * 点位对应物联网的设备属性
+ * 点位对应物联网的物模型属性
  *
  * @author chengliang
  * @date 2023/06/28

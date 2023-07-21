@@ -1,4 +1,4 @@
-package org.dromara.manager.device.domain;
+package org.dromara.manager.thing.domain;
 
 import org.dromara.common.tenant.core.TenantEntity;
 import com.baomidou.mybatisplus.annotation.*;
@@ -8,15 +8,15 @@ import lombok.EqualsAndHashCode;
 import java.io.Serial;
 
 /**
- * 设备功能对象 iot_device_function
+ * 物模型功能对象
  *
  * @author chengliang4810
  * @date 2023-07-20
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@TableName("iot_device_function")
-public class DeviceFunction extends TenantEntity {
+@TableName("iot_thing_function")
+public class ThingFunction extends TenantEntity {
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -43,7 +43,7 @@ public class DeviceFunction extends TenantEntity {
     private Long driverId;
 
     /**
-     * 设备属性
+     * 物模型属性
      */
     private Long functionStatusAttribute;
 
