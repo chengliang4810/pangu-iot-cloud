@@ -32,6 +32,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -318,14 +319,18 @@ public class ThingAttributeServiceImpl implements IThingAttributeService {
             return;
         }
 
+        Map<String, Object> dataMap = null;
+        try {
+            dataMap = remoteTableService.selectLastData(deviceCode);
+        } catch (Exception ignored){}
 
-        Map<String, Object> dataMap = remoteTableService.selectLastData(deviceCode);
         if (CollUtil.isEmpty(dataMap)) {
             return;
         }
 
+        Map<String, Object> finalDataMap = dataMap;
         records.forEach(attribute -> {
-            Object value = dataMap.get(attribute.getIdentifier());
+            Object value = finalDataMap.get(attribute.getIdentifier());
             if (ObjUtil.isNull(value)) {
                 return;
             }
