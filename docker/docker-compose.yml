@@ -29,7 +29,7 @@ services:
     network_mode: "host"
 
   nacos:
-    image: ruoyi/ruoyi-nacos:1.6.0
+    image: ruoyi/ruoyi-nacos:2.1.0
     container_name: nacos
     ports:
       - "8848:8848"
@@ -96,7 +96,7 @@ services:
     network_mode: "host"
 
   seata-server:
-    image: ruoyi/ruoyi-seata-server:1.6.0
+    image: ruoyi/ruoyi-seata-server:2.1.0
     container_name: seata-server
     ports:
       - "7091:7091"
@@ -135,7 +135,7 @@ services:
     network_mode: "host"
 
   sentinel:
-    image: ruoyi/ruoyi-sentinel-dashboard:1.6.0
+    image: ruoyi/ruoyi-sentinel-dashboard:2.1.0
     container_name: sentinel
     environment:
       TZ: Asia/Shanghai
@@ -150,7 +150,7 @@ services:
     network_mode: "host"
 
   ruoyi-monitor:
-    image: ruoyi/ruoyi-monitor:1.6.0
+    image: ruoyi/ruoyi-monitor:2.1.0
     container_name: ruoyi-monitor
     environment:
       # 时区上海
@@ -165,24 +165,23 @@ services:
     privileged: true
     network_mode: "host"
 
-  ruoyi-xxl-job-admin:
-    image: ruoyi/ruoyi-xxl-job-admin:1.6.0
-    container_name: ruoyi-xxl-job-admin
+  ruoyi-powerjob-server:
+    image: ruoyi/ruoyi-powerjob-server:2.1.0
+    container_name: ruoyi-powerjob-server
     environment:
       # 时区上海
       TZ: Asia/Shanghai
     ports:
-      - "9900:9900"
+      - "7700:7700"
+      - "10086:10086"
+      - "10010:10010"
     volumes:
-      # 配置文件
-      - /docker/ruoyi-xxl-job-admin/logs/:/ruoyi/xxl-job-admin/logs
-      # skywalking 探针
-      - /docker/skywalking/agent/:/ruoyi/skywalking/agent
+      - /docker/powerjob/logs/:/ruoyi/powerjob/logs
     privileged: true
     network_mode: "host"
 
   ruoyi-gateway:
-    image: ruoyi/ruoyi-gateway:1.6.0
+    image: ruoyi/ruoyi-gateway:2.1.0
     container_name: ruoyi-gateway
     environment:
       # 时区上海
@@ -198,7 +197,7 @@ services:
     network_mode: "host"
 
   ruoyi-auth:
-    image: ruoyi/ruoyi-auth:1.6.0
+    image: ruoyi/ruoyi-auth:2.1.0
     container_name: ruoyi-auth
     environment:
       # 时区上海
@@ -214,7 +213,7 @@ services:
     network_mode: "host"
 
   ruoyi-system:
-    image: ruoyi/ruoyi-system:1.6.0
+    image: ruoyi/ruoyi-system:2.1.0
     container_name: ruoyi-system
     environment:
       # 时区上海
@@ -230,7 +229,7 @@ services:
     network_mode: "host"
 
   ruoyi-gen:
-    image: ruoyi/ruoyi-gen:1.6.0
+    image: ruoyi/ruoyi-gen:2.1.0
     container_name: ruoyi-gen
     environment:
       # 时区上海
@@ -246,7 +245,7 @@ services:
     network_mode: "host"
 
   ruoyi-job:
-    image: ruoyi/ruoyi-job:1.6.0
+    image: ruoyi/ruoyi-job:2.1.0
     container_name: ruoyi-job
     environment:
       # 时区上海
@@ -262,7 +261,7 @@ services:
     network_mode: "host"
 
   ruoyi-resource:
-    image: ruoyi/ruoyi-resource:1.6.0
+    image: ruoyi/ruoyi-resource:2.1.0
     container_name: ruoyi-resource
     environment:
       # 时区上海
@@ -494,7 +493,7 @@ services:
     network_mode: "host"
 
   shardingproxy:
-    image: apache/shardingsphere-proxy:5.3.2
+    image: apache/shardingsphere-proxy:5.4.0
     container_name: shardingsphere-proxy
     command: server /data
     ports:

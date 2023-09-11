@@ -14,7 +14,7 @@
     </description>
 
     <properties>
-        <revision>2.0.0-BETA</revision>
+        <revision>2.1.0</revision>
     </properties>
 
     <dependencyManagement>
@@ -202,6 +202,12 @@
             <dependency>
                 <groupId>org.dromara</groupId>
                 <artifactId>ruoyi-common-websocket</artifactId>
+                <version>${revision}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.dromara</groupId>
+                <artifactId>ruoyi-common-social</artifactId>
                 <version>${revision}</version>
             </dependency>
 

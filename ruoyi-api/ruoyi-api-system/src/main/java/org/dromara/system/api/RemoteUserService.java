@@ -1,5 +1,6 @@
 package org.dromara.system.api;
 
+import org.dromara.common.core.exception.ServiceException;
 import org.dromara.common.core.exception.user.UserException;
 import org.dromara.system.api.domain.bo.RemoteUserBo;
 import org.dromara.system.api.model.LoginUser;
@@ -20,6 +21,15 @@ public interface RemoteUserService {
      * @return 结果
      */
     LoginUser getUserInfo(String username, String tenantId) throws UserException;
+
+    /**
+     * 通过用户id查询用户信息
+     *
+     * @param userId   用户id
+     * @param tenantId 租户id
+     * @return 结果
+     */
+    LoginUser getUserInfo(Long userId, String tenantId) throws UserException;
 
     /**
      * 通过手机号查询用户信息
@@ -53,7 +63,7 @@ public interface RemoteUserService {
      * @param remoteUserBo 用户信息
      * @return 结果
      */
-    Boolean registerUserInfo(RemoteUserBo remoteUserBo);
+    Boolean registerUserInfo(RemoteUserBo remoteUserBo) throws UserException, ServiceException;
 
     /**
      * 通过userId查询用户账户
@@ -62,4 +72,13 @@ public interface RemoteUserService {
      * @return 结果
      */
     String selectUserNameById(Long userId);
+
+    /**
+     * 更新用户信息
+     *
+     * @param userId 用户ID
+     * @param ip     IP地址
+     */
+    void recordLoginInfo(Long userId, String ip);
+
 }
