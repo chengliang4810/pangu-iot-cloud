@@ -62,7 +62,7 @@ public class DeviceController extends BaseController {
     /**
      * 查询设备
      */
-    @SaCheckPermission("manager:device:list")
+//    @SaCheckPermission("manager:device:list")
     @GetMapping("/tree")
     public R<List<DeviceVO>> tree(DeviceBO bo) {
         return R.ok(deviceService.queryList(bo));
@@ -84,7 +84,7 @@ public class DeviceController extends BaseController {
      *
      * @param id 主键
      */
-    @SaCheckPermission("manager:device:query")
+//    @SaCheckPermission("manager:device:query")
     @GetMapping("/{id}")
     public R<DeviceDetailVO> getInfo(@NotNull(message = "主键不能为空") @PathVariable Long id) {
         return R.ok(deviceService.queryById(id));

@@ -45,6 +45,6 @@ public class AuthFilter {
                     });
             })
             // 认证函数之前执行
-            .setError(e -> SaResult.error("认证失败，无法访问系统资源").setCode(HttpStatus.UNAUTHORIZED));
+            .setError(e -> SaResult.error("认证失败，无法访问系统资源。 " + e.getMessage()).setCode(HttpStatus.UNAUTHORIZED));
     }
 }

@@ -1,6 +1,7 @@
 package com.pangu.iot.manager.device.controller;
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
+import cn.dev33.satoken.annotation.SaIgnore;
 import com.pangu.common.core.domain.R;
 import com.pangu.common.core.validate.AddGroup;
 import com.pangu.common.core.validate.EditGroup;
@@ -63,7 +64,8 @@ public class DeviceAttributeController extends BaseController {
     /**
      * 查询设备属性列表
      */
-    @SaCheckPermission("manager:attribute:list")
+//    @SaCheckPermission("manager:attribute:list")
+    @SaIgnore
     @GetMapping("/tree")
     public R<List<DeviceAttributeVO>> list(DeviceAttributeBO bo) {
         return R.ok(deviceAttributeService.queryList(bo));
@@ -72,7 +74,7 @@ public class DeviceAttributeController extends BaseController {
     /**
      * 查询设备属性列表
      */
-    @SaCheckPermission("manager:attribute:list")
+//    @SaCheckPermission("manager:attribute:list")
     @GetMapping("/tree/{deviceId}")
     public R<List<DeviceAttributeVO>> tree(@PathVariable Long deviceId) {
         return R.ok(deviceAttributeService.queryVOListByDeviceId(deviceId));

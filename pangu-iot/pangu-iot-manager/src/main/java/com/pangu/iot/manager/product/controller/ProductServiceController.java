@@ -50,7 +50,7 @@ public class ProductServiceController extends BaseController {
     /**
      * 查询产品功能树表
      */
-    @SaCheckPermission("manager:product_service:list")
+//    @SaCheckPermission("manager:product_service:list")
     @GetMapping("/tree")
     public R<List<ProductServiceVO>> tree(ProductServiceBO bo) {
         return R.ok(productServiceService.queryList(bo));
